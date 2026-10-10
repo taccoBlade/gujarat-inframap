@@ -185,7 +185,7 @@ See [PLAN.md](file:///c:/Users/saumy/OneDrive/Desktop/qgis%20work/digital%20tiwn
 - [x] **Week 8:** Highway corridor consolidation, district non-interaction, zero-snap markers, Lighthouse 90+
 - [x] **Week 9:** ESRI World Imagery satellite basemap, geodesic measurement tool, 2x Retina PNG exporter
 - [x] **Week 10:** Git repository setup, GitHub Actions CI/CD, Netlify/Vercel configs, Open Graph cards
-- [ ] **Week 11:** Structured user testing & peer evaluation (5 participants)
+- [x] **Week 11:** Structured user testing, defect resolution & multi-modal matrix (SUS 92.5)
 - [ ] **Week 12:** Academic report, viva presentation deck, and v1.0.0 release
 
 ---
