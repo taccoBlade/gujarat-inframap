@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120"/>
+      <stop offset="50%" stop-color="#070c16"/>
+      <stop offset="100%" stop-color="#030712"/>
+    </linearGradient>
+
+    <!-- Glowing Grid Pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.8" stroke-opacity="0.6"/>
+    </pattern>
+
+    <!-- Radial Glows -->
+    <radialGradient id="cyanGlow" cx="75%" cy="35%" r="45%">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#0284c7" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="emeraldGlow" cx="25%" cy="80%" r="40%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    
+    <!-- Linear Card Gradients -->
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#cyanGlow)"/>
+  <rect width="1200" height="630" fill="url(#emeraldGlow)"/>
+
+  <!-- Border Frame -->
+  <rect x="20" y="20" width="1160" height="590" rx="16" fill="none" stroke="#334155" stroke-width="1.5" stroke-opacity="0.8"/>
+  <rect x="26" y="26" width="1148" height="578" rx="12" fill="none" stroke="#00f0ff" stroke-width="0.75" stroke-opacity="0.3"/>
+
+  <!-- Corner Crosshairs -->
+  <path d="M 35 45 L 55 45 M 45 35 L 45 55" stroke="#00f0ff" stroke-width="1.5" stroke-opacity="0.7"/>
+  <path d="M 1145 45 L 1165 45 M 1155 35 L 1155 55" stroke="#00f0ff" stroke-width="1.5" stroke-opacity="0.7"/>
+  <path d="M 35 585 L 55 585 M 45 575 L 45 595" stroke="#00f0ff" stroke-width="1.5" stroke-opacity="0.7"/>
+  <path d="M 1145 585 L 1165 585 M 1155 575 L 1155 595" stroke="#00f0ff" stroke-width="1.5" stroke-opacity="0.7"/>
+
+  <!-- Status Chip -->
+  <g transform="translate(60, 60)">
+    <rect width="260" height="36" rx="18" fill="#0f172a" stroke="#0284c7" stroke-width="1.5"/>
+    <circle cx="20" cy="18" r="5" fill="#10b981"/>
+    <circle cx="20" cy="18" r="9" fill="none" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.5"/>
+    <text x="36" y="23" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#38bdf8" letter-spacing="1.5">GIS OBSERVATORY • v1.0</text>
+  </g>
+
+  <!-- Right Status Badge -->
+  <g transform="translate(940, 60)">
+    <text x="200" y="24" text-anchor="end" font-family="'JetBrains Mono', monospace, sans-serif" font-size="13" font-weight="600" fill="#94a3b8" letter-spacing="1">EPSG:4326 | WGS 84</text>
+  </g>
+
+  <!-- Main Brand Title -->
+  <text x="60" y="165" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="64" font-weight="800" fill="#ffffff" letter-spacing="-1.5">
+    Gujarat <tspan fill="#38bdf8">InfraMap</tspan>
+  </text>
+
+  <!-- Subtitle -->
+  <text x="60" y="215" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="500" fill="#94a3b8">
+    Production Digital Infrastructure Twin &amp; Spatial Planning Observatory
+  </text>
+
+  <!-- Metric Cards Row -->
+  <!-- Card 1: Districts -->
+  <g transform="translate(60, 270)">
+    <rect width="200" height="130" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1"/>
+    <text x="20" y="42" font-family="'JetBrains Mono', monospace" font-size="36" font-weight="800" fill="#38bdf8">33</text>
+    <text x="20" y="72" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#f8fafc">Districts &amp; HQs</text>
+    <text x="20" y="96" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748b">100% Boundary Audit</text>
+  </g>
+
+  <!-- Card 2: Highways -->
+  <g transform="translate(280, 270)">
+    <rect width="200" height="130" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1"/>
+    <text x="20" y="42" font-family="'JetBrains Mono', monospace" font-size="36" font-weight="800" fill="#f59e0b">43</text>
+    <text x="20" y="72" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#f8fafc">NH Corridors</text>
+    <text x="20" y="96" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748b">NE-1 &amp; GQ Unified</text>
+  </g>
+
+  <!-- Card 3: Railways -->
+  <g transform="translate(500, 270)">
+    <rect width="200" height="130" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1"/>
+    <text x="20" y="42" font-family="'JetBrains Mono', monospace" font-size="36" font-weight="800" fill="#a855f7">623</text>
+    <text x="20" y="72" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#f8fafc">Rail Stations</text>
+    <text x="20" y="96" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748b">4 WR Divisions (ADI/BRC)</text>
+  </g>
+
+  <!-- Card 4: Energy -->
+  <g transform="translate(720, 270)">
+    <rect width="200" height="130" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1"/>
+    <text x="20" y="42" font-family="'JetBrains Mono', monospace" font-size="36" font-weight="800" fill="#10b981">31.9<tspan font-size="20">GW</tspan></text>
+    <text x="20" y="72" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#f8fafc">Power Generation</text>
+    <text x="20" y="96" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748b">44 Plants (Khavda/Charanka)</text>
+  </g>
+
+  <!-- Card 5: Grid Corridors -->
+  <g transform="translate(940, 270)">
+    <rect width="200" height="130" rx="12" fill="url(#cardGrad)" stroke="#334155" stroke-width="1"/>
+    <text x="20" y="42" font-family="'JetBrains Mono', monospace" font-size="36" font-weight="800" fill="#00f0ff">765<tspan font-size="20">kV</tspan></text>
+    <text x="20" y="72" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#f8fafc">GETCO / PGCIL</text>
+    <text x="20" y="96" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748b">12 Lines &amp; 10 Pooling Subs</text>
+  </g>
+
+  <!-- Bottom Features Bar -->
+  <g transform="translate(60, 440)">
+    <rect width="1080" height="120" rx="12" fill="#0b1329" fill-opacity="0.8" stroke="#1e293b" stroke-width="1"/>
+    
+    <!-- Feature 1 -->
+    <g transform="translate(30, 25)">
+      <circle cx="16" cy="16" r="14" fill="#0284c7" fill-opacity="0.2"/>
+      <path d="M 12 16 L 15 19 L 21 13" fill="none" stroke="#38bdf8" stroke-width="2"/>
+      <text x="40" y="16" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#f8fafc">7,344 Spatial Features</text>
+      <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748b">Multi-Token High-Speed Search</text>
+    </g>
+
+    <!-- Feature 2 -->
+    <g transform="translate(300, 25)">
+      <circle cx="16" cy="16" r="14" fill="#10b981" fill-opacity="0.2"/>
+      <path d="M 12 16 L 15 19 L 21 13" fill="none" stroke="#10b981" stroke-width="2"/>
+      <text x="40" y="16" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#f8fafc">Sub-Second Load Time</text>
+      <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748b">Zero-Backend Client-Side GIS</text>
+    </g>
+
+    <!-- Feature 3 -->
+    <g transform="translate(570, 25)">
+      <circle cx="16" cy="16" r="14" fill="#f59e0b" fill-opacity="0.2"/>
+      <path d="M 12 16 L 15 19 L 21 13" fill="none" stroke="#f59e0b" stroke-width="2"/>
+      <text x="40" y="16" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#f8fafc">Geodesic Measurement</text>
+      <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748b">Interactive Real-Time Tool</text>
+    </g>
+
+    <!-- Feature 4 -->
+    <g transform="translate(840, 25)">
+      <circle cx="16" cy="16" r="14" fill="#a855f7" fill-opacity="0.2"/>
+      <path d="M 12 16 L 15 19 L 21 13" fill="none" stroke="#a855f7" stroke-width="2"/>
+      <text x="40" y="16" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#f8fafc">2x Retina Map Export</text>
+      <text x="40" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" fill="#64748b">One-Click Cartographic PNG</text>
+    </g>
+
+    <!-- Footer URL -->
+    <text x="540" y="92" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="600" fill="#38bdf8" letter-spacing="1">
+      https://saumy.github.io/gujarat-inframap/
+    </text>
+  </g>
+</svg>

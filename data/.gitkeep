@@ -1,0 +1,5 @@
+# GeoJSON files generated from Overpass Turbo / QGIS will be saved here:
+# - gujarat_districts.geojson
+# - gujarat_roads.geojson
+# - gujarat_railways.geojson
+# - gujarat_power.geojson

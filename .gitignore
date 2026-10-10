@@ -1,0 +1,31 @@
+# Dependency directories
+node_modules/
+dist/
+
+# Operating system / IDE files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Large test audit artifacts & profiling dumps
+lighthouse*.json
+*.log
+.system_generated/
+
+# Temporary GIS and editor locks
+*.qgz~
+*.qgs~
+*.bak
+*.tmp
+*.swp
+*~

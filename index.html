@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gujarat InfraMap — Production digital infrastructure twin and GIS spatial observatory visualizing 33 administrative districts, highways, railway networks, power plants, and transmission corridors.">
+  <meta name="keywords" content="Gujarat, GIS, Infrastructure, Digital Twin, Leaflet, Maps, Railways, Highways, Power Grid, GETCO, OpenStreetMap, Spatial Observatory">
+  <meta name="author" content="Gujarat InfraMap Project">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Gujarat InfraMap">
+  <title>Gujarat InfraMap — Infrastructure Geospatial Twin</title>
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://saumy.github.io/gujarat-inframap/">
+
+  <!-- Open Graph / Facebook Protocol -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Gujarat InfraMap">
+  <meta property="og:title" content="Gujarat InfraMap — Infrastructure Geospatial Twin & Spatial Observatory">
+  <meta property="og:description" content="Production-grade GIS spatial observatory mapping 33 administrative districts, 43 highway corridors, 623 railway stations, 44 power plants (31.9 GW), and GETCO transmission grids.">
+  <meta property="og:url" content="https://saumy.github.io/gujarat-inframap/">
+  <meta property="og:image" content="https://saumy.github.io/gujarat-inframap/assets/og-preview.png">
+  <meta property="og:image:secure_url" content="https://saumy.github.io/gujarat-inframap/assets/og-preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Gujarat InfraMap GIS Digital Twin Dashboard">
+  <meta property="og:locale" content="en_IN">
+
+  <!-- Twitter Card Protocol -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gujarat InfraMap — Infrastructure Geospatial Twin">
+  <meta name="twitter:description" content="Production GIS digital twin visualizing 33 districts, 43 highway corridors, 623 railway stations, 44 power plants (31.9 GW), and GETCO transmission grids.">
+  <meta name="twitter:image" content="https://saumy.github.io/gujarat-inframap/assets/og-preview.png">
+  <meta name="twitter:image:alt" content="Gujarat InfraMap GIS Digital Twin Dashboard">
+
+  <!-- Web App Manifest & Apple Touch Icons -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="assets/icon-512.png">
+
+  <!-- High-Precision Vector Favicon (Eliminates 404 Console Errors) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'%3E%3Cpolygon points='3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21' stroke='%2338bdf8' stroke-width='1.5'/%3E%3C/svg%3E">
+
+  <!-- Resource Preconnects for Zero-Latency Tile & Font Streaming -->
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://a.tile.openstreetmap.fr" crossorigin>
+  <link rel="preconnect" href="https://b.tile.openstreetmap.fr" crossorigin>
+  <link rel="preconnect" href="https://c.tile.openstreetmap.fr" crossorigin>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- Inter / Plus Jakarta Sans Typography (Non-render blocking) -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css?v=4.0.0">
+</head>
+<body class="theme-dark">
+
+  <!-- Application Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="brand-badge">
+        <span class="brand-pulse"></span>
+        <svg class="brand-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+          <line x1="9" y1="3" x2="9" y2="18"></line>
+          <line x1="15" y1="6" x2="15" y2="21"></line>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-title-wrap">
+          <h1 class="brand-title">Gujarat InfraMap</h1>
+          <span class="version-tag">v1.0 • GIS</span>
+        </div>
+        <p class="brand-subtitle">Digital Infrastructure Twin & Spatial Observatory</p>
+      </div>
+
+      <!-- Active District Hierarchy Breadcrumb -->
+      <nav class="district-breadcrumb" id="districtBreadcrumb" aria-label="Geographic Hierarchy">
+        <button class="breadcrumb-item breadcrumb-state" id="breadcrumbStateBtn" title="Reset view to full Gujarat">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          </svg>
+          <span>Gujarat</span>
+        </button>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item breadcrumb-current" id="breadcrumbDistrict">All Districts (33)</span>
+      </nav>
+    </div>
+
+    <div class="header-center">
+      <!-- Universal Smart Search -->
+      <div class="search-container">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="universalSearch" placeholder="Search districts, power plants, stations, highways..." autocomplete="off" spellcheck="false" aria-label="Universal Infrastructure Search">
+        <button id="clearSearchBtn" class="search-clear-btn hidden" title="Clear search" aria-label="Clear search">✕</button>
+        <kbd class="search-kbd-hint" title="Press / to search" aria-hidden="true">/</kbd>
+        <div id="searchResults" class="search-results-dropdown hidden" role="listbox" aria-label="Search Results"></div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <!-- District Dropdown Selector -->
+      <div class="dropdown-wrapper">
+        <select id="districtSelect" class="styled-select" title="Jump to District" aria-label="Administrative District Selector">
+          <option value="">Jump to District...</option>
+        </select>
+      </div>
+
+      <!-- Action Buttons -->
+      <button id="measureToolBtn" class="action-btn action-btn-secondary" title="Measure Distance on Map (M)" aria-label="Distance Measurement Tool">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <path d="M2 12h20"></path>
+          <path d="M6 9v6"></path>
+          <path d="M10 10v4"></path>
+          <path d="M14 9v6"></path>
+          <path d="M18 10v4"></path>
+          <path d="M22 9v6"></path>
+          <path d="M2 9v6"></path>
+        </svg>
+        <span>Measure</span>
+      </button>
+
+      <button id="exportMapBtn" class="action-btn action-btn-secondary" title="Export Current View as PNG (E)" aria-label="Export Map View as PNG">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+          <circle cx="12" cy="13" r="4"></circle>
+        </svg>
+        <span>Export</span>
+      </button>
+
+      <button id="resetViewBtn" class="action-btn" title="Reset View to Full Gujarat (R)" aria-label="Reset View to Full Gujarat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="22" y1="12" x2="18" y2="12"></line>
+          <line x1="6" y1="12" x2="2" y2="12"></line>
+          <line x1="12" y1="6" x2="12" y2="2"></line>
+          <line x1="12" y1="22" x2="12" y2="18"></line>
+        </svg>
+        <span>Reset</span>
+      </button>
+
+      <button id="toggleDrawerBtn" class="action-btn action-btn-secondary" title="Toggle Layer Management Drawer (D)" aria-label="Toggle Control Drawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="15" y1="3" x2="15" y2="21"></line>
+        </svg>
+        <span>Drawer</span>
+      </button>
+
+      <button id="aboutBtn" class="action-btn action-btn-secondary" title="System Specifications & Metadata" aria-label="System Specifications & Metadata">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span>Specs</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Viewport -->
+  <main class="app-viewport">
+    <!-- Map Container -->
+    <div id="map"></div>
+
+    <!-- Interactive Geodesic Measurement HUD (Week 9 Stretch Tool) -->
+    <div id="measureHud" class="measure-hud hidden" role="region" aria-label="Geodesic Distance Measurement Tool">
+      <div class="measure-hud-top">
+        <div class="measure-hud-title-wrap">
+          <span class="measure-pulse-indicator"></span>
+          <span class="measure-hud-title">Distance Measurement Tool</span>
+        </div>
+        <span id="measureModeStatus" class="measure-status-chip">Click map to place Point 1</span>
+        <button id="measureExitBtn" class="measure-close-btn" title="Exit Measurement Mode (Esc)" aria-label="Exit Measurement Mode">&times;</button>
+      </div>
+      <div class="measure-hud-stats">
+        <div class="measure-stat-col">
+          <span class="measure-stat-label">TOTAL DISTANCE</span>
+          <span class="measure-stat-val" id="measureTotalDisplay">0.00 km</span>
+        </div>
+        <div class="measure-stat-col">
+          <span class="measure-stat-label">CURRENT SEGMENT</span>
+          <span class="measure-stat-val" id="measureSegmentDisplay">0.00 km</span>
+        </div>
+        <div class="measure-stat-col">
+          <span class="measure-stat-label">WAYPOINTS</span>
+          <span class="measure-stat-val" id="measurePointsDisplay">0</span>
+        </div>
+      </div>
+      <div class="measure-hud-controls">
+        <button id="measureFinishBtn" class="measure-action-btn btn-finish" disabled title="Complete current path">✓ Complete Path</button>
+        <button id="measureClearBtn" class="measure-action-btn btn-clear" title="Clear measurement points">✕ Clear</button>
+        <button id="measureDoneBtn" class="measure-action-btn btn-done" title="Exit measurement mode (Esc)">Exit</button>
+      </div>
+    </div>
+
+    <!-- Dynamic Toast Notification (Week 9 Feedback) -->
+    <div id="appToast" class="app-toast hidden" role="status" aria-live="polite"></div>
+
+    <!-- Floating Quick-Open Button (visible when drawer is collapsed) -->
+    <button id="floatingDrawerBtn" class="floating-drawer-toggle" title="Open Layer Controls" aria-label="Open Layer Controls">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
+      <span>Layers & Controls</span>
+    </button>
+
+    <!-- Floating Layer & Control Drawer -->
+    <aside class="layer-drawer" id="layerDrawer">
+      <div class="drawer-touch-handle" aria-hidden="true"></div>
+      <div class="drawer-header">
+        <div class="drawer-title-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="drawer-icon">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <h2>Layer Management</h2>
+        </div>
+        <div class="drawer-header-actions">
+          <span class="active-layers-count" id="activeLayersCount">6 Layers Active</span>
+          <button id="collapseDrawerBtn" class="drawer-collapse-btn" title="Collapse Control Drawer" aria-label="Collapse Control Drawer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Intelligence Layer Presets (Requirement 4: Declutter Default Experience) -->
+      <div class="control-group preset-group">
+        <div class="group-header-row">
+          <span class="group-label">Intelligence Presets</span>
+          <span class="preset-status-tag" id="activePresetTag">Overview</span>
+        </div>
+        <div class="preset-pill-grid">
+          <button class="preset-pill active" data-preset="overview" title="Subtle district borders, major expressways & premier baseload energy">
+            <span class="preset-icon">🗺️</span>
+            <span class="preset-label">Overview</span>
+          </button>
+          <button class="preset-pill" data-preset="transport" title="Highways, expressways, railway network & stations">
+            <span class="preset-icon">🚆</span>
+            <span class="preset-label">Transport</span>
+          </button>
+          <button class="preset-pill" data-preset="energy" title="Power generation & GETCO 400/765 kV transmission grid">
+            <span class="preset-icon">⚡</span>
+            <span class="preset-label">Energy</span>
+          </button>
+          <button class="preset-pill" data-preset="admin" title="District boundaries, administrative headquarters & stats">
+            <span class="preset-icon">🏛️</span>
+            <span class="preset-label">Admin</span>
+          </button>
+          <button class="preset-pill" data-preset="full" title="All infrastructure layers with zoom-dependent decluttering">
+            <span class="preset-icon">🌐</span>
+            <span class="preset-label">Full Infra</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Basemap Segmented Switcher -->
+      <div class="control-group">
+        <span class="group-label">Basemap Provider (100% Free & Open)</span>
+        <div class="segmented-control">
+          <button class="segment-btn active" data-basemap="dark">Dark GIS</button>
+          <button class="segment-btn" data-basemap="osm">Clean OSM</button>
+          <button class="segment-btn" data-basemap="satellite">Satellite</button>
+          <button class="segment-btn" data-basemap="topo">Terrain</button>
+        </div>
+      </div>
+
+      <!-- Infrastructure Layers List with Logical Grouping -->
+      <div class="control-group layers-container">
+        <div class="group-header-row">
+          <span class="group-label">Infrastructure Layers</span>
+          <span class="layer-sublabel" id="layerFilterCount">3 of 7 Active</span>
+        </div>
+        
+        <!-- Category 1: Administrative Geography -->
+        <div class="layer-category-block">
+          <div class="category-header">
+            <span class="category-title">🏛️ Administrative Geography</span>
+          </div>
+
+          <!-- District Boundaries -->
+          <div class="layer-item-wrapper">
+            <div class="layer-item">
+              <label class="custom-toggle">
+                <input type="checkbox" id="layerDistricts" aria-label="Toggle Administrative Districts Layer" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="layer-meta">
+                <div class="layer-name-row">
+                  <span class="layer-indicator indicator-boundary"></span>
+                  <span class="layer-name">District Boundaries</span>
+                </div>
+                <div class="layer-action-pills">
+                  <span class="asset-badge badge-cyan" id="countDistricts">33 districts</span>
+                  <button class="layer-opacity-btn" data-target="opacityDistrictsWrap" title="Adjust Layer Opacity" aria-label="Adjust Districts Layer Opacity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                      <circle cx="12" cy="12" r="9"></circle>
+                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="layer-opacity-drawer hidden" id="opacityDistrictsWrap">
+              <div class="opacity-slider-inner">
+                <span class="opacity-label">Opacity</span>
+                <input type="range" class="opacity-slider" id="opacityDistricts" min="0" max="100" value="100" aria-label="Administrative Districts Opacity">
+                <span class="opacity-val" id="valDistricts">100%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- District Headquarters -->
+          <div class="layer-item-wrapper">
+            <div class="layer-item">
+              <label class="custom-toggle">
+                <input type="checkbox" id="layerHq" aria-label="Toggle District Headquarters Layer">
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="layer-meta">
+                <div class="layer-name-row">
+                  <span class="layer-indicator indicator-hq"></span>
+                  <span class="layer-name">District Headquarters</span>
+                </div>
+                <div class="layer-action-pills">
+                  <span class="asset-badge badge-teal" id="countHq">33 HQs</span>
+                  <button class="layer-opacity-btn" data-target="opacityHqWrap" title="Adjust Layer Opacity" aria-label="Adjust Headquarters Layer Opacity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                      <circle cx="12" cy="12" r="9"></circle>
+                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="layer-opacity-drawer hidden" id="opacityHqWrap">
+              <div class="opacity-slider-inner">
+                <span class="opacity-label">Opacity</span>
+                <input type="range" class="opacity-slider" id="opacityHq" min="0" max="100" value="100" aria-label="District Headquarters Opacity">
+                <span class="opacity-val" id="valHq">100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category 2: Transportation Corridors -->
+        <div class="layer-category-block">
+          <div class="category-header">
+            <span class="category-title">🛣️ Transportation Corridors</span>
+          </div>
+
+          <!-- Highways & Expressways -->
+          <div class="layer-item-wrapper">
+            <div class="layer-item">
+              <label class="custom-toggle">
+                <input type="checkbox" id="layerRoads" aria-label="Toggle Highways and Expressways Layer" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="layer-meta">
+                <div class="layer-name-row">
+                  <span class="layer-indicator indicator-road"></span>
+                  <span class="layer-name">Highways & Expressways</span>
+                </div>
+                <div class="layer-action-pills">
+                  <span class="asset-badge badge-orange" id="countRoads">4,325 seg</span>
+                  <button class="layer-opacity-btn" data-target="opacityRoadsWrap" title="Adjust Layer Opacity" aria-label="Adjust Roads Layer Opacity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                      <circle cx="12" cy="12" r="9"></circle>
+                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="layer-opacity-drawer hidden" id="opacityRoadsWrap">
+              <div class="opacity-slider-inner">
+                <span class="opacity-label">Opacity</span>
+                <input type="range" class="opacity-slider" id="opacityRoads" min="0" max="100" value="100" aria-label="Highways and Expressways Opacity">
+                <span class="opacity-val" id="valRoads">100%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Railway Corridors -->
+          <div class="layer-item-wrapper">
+            <div class="layer-item">
+              <label class="custom-toggle">
+                <input type="checkbox" id="layerRailways" aria-label="Toggle Railway Corridors Layer">
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="layer-meta">
+                <div class="layer-name-row">
+                  <span class="layer-indicator indicator-rail"></span>
+                  <span class="layer-name">Railway Corridors</span>
+                </div>
+                <div class="layer-action-pills">
+                  <span class="asset-badge badge-slate" id="countRailways">2,264 tracks</span>
+                  <button class="layer-opacity-btn" data-target="opacityRailwaysWrap" title="Adjust Layer Opacity" aria-label="Adjust Railways Layer Opacity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                      <circle cx="12" cy="12" r="9"></circle>
+                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="layer-opacity-drawer hidden" id="opacityRailwaysWrap">
+              <div class="opacity-slider-inner">
+                <span class="opacity-label">Opacity</span>
+                <input type="range" class="opacity-slider" id="opacityRailways" min="0" max="100" value="100" aria-label="Railway Corridors Opacity">
+                <span class="opacity-val" id="valRailways">100%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Railway Stations -->
+          <div class="layer-item-wrapper">
+            <div class="layer-item">
+              <label class="custom-toggle">
+                <input type="checkbox" id="layerStations" aria-label="Toggle Railway Stations Layer">
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="layer-meta">
+                <div class="layer-name-row">
+                  <span class="layer-indicator indicator-station"></span>
+                  <span class="layer-name">Railway Stations (WR)</span>
+                </div>
+                <div class="layer-action-pills">
+                  <span class="asset-badge badge-blue" id="countStations">623 stations</span>
+                  <button class="layer-opacity-btn" data-target="opacityStationsWrap" title="Adjust Layer Opacity" aria-label="Adjust Stations Layer Opacity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                      <circle cx="12" cy="12" r="9"></circle>
+                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="layer-opacity-drawer hidden" id="opacityStationsWrap">
+              <div class="opacity-slider-inner">
+                <span class="opacity-label">Opacity</span>
+                <input type="range" class="opacity-slider" id="opacityStations" min="0" max="100" value="100" aria-label="Railway Stations Opacity">
+                <span class="opacity-val" id="valStations">100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category 3: Energy & Power Grid -->
+        <div class="layer-category-block">
+          <div class="category-header">
+            <span class="category-title">⚡ Energy & Power Grid</span>
+          </div>
+
+          <!-- Power Generation Plants -->
+          <div class="layer-item-wrapper">
+            <div class="layer-item">
+              <label class="custom-toggle">
+                <input type="checkbox" id="layerPower" aria-label="Toggle Power Generation Facilities Layer" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="layer-meta">
+                <div class="layer-name-row">
+                  <span class="layer-indicator indicator-power"></span>
+                  <span class="layer-name">Power Generation</span>
+                </div>
+                <div class="layer-action-pills">
+                  <span class="asset-badge badge-amber" id="countPower">44 plants (31.9 GW)</span>
+                  <button class="layer-opacity-btn" data-target="opacityPowerWrap" title="Adjust Layer Opacity" aria-label="Adjust Power Layer Opacity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                      <circle cx="12" cy="12" r="9"></circle>
+                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="layer-opacity-drawer hidden" id="opacityPowerWrap">
+              <div class="opacity-slider-inner">
+                <span class="opacity-label">Opacity</span>
+                <input type="range" class="opacity-slider" id="opacityPower" min="0" max="100" value="100" aria-label="Power Generation Opacity">
+                <span class="opacity-val" id="valPower">100%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- GETCO Transmission Grid -->
+          <div class="layer-item-wrapper">
+            <div class="layer-item">
+              <label class="custom-toggle">
+                <input type="checkbox" id="layerTransmission" aria-label="Toggle GETCO Transmission Grid Layer">
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="layer-meta">
+                <div class="layer-name-row">
+                  <span class="layer-indicator indicator-transmission"></span>
+                  <span class="layer-name">GETCO Grid (400/765 kV)</span>
+                </div>
+                <div class="layer-action-pills">
+                  <span class="asset-badge badge-purple" id="countTransmission">12 lines, 10 substations</span>
+                  <button class="layer-opacity-btn" data-target="opacityTransmissionWrap" title="Adjust Layer Opacity" aria-label="Adjust Transmission Layer Opacity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                      <circle cx="12" cy="12" r="9"></circle>
+                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="layer-opacity-drawer hidden" id="opacityTransmissionWrap">
+              <div class="opacity-slider-inner">
+                <span class="opacity-label">Opacity</span>
+                <input type="range" class="opacity-slider" id="opacityTransmission" min="0" max="100" value="100" aria-label="GETCO Transmission Grid Opacity">
+                <span class="opacity-val" id="valTransmission">100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Specialized Infrastructure Inspectors (Tabbed Container: Reduces Scroll Clutter) -->
+      <div class="control-group inspector-container">
+        <div class="group-header-row">
+          <span class="group-label">Asset Inspectors</span>
+        </div>
+
+        <div class="inspector-tabs">
+          <button class="insp-tab-btn active" data-tab="tabHighways">🛣️ Roads</button>
+          <button class="insp-tab-btn" data-tab="tabRailways">🚆 Rail</button>
+          <button class="insp-tab-btn" data-tab="tabEnergy">⚡ Energy</button>
+        </div>
+
+        <!-- Tab 1: Highway Corridor Inspector -->
+        <div class="insp-tab-pane active" id="tabHighways">
+          <div class="corridor-select-box">
+            <select id="corridorSelect" class="corridor-dropdown" aria-label="Select Strategic Highway Corridor">
+              <option value="">🛣️ Select Highway Corridor...</option>
+              <optgroup label="Access-Controlled Expressways (120 km/h) & GQ">
+                <option value="NE 1">NE-1 — Ahmedabad-Vadodara Expressway (120 km/h • 93.8 km)</option>
+                <option value="Delhi - Vadodara Expressway">NE-4 — Delhi-Vadodara Expressway (120 km/h • 8-Lane)</option>
+                <option value="NH 48">NH 48 — Delhi-Mumbai Golden Quad (100 km/h • 646.6 km)</option>
+              </optgroup>
+              <optgroup label="Major Economic & Port Corridors (100 km/h)">
+                <option value="NH 27">NH 27 — East-West Economic Corridor (100 km/h • 758.2 km)</option>
+                <option value="NH 47">NH 47 — Bamanbore-Ahmedabad-Indore (100 km/h • 417.6 km)</option>
+                <option value="NH 53">NH 53 — Hazira Port / Surat Corridor (100 km/h • 177.2 km)</option>
+                <option value="NH 754K">NH 754K — Amritsar-Jamnagar Corridor (100 km/h • 368.4 km)</option>
+                <option value="NH 64">NH 64 — Ahmedabad-Dholera SIR Corridor (100 km/h • 250.8 km)</option>
+              </optgroup>
+              <optgroup label="Primary Coastal & State Trunks (80 km/h)">
+                <option value="NH 51">NH 51 — Coastal Saurashtra (80 km/h • 763.2 km)</option>
+                <option value="NH 41">NH 41 — Kandla Port / Mandvi (80 km/h • 295.7 km)</option>
+                <option value="NH 56">NH 56 — Eastern Tribal Corridor (80 km/h • 593.1 km)</option>
+                <option value="NH 58">NH 58 — Palanpur-Ambaji Corridor (80 km/h • 265.4 km)</option>
+                <option value="NH 68">NH 68 — Barmer-Radhanpur Desert (80 km/h • 231.8 km)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="corridor-filter-pills" id="corridorFilterPills">
+            <button class="c-pill active" data-class="all">All</button>
+            <button class="c-pill" data-class="expressway">Expressway</button>
+            <button class="c-pill" data-class="golden_quadrilateral">GQ NH-48</button>
+            <button class="c-pill" data-class="arterial_corridor">Arterials</button>
+            <button class="c-pill" data-class="national_highway">Primary</button>
+          </div>
+
+          <div id="corridorTelemetry" class="corridor-telemetry hidden">
+            <div class="telemetry-header">
+              <span class="telemetry-title" id="telemetryName">NH 48</span>
+              <button class="telemetry-close" id="clearCorridorBtn" title="Reset highway corridor highlight">✕</button>
+            </div>
+            <p class="telemetry-route" id="telemetryRoute">Delhi - Jaipur - Ahmedabad - Vadodara - Surat - Mumbai</p>
+            <div class="telemetry-stats">
+              <div class="t-stat"><span class="t-val" id="telemetryLen">646.6 km</span><span class="t-lbl">Length</span></div>
+              <div class="t-stat"><span class="t-val" id="telemetryAuth">NHAI</span><span class="t-lbl">Authority</span></div>
+              <div class="t-stat"><span class="t-val" id="telemetrySpeed">120 km/h</span><span class="t-lbl">Max Speed</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Railway & Station Inspector -->
+        <div class="insp-tab-pane" id="tabRailways">
+          <div class="railway-select-box">
+            <select id="stationSelect" class="station-dropdown" aria-label="Select Major Railway Junction">
+              <option value="">🚆 Select Railway Junction...</option>
+              <optgroup label="Ahmedabad Division (ADI)">
+                <option value="ADI">Ahmedabad Junction (ADI) — Division HQ</option>
+                <option value="GIMB">Gandhidham BG (GIMB)</option>
+                <option value="BHUJ">Bhuj (BHUJ)</option>
+                <option value="MSH">Mehsana Junction (MSH)</option>
+                <option value="PNU">Palanpur Junction (PNU)</option>
+                <option value="VG">Viramgam Junction (VG)</option>
+              </optgroup>
+              <optgroup label="Vadodara Division (BRC)">
+                <option value="BRC">Vadodara Junction (BRC) — Division HQ</option>
+                <option value="ST">Surat (ST) — Mainline Terminal</option>
+                <option value="ANND">Anand Junction (ANND)</option>
+                <option value="BH">Bharuch Junction (BH)</option>
+                <option value="VAPI">Vapi (VAPI)</option>
+              </optgroup>
+              <optgroup label="Rajkot Division (RJT)">
+                <option value="RJT">Rajkot Junction (RJT) — Division HQ</option>
+                <option value="SUNR">Surendranagar Junction (SUNR)</option>
+                <option value="JAM">Jamnagar (JAM)</option>
+                <option value="DWK">Dwarka (DWK)</option>
+                <option value="OKHA">Okha (OKHA)</option>
+              </optgroup>
+              <optgroup label="Bhavnagar Division (BVC)">
+                <option value="BVC">Bhavnagar Terminus (BVC) — Division HQ</option>
+                <option value="JND">Junagadh Junction (JND)</option>
+                <option value="VRL">Veraval Junction (VRL) — Somnath</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="rail-filter-pills" id="stationFilterPills">
+            <button class="r-pill active" data-div="all">All (623)</button>
+            <button class="r-pill" data-div="major">Terminals</button>
+            <button class="r-pill" data-div="ADI">Ahmedabad</button>
+            <button class="r-pill" data-div="BRC">Vadodara</button>
+            <button class="r-pill" data-div="RJT">Rajkot</button>
+            <button class="r-pill" data-div="BVC">Bhavnagar</button>
+          </div>
+
+          <div id="stationTelemetry" class="station-telemetry hidden">
+            <div class="telemetry-header">
+              <span class="telemetry-title" id="stationTelName">Ahmedabad Junction</span>
+              <span class="telemetry-code-badge" id="stationTelCode">ADI</span>
+              <button class="telemetry-close" id="clearStationBtn" title="Reset station focus">✕</button>
+            </div>
+            <p class="telemetry-route" id="stationTelDivision">Western Railway — Ahmedabad Division</p>
+            <div class="telemetry-stats">
+              <div class="t-stat"><span class="t-val" id="stationTelClass">Major Junction</span><span class="t-lbl">Class</span></div>
+              <div class="t-stat"><span class="t-val" id="stationTelZone">WR</span><span class="t-lbl">Zone</span></div>
+              <div class="t-stat"><span class="t-val" id="stationTelState">Gujarat</span><span class="t-lbl">State</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Power Grid & Energy Inspector -->
+        <div class="insp-tab-pane" id="tabEnergy">
+          <div class="power-select-box">
+            <select id="powerSelect" class="power-dropdown" aria-label="Select Premier Power Generation Asset">
+              <option value="">⚡ Select Power Facility...</option>
+              <optgroup label="Thermal & Nuclear Megaprojects">
+                <option value="Mundra Thermal Power Station (Adani Power)">Mundra Thermal — Adani (4,620 MW Coal)</option>
+                <option value="Mundra Ultra Mega Power Plant (Tata Power UMPP)">Mundra UMPP — Tata (4,000 MW Coal)</option>
+                <option value="Kakrapar Atomic Power Station (KAPS Unit 1-4)">Kakrapar Nuclear KAPS (1,840 MW Atomic)</option>
+                <option value="Wanakbori Thermal Power Station">Wanakbori TPS — GSECL (1,640 MW Coal)</option>
+                <option value="Salaya Thermal Power Plant (Essar Power)">Salaya TPP — Essar (1,200 MW Coal)</option>
+              </optgroup>
+              <optgroup label="Renewable Mega-Parks (Solar & Wind)">
+                <option value="Khavda Renewable Energy Park (Phase I)">Khavda RE Mega-Park (2,140 MW Hybrid)</option>
+                <option value="Jakhau Wind Energy Farm">Jakhau Wind Farm (1,000 MW Wind)</option>
+                <option value="Charanka Solar Park">Charanka Solar Park — GPCL (790 MW Solar)</option>
+                <option value="Raghanesda Solar Park">Raghanesda Solar Park (700 MW Solar)</option>
+                <option value="Dwarka Coastal Wind Farm">Dwarka Coastal Wind (450 MW Wind)</option>
+                <option value="Dholera Solar Park (Phase I)">Dholera Solar Park (300 MW Solar)</option>
+              </optgroup>
+              <optgroup label="Hydro & Gas Turbines">
+                <option value="Sardar Sarovar River Bed Power House (RBPH)">Sardar Sarovar RBPH (1,200 MW Hydro)</option>
+                <option value="DGEN Mega Combined Cycle Power Plant (Torrent Dahej)">DGEN Mega CCGT (1,200 MW Gas)</option>
+                <option value="Sugen Combined Cycle Power Plant (Torrent Power)">Sugen CCPP (1,148 MW Gas)</option>
+                <option value="Ukai Hydro Power Station">Ukai Hydro (300 MW Dam)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="power-filter-pills" id="powerFilterPills">
+            <button class="p-pill active" data-cat="all">All</button>
+            <button class="p-pill" data-cat="solar">Solar</button>
+            <button class="p-pill" data-cat="wind">Wind</button>
+            <button class="p-pill" data-cat="nuclear">Nuclear</button>
+            <button class="p-pill" data-cat="hydro">Hydro</button>
+            <button class="p-pill" data-cat="thermal">Thermal</button>
+            <button class="p-pill" data-cat="gas">Gas</button>
+          </div>
+
+          <div class="transmission-select-box" style="margin-top: 8px;">
+            <select id="transmissionSelect" class="transmission-dropdown" aria-label="Select 400kV / 765kV Transmission Corridor">
+              <option value="">⚡ Select Transmission Corridor...</option>
+              <optgroup label="765 kV Ultra-High Voltage (UHV)">
+                <option value="765-MUNDRA-PIRANA">765 kV Mundra - Lakadia - Pirana (337.4 km)</option>
+                <option value="765-KHAVDA-VADODARA">765 kV Khavda RE - Dehgam - Vadodara (449.1 km)</option>
+              </optgroup>
+              <optgroup label="400 kV Extra-High Voltage (EHV)">
+                <option value="400-CHARANKA-GANDHINAGAR">400 kV Charanka Solar - Gandhinagar (186.2 km)</option>
+                <option value="400-SSNNL-DEHGAM">400 kV Sardar Sarovar Hydro Grid (194.5 km)</option>
+                <option value="400-KAKRAPAR-VAPI">400 kV Kakrapar Nuclear - Vapi (134.1 km)</option>
+                <option value="400-WANAKBORI-AHMEDABAD">400 kV Wanakbori - Ahmedabad (112.3 km)</option>
+                <option value="400-SIKKA-JETPUR">400 kV Sikka - Jamnagar - Jetpur (168.4 km)</option>
+                <option value="400-SUGEN-HAZIRA">400 kV Sugen - Hazira Grid (96.2 km)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div id="powerTelemetry" class="power-telemetry hidden">
+            <div class="telemetry-header">
+              <span class="telemetry-title" id="powerTelName">Mundra Thermal Power Station</span>
+              <span class="telemetry-cap-badge" id="powerTelCap">4,620 MW</span>
+              <button class="telemetry-close" id="clearPowerBtn" title="Reset power asset focus">✕</button>
+            </div>
+            <p class="telemetry-route" id="powerTelOperator">Adani Power — Supercritical Coal</p>
+            <div class="telemetry-stats">
+              <div class="t-stat"><span class="t-val" id="powerTelCat">Thermal</span><span class="t-lbl">Source</span></div>
+              <div class="t-stat"><span class="t-val" id="powerTelDist">Kutch</span><span class="t-lbl">District</span></div>
+              <div class="t-stat"><span class="t-val" id="powerTelGreen">Baseload</span><span class="t-lbl">Type</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compact Refined Symbology Key -->
+      <div class="control-group legend-group">
+        <span class="group-label">Symbology Key</span>
+        <div class="legend-grid">
+          <div class="legend-chip"><span class="sym-line sym-exp"></span> Expressway (NE-1)</div>
+          <div class="legend-chip"><span class="sym-line sym-gq"></span> Golden Quad (NH-48)</div>
+          <div class="legend-chip"><span class="sym-line sym-art"></span> Arterial Corridor</div>
+          <div class="legend-chip"><span class="sym-line sym-nh"></span> Primary NH</div>
+          <div class="legend-chip"><span class="sym-rail-dual"></span> Dual-Tone Track</div>
+          <div class="legend-chip"><span class="sym-dot sym-major-station"></span> Major Rail Hub</div>
+          <div class="legend-chip"><span class="sym-dot sym-power-major"></span> Major Plant (≥500 MW)</div>
+          <div class="legend-chip"><span class="sym-line sym-trans-765"></span> 765 kV UHV Line</div>
+          <div class="legend-chip"><span class="sym-line sym-trans-400"></span> 400 kV EHV Line</div>
+          <div class="legend-chip"><span class="sym-border sym-border-subtle"></span> District Boundary</div>
+          <div class="legend-chip"><span class="sym-border sym-border-active"></span> Selected District</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Bottom HUD Bar -->
+    <div class="map-hud">
+      <div class="hud-item">
+        <span class="hud-label">COORDS</span>
+        <span class="hud-value" id="hudCoords">22.3094° N, 72.1362° E</span>
+      </div>
+      <div class="hud-divider"></div>
+      <div class="hud-item">
+        <span class="hud-label">ZOOM</span>
+        <span class="hud-value" id="hudZoom">7.5</span>
+      </div>
+      <div class="hud-divider"></div>
+      <div class="hud-item">
+        <span class="hud-label">TOTAL ASSETS</span>
+        <span class="hud-value">7,344 Indexed</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Technical Specs & Metadata Modal (Week 6 Accessible Dialog) -->
+  <dialog id="aboutModal" class="system-modal" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <div class="modal-card">
+      <div class="modal-card-header">
+        <div class="modal-title-wrap">
+          <span class="modal-badge">GEOSPATIAL DIGITAL TWIN SPECIFICATIONS</span>
+          <h2 id="modalTitle">Gujarat InfraMap System Architecture</h2>
+        </div>
+        <button id="closeModalBtn" class="modal-close-icon" aria-label="Close dialog">&times;</button>
+      </div>
+
+      <div class="modal-card-body" id="modalDesc">
+        <div class="spec-highlight">
+          <p>An open, zero-backend, client-side digital infrastructure twin aggregating <strong>7,344 verified geospatial features</strong> across Gujarat into a real-time responsive visualization engine operating strictly in EPSG:4326 (WGS 84).</p>
+        </div>
+
+        <h3 class="spec-subheading">Authoritative 7-Layer Infrastructure Inventory</h3>
+        <div class="spec-table-wrap">
+          <table class="spec-table">
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Features</th>
+                <th>Coverage & Scope</th>
+                <th>Authoritative Source</th>
+                <th>Geometry</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Districts</strong></td>
+                <td>33</td>
+                <td>All 33 revenue districts of Gujarat</td>
+                <td>Survey of India / LGD</td>
+                <td>MultiPolygon</td>
+              </tr>
+              <tr>
+                <td><strong>District HQs</strong></td>
+                <td>33</td>
+                <td>Administrative capital centroids</td>
+                <td>Census of India / LGD</td>
+                <td>Point Node</td>
+              </tr>
+              <tr>
+                <td><strong>Power Generation</strong></td>
+                <td>44</td>
+                <td>31,906.4 MW across 6 energy classifications</td>
+                <td>CEA / GSECL / MoP</td>
+                <td>Point Node</td>
+              </tr>
+              <tr>
+                <td><strong>GETCO Power Grid</strong></td>
+                <td>22</td>
+                <td>12 transmission lines (400/765 kV) & 10 pooling substations</td>
+                <td>GETCO / POWERGRID</td>
+                <td>LineString & Point</td>
+              </tr>
+              <tr>
+                <td><strong>Highways & Expressways</strong></td>
+                <td>43 Unified Corridors</td>
+                <td>Golden Quad (NH-48), NE-1, NE-4, All Primary & Feeder Arterials</td>
+                <td>MoRTH / NHAI</td>
+                <td>MultiLineString</td>
+              </tr>
+              <tr>
+                <td><strong>Railway Corridors</strong></td>
+                <td>2,264</td>
+                <td>Western Railway broad gauge mainline corridors</td>
+                <td>Indian Railways / OSM</td>
+                <td>LineString</td>
+              </tr>
+              <tr>
+                <td><strong>Railway Stations</strong></td>
+                <td>623</td>
+                <td>Western Railway operational stations & junctions</td>
+                <td>IRCTC / DataMeet</td>
+                <td>Point Node</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="spec-subheading">Keyboard Navigation Shortcuts</h3>
+        <div class="shortcuts-grid">
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">/</kbd>
+            <span class="shortcut-desc">Focus Universal Search</span>
+          </div>
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">D</kbd>
+            <span class="shortcut-desc">Toggle Layer Control Drawer</span>
+          </div>
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">M</kbd>
+            <span class="shortcut-desc">Toggle Distance Measurement Tool</span>
+          </div>
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">E</kbd>
+            <span class="shortcut-desc">Export Current Map View as PNG</span>
+          </div>
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">Esc</kbd>
+            <span class="shortcut-desc">Close Modal / Exit Measuring</span>
+          </div>
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">R</kbd>
+            <span class="shortcut-desc">Reset View to Full Gujarat</span>
+          </div>
+        </div>
+
+        <h3 class="spec-subheading">Free Basemap & Tile Providers</h3>
+        <div class="api-key-box" style="background: rgba(30,41,59,0.7); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 1rem; margin-top: 0.5rem;">
+          <p style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 0.75rem;">
+            <strong>100% Free Default:</strong> The app uses OpenStreetMap (Clean & Dark Slate), Esri Satellite, and OpenTopoMap without requiring any API keys or registration.
+          </p>
+          <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.75rem;">
+            <strong>Optional Mapbox Token:</strong> If you prefer to use high-resolution Mapbox Dark Navigation tiles, sign up for a free developer account at <a href="https://account.mapbox.com/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8;">mapbox.com</a> (50,000 free map loads/mo) and paste your public token below:
+          </p>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="customApiKeyInput" placeholder="Enter optional Mapbox pk.eyJ... token" aria-label="Optional Mapbox API Token" style="flex: 1; height: 36px; background: rgba(15,23,42,0.9); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 0 0.75rem; color: #fff; font-size: 0.8rem;">
+            <button id="saveApiKeyBtn" style="background: #0284c7; color: #fff; border: none; padding: 0 1rem; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.8rem;">Save Key</button>
+          </div>
+          <span id="apiKeyStatus" style="display: block; font-size: 0.75rem; color: #10b981; margin-top: 0.4rem;"></span>
+        </div>
+
+        <h3 class="spec-subheading" style="margin-top: 1rem;">Architecture, Geometry & Precision</h3>
+        <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.55;">Built with <strong>Leaflet.js v1.9</strong> and optimized with GDAL/OGR coordinate rounding to 5 decimal places (~1.1 meter ground precision). Layer opacities are hardware-composited on custom CSS panes for 60 FPS performance without vector re-rendering. Desktop GIS integration provided via preconfigured <code>gujarat_inframap.qgs</code> for QGIS 4.0.1.</p>
+        
+        <div class="spec-disclaimer" style="margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(15, 23, 42, 0.6); border-left: 3px solid #0ea5e9; border-radius: 4px; font-size: 0.76rem; color: #64748b;">
+          <strong>Disclaimer:</strong> This digital twin is developed for educational, planning, and academic research purposes. Spatial boundaries and infrastructure alignments represent public open-source compilations and do not constitute official statutory boundary demarcations.
+        </div>
+      </div>
+
+      <div class="modal-card-footer">
+        <button id="modalDismissBtn" class="btn-dismiss">Close Specifications</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Leaflet Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- HTML2Canvas Library for Client-Side High-Res Map Snapshotting (Week 9) -->
+  <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- Application Logic -->
+  <script src="js/app.js?v=4.0.0"></script>
+</body>
+</html>

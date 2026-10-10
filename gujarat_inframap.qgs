@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis projectname="Gujarat InfraMap" version="3.34.0">
+  <title>Gujarat InfraMap — Infrastructure GIS</title>
+  <homePath path=""/>
+  <layer-tree-group>
+    <customproperties/>
+    <layer-tree-layer name="District Headquarters Nodes" id="district_hq" checked="Qt::Checked" expanded="1" source="./data/gujarat_district_hq.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="High-Voltage Substations &amp; Grid Nodes" id="substations" checked="Qt::Checked" expanded="1" source="./data/gujarat_transmission.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="GETCO &amp; PowerGrid Transmission Corridors (400kV/765kV)" id="transmission_lines" checked="Qt::Checked" expanded="1" source="./data/gujarat_transmission.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="Power and Energy Generation Facilities" id="power_plants" checked="Qt::Checked" expanded="1" source="./data/gujarat_power.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="Railway Stations (Western Railway)" id="railway_stations" checked="Qt::Checked" expanded="1" source="./data/gujarat_stations.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="Railway Corridors" id="railways" checked="Qt::Checked" expanded="1" source="./data/gujarat_railways.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="National Highways and Expressways" id="roads" checked="Qt::Checked" expanded="1" source="./data/gujarat_roads.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="District Boundaries (Gujarat)" id="districts" checked="Qt::Checked" expanded="1" source="./data/gujarat_districts.geojson" providerKey="ogr"/>
+  </layer-tree-group>
+  <mapcanvas>
+    <units>degrees</units>
+    <extent>
+      <xmin>68.10</xmin>
+      <ymin>20.10</ymin>
+      <xmax>74.50</xmax>
+      <ymax>24.75</ymax>
+    </extent>
+    <destinationsrs>
+      <spatialrefsys>
+        <authid>EPSG:4326</authid>
+        <description>WGS 84</description>
+        <srid>4326</srid>
+      </spatialrefsys>
+    </destinationsrs>
+  </mapcanvas>
+  <projectlayers>
+    <maplayer type="vector" id="district_hq" name="District Headquarters Nodes" readOnly="0">
+      <id>district_hq</id>
+      <datasource>./data/gujarat_district_hq.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>District Headquarters Nodes</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="substations" name="High-Voltage Substations &amp; Grid Nodes" readOnly="0">
+      <id>substations</id>
+      <datasource>./data/gujarat_transmission.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>High-Voltage Substations &amp; Grid Nodes</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="transmission_lines" name="GETCO &amp; PowerGrid Transmission Corridors (400kV/765kV)" readOnly="0">
+      <id>transmission_lines</id>
+      <datasource>./data/gujarat_transmission.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>GETCO &amp; PowerGrid Transmission Corridors (400kV/765kV)</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="power_plants" name="Power and Energy Generation Facilities" readOnly="0">
+      <id>power_plants</id>
+      <datasource>./data/gujarat_power.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>Power and Energy Generation Facilities</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="railway_stations" name="Railway Stations (Western Railway)" readOnly="0">
+      <id>railway_stations</id>
+      <datasource>./data/gujarat_stations.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>Railway Stations (Western Railway)</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="railways" name="Railway Corridors" readOnly="0">
+      <id>railways</id>
+      <datasource>./data/gujarat_railways.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>Railway Corridors</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="roads" name="National Highways and Expressways" readOnly="0">
+      <id>roads</id>
+      <datasource>./data/gujarat_roads.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>National Highways and Expressways</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="districts" name="District Boundaries (Gujarat)" readOnly="0">
+      <id>districts</id>
+      <datasource>./data/gujarat_districts.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>District Boundaries (Gujarat)</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+  </projectlayers>
+</qgis>
