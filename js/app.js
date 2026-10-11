@@ -6936,6 +6936,14 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (window.GeospatialAnalysisToolkit) {
         window.GeospatialAnalysisToolkit.openModal();
       }
+    } else if ((e.key === "i" || e.key === "I") && !isTyping) {
+      e.preventDefault();
+      const intelModal = document.getElementById("infraIntelModal");
+      if (intelModal && intelModal.open) {
+        intelModal.close();
+      } else if (window.InfrastructureIntelligence) {
+        window.InfrastructureIntelligence.openModal();
+      }
     } else if ((e.key === "r" || e.key === "R") && !isTyping) {
       e.preventDefault();
       resetToStateView();
@@ -6958,6 +6966,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const pKey = presetMap[e.key];
       if (pKey) applyPreset(pKey);
     } else if (e.key === "Escape") {
+      const intelModal = document.getElementById("infraIntelModal");
+      if (intelModal && intelModal.open) {
+        intelModal.close();
+        return;
+      }
       const satModal = document.getElementById("spatialAnalysisModal");
       if (satModal && satModal.open) {
         satModal.close();
@@ -7094,6 +7107,51 @@ document.addEventListener("DOMContentLoaded", () => {
     openSpatialToolkitBtn.addEventListener("click", () => {
       if (window.GeospatialAnalysisToolkit) {
         window.GeospatialAnalysisToolkit.openModal();
+      }
+    });
+  }
+
+  // Initialize Gujarat Infrastructure Intelligence Engine
+  if (window.InfrastructureIntelligence && typeof window.InfrastructureIntelligence.init === "function") {
+    Promise.all([
+      fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
+      fetchCachedGeoJson("data/gujarat_power.geojson"),
+      fetchCachedGeoJson("data/gujarat_transmission.geojson"),
+      fetchCachedGeoJson("data/gujarat_roads.geojson"),
+      fetchCachedGeoJson("data/gujarat_stations.geojson"),
+      fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
+      fetchCachedGeoJson("data/gujarat_urban_industry.geojson"),
+      fetchCachedGeoJson("data/gujarat_groundwater_geology.geojson"),
+      fetchCachedGeoJson("data/gujarat_geoenvironmental.geojson"),
+      fetchCachedGeoJson("data/gujarat_environment_disaster.geojson"),
+      fetchCachedGeoJson("data/gujarat_districts.geojson"),
+      fetchCachedGeoJson("data/gujarat_district_hq.geojson")
+    ]).then(([watData, powData, transData, roadsData, statData, structData, urbData, gwData, geoData, disData, distData, hqData]) => {
+      window.InfrastructureIntelligence.init(map, {
+        waterData: watData,
+        powerData: powData,
+        transData: transData,
+        roadsData: roadsData,
+        stationsData: statData,
+        structData: structData,
+        urbanData: urbData,
+        groundwaterData: gwData,
+        geoenvData: geoData,
+        disasterData: disData,
+        districtsData: distData,
+        districtHqData: hqData
+      });
+    }).catch(err => {
+      console.warn("[InfrastructureIntelligence] Data load notice:", err);
+      window.InfrastructureIntelligence.init(map, {});
+    });
+  }
+
+  const openInfraIntelBtn = document.getElementById("openInfraIntelBtn");
+  if (openInfraIntelBtn) {
+    openInfraIntelBtn.addEventListener("click", () => {
+      if (window.InfrastructureIntelligence) {
+        window.InfrastructureIntelligence.openModal();
       }
     });
   }

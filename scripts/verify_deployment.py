@@ -120,6 +120,7 @@ def test_javascript_syntax():
         "js/district_registry.js",
         "js/temporal_explorer.js",
         "js/geospatial_analysis_toolkit.js",
+        "js/infrastructure_intelligence.js",
         "js/app.js",
         "sw.js"
     ]

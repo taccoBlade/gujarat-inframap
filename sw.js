@@ -4,7 +4,7 @@
  * Version: 5.0.0
  */
 
-const CACHE_NAME = "gujarat-inframap-v5.2.0";
+const CACHE_NAME = "gujarat-inframap-v5.3.0";
 
 const PRECACHE_ASSETS = [
   "./",
@@ -22,6 +22,7 @@ const PRECACHE_ASSETS = [
   "./js/district_registry.js",
   "./js/temporal_explorer.js",
   "./js/geospatial_analysis_toolkit.js",
+  "./js/infrastructure_intelligence.js",
   "./js/app.js",
   "./manifest.json",
   "./assets/icon-192.png",

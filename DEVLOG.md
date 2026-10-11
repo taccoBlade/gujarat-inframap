@@ -1070,3 +1070,61 @@ Integrate an in-browser **Geospatial Analysis Toolkit** directly into the map co
   - Drawing persistence and GeoJSON export verified.
   - HUD controls, modal tabs, and keybinding <kbd>A</kbd> / <kbd>Esc</kbd> verified.
 - **Regression Suite:** `node scripts/test_temporal_explorer.js`, `node scripts/test_ui_rescue_and_ports.js`, and `node scripts/test_browser_interactive.js` executed with 100% pass rate.
+
+---
+
+## Phase 25: Gujarat Infrastructure Intelligence Dashboard — Evidence-Backed Spatial Analytics, Topological Relationships, WEA Nexus & Context Reports
+
+### Objective & Architectural Mandate
+Engineer an evidence-backed **Gujarat Infrastructure Intelligence Dashboard** (`js/infrastructure_intelligence.js`) that produces reproducible spatial insights directly from the 13 statutory datasets and linked asset registers. Strict anti-fabrication mandate: zero synthetic operational numbers, fictional marketing summaries, or proximity-based assumptions presented as physical dependencies.
+
+### Core Architectural Subsystems & Evidence Rigor
+1. **Asset Relationship Explorer (`#intelPane-relationships`)**:
+   - Indexes direct topological foreign keys across all mapped assets (dams, rivers, canals, power stations, substations, transmission lines, ports, bridges).
+   - Resolves directional relationships:
+     - **Upstream Nodes**: Hydraulic inflow sources (e.g. Narmada River for Sardar Sarovar; Sardar Sarovar head for CHPH).
+     - **Downstream Nodes**: Hydraulic discharge channels, pick-up barrages/weirs, and offtaking canals.
+     - **Dependent Infrastructure**: Bulk drinking water treatment plants (WTPs), irrigation command areas, and industrial SEZ grid substations.
+   - Rigorous Dependency Classification: Every edge explicitly tagged as `[ VERIFIED STATUTORY TOPOLOGY ]`, `[ HYDRAULIC DISCHARGE CONDUIT ]`, `[ ELECTRICAL EVACUATION BUSBAR ]`, or `[ MULTI-MODAL LOGISTIC INTERFACE ]`.
+   - Spatial Visualizer: Live "Highlight Connected Network on Map" plots pulsing upstream/downstream flow vectors and fits camera bounds.
+2. **District Infrastructure Comparison (`#intelPane-districts`)**:
+   - Computes reproducible cross-domain metrics for all 33 revenue districts from the spatial database:
+     - Administrative footprint: Area ($\text{km}^2$), 2011 Census Population, Talukas count.
+     - Water inventory: Dams & barrages count, Gross Storage Capacity ($\text{MCM}$), Live Storage ($\text{MCM}$), Monitored CWC river gauges.
+     - Energy footprint: Generating stations count, Total Installed Capacity ($\text{MW}$), fuel source breakdown (Hydro, Solar, Wind, Thermal, Gas, Nuclear), $400\text{ kV} / 765\text{ kV}$ substations count.
+     - Transport & Logistics: Western Railway stations count, mapped strategic highway length ($\text{km}$), signature civil structures (bridges/flyovers), commercial seaports, airports, and SEZs.
+   - **Mandatory Caveat & Anti-Misinterpretation Banner:**
+     - Explicit statutory disclosure: *"A district with more mapped assets is not necessarily more developed. Variations reflect statutory gazette curation completeness, state vs national reporting thresholds, and geographic concentration of bulk utilities."*
+3. **Water–Energy–Agriculture (WEA) Nexus Architecture (`#intelPane-nexus`)**:
+   - Formalized 5 statewide macro-systems:
+     1. *Narmada River Lifeline & Multi-Purpose Inter-Basin Grid* ($9{,}460\text{ MCM}$ storage $\iff 1{,}450\text{ MW}$ hydro $\iff 1.845\text{M ha}$ command).
+     2. *Tapi River Valley Hydropower & Kakrapar Irrigation System* ($7{,}414\text{ MCM}$ storage $\iff 300\text{ MW}$ hydro $\iff 379\text{k ha}$ command).
+     3. *Mahi River Kadana Hydropower & Wanakbori Thermal Cooling Nexus* ($1{,}542\text{ MCM}$ storage $\iff 240\text{ MW}$ hydro $\iff 212\text{k ha}$ command $\iff 1{,}470\text{ MW}$ thermal cooling).
+     4. *Sabarmati Dharoi Storage, Urban Supply & Fatehwadi Command* ($907\text{ MCM}$ storage $\iff 650\text{ MLD}$ AMC potable water $\iff 56\text{k ha}$ command).
+     5. *Banas River Dantiwada Reservoir & Arid Alluvial Aquifer Recharge* ($464\text{ MCM}$ storage $\iff$ Sujalam Sufalam spreading canals $\iff$ Mehsana/Patan alluvial aquifers).
+   - Interactive spatial flow tracer: Animates color-coded multi-sector conduits across Leaflet panes.
+4. **On-Demand Infrastructure Context Reports (`#intelPane-reports`)**:
+   - Location-agnostic radial screening engine:
+     - Computes geodesic distances on WGS 84 ellipsoid to nearest Highway (with IRC:73 transit estimate $1.28\times$), Railway Station, Commercial Seaport, Commercial Airport, Storage Dam, and CWC gauge.
+     - Identifies CGWB groundwater extraction category, BIS IS 1893 seismic hazard zone, nearest active seismogenic fault line, and NDMA basic wind speed zone.
+     - **Non-Dependency Guarantee:** Explicitly clarifies that Euclidean proximity does not constitute physical easement or operational dependency.
+   - Actionable spatial output: Drops screening pin with $10\text{ km}$ and $25\text{ km}$ concentric radial buffer rings on map.
+5. **Coverage & Uncertainty Dashboard (`#intelPane-coverage`)**:
+   - Comprehensive audit across all 13 core GIS layers (3,327 features):
+     - Feature counts, attribute completeness percentages ($\ge 92.7\%$), primary statutory custodian agencies (CWC, CEA, GETCO, NHAI, Western Railway, GSI, CGWB, GMB, GIDC), publication vintages, and explicit coverage limitations/blind spots.
+6. **Distinctive Asset Superlatives (`#intelPane-distinctive`)**:
+   - Evidence-backed cards highlighting Gujarat's highest-impact statutory assets with dual narratives:
+     - *'Why This Matters'* (systemic role in grid/water/transport economy).
+     - *'What Makes It Distinctive'* (structural and physical superlatives from official gazettes).
+   - Deep links directly into the Asset Relationship Explorer.
+
+### Verification & Validation Suite
+- **Deployment Manifests:** `python scripts/verify_deployment.py` passed 100% across all 13 GeoJSON layers (3,327 features), 18 static resources, and 15 JavaScript modules.
+- **Dedicated Automation Suite:** `node scripts/test_infrastructure_intelligence.js` executed via Headless Chrome CDP with 0 console errors:
+  - Asset relationship graphs verified (Sardar Sarovar: 1 upstream, 5 downstream, 2 dependent, 8 verified links).
+  - District infrastructure comparison verified across all 33 districts (Ahmedabad, Kachchh, Narmada calculations verified).
+  - WEA nexus systems verified (all 5 macro systems, stage sequences, and net energy metrics).
+  - Context report generated with projected UTM 43N coordinates and statutory disclaimers.
+  - Coverage audit validated (13 layers, 3,327 features).
+  - Modal navigation, tab switching, and keyboard shortcuts <kbd>I</kbd> and <kbd>Esc</kbd> verified.
+- **Regression Suite:** `node scripts/test_geospatial_toolkit.js`, `node scripts/test_temporal_explorer.js`, and `node scripts/test_browser_interactive.js` passed 100%.
