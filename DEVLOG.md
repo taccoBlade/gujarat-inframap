@@ -1027,3 +1027,46 @@ Integrate a dedicated **Temporal Explorer Engine** into the Gujarat Digital Twin
 - **Dedicated Temporal Automation Suite:** `node scripts/test_temporal_explorer.js` executed with 0 errors, validating HUD timeline stepping, modal tab switching, comparative SVG chart rendering, missing interval indicators, and shortcut <kbd>Y</kbd>.
 - **Regression Testing:** `node scripts/test_browser_interactive.js` and `node scripts/test_ui_rescue_and_ports.js` passed 100% across all modals and viewports.
 
+---
+
+## Phase 24: Gujarat Geospatial Analysis Toolkit — Geodesic Measurement, Spatial Buffering, and Environmental Screening
+
+### Objective & Architectural Mandate
+Integrate an in-browser **Geospatial Analysis Toolkit** directly into the map controls of Gujarat InfraMap without external GIS software or heavy client-side C++ / WASM dependencies. The toolkit equips engineers, urban planners, and infrastructure auditors with geodetic measurement, area calculation, coordinate inspection with projected CRS (UTM 43N), drawing & spatial query engines, buffer analysis, multi-asset comparative evaluation, hydrological network topology inspection, and environmental & terrain context screening.
+
+### Core Architectural Features & Geodetic Standards
+1. **High-Accuracy Geodetic & Projected Solvers (`js/geospatial_analysis_toolkit.js`)**:
+   - **Straight-Line & Multi-Segment Geodesic Distance:** Employs WGS 84 ellipsoid Vincenty / Haversine metric calculations with segment-by-segment and cumulative chainage readouts.
+   - **Transparent Road Distance Disclaimer:** Straight-line distances are explicitly marked as Geodesic (WGS 84). Road routing transit estimates disclose IRC:73 winding coefficient (1.28×), preventing misleading travel times.
+   - **Spherical Excess Polygon Area:** Uses Gauss spherical excess formula ($A = R^2 \cdot E$) to compute planar and geodesic surface area (m², km², hectares, acres) and perimeter.
+   - **Projected CRS Transformation (EPSG:32643 UTM Zone 43N):** Built-in Transverse Mercator forward projection for Gujarat (Central Meridian 75°E, False Easting 500,000m) outputting Easting/Northing in meters alongside standard WGS 84 Decimal Degrees and DMS coordinates.
+2. **Interactive Drawing & Spatial Storage Engine**:
+   - Allows users to sketch, annotate, label, and style custom Points, Polyline Alignments, and Polygon Boundaries directly onto the Leaflet canvas.
+   - Local persistence via `localStorage` under `gujarat_inframap_user_drawings` with full JSON schema validation and GeoJSON FeatureCollection export capabilities.
+   - Zero corruption policy: All user geometries are managed in isolated Leaflet LayerGroups (`userDrawingsLayerGroup`, `analysisLayerGroup`, `bufferLayerGroup`), guaranteeing official statutory datasets are never mutated.
+3. **Spatial Query, Buffering, and Intersecting Asset Discovery**:
+   - **Buffer Generator:** Calculates approximate geodesic circular and corridor buffers at user-defined radii (0.5 km to 50.0 km).
+   - **Ray-Casting Point-in-Polygon Engine:** Identifies which mapped infrastructure assets (power plants, dams, substations, ports, SEZs, stations) intersect a drawn boundary, district, or buffer zone.
+   - **Nearest Asset Finder:** Locates the closest mapped infrastructure assets to any queried point with explicit distance calculations, coordinate inspection, and direct links to the Asset Inspector.
+4. **Multi-Asset Comparative Benchmarking & Hydro-Network Topology**:
+   - **Comparative Workbench Tab:** Compare 2 to 4 infrastructure assets side-by-side across capacity, status, district, coordinates, and operational parameters.
+   - **Hydrological Network Topology Explorer:** Integrates directly with `WaterSystemsNetwork` (Phase 15) to inspect upstream/downstream flow relationships, connected dams, barrages, and canal branches.
+5. **Preliminary Environmental & Terrain Alignment Screening**:
+   - Screens any drawn line alignment or polygon against official statutory hazard layers:
+     - Seismic Hazard Zone (BIS IS 1893 Zone V Kutch, Zone IV Saurashtra/Bharuch).
+     - Active Geological Fault Lines (Kutch Mainland Fault, Katrol Hill Fault, South Wagad Fault, Narmada-Son Fault).
+     - GSI Regional Geology & Lithology (Alluvium, Deccan Basalt, Tertiary Sandstone).
+     - SRTM Terrain & Elevation Profile estimation.
+6. **Dual HUD & Workbench Modal Interface**:
+   - **Floating Map Dock & Active Tool HUD (`#spatialAnalysisDock`, `#spatialAnalysisHUD`):** Positioned ergonomically on the map canvas with live metric updates, cursor coordinate tracking, and quick-clear controls.
+   - **Comprehensive Workbench Modal (`#spatialAnalysisModal`):** Accessible via header button, More Tools dropdown, map dock, or hotkey <kbd>A</kbd>. Features 5 organized tabs: Measurements, Compare, User Drawings, Environmental Screening, and Methodology & CRS References.
+
+### Verification & Validation Suite
+- **Deployment Manifests:** `python scripts/verify_deployment.py` passed 100% across all 13 GeoJSON layers (3,327 features), 17 static resources, and 14 JavaScript modules.
+- **Dedicated Toolkit Automation Suite:** `node scripts/test_geospatial_toolkit.js` executed via Headless Chrome CDP with 0 console errors:
+  - Geodetic distance verified (Ahmedabad to Vadodara: 101.20 km).
+  - Spherical polygon area verified (11,423.02 km²).
+  - UTM Zone 43N conversion verified (Easting: 258,165 m, Northing: 2,569,354 m).
+  - Drawing persistence and GeoJSON export verified.
+  - HUD controls, modal tabs, and keybinding <kbd>A</kbd> / <kbd>Esc</kbd> verified.
+- **Regression Suite:** `node scripts/test_temporal_explorer.js`, `node scripts/test_ui_rescue_and_ports.js`, and `node scripts/test_browser_interactive.js` executed with 100% pass rate.

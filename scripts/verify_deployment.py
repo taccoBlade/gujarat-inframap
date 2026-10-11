@@ -119,6 +119,7 @@ def test_javascript_syntax():
         "js/water_scenarios_lab.js",
         "js/district_registry.js",
         "js/temporal_explorer.js",
+        "js/geospatial_analysis_toolkit.js",
         "js/app.js",
         "sw.js"
     ]

@@ -12649,3 +12649,453 @@ dialog.system-modal::backdrop {
     min-width: 100%;
   }
 }
+
+/* ==========================================================================
+   Geospatial Analysis Toolkit Styling (Dock, HUD & Modal)
+   ========================================================================== */
+
+/* Crosshair cursor when active analysis tool is digitizing */
+#map.analysis-crosshair-active,
+#map.analysis-crosshair-active .leaflet-container,
+#map.analysis-crosshair-active .leaflet-pane {
+  cursor: crosshair !important;
+}
+
+/* Floating GIS Dock (Top-Left under Zoom) */
+.spatial-analysis-dock {
+  position: absolute;
+  top: 82px;
+  left: 14px;
+  z-index: var(--z-controls);
+  background: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 15px rgba(56, 189, 248, 0.15);
+  width: 140px;
+  transition: all 0.2s ease-in-out;
+}
+
+.sad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sad-pulse-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.sad-header-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: 0.03em;
+}
+
+.sad-collapse-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+.sad-collapse-btn:hover {
+  color: #38bdf8;
+}
+
+.sad-tools-grid {
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  gap: 2px;
+}
+.sad-tools-grid.collapsed {
+  display: none;
+}
+
+.sad-tool-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s;
+  text-align: left;
+}
+.sad-tool-btn:hover {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+}
+.sad-tool-btn.active {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+.sad-icon {
+  font-size: 0.85rem;
+}
+.sad-label {
+  white-space: nowrap;
+}
+
+/* Floating Spatial Analysis HUD */
+.spatial-analysis-hud {
+  position: absolute;
+  top: 82px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-hud);
+  width: min(580px, calc(100vw - 32px));
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 20px rgba(56, 189, 248, 0.2);
+  padding: 0.85rem 1.1rem;
+}
+.spatial-analysis-hud.hidden {
+  display: none !important;
+}
+
+.sahud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.sahud-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sahud-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.sahud-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.sahud-close-x {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+.sahud-close-x:hover {
+  color: #ef4444;
+}
+
+.sahud-instructions {
+  font-size: 0.70rem;
+  color: #94a3b8;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.4rem;
+}
+
+.sahud-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 0.65rem;
+}
+
+.sahud-stat-box {
+  background: rgba(2, 6, 23, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.sahud-stat-k {
+  font-size: 0.60rem;
+  font-weight: 700;
+  color: #64748b;
+  font-family: var(--font-mono);
+}
+.sahud-stat-v {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #38bdf8;
+}
+.sahud-stat-sub {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.sahud-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.sahud-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sahud-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+.sahud-btn.btn-primary {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+.sahud-btn.btn-danger {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+.sahud-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Coordinate Inspector Block */
+.sahud-coords-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+  font-size: 0.72rem;
+}
+.sahud-coord-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+  padding-bottom: 2px;
+}
+.sahud-coord-k {
+  color: #64748b;
+  font-weight: 600;
+}
+.sahud-coord-v {
+  color: #f8fafc;
+  text-align: right;
+}
+
+/* Nearest Assets */
+.sahud-nearest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+.sahud-nearest-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(2, 6, 23, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+}
+.sn-icon {
+  font-size: 1.1rem;
+}
+.sn-info {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.72rem;
+}
+.sn-info strong {
+  color: #f8fafc;
+}
+.sn-info small {
+  color: #94a3b8;
+  font-family: var(--font-mono);
+}
+
+.sahud-disclaimer {
+  font-size: 0.64rem;
+  color: #64748b;
+  border-left: 2px solid #38bdf8;
+  padding-left: 6px;
+  margin-bottom: 0.6rem;
+}
+
+/* Buffer & Env Screening */
+.sahud-buffer-slider-wrap {
+  margin-bottom: 0.6rem;
+}
+.sahud-buffer-slider-wrap input {
+  width: 100%;
+  accent-color: #f59e0b;
+}
+.sahud-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.60rem;
+  color: #64748b;
+  font-family: var(--font-mono);
+}
+.sahud-buffer-results {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 6px;
+  padding: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+.sbr-title {
+  font-size: 0.76rem;
+  color: #fbbf24;
+  margin-bottom: 0.3rem;
+}
+.sbr-counts {
+  display: flex;
+  gap: 0.8rem;
+  font-size: 0.70rem;
+  color: #e2e8f0;
+  flex-wrap: wrap;
+}
+
+.sahud-env-report {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  margin-bottom: 0.6rem;
+}
+.ser-item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+  padding-bottom: 2px;
+}
+.ser-k {
+  color: #64748b;
+  font-weight: 600;
+}
+.ser-v {
+  color: #f8fafc;
+  text-align: right;
+  max-width: 280px;
+}
+
+.sahud-empty-hint {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-style: italic;
+  padding: 0.4rem 0;
+  margin-bottom: 0.5rem;
+}
+
+/* Draw controls */
+.sahud-draw-type-row {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+.sahud-draw-type-btn {
+  flex: 1;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.sahud-draw-type-btn.active {
+  background: rgba(236, 72, 153, 0.2);
+  border-color: #ec4899;
+  color: #ffffff;
+}
+.sahud-draw-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Modal Launchers list */
+.sat-launcher-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.sat-launch-btn {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.12s;
+}
+.sat-launch-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.sat-del-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.sat-del-btn:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .spatial-analysis-dock {
+    top: auto;
+    bottom: 74px;
+    left: 12px;
+    width: min(200px, calc(100vw - 24px));
+  }
+  .spatial-analysis-hud {
+    top: auto;
+    bottom: 120px;
+    width: calc(100vw - 24px);
+  }
+}
