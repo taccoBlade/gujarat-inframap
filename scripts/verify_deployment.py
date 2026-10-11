@@ -107,7 +107,19 @@ def test_javascript_syntax():
     print("\n==================================================")
     print("STEP 3: Validating JavaScript Engine Syntax")
     print("==================================================")
-    js_files = ["js/app.js"]
+    js_files = [
+        "js/civil_science_stop.js",
+        "js/layer_manager.js",
+        "js/asset_inspector.js",
+        "js/dam_science_lab.js",
+        "js/water_systems_network.js",
+        "js/energy_infrastructure_explorer.js",
+        "js/transportation_explorer.js",
+        "js/geoenvironmental_intelligence.js",
+        "js/water_scenarios_lab.js",
+        "js/app.js",
+        "sw.js"
+    ]
     for js in js_files:
         assert os.path.exists(js), f"{js} missing"
         result = subprocess.run(["node", "--check", js], capture_output=True, text=True)

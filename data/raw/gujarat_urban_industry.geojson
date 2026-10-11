@@ -1,0 +1,1025 @@
+{
+  "type": "FeatureCollection",
+  "name": "gujarat_urban_industry",
+  "metadata": {
+    "title": "Gujarat Urban Infrastructure, Ports, Airports, Metro & Industrial Hubs",
+    "crs": "EPSG:4326 (WGS 84)",
+    "primary_sources": [
+      "UD&UHD",
+      "GMB",
+      "AAI",
+      "GIDC",
+      "GMRC"
+    ],
+    "total_features": 34,
+    "generated": "2026-10-10"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "GJ-URB-MC-001",
+      "properties": {
+        "id": "GJ-URB-MC-001",
+        "name": "Ahmedabad Municipal Corporation (AMC)",
+        "asset_category": "municipal_corporation",
+        "city": "Ahmedabad",
+        "area_sqkm": 466.0,
+        "population_2011": 5577940,
+        "smart_city_status": "Operational (Smart City Mission)",
+        "official_portal": "https://ahmedabadcity.gov.in",
+        "source_org": "Urban Development & Urban Housing Department (UD&UHD GoG)",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.58912,
+          23.02656
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-URB-MC-002",
+      "properties": {
+        "id": "GJ-URB-MC-002",
+        "name": "Surat Municipal Corporation (SMC)",
+        "asset_category": "municipal_corporation",
+        "city": "Surat",
+        "area_sqkm": 462.1,
+        "population_2011": 4467797,
+        "smart_city_status": "Operational (Smart City Awardee)",
+        "official_portal": "https://suratmunicipal.gov.in",
+        "source_org": "Urban Development & Urban Housing Department (UD&UHD GoG)",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.82567,
+          21.19612
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-URB-MC-003",
+      "properties": {
+        "id": "GJ-URB-MC-003",
+        "name": "Vadodara Municipal Corporation (VMC)",
+        "asset_category": "municipal_corporation",
+        "city": "Vadodara",
+        "area_sqkm": 220.3,
+        "population_2011": 1822221,
+        "smart_city_status": "Operational (Smart City Mission)",
+        "official_portal": "https://vmc.gov.in",
+        "source_org": "Urban Development & Urban Housing Department (UD&UHD GoG)",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.20539,
+          22.2882
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-URB-MC-004",
+      "properties": {
+        "id": "GJ-URB-MC-004",
+        "name": "Rajkot Municipal Corporation (RMC)",
+        "asset_category": "municipal_corporation",
+        "city": "Rajkot",
+        "area_sqkm": 129.2,
+        "population_2011": 1390640,
+        "smart_city_status": "Operational (Smart City Mission)",
+        "official_portal": "https://rmc.gov.in",
+        "source_org": "Urban Development & Urban Housing Department (UD&UHD GoG)",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.80503,
+          22.29564
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-URB-MC-005",
+      "properties": {
+        "id": "GJ-URB-MC-005",
+        "name": "Bhavnagar Municipal Corporation (BMC)",
+        "asset_category": "municipal_corporation",
+        "city": "Bhavnagar",
+        "area_sqkm": 108.3,
+        "population_2011": 605882,
+        "smart_city_status": "Active Urban Local Body",
+        "official_portal": "https://bmcgujarat.com",
+        "source_org": "Urban Development & Urban Housing Department (UD&UHD GoG)",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.13923,
+          21.77464
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-URB-MC-006",
+      "properties": {
+        "id": "GJ-URB-MC-006",
+        "name": "Jamnagar Municipal Corporation (JMC)",
+        "asset_category": "municipal_corporation",
+        "city": "Jamnagar",
+        "area_sqkm": 125.7,
+        "population_2011": 529308,
+        "smart_city_status": "Active Urban Local Body",
+        "official_portal": "https://mcjamnagar.com",
+        "source_org": "Urban Development & Urban Housing Department (UD&UHD GoG)",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.07241,
+          22.47148
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-URB-MC-007",
+      "properties": {
+        "id": "GJ-URB-MC-007",
+        "name": "Junagadh Municipal Corporation (JMC)",
+        "asset_category": "municipal_corporation",
+        "city": "Junagadh",
+        "area_sqkm": 160.0,
+        "population_2011": 319462,
+        "smart_city_status": "Active Urban Local Body",
+        "official_portal": "https://junagadhmunicipal.org",
+        "source_org": "Urban Development & Urban Housing Department (UD&UHD GoG)",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.46102,
+          21.52319
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-URB-MC-008",
+      "properties": {
+        "id": "GJ-URB-MC-008",
+        "name": "Gandhinagar Municipal Corporation (GMC)",
+        "asset_category": "municipal_corporation",
+        "city": "Gandhinagar",
+        "area_sqkm": 326.0,
+        "population_2011": 292797,
+        "smart_city_status": "Operational (State Capital Smart City)",
+        "official_portal": "https://gandhinagarmunicipal.com",
+        "source_org": "Urban Development & Urban Housing Department (UD&UHD GoG)",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.66059,
+          23.23719
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-PORT-001",
+      "properties": {
+        "id": "GJ-LOG-PORT-001",
+        "name": "Deendayal Port (Kandla)",
+        "asset_category": "seaport",
+        "district": "Kutch",
+        "authority": "Deendayal Port Authority (Major Port Trust)",
+        "capacity_mmt": 137.0,
+        "draft_m": 14.5,
+        "port_type": "Major Port (Bulk, Container, Crude)",
+        "berths_count": 16,
+        "source_org": "Gujarat Maritime Board (GMB) & MoPSW",
+        "source_url": "https://gmbports.org",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "NH 41 (Kandla–Gandhidham–Ahmedabad) & NH 27",
+        "rail_connectivity": "Western Railway Gandhidham Division + Western Dedicated Freight Corridor (WDFC) feeder link",
+        "freight_facilities": "16 Berths, 6 Oil Jetties, 137 MMT Capacity, Liquid Chemical Terminal",
+        "connected_structures": [
+          "GJ-TRM-006"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.2186,
+          23.0039
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-PORT-002",
+      "properties": {
+        "id": "GJ-LOG-PORT-002",
+        "name": "Mundra Port (APSEZ)",
+        "asset_category": "seaport",
+        "district": "Kutch",
+        "authority": "Adani Ports and SEZ (APSEZ)",
+        "capacity_mmt": 260.0,
+        "draft_m": 17.5,
+        "port_type": "Private Commercial Port (India's Largest Gateway)",
+        "berths_count": 28,
+        "source_org": "Gujarat Maritime Board (GMB) & MoPSW",
+        "source_url": "https://gmbports.org",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "NH 41 & 4-lane State Coastal Access Highway",
+        "rail_connectivity": "64 km Private Port Railway to Adipur + Western Dedicated Freight Corridor (WDFC)",
+        "freight_facilities": "28 Berths, 4 Container Terminals, 2 Single Point Moorings (SPM), 260 MMT Capacity",
+        "connected_structures": [
+          "GJ-TRM-006"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.7056,
+          22.7444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-PORT-003",
+      "properties": {
+        "id": "GJ-LOG-PORT-003",
+        "name": "Pipavav Port (APM Terminals)",
+        "asset_category": "seaport",
+        "district": "Amreli",
+        "authority": "APM Terminals Pipavav (GMB Concession)",
+        "capacity_mmt": 20.0,
+        "draft_m": 14.0,
+        "port_type": "Multi-Purpose Container & Bulk Port",
+        "berths_count": 5,
+        "source_org": "Gujarat Maritime Board (GMB) & MoPSW",
+        "source_url": "https://gmbports.org",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "NH 51 (Coastal National Highway)",
+        "rail_connectivity": "271 km Pipavav Railway Corporation Ltd (PRCL) broad gauge line to Surendranagar",
+        "freight_facilities": "5 Berths, Double-Stack Container Depot, 20 MMT Capacity",
+        "connected_structures": [
+          "GJ-TRM-005",
+          "GJ-BRG-013"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.5033,
+          20.9167
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-PORT-004",
+      "properties": {
+        "id": "GJ-LOG-PORT-004",
+        "name": "Dahej Port & Petronet LNG",
+        "asset_category": "seaport",
+        "district": "Bharuch",
+        "authority": "Gujarat Maritime Board (GMB) / Petronet LNG",
+        "capacity_mmt": 45.0,
+        "draft_m": 15.0,
+        "port_type": "Chemical & LNG Deep Draft Terminal",
+        "berths_count": 6,
+        "source_org": "Gujarat Maritime Board (GMB) & MoPSW",
+        "source_url": "https://gmbports.org",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "Bharuch-Dahej 6-lane Expressway / SH 6",
+        "rail_connectivity": "Bharuch-Dahej Broad Gauge Line (Western Railway)",
+        "freight_facilities": "Petronet LNG Terminal, Chemical Solid Cargo Port, 45 MMT Capacity",
+        "connected_structures": [
+          "GJ-TRM-003",
+          "GJ-BRG-002"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.5333,
+          21.6833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-PORT-005",
+      "properties": {
+        "id": "GJ-LOG-PORT-005",
+        "name": "Hazira Port (Adani / AMNS)",
+        "asset_category": "seaport",
+        "district": "Surat",
+        "authority": "Adani Hazira Port / AMNS India",
+        "capacity_mmt": 50.0,
+        "draft_m": 14.0,
+        "port_type": "Deep Draft Port & LNG Terminal",
+        "berths_count": 7,
+        "source_org": "Gujarat Maritime Board (GMB) & MoPSW",
+        "source_url": "https://gmbports.org",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "Surat-Hazira 6-lane Port Expressway / NH 53",
+        "rail_connectivity": "Surat-Hazira Port Rail Corridor",
+        "freight_facilities": "7 Berths, Shell LNG Terminal, Adani Container Terminal, 50 MMT Capacity",
+        "connected_structures": [
+          "GJ-TRM-004",
+          "GJ-FLY-003",
+          "GJ-BRG-005"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.6333,
+          21.1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-PORT-006",
+      "properties": {
+        "id": "GJ-LOG-PORT-006",
+        "name": "Sikka Marine Terminal",
+        "asset_category": "seaport",
+        "district": "Jamnagar",
+        "authority": "Reliance Jamnagar / GMB",
+        "capacity_mmt": 125.0,
+        "draft_m": 24.0,
+        "port_type": "Crude Oil VLCC Single Point Mooring (SPM)",
+        "berths_count": 5,
+        "source_org": "Gujarat Maritime Board (GMB) & MoPSW",
+        "source_url": "https://gmbports.org",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "NH 27 / Jamnagar-Bediswar Road",
+        "rail_connectivity": "Jamnagar-Kanalus Broad Gauge Line",
+        "freight_facilities": "Single Point Mooring (SPM) for VLCC Crude Carriers (Reliance Jamnagar Refinery)",
+        "connected_structures": []
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.8333,
+          22.4333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-PORT-007",
+      "properties": {
+        "id": "GJ-LOG-PORT-007",
+        "name": "Porbandar Port",
+        "asset_category": "seaport",
+        "district": "Porbandar",
+        "authority": "Gujarat Maritime Board",
+        "capacity_mmt": 5.0,
+        "draft_m": 9.5,
+        "port_type": "All-Weather Direct Berthing Port",
+        "berths_count": 3,
+        "source_org": "Gujarat Maritime Board (GMB) & MoPSW",
+        "source_url": "https://gmbports.org",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "NH 27 (Western Terminus of East-West Corridor)",
+        "rail_connectivity": "Porbandar Railway Station / Bhavnagar Division",
+        "freight_facilities": "All-Weather Direct Berthing Port, 5 MMT Capacity",
+        "connected_structures": [
+          "GJ-BRG-012"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.6,
+          21.6333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-PORT-008",
+      "properties": {
+        "id": "GJ-LOG-PORT-008",
+        "name": "Bhavnagar Port",
+        "asset_category": "seaport",
+        "district": "Bhavnagar",
+        "authority": "Gujarat Maritime Board",
+        "capacity_mmt": 8.0,
+        "draft_m": 8.5,
+        "port_type": "Tidal Lock Gate Port (Historic)",
+        "berths_count": 4,
+        "source_org": "Gujarat Maritime Board (GMB) & MoPSW",
+        "source_url": "https://gmbports.org",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "NH 51 & Bhavnagar-Ahmedabad Short Route Highway",
+        "rail_connectivity": "Western Railway Bhavnagar Division",
+        "freight_facilities": "Historic Tidal Lock Gate Port, 8 MMT Capacity",
+        "connected_structures": [
+          "GJ-BRG-013"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.1833,
+          21.7833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-AIR-001",
+      "properties": {
+        "id": "GJ-LOG-AIR-001",
+        "name": "Sardar Vallabhbhai Patel International Airport (SVPIA)",
+        "asset_category": "airport",
+        "city": "Ahmedabad",
+        "iata": "AMD",
+        "icao": "VAAH",
+        "operator": "Adani Airports / AAI",
+        "runway_length_m": 3505,
+        "airport_type": "Major International Airport",
+        "source_org": "Airports Authority of India (AAI)",
+        "source_url": "https://aai.aero",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "Airport Road, Sardar Patel Ring Road, 132ft Ring Road",
+        "public_transit_connectivity": "Ahmedabad Metro Phase 2 (under development) & AMTS Airport Express",
+        "runway_specifications": "Runway 05/23: 3,505 m × 45 m (Code 4E CAT I ILS, widebody capable)",
+        "passenger_traffic_fy24": "11.6 Million Passengers (Audited FY 2023-24)",
+        "connected_structures": [
+          "GJ-BRG-006",
+          "GJ-BRG-009"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.6347,
+          23.0772
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-AIR-002",
+      "properties": {
+        "id": "GJ-LOG-AIR-002",
+        "name": "Surat International Airport",
+        "asset_category": "airport",
+        "city": "Surat",
+        "iata": "STV",
+        "icao": "VASU",
+        "operator": "Airports Authority of India",
+        "runway_length_m": 2905,
+        "airport_type": "International Customs Airport",
+        "source_org": "Airports Authority of India (AAI)",
+        "source_url": "https://aai.aero",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "Surat-Dumas Road, Surat BRTS Airport Line",
+        "public_transit_connectivity": "Surat City Bus & Metro Phase 1 connection planned",
+        "runway_specifications": "Runway 04/22: 2,905 m × 45 m (CAT I ILS)",
+        "passenger_traffic_fy24": "1.3 Million Passengers (Audited FY 2023-24)",
+        "connected_structures": [
+          "GJ-BRG-005",
+          "GJ-FLY-003"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.742,
+          21.114
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-AIR-003",
+      "properties": {
+        "id": "GJ-LOG-AIR-003",
+        "name": "Vadodara Airport (Civil Aerodrome Harni)",
+        "asset_category": "airport",
+        "city": "Vadodara",
+        "iata": "BDQ",
+        "icao": "VABO",
+        "operator": "Airports Authority of India",
+        "runway_length_m": 2469,
+        "airport_type": "Green Domestic Airport",
+        "source_org": "Airports Authority of India (AAI)",
+        "source_url": "https://aai.aero",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "Harni Road, VIP Road, Golden Quadrilateral NH 48 (5 km)",
+        "public_transit_connectivity": "VMC City Bus Services",
+        "runway_specifications": "Runway 04/22: 2,469 m × 45 m",
+        "passenger_traffic_fy24": "1.1 Million Passengers (Audited FY 2023-24)",
+        "connected_structures": [
+          "GJ-FLY-002",
+          "GJ-BRG-010"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.2264,
+          22.3333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-AIR-004",
+      "properties": {
+        "id": "GJ-LOG-AIR-004",
+        "name": "Rajkot Hirasar International Airport",
+        "asset_category": "airport",
+        "city": "Rajkot",
+        "iata": "HSR",
+        "icao": "VAHS",
+        "operator": "Airports Authority of India",
+        "runway_length_m": 3040,
+        "airport_type": "Greenfield International Airport",
+        "source_org": "Airports Authority of India (AAI)",
+        "source_url": "https://aai.aero",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "NH 27 (Rajkot-Ahmedabad Highway, 6-lane access corridor)",
+        "public_transit_connectivity": "RMC Direct Airport Shuttle & Regional GSRTC",
+        "runway_specifications": "Runway 05/23: 3,040 m × 45 m (Greenfield International Airport)",
+        "passenger_traffic_fy24": "0.9 Million Passengers (Inaugural Year FY 2023-24)",
+        "connected_structures": [
+          "GJ-FLY-004",
+          "GJ-BRG-012"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.0189,
+          22.3853
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-AIR-005",
+      "properties": {
+        "id": "GJ-LOG-AIR-005",
+        "name": "Bhuj Airport (Civil Enclave)",
+        "asset_category": "airport",
+        "city": "Bhuj",
+        "iata": "BHJ",
+        "icao": "VABJ",
+        "operator": "AAI / Indian Air Force",
+        "runway_length_m": 2501,
+        "airport_type": "Civil Enclave Domestic Airport",
+        "source_org": "Airports Authority of India (AAI)",
+        "source_url": "https://aai.aero",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "Bhuj-Mirzapar Road, NH 41 Link",
+        "public_transit_connectivity": "GSRTC Kutch Transit",
+        "runway_specifications": "Runway 05/23: 2,501 m × 45 m (Civil Enclave / IAF)",
+        "passenger_traffic_fy24": "0.3 Million Passengers",
+        "connected_structures": []
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.67,
+          23.2878
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-AIR-006",
+      "properties": {
+        "id": "GJ-LOG-AIR-006",
+        "name": "Jamnagar Airport (Govardhanpur IAF)",
+        "asset_category": "airport",
+        "city": "Jamnagar",
+        "iata": "JGA",
+        "icao": "VAJM",
+        "operator": "AAI / Indian Air Force",
+        "runway_length_m": 2512,
+        "airport_type": "Civil Enclave Domestic Airport",
+        "source_org": "Airports Authority of India (AAI)",
+        "source_url": "https://aai.aero",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "NH 27 / Airport Road",
+        "public_transit_connectivity": "City Transit",
+        "runway_specifications": "Runway 06/24: 2,512 m × 45 m (Civil Enclave / IAF)",
+        "passenger_traffic_fy24": "0.25 Million Passengers",
+        "connected_structures": []
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.0125,
+          22.465
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-LOG-AIR-007",
+      "properties": {
+        "id": "GJ-LOG-AIR-007",
+        "name": "Bhavnagar Airport",
+        "asset_category": "airport",
+        "city": "Bhavnagar",
+        "iata": "BHU",
+        "icao": "VABV",
+        "operator": "Airports Authority of India",
+        "runway_length_m": 1920,
+        "airport_type": "Domestic Airport",
+        "source_org": "Airports Authority of India (AAI)",
+        "source_url": "https://aai.aero",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational",
+        "highway_connectivity": "Airport Road / NH 51 link",
+        "public_transit_connectivity": "City Bus Transit",
+        "runway_specifications": "Runway 07/25: 1,920 m × 45 m",
+        "passenger_traffic_fy24": "0.15 Million Passengers",
+        "connected_structures": [
+          "GJ-BRG-013"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.1856,
+          21.7522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-IND-SEZ-001",
+      "properties": {
+        "id": "GJ-IND-SEZ-001",
+        "name": "Dahej PCPIR (Petroleum & Chemicals Region)",
+        "asset_category": "industrial_estate",
+        "district": "Bharuch",
+        "area_sqkm": 453.0,
+        "focus": "Petrochemicals, Specialty Chemicals, Fertilizer, LNG",
+        "governing_body": "GIDC / Gujarat PCPIR Authority",
+        "notable_units": "OPaL, Petronet LNG, RIL, GACL, BASF, Deepak Nitrite",
+        "source_org": "Gujarat Industrial Development Corporation (GIDC) / DICDL",
+        "source_url": "https://gidc.gujarat.gov.in",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.58,
+          21.72
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-IND-SEZ-002",
+      "properties": {
+        "id": "GJ-IND-SEZ-002",
+        "name": "Dholera Special Investment Region (DSIR)",
+        "asset_category": "industrial_estate",
+        "district": "Ahmedabad",
+        "area_sqkm": 920.0,
+        "focus": "Semiconductors (Tata Fab), Defense, Aerospace, Heavy Engineering",
+        "governing_body": "Dholera Industrial City Development Ltd (DICDL)",
+        "notable_units": "Tata Electronics Semiconductor Fab, Dholera Solar Park",
+        "source_org": "Gujarat Industrial Development Corporation (GIDC) / DICDL",
+        "source_url": "https://gidc.gujarat.gov.in",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.2,
+          22.25
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-IND-SEZ-003",
+      "properties": {
+        "id": "GJ-IND-SEZ-003",
+        "name": "Mundra Multi-Product SEZ (APSEZ)",
+        "asset_category": "industrial_estate",
+        "district": "Kutch",
+        "area_sqkm": 84.0,
+        "focus": "Port-Based Manufacturing, Steel, Solar PV, Edible Oils",
+        "governing_body": "Adani Ports & SEZ Ltd",
+        "notable_units": "Adani Solar, Wilmar, Power Plants, Port Terminals",
+        "source_org": "Gujarat Industrial Development Corporation (GIDC) / DICDL",
+        "source_url": "https://gidc.gujarat.gov.in",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          69.65,
+          22.8
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-IND-SEZ-004",
+      "properties": {
+        "id": "GJ-IND-SEZ-004",
+        "name": "Sanand Industrial Estate (GIDC Auto Hub)",
+        "asset_category": "industrial_estate",
+        "district": "Ahmedabad",
+        "area_sqkm": 21.5,
+        "focus": "Automotive & Semiconductor Assembly / Testing (ATMP)",
+        "governing_body": "Gujarat Industrial Development Corporation (GIDC)",
+        "notable_units": "Micron Semiconductor, Tata Motors, Ford/Tata, Coloplast",
+        "source_org": "Gujarat Industrial Development Corporation (GIDC) / DICDL",
+        "source_url": "https://gidc.gujarat.gov.in",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.38,
+          23.0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-IND-SEZ-005",
+      "properties": {
+        "id": "GJ-IND-SEZ-005",
+        "name": "Hazira Heavy Industrial Complex",
+        "asset_category": "industrial_estate",
+        "district": "Surat",
+        "area_sqkm": 38.0,
+        "focus": "Steel, Heavy Engineering, Offshore Fabrication, LNG",
+        "governing_body": "GIDC / Hazira Notified Area",
+        "notable_units": "ArcelorMittal Nippon Steel (AMNS), L&T Heavy Eng, Reliance Hazira, ONGC",
+        "source_org": "Gujarat Industrial Development Corporation (GIDC) / DICDL",
+        "source_url": "https://gidc.gujarat.gov.in",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.65,
+          21.13
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-IND-SEZ-006",
+      "properties": {
+        "id": "GJ-IND-SEZ-006",
+        "name": "Ankleshwar GIDC (Asia's Largest Chemical Hub)",
+        "asset_category": "industrial_estate",
+        "district": "Bharuch",
+        "area_sqkm": 16.0,
+        "focus": "Pharmaceuticals, Agro-Chemicals, Dyes & Pigments",
+        "governing_body": "GIDC / Notified Area Authority",
+        "notable_units": "UPL, Zydus, Glenmark, Asian Paints, Aarti Industries",
+        "source_org": "Gujarat Industrial Development Corporation (GIDC) / DICDL",
+        "source_url": "https://gidc.gujarat.gov.in",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.01,
+          21.63
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-IND-SEZ-007",
+      "properties": {
+        "id": "GJ-IND-SEZ-007",
+        "name": "Vapi GIDC Industrial Estate",
+        "asset_category": "industrial_estate",
+        "district": "Valsad",
+        "area_sqkm": 11.5,
+        "focus": "Chemicals, Paper, Dyes, Packaging, Textiles",
+        "governing_body": "GIDC / Vapi Notified Area",
+        "notable_units": "Bayer, United Phosphorus, Century Pulp, Micro Inks",
+        "source_org": "Gujarat Industrial Development Corporation (GIDC) / DICDL",
+        "source_url": "https://gidc.gujarat.gov.in",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.93,
+          20.37
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-IND-SEZ-008",
+      "properties": {
+        "id": "GJ-IND-SEZ-008",
+        "name": "Morbi Ceramic Industrial Cluster",
+        "asset_category": "industrial_estate",
+        "district": "Morbi",
+        "area_sqkm": 30.0,
+        "focus": "Ceramic Vitrified Tiles, Sanitaryware (Produces >70% of India's output)",
+        "governing_body": "Morbi Ceramic Association / GIDC",
+        "notable_units": "Somany, Kajaria partners, Simpolo, Asian Granito",
+        "source_org": "Gujarat Industrial Development Corporation (GIDC) / DICDL",
+        "source_url": "https://gidc.gujarat.gov.in",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          70.85,
+          22.8
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-IND-SEZ-009",
+      "properties": {
+        "id": "GJ-IND-SEZ-009",
+        "name": "GIFT City (International Financial Services Centre)",
+        "asset_category": "industrial_estate",
+        "district": "Gandhinagar",
+        "area_sqkm": 3.6,
+        "focus": "International Banking, FinTech, Bullion Exchange, Insurance",
+        "governing_body": "Gujarat International Finance Tec-City Co Ltd / IFSCA",
+        "notable_units": "India INX, NSE IX, Bank of America, HSBC, Standard Chartered",
+        "source_org": "Gujarat Industrial Development Corporation (GIDC) / DICDL",
+        "source_url": "https://gidc.gujarat.gov.in",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.685,
+          23.16
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-METRO-001",
+      "properties": {
+        "id": "GJ-METRO-001",
+        "name": "Ahmedabad Metro Phase 1: East-West Corridor (Thaltej Gam - Vastral Gam)",
+        "asset_category": "metro_corridor",
+        "length_km": 21.16,
+        "stations_count": 17,
+        "operating_agency": "Gujarat Metro Rail Corporation (GMRC)",
+        "source_org": "GMRC Official Route Alignment",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.502,
+            23.051
+          ],
+          [
+            72.531,
+            23.048
+          ],
+          [
+            72.556,
+            23.038
+          ],
+          [
+            72.571,
+            23.029
+          ],
+          [
+            72.589,
+            23.024
+          ],
+          [
+            72.61,
+            23.018
+          ],
+          [
+            72.635,
+            23.01
+          ],
+          [
+            72.662,
+            23.003
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-METRO-002",
+      "properties": {
+        "id": "GJ-METRO-002",
+        "name": "Ahmedabad Metro Phase 1: North-South Corridor (APMC - Motera Stadium)",
+        "asset_category": "metro_corridor",
+        "length_km": 18.87,
+        "stations_count": 15,
+        "operating_agency": "Gujarat Metro Rail Corporation (GMRC)",
+        "source_org": "GMRC Official Route Alignment",
+        "data_quality": "VERIFIED_GOV_RECORD",
+        "status": "Operational"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            72.538,
+            22.985
+          ],
+          [
+            72.548,
+            23.008
+          ],
+          [
+            72.565,
+            23.028
+          ],
+          [
+            72.578,
+            23.049
+          ],
+          [
+            72.592,
+            23.072
+          ],
+          [
+            72.601,
+            23.095
+          ],
+          [
+            72.603,
+            23.108
+          ]
+        ]
+      }
+    }
+  ]
+}

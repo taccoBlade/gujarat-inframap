@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
 <qgis projectname="Gujarat InfraMap" version="3.34.0">
-  <title>Gujarat InfraMap — Infrastructure GIS</title>
+  <title>Gujarat InfraMap — Infrastructure Digital Twin GIS</title>
   <homePath path=""/>
   <layer-tree-group>
     <customproperties/>
     <layer-tree-layer name="District Headquarters Nodes" id="district_hq" checked="Qt::Checked" expanded="1" source="./data/gujarat_district_hq.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="Gujarat Water Systems Network &amp; Dams" id="water_resources" checked="Qt::Checked" expanded="1" source="./data/gujarat_water_resources.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="Commercial Ports, Airports, SEZs &amp; Metro" id="urban_industry" checked="Qt::Checked" expanded="1" source="./data/gujarat_urban_industry.geojson" providerKey="ogr"/>
     <layer-tree-layer name="High-Voltage Substations &amp; Grid Nodes" id="substations" checked="Qt::Checked" expanded="1" source="./data/gujarat_transmission.geojson" providerKey="ogr"/>
     <layer-tree-layer name="GETCO &amp; PowerGrid Transmission Corridors (400kV/765kV)" id="transmission_lines" checked="Qt::Checked" expanded="1" source="./data/gujarat_transmission.geojson" providerKey="ogr"/>
     <layer-tree-layer name="Power and Energy Generation Facilities" id="power_plants" checked="Qt::Checked" expanded="1" source="./data/gujarat_power.geojson" providerKey="ogr"/>
     <layer-tree-layer name="Railway Stations (Western Railway)" id="railway_stations" checked="Qt::Checked" expanded="1" source="./data/gujarat_stations.geojson" providerKey="ogr"/>
     <layer-tree-layer name="Railway Corridors" id="railways" checked="Qt::Checked" expanded="1" source="./data/gujarat_railways.geojson" providerKey="ogr"/>
     <layer-tree-layer name="National Highways and Expressways" id="roads" checked="Qt::Checked" expanded="1" source="./data/gujarat_roads.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="Seismic, Cyclone, Flood &amp; Ecological Hazards" id="environment_disaster" checked="Qt::Checked" expanded="1" source="./data/gujarat_environment_disaster.geojson" providerKey="ogr"/>
+    <layer-tree-layer name="CGWB Aquifer Extraction &amp; Salinity Profiles" id="groundwater_geology" checked="Qt::Checked" expanded="1" source="./data/gujarat_groundwater_geology.geojson" providerKey="ogr"/>
     <layer-tree-layer name="District Boundaries (Gujarat)" id="districts" checked="Qt::Checked" expanded="1" source="./data/gujarat_districts.geojson" providerKey="ogr"/>
   </layer-tree-group>
   <mapcanvas>
@@ -36,6 +40,34 @@
       <datasource>./data/gujarat_district_hq.geojson</datasource>
       <keywordList><value></value></keywordList>
       <layername>District Headquarters Nodes</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="water_resources" name="Gujarat Water Systems Network &amp; Dams" readOnly="0">
+      <id>water_resources</id>
+      <datasource>./data/gujarat_water_resources.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>Gujarat Water Systems Network &amp; Dams</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="urban_industry" name="Commercial Ports, Airports, SEZs &amp; Metro" readOnly="0">
+      <id>urban_industry</id>
+      <datasource>./data/gujarat_urban_industry.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>Commercial Ports, Airports, SEZs &amp; Metro</layername>
       <srs>
         <spatialrefsys>
           <authid>EPSG:4326</authid>
@@ -120,6 +152,34 @@
       <datasource>./data/gujarat_roads.geojson</datasource>
       <keywordList><value></value></keywordList>
       <layername>National Highways and Expressways</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="environment_disaster" name="Seismic, Cyclone, Flood &amp; Ecological Hazards" readOnly="0">
+      <id>environment_disaster</id>
+      <datasource>./data/gujarat_environment_disaster.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>Seismic, Cyclone, Flood &amp; Ecological Hazards</layername>
+      <srs>
+        <spatialrefsys>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <srid>4326</srid>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="UTF-8">ogr</provider>
+    </maplayer>
+    <maplayer type="vector" id="groundwater_geology" name="CGWB Aquifer Extraction &amp; Salinity Profiles" readOnly="0">
+      <id>groundwater_geology</id>
+      <datasource>./data/gujarat_groundwater_geology.geojson</datasource>
+      <keywordList><value></value></keywordList>
+      <layername>CGWB Aquifer Extraction &amp; Salinity Profiles</layername>
       <srs>
         <spatialrefsys>
           <authid>EPSG:4326</authid>

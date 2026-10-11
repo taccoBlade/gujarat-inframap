@@ -24,17 +24,73 @@ document.addEventListener("DOMContentLoaded", () => {
   // Position zoom controls at bottom right
   L.control.zoom({ position: "bottomright" }).addTo(map);
 
+  // Helper to safely inspect any infrastructure asset via AssetInspector
+  function inspectAsset(asset) {
+    if (!window.AssetInspector || !asset) return;
+    if (typeof isMeasuring !== "undefined" && isMeasuring) return;
+    if (typeof isProximityAuditing !== "undefined" && isProximityAuditing) return;
+    window.AssetInspector.inspect(asset);
+    if (window.LayerManager && typeof window.LayerManager.highlightSelectedAsset === "function") {
+      window.LayerManager.highlightSelectedAsset(asset);
+    }
+  }
+  window.inspectAsset = inspectAsset;
+
+  // Initialize Infrastructure Asset Inspector Component
+  if (window.AssetInspector) {
+    window.AssetInspector.init(map, {
+      onNavigate: (query) => {
+        if (typeof triggerSearch === "function") {
+          triggerSearch(query);
+        } else {
+          const input = document.getElementById("universalSearch");
+          if (input) {
+            input.value = query;
+            input.dispatchEvent(new Event("input", { bubbles: true }));
+          }
+        }
+      }
+    });
+  }
+
+  // Automatically collapse layerDrawer on smaller desktop displays when inspector opens
+  window.addEventListener("assetInspectorOpened", () => {
+    if (typeof setDrawerCollapsed === "function" && window.innerWidth <= 1280) {
+      setDrawerCollapsed(true);
+    }
+  });
+
   // 2. Custom Leaflet Panes for strict Z-Index rendering order
-  // Districts polygon base pane sits below all infrastructure overlays (350 vs 448-600)
+  map.createPane("basinsPane").style.zIndex = 340;            // River Basin Catchment Boundaries
   map.createPane("districtsPane").style.zIndex = 350;
-  map.createPane("railwaysBasePane").style.zIndex = 448; // Base dark casing for dual-tone track
-  map.createPane("railwaysPane").style.zIndex = 450;     // High-contrast dashed ties
-  map.createPane("roadsPane").style.zIndex = 500;
-  map.createPane("stationsPane").style.zIndex = 550;
-  map.createPane("hqPane").style.zIndex = 580;
+  map.createPane("terrainPane").style.zIndex = 355;           // SRTM Terrain & Elevation Regimes
+  map.createPane("geologyPane").style.zIndex = 356;           // Bedrock Formations (GSI Bhukosh)
+  map.createPane("soilsPane").style.zIndex = 358;             // Soil Series & Expansive Vertisols
+  map.createPane("groundwaterPane").style.zIndex = 360;       // CGWB Groundwater Status
+  map.createPane("seismicPane").style.zIndex = 370;           // BIS IS 1893 Seismic Hazard Zones
+  map.createPane("disasterPane").style.zIndex = 380;          // Cyclone & Flood Vulnerability
+  map.createPane("coastalPane").style.zIndex = 385;           // Coastal Hazards & Salinity Ingress
+  map.createPane("commandPane").style.zIndex = 390;           // Culturable Irrigation Command Footprints
+  map.createPane("faultsPane").style.zIndex = 400;            // Active Seismogenic Fault Lines
+  map.createPane("reservoirsPane").style.zIndex = 410;        // Reservoir Water-Spread Bathymetric Polygons
+  map.createPane("waterwaysPane").style.zIndex = 420;         // Rivers & Narmada Main Canal
+  map.createPane("railwaysBasePane").style.zIndex = 448;      // Base dark casing for dual-tone track
+  map.createPane("railwaysPane").style.zIndex = 450;          // High-contrast dashed ties
+  map.createPane("roadsPane").style.zIndex = 500;             // Highways & Expressways
+  map.createPane("stationsPane").style.zIndex = 550;          // Railway Stations
+  map.createPane("urbanMetroPane").style.zIndex = 560;        // Municipal Bodies & Metro Lines
+  map.createPane("portsAirportsPane").style.zIndex = 570;     // Commercial Seaports & Airports
+  map.createPane("hqPane").style.zIndex = 580;                // District HQs
   map.createPane("transmissionLinesPane").style.zIndex = 590; // High-Voltage Transmission Corridors
-  map.createPane("substationsPane").style.zIndex = 595;        // Substation Pooling Nodes
-  map.createPane("powerPane").style.zIndex = 600;              // Generation Facilities
+  map.createPane("substationsPane").style.zIndex = 595;       // Substation Pooling Nodes
+  map.createPane("powerPane").style.zIndex = 600;             // Generation Facilities
+  map.createPane("damsPane").style.zIndex = 610;              // CWC Large Dams & Reservoirs
+  map.createPane("industryPane").style.zIndex = 615;          // Mega GIDC Estates & SEZs
+  map.createPane("sanctuariesPane").style.zIndex = 620;       // Wildlife Sanctuaries & National Parks
+  map.createPane("waterHighlightPane").style.zIndex = 640;    // Flow Vector Tracing & Follow the Water Markers
+  map.createPane("selectionPane").style.zIndex = 650;         // Non-intrusive Selected Asset Halo
+  map.getPane("selectionPane").style.pointerEvents = "none";
+  map.createPane("proximityPane").style.zIndex = 700;         // Proximity Audit Crosshair & Vectors
 
   // 3. Basemap Providers (100% Free & Open-Source — Zero Watermarks, Zero API Keys)
   // 3. Basemap Providers (CARTO Dark Matter Default: Muted charcoal GIS canvas, zero noise)
@@ -100,120 +156,69 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 4. Infrastructure Layer Groups (Overview Preset Default: Districts, Roads, Power)
+  // 4. Infrastructure Layer Groups (Overview Preset Default: Districts, Roads, Power, WaterDams, Reservoirs)
   const layerGroups = {
     districts: L.layerGroup().addTo(map),
+    hq: L.layerGroup(),
     roads: L.layerGroup().addTo(map),
-    power: L.layerGroup().addTo(map),
+    structures: L.layerGroup(),
     railways: L.layerGroup(),
     stations: L.layerGroup(),
-    hq: L.layerGroup(),
-    transmission: L.layerGroup()
+    waterDams: L.layerGroup().addTo(map),
+    reservoirs: L.layerGroup().addTo(map),
+    rivers: L.layerGroup(),
+    canals: L.layerGroup(),
+    waterways: L.layerGroup(),
+    groundwater: L.layerGroup(),
+    gwStations: L.layerGroup(),
+    commandAreas: L.layerGroup(),
+    power: L.layerGroup().addTo(map),
+    transmission: L.layerGroup(),
+    substations: L.layerGroup(),
+    urbanMetro: L.layerGroup(),
+    portsAirports: L.layerGroup(),
+    industries: L.layerGroup(),
+    geology: L.layerGroup(),
+    faults: L.layerGroup(),
+    soils: L.layerGroup(),
+    terrain: L.layerGroup(),
+    seismic: L.layerGroup(),
+    cycloneFlood: L.layerGroup(),
+    coastal: L.layerGroup(),
+    sanctuaries: L.layerGroup()
   };
 
-  // Toggle Checkboxes Registry
-  const layerToggles = [
-    { key: "districts", id: "layerDistricts", group: layerGroups.districts },
-    { key: "hq", id: "layerHq", group: layerGroups.hq },
-    { key: "roads", id: "layerRoads", group: layerGroups.roads },
-    { key: "railways", id: "layerRailways", group: layerGroups.railways },
-    { key: "stations", id: "layerStations", group: layerGroups.stations },
-    { key: "power", id: "layerPower", group: layerGroups.power },
-    { key: "transmission", id: "layerTransmission", group: layerGroups.transmission }
-  ];
-
-  // Intelligent Layer Presets Configuration (Requirement 4)
-  const LAYER_PRESETS = {
-    overview: {
-      name: "Overview",
-      layers: { districts: true, roads: true, power: true, railways: false, stations: false, hq: false, transmission: false }
-    },
-    transport: {
-      name: "Transport",
-      layers: { districts: true, roads: true, railways: true, stations: true, power: false, transmission: false, hq: false }
-    },
-    energy: {
-      name: "Energy",
-      layers: { districts: true, power: true, transmission: true, roads: false, railways: false, stations: false, hq: false }
-    },
-    admin: {
-      name: "Admin",
-      layers: { districts: true, hq: true, roads: false, railways: false, stations: false, power: false, transmission: false }
-    },
-    full: {
-      name: "Full Infra",
-      layers: { districts: true, roads: true, railways: true, stations: true, power: true, transmission: true, hq: true }
-    }
-  };
-
-  function updateActiveLayersCount() {
-    let count = 0;
-    layerToggles.forEach(t => {
-      const el = document.getElementById(t.id);
-      if (el && el.checked) count++;
+  // Initialize Modular Layer Manager & Advanced Scale-Dependent Engine
+  if (window.LayerManager && typeof window.LayerManager.init === "function") {
+    window.LayerManager.init(map, layerGroups, {
+      ensureLayerLoaded: (key) => ensureLayerLoaded(key),
+      showToast: (msg) => {
+        if (typeof showToast === "function") showToast(msg);
+      }
     });
-    const label = document.getElementById("activeLayersCount");
-    if (label) label.textContent = `${count} of 7 Active`;
-    const filterCount = document.getElementById("layerFilterCount");
-    if (filterCount) filterCount.textContent = `${count} of 7 Active`;
-  }
-
-  function checkCurrentPresetMatch() {
-    let matchedPreset = null;
-    for (const [pKey, pConfig] of Object.entries(LAYER_PRESETS)) {
-      let matches = true;
-      for (const [lKey, expected] of Object.entries(pConfig.layers)) {
-        const tObj = layerToggles.find(t => t.key === lKey);
-        const el = tObj ? document.getElementById(tObj.id) : null;
-        if (el && el.checked !== expected) {
-          matches = false;
-          break;
-        }
-      }
-      if (matches) {
-        matchedPreset = pKey;
-        break;
-      }
-    }
-
-    const tag = document.getElementById("activePresetTag");
-    if (matchedPreset) {
-      document.querySelectorAll(".preset-pill").forEach(btn => {
-        btn.classList.toggle("active", btn.getAttribute("data-preset") === matchedPreset);
-      });
-      if (tag) tag.textContent = LAYER_PRESETS[matchedPreset].name;
-    } else {
-      document.querySelectorAll(".preset-pill").forEach(btn => btn.classList.remove("active"));
-      if (tag) tag.textContent = "Custom";
-    }
   }
 
   function applyPreset(presetKey) {
-    const preset = LAYER_PRESETS[presetKey];
-    if (!preset) return;
-
-    Object.entries(preset.layers).forEach(([layerKey, shouldShow]) => {
-      const tObj = layerToggles.find(t => t.key === layerKey);
-      if (!tObj) return;
-      const el = document.getElementById(tObj.id);
-      if (el) el.checked = shouldShow;
-
-      if (shouldShow) {
-        if (typeof ensureLayerLoaded === "function") ensureLayerLoaded(layerKey);
-        if (!map.hasLayer(tObj.group)) map.addLayer(tObj.group);
-      } else {
-        if (map.hasLayer(tObj.group)) map.removeLayer(tObj.group);
-      }
-    });
-
+    if (window.LayerManager && typeof window.LayerManager.applyPreset === "function") {
+      window.LayerManager.applyPreset(presetKey);
+    }
     document.querySelectorAll(".preset-pill").forEach(btn => {
       btn.classList.toggle("active", btn.getAttribute("data-preset") === presetKey);
     });
-
     const tag = document.getElementById("activePresetTag");
-    if (tag) tag.textContent = preset.name;
-
-    updateActiveLayersCount();
+    if (tag) {
+      const names = {
+        overview: "Overview",
+        water: "Water",
+        transport: "Transport",
+        energy: "Energy",
+        urban: "Industry",
+        disaster: "Hazards",
+        admin: "Admin",
+        full: "Full Twin"
+      };
+      tag.textContent = names[presetKey] || "Custom";
+    }
     if (typeof applyZoomDependentRendering === "function") {
       applyZoomDependentRendering(map.getZoom());
     }
@@ -225,26 +230,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const pKey = btn.getAttribute("data-preset");
       if (pKey) applyPreset(pKey);
     });
-  });
-
-  // Layer toggle change listeners
-  layerToggles.forEach(t => {
-    const el = document.getElementById(t.id);
-    if (el) {
-      el.addEventListener("change", (e) => {
-        if (e.target.checked) {
-          if (typeof ensureLayerLoaded === "function") ensureLayerLoaded(t.key);
-          if (!map.hasLayer(t.group)) map.addLayer(t.group);
-        } else {
-          if (map.hasLayer(t.group)) map.removeLayer(t.group);
-        }
-        updateActiveLayersCount();
-        checkCurrentPresetMatch();
-        if (typeof applyZoomDependentRendering === "function") {
-          applyZoomDependentRendering(map.getZoom());
-        }
-      });
-    }
   });
 
   function switchInspectorTab(targetId) {
@@ -264,6 +249,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Calculate and display active layers count across Layer Manager
+  function updateActiveLayersCount() {
+    const checkboxes = document.querySelectorAll(".layer-toggle-input:checked");
+    const count = checkboxes.length;
+    const total = document.querySelectorAll(".layer-toggle-input").length || 27;
+    const countHeader = document.getElementById("activeLayersCount");
+    if (countHeader) countHeader.textContent = `${count} Layers Active`;
+    const filterCount = document.getElementById("layerFilterCount");
+    if (filterCount) filterCount.textContent = `${count} of ${total} Active`;
+  }
+
   // Initial active layers count update
   updateActiveLayersCount();
 
@@ -275,7 +271,16 @@ document.addEventListener("DOMContentLoaded", () => {
     opacityRailways: { panes: ["railwaysBasePane", "railwaysPane"], valId: "valRailways" },
     opacityStations: { panes: ["stationsPane"], valId: "valStations" },
     opacityDistricts: { panes: ["districtsPane"], valId: "valDistricts" },
-    opacityHq: { panes: ["hqPane"], valId: "valHq" }
+    opacityHq: { panes: ["hqPane"], valId: "valHq" },
+    opacityWaterDams: { panes: ["damsPane"], valId: "valWaterDams" },
+    opacityWaterways: { panes: ["waterwaysPane"], valId: "valWaterways" },
+    opacityUrbanMetro: { panes: ["urbanMetroPane"], valId: "valUrbanMetro" },
+    opacityPortsAirports: { panes: ["portsAirportsPane"], valId: "valPortsAirports" },
+    opacityIndustries: { panes: ["industryPane"], valId: "valIndustries" },
+    opacityGroundwater: { panes: ["groundwaterPane"], valId: "valGroundwater" },
+    opacitySeismic: { panes: ["seismicPane"], valId: "valSeismic" },
+    opacityCycloneFlood: { panes: ["disasterPane"], valId: "valCycloneFlood" },
+    opacitySanctuaries: { panes: ["sanctuariesPane"], valId: "valSanctuaries" }
   };
 
   // Wire opacity drawer toggle buttons
@@ -445,201 +450,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const districtLayers = {};
   const districtList = [];
 
-  // Multi-Modal District Infrastructure Registry (Week 11 Usability Resolution)
-  const DISTRICT_INFRA_REGISTRY = {
-    "Ahmedabad": {
-      highways: [{ code: "NE 1", label: "NE-1 (120 km/h)" }, { code: "NH 48", label: "NH 48 (GQ)" }, { code: "NH 47", label: "NH 47" }],
-      railways: [{ code: "ADI", label: "Ahmedabad JN (ADI)" }, { code: "SBT", label: "Sabarmati JN (SBT)" }],
-      power: [{ name: "Sabarmati Thermal Power Station (Torrent Power)", label: "Sabarmati (482 MW)" }]
-    },
-    "Amreli": {
-      highways: [{ code: "NH 51", label: "NH 51 (Coastal)" }],
-      railways: [{ code: "AE", label: "Amreli (AE)" }],
-      power: []
-    },
-    "Anand": {
-      highways: [{ code: "NE 1", label: "NE-1 Expressway" }, { code: "NH 48", label: "NH 48 (GQ)" }],
-      railways: [{ code: "ANND", label: "Anand JN (ANND)" }],
-      power: []
-    },
-    "Aravalli": {
-      highways: [{ code: "NH 48", label: "NH 48 Trunk" }],
-      railways: [{ code: "MDSA", label: "Modasa (MDSA)" }],
-      power: []
-    },
-    "Banaskantha": {
-      highways: [{ code: "NH 27", label: "NH 27 (East-West)" }, { code: "NH 58", label: "NH 58" }],
-      railways: [{ code: "PNU", label: "Palanpur JN (PNU)" }],
-      power: []
-    },
-    "Bharuch": {
-      highways: [{ code: "NH 48", label: "NH 48 (Delhi-Mumbai GQ)" }, { code: "NH 53", label: "NH 53 Link" }],
-      railways: [{ code: "BH", label: "Bharuch JN (BH)" }, { code: "AKV", label: "Ankleshwar JN (AKV)" }],
-      power: [
-        { name: "DGEN Mega Combined Cycle Power Plant (Torrent Dahej)", label: "DGEN Dahej (1,200 MW)" },
-        { name: "Paguthan Combined Cycle Power Plant (CLP India)", label: "Paguthan (655 MW)" },
-        { name: "Gandhar Gas Power Station (NTPC Jhanor)", label: "Gandhar Gas (648 MW)" }
-      ]
-    },
-    "Bhavnagar": {
-      highways: [{ code: "NH 51", label: "NH 51 (Coastal Saurashtra)" }],
-      railways: [{ code: "BVC", label: "Bhavnagar Terminus (BVC)" }],
-      power: []
-    },
-    "Botad": {
-      highways: [{ code: "NH 51", label: "NH 51 Corridor" }],
-      railways: [{ code: "BTD", label: "Botad JN (BTD)" }],
-      power: []
-    },
-    "Chhota Udepur": {
-      highways: [{ code: "NH 56", label: "NH 56 Tribal Trunk" }],
-      railways: [{ code: "CTD", label: "Chhota Udepur (CTD)" }],
-      power: []
-    },
-    "Dahod": {
-      highways: [{ code: "NH 47", label: "NH 47 Interstate" }],
-      railways: [{ code: "DHD", label: "Dahod (DHD)" }],
-      power: []
-    },
-    "Dang": {
-      highways: [{ code: "NH 56", label: "NH 56 (Ahwa)" }],
-      railways: [{ code: "WGI", label: "Waghai (WGI)" }],
-      power: []
-    },
-    "Devbhumi Dwarka": {
-      highways: [{ code: "NH 51", label: "NH 51 Coastal" }],
-      railways: [{ code: "DWK", label: "Dwarka (DWK)" }, { code: "OKHA", label: "Okha Port (OKHA)" }],
-      power: [{ name: "Dwarka Coastal Wind Farm", label: "Dwarka Wind (450 MW)" }]
-    },
-    "Gandhinagar": {
-      highways: [{ code: "NH 48", label: "NH 48 Highway" }],
-      railways: [{ code: "GNC", label: "Gandhinagar Capital (GNC)" }],
-      power: [{ name: "Gandhinagar Thermal Power Station", label: "Gandhinagar TPS (630 MW)" }]
-    },
-    "Gir Somnath": {
-      highways: [{ code: "NH 51", label: "NH 51 Coastal" }],
-      railways: [{ code: "VRL", label: "Veraval JN (VRL)" }],
-      power: []
-    },
-    "Jamnagar": {
-      highways: [{ code: "NH 27", label: "NH 27 (East-West)" }, { code: "NH 754K", label: "NH 754K (Amritsar-Jamnagar)" }],
-      railways: [{ code: "JAM", label: "Jamnagar (JAM)" }, { code: "HAPA", label: "Hapa (HAPA)" }],
-      power: [
-        { name: "Salaya Thermal Power Plant (Essar Power)", label: "Salaya TPP (1,200 MW)" },
-        { name: "Sikka Thermal Power Station", label: "Sikka TPS (500 MW)" }
-      ]
-    },
-    "Junagadh": {
-      highways: [{ code: "NH 51", label: "NH 51 Link" }],
-      railways: [{ code: "JND", label: "Junagadh JN (JND)" }],
-      power: []
-    },
-    "Kheda": {
-      highways: [{ code: "NE 1", label: "NE-1 (Nadiad Exit)" }, { code: "NH 48", label: "NH 48 (GQ)" }],
-      railways: [{ code: "ND", label: "Nadiad JN (ND)" }],
-      power: [{ name: "Wanakbori Thermal Power Station", label: "Wanakbori TPS (1,640 MW)" }]
-    },
-    "Kutch": {
-      highways: [{ code: "NH 27", label: "NH 27 (East-West)" }, { code: "NH 41", label: "NH 41 (Kandla/Mandvi)" }],
-      railways: [{ code: "GIMB", label: "Gandhidham BG (GIMB)" }, { code: "BHUJ", label: "Bhuj (BHUJ)" }],
-      power: [
-        { name: "Mundra Thermal Power Station (Adani Power)", label: "Mundra Thermal (4,620 MW - Largest Thermal)" },
-        { name: "Mundra Ultra Mega Power Plant (Tata Power UMPP)", label: "Mundra UMPP (4,000 MW)" },
-        { name: "Khavda Renewable Energy Park (Phase I)", label: "Khavda RE Mega-Park (2,140 MW)" },
-        { name: "Jakhau Wind Energy Farm", label: "Jakhau Wind (1,000 MW)" }
-      ]
-    },
-    "Mahisagar": {
-      highways: [{ code: "NH 56", label: "NH 56 Corridor" }],
-      railways: [{ code: "GDA", label: "Godhra JN Gateway (GDA)" }],
-      power: [{ name: "Kadana Hydro Power Station", label: "Kadana Hydro (240 MW)" }]
-    },
-    "Mehsana": {
-      highways: [{ code: "NH 58", label: "NH 58 Trunk" }],
-      railways: [{ code: "MSH", label: "Mahesana JN (MSH)" }],
-      power: []
-    },
-    "Morbi": {
-      highways: [{ code: "NH 27", label: "NH 27 (Ceramic Belt)" }],
-      railways: [{ code: "MVI", label: "Morbi (MVI)" }],
-      power: []
-    },
-    "Narmada": {
-      highways: [{ code: "NH 56", label: "NH 56 (Tribal Highway)" }],
-      railways: [{ code: "DB", label: "Dabhoi JN Gateway (DB)" }],
-      power: [{ name: "Sardar Sarovar River Bed Power House (RBPH)", label: "Sardar Sarovar Hydro (1,200 MW)" }]
-    },
-    "Navsari": {
-      highways: [{ code: "NH 48", label: "NH 48 (Golden Quad)" }],
-      railways: [{ code: "NVS", label: "Navsari (NVS)" }],
-      power: []
-    },
-    "Panchmahal": {
-      highways: [{ code: "NH 47", label: "NH 47 (Godhra-Indore)" }],
-      railways: [{ code: "GDA", label: "Godhra JN (GDA)" }],
-      power: []
-    },
-    "Patan": {
-      highways: [{ code: "NH 68", label: "NH 68 (Radhanpur)" }],
-      railways: [{ code: "PTN", label: "Patan (PTN)" }],
-      power: [
-        { name: "Charanka Solar Park", label: "Charanka Solar (790 MW)" },
-        { name: "Raghanesda Solar Park", label: "Raghanesda Solar (700 MW)" }
-      ]
-    },
-    "Porbandar": {
-      highways: [{ code: "NH 27", label: "NH 27 Trunk" }, { code: "NH 51", label: "NH 51 Coastal" }],
-      railways: [{ code: "PBR", label: "Porbandar (PBR)" }],
-      power: []
-    },
-    "Rajkot": {
-      highways: [{ code: "NH 27", label: "NH 27 (East-West)" }, { code: "NH 47", label: "NH 47 (Ahmedabad-Rajkot)" }],
-      railways: [{ code: "RJT", label: "Rajkot JN (RJT)" }],
-      power: []
-    },
-    "Sabarkantha": {
-      highways: [{ code: "NH 48", label: "NH 48 Corridor" }],
-      railways: [{ code: "HMT", label: "Himmatnagar (HMT)" }],
-      power: []
-    },
-    "Surat": {
-      highways: [{ code: "NH 48", label: "NH 48 (Golden Quad)" }, { code: "NH 53", label: "NH 53 (Hazira Port)" }],
-      railways: [{ code: "ST", label: "Surat Terminal (ST)" }, { code: "UDN", label: "Udhna JN (UDN)" }],
-      power: [
-        { name: "Kakrapar Atomic Power Station (KAPS Unit 1-4)", label: "Kakrapar Nuclear (1,840 MW)" },
-        { name: "Sugen Combined Cycle Power Plant (Torrent Power)", label: "Sugen CCPP (1,148 MW)" }
-      ]
-    },
-    "Surendranagar": {
-      highways: [{ code: "NH 47", label: "NH 47 Trunk" }],
-      railways: [{ code: "SUNR", label: "Surendranagar (SUNR)" }],
-      power: []
-    },
-    "Tapi": {
-      highways: [{ code: "NH 53", label: "NH 53 Corridor" }],
-      railways: [{ code: "VYA", label: "Vyara (VYA)" }],
-      power: [
-        { name: "Ukai Hydro Power Station", label: "Ukai Hydro (300 MW)" },
-        { name: "Ukai Thermal Power Station", label: "Ukai Thermal (850 MW)" }
-      ]
-    },
-    "Vadodara": {
-      highways: [{ code: "NE 1", label: "NE-1 (120 km/h)" }, { code: "Delhi - Vadodara Expressway", label: "NE-4 (120 km/h)" }, { code: "NH 48", label: "NH 48 (GQ)" }],
-      railways: [{ code: "BRC", label: "Vadodara JN (BRC)" }],
-      power: [{ name: "Wanakbori Thermal Power Station", label: "Wanakbori TPS Link (1,640 MW)" }]
-    },
-    "Valsad": {
-      highways: [{ code: "NH 48", label: "NH 48 (Golden Quad)" }],
-      railways: [{ code: "BL", label: "Valsad (BL)" }, { code: "VAPI", label: "Vapi (VAPI)" }],
-      power: []
-    }
-  };
+  // Multi-Modal District Infrastructure Registry (Modular gazette matrix loaded from js/district_registry.js)
+  const DISTRICT_INFRA_REGISTRY = window.DISTRICT_INFRA_REGISTRY || {};
 
   function getDistrictInfraHtml(districtName) {
     const infra = DISTRICT_INFRA_REGISTRY[districtName];
     if (!infra) return "";
     let html = `<div class="district-infra-section">
-      <div class="infra-section-title">⚡ Multi-Modal Infrastructure Matrix</div>`;
+      <div class="infra-section-title">⚡ Multi-Modal Digital Twin Matrix</div>`;
 
     if (infra.highways && infra.highways.length > 0) {
       html += `<div class="infra-category-row">
@@ -670,6 +488,42 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       html += `</div></div>`;
     }
+
+    if (infra.dams && infra.dams.length > 0) {
+      html += `<div class="infra-category-row">
+        <span class="infra-cat-label">💧 Water & Dams:</span>
+        <div class="infra-chips">`;
+      for (const d of infra.dams) {
+        html += `<button class="infra-badge-chip chip-dam" onclick="window.selectDamByName('${d.name}', true)" title="Inspect ${d.label}">💧 ${d.label}</button>`;
+      }
+      html += `</div></div>`;
+    }
+
+    if (infra.portsAirports && infra.portsAirports.length > 0) {
+      html += `<div class="infra-category-row">
+        <span class="infra-cat-label">⚓ Ports & Airports:</span>
+        <div class="infra-chips">`;
+      for (const pa of infra.portsAirports) {
+        html += `<button class="infra-badge-chip chip-port" onclick="window.selectUrbanAssetByName('${pa.name}', true)" title="Inspect ${pa.label}">⚓ ${pa.label}</button>`;
+      }
+      html += `</div></div>`;
+    }
+
+    if (infra.industry && infra.industry.length > 0) {
+      html += `<div class="infra-category-row">
+        <span class="infra-cat-label">🏭 Industry & SEZ:</span>
+        <div class="infra-chips">`;
+      for (const ind of infra.industry) {
+        html += `<button class="infra-badge-chip chip-industry" onclick="window.selectUrbanAssetByName('${ind.name}', true)" title="Inspect ${ind.label}">🏭 ${ind.label}</button>`;
+      }
+      html += `</div></div>`;
+    }
+
+    html += `<div class="infra-category-row" style="margin-top: 5px;">
+      <button class="infra-badge-chip chip-hazard" style="width: 100%; justify-content: center; padding: 4px;" onclick="window.selectHazardDistrictByName('${districtName}', true)" title="Inspect ${districtName} Multi-Hazard & Aquifer Stress Profile">
+        ⚠️ Inspect Multi-Hazard & CGWB Groundwater Profile
+      </button>
+    </div>`;
 
     html += `</div>`;
     return html;
@@ -880,6 +734,11 @@ document.addEventListener("DOMContentLoaded", () => {
               }
             }
             layer.openPopup();
+            inspectAsset({
+              properties: { ...p, asset_category: "district_hq" },
+              geometry: feature.geometry,
+              type: "district_hq"
+            });
           }
         });
       }
@@ -1076,6 +935,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (typeof applyZoomDependentRendering === "function") {
         applyZoomDependentRendering(map.getZoom());
       }
+      if (typeof initTransportExplorerIntegration === "function") {
+        initTransportExplorerIntegration();
+      }
+      if (typeof initGeoenvironmentalIntelligenceIntegration === "function") {
+        initGeoenvironmentalIntelligenceIntegration();
+      }
     });
     return roadsPromise;
   }
@@ -1197,6 +1062,11 @@ document.addEventListener("DOMContentLoaded", () => {
                   L.DomEvent.stopPropagation(e);
                 }
               }
+              inspectAsset({
+                properties: { ...feature.properties, asset_category: "railway_line" },
+                geometry: feature.geometry,
+                type: "railway_line"
+              });
             }
           });
         }
@@ -1525,7 +1395,10 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="popup-action-row">
             <button class="popup-btn-zoom" onclick="window.focusPowerPlant('${name.replace(/'/g, "\\'")}', true)">
-              🔍 Zoom to Plant
+              🔍 Inspect Asset
+            </button>
+            <button class="popup-btn-highlight" onclick="if(window.EnergyExplorer) window.EnergyExplorer.highlightPowerEvacuation('${name.replace(/'/g, "\\'")}')">
+              ⚡ Evacuate Grid
             </button>
           </div>
         </div>
@@ -1631,6 +1504,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             transmissionCorridorsByCode[code] = { layer, feature };
             transmissionLayers.push({ layer, feature });
+            layerGroups.transmission.addLayer(layer);
 
             searchIndex.push({
               title: `${name}`,
@@ -1706,6 +1580,11 @@ document.addEventListener("DOMContentLoaded", () => {
                   }
                 }
                 selectTransmissionCorridor(code, false);
+                inspectAsset({
+                  properties: { ...p, asset_category: "transmission_line" },
+                  geometry: feature.geometry,
+                  type: "transmission_line"
+                });
               }
             });
           } else if (ftype === "substation") {
@@ -1713,6 +1592,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const dist = p.district || "Gujarat";
             const op = p.operator || "GETCO";
             const latlng = layer.getLatLng();
+
+            (layerGroups.substations || layerGroups.transmission).addLayer(layer);
 
             searchIndex.push({
               title: `${name}`,
@@ -1722,7 +1603,7 @@ document.addEventListener("DOMContentLoaded", () => {
               badgeClass: "tag-substation",
               icon: "🔌",
               priority: 76,
-              layerKey: "transmission",
+              layerKey: "substations",
               searchTerms: [name, `${v} kv`, `${v}kv`, dist, op, "substation", "pooling", "getco", "powergrid", "grid"].join(" ").toLowerCase(),
               latlng: [latlng.lat, latlng.lng],
               layer: layer
@@ -1786,11 +1667,16 @@ document.addEventListener("DOMContentLoaded", () => {
                   }
                 }
                 layer.openPopup();
+                inspectAsset({
+                  properties: { ...p, asset_category: "substation" },
+                  geometry: feature.geometry,
+                  type: "substation"
+                });
               }
             });
           }
         }
-      }).addTo(layerGroups.transmission);
+      });
     } catch (err) {
       console.error("Failed to load transmission grid:", err);
     }
@@ -1803,6 +1689,1941 @@ document.addEventListener("DOMContentLoaded", () => {
     return transmissionPromise;
   }
 
+  async function initEnergyExplorerIntegration() {
+    try {
+      const [powerData, transData, waterData] = await Promise.all([
+        fetchCachedGeoJson("data/gujarat_power.geojson"),
+        fetchCachedGeoJson("data/gujarat_transmission.geojson"),
+        fetchCachedGeoJson("data/gujarat_water_resources.geojson")
+      ]);
+      if (window.EnergyExplorer && typeof window.EnergyExplorer.init === "function") {
+        window.EnergyExplorer.init(map, powerData, transData, waterData);
+      }
+    } catch (err) {
+      console.warn("[EnergyExplorer] Initialization notice:", err);
+    }
+  }
+
+  // --- Transport Structures & Civil Engineering Explorer Integration (Phase 17) ---
+  let transportStructuresPromise = null;
+  async function loadTransportStructuresLayer() {
+    if (transportStructuresPromise) return transportStructuresPromise;
+    transportStructuresPromise = (async () => {
+      try {
+        const data = await fetchCachedGeoJson("data/gujarat_transport_structures.geojson");
+        if (!data || !data.features) return;
+
+        const structuresPane = map.getPane("roadsPane") ? "roadsPane" : "overlayPane";
+
+        data.features.forEach(feat => {
+          const p = feat.properties || {};
+          const geom = feat.geometry || {};
+          if (!geom.coordinates || geom.type !== "Point") return;
+          const [lon, lat] = geom.coordinates;
+          const cat = p.asset_category || "bridge";
+
+          let iconGlyph = "🌉";
+          let badgeColorClass = "badge-bridge";
+          if (cat === "flyover") { iconGlyph = "🛣️"; badgeColorClass = "badge-flyover"; }
+          else if (cat === "tunnel") { iconGlyph = "🚇"; badgeColorClass = "badge-tunnel"; }
+          else if (cat === "freight_terminal") { iconGlyph = "📦"; badgeColorClass = "badge-terminal"; }
+
+          const customIcon = L.divIcon({
+            className: `custom-struct-marker marker-${cat}`,
+            html: `<div class="struct-marker-glyph ${badgeColorClass}"><span>${iconGlyph}</span></div>`,
+            iconSize: [28, 28],
+            iconAnchor: [14, 14],
+            popupAnchor: [0, -14]
+          });
+
+          const marker = L.marker([lat, lon], {
+            icon: customIcon,
+            pane: structuresPane
+          });
+
+          marker.bindTooltip(`<strong>${p.name}</strong><br><small style="color: #38bdf8;">${p.supporting_corridor} • Crosses: ${p.waterway_crossed}</small>`, {
+            sticky: true,
+            opacity: 0.95
+          });
+
+          marker.bindPopup(`
+            <div class="popup-card">
+              <div class="popup-card-header">
+                <span class="popup-category cat-${cat}">${cat.toUpperCase().replace('_', ' ')}</span>
+                <h4 class="popup-card-title">${p.name}</h4>
+                <p style="font-size: 0.74rem; color: #94a3b8; margin-top: 2px;">${p.alternate_name || p.id}</p>
+              </div>
+              <div class="popup-grid">
+                <span class="grid-key">Supporting Route:</span>
+                <span class="grid-val"><strong style="color: #38bdf8;">${p.supporting_corridor}</strong></span>
+                <span class="grid-key">Feature Crossed:</span>
+                <span class="grid-val" style="color: #67e8f9;">${p.waterway_crossed}</span>
+                <span class="grid-key">Total Length:</span>
+                <span class="grid-val">${p.length_m ? `${p.length_m.toLocaleString()} m` : '—'} (${p.lane_count || '—'} Lanes)</span>
+                <span class="grid-key">Max Span:</span>
+                <span class="grid-val">${p.max_span_m ? `${p.max_span_m} m` : 'Continuous'} (${p.bridge_type})</span>
+                <span class="grid-key">Authority:</span>
+                <span class="grid-val">${p.responsible_authority}</span>
+                <span class="grid-key">Commissioned:</span>
+                <span class="grid-val">${p.commissioning_date || (p.commissioning_year ? `Year ${p.commissioning_year}` : 'Operational')}</span>
+              </div>
+              <div class="popup-action-row" style="margin-top: 10px; display: flex; gap: 6px;">
+                <button class="popup-btn-highlight" style="flex: 1;" onclick="window.TransportExplorer && window.TransportExplorer.highlightCrossingRelationship('${p.id}')">
+                  🔗 Highlight Crossing
+                </button>
+                <button class="popup-btn-zoom" style="flex: 1;" onclick="window.inspectAsset && window.inspectAsset({ type: 'Feature', geometry: { type: 'Point', coordinates: [${lon}, ${lat}] }, properties: ${JSON.stringify(p).replace(/"/g, '&quot;')} }, '${cat}')">
+                  🔍 Details
+                </button>
+              </div>
+            </div>
+          `, { maxWidth: 330 });
+
+          // Add to structures layer group
+          (layerGroups.structures || layerGroups.roads).addLayer(marker);
+
+          // Add to search index
+          searchIndex.push({
+            title: `${p.name}`,
+            subtitle: `${p.supporting_corridor} • Crosses: ${p.waterway_crossed} • ${p.responsible_authority}`,
+            type: "structure",
+            category: cat.toUpperCase(),
+            badgeClass: `tag-${cat}`,
+            icon: iconGlyph,
+            priority: 88,
+            layerKey: "structures",
+            searchTerms: [p.name, p.id, p.alternate_name, p.supporting_corridor, p.waterway_crossed, p.district, p.responsible_authority, cat].join(" ").toLowerCase(),
+            latlng: [lat, lon]
+          });
+        });
+      } catch (err) {
+        console.warn("[TransportStructures] Error loading layer:", err);
+      }
+    })();
+    return transportStructuresPromise;
+  }
+
+  async function initTransportExplorerIntegration() {
+    try {
+      const [roadsData, structData, railData, statData, urbData, watData] = await Promise.all([
+        fetchCachedGeoJson("data/gujarat_roads.geojson"),
+        fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
+        fetchCachedGeoJson("data/gujarat_railways.geojson"),
+        fetchCachedGeoJson("data/gujarat_stations.geojson"),
+        fetchCachedGeoJson("data/gujarat_urban_industry.geojson"),
+        fetchCachedGeoJson("data/gujarat_water_resources.geojson")
+      ]);
+
+      if (window.TransportExplorer && typeof window.TransportExplorer.init === "function") {
+        window.TransportExplorer.init(map, {
+          roadsData,
+          structuresData: structData,
+          railwaysData: railData,
+          stationsData: statData,
+          urbanData: urbData,
+          waterData: watData
+        }, {
+          onInspect: (asset, cat) => inspectAsset(asset, cat),
+          highlightCorridor: (c) => highlightHighwayCorridor(c)
+        });
+      }
+
+      await loadTransportStructuresLayer();
+    } catch (err) {
+      console.warn("[TransportExplorer] Initialization notice:", err);
+    }
+  }
+
+  window.highlightCrossingRelationship = function(id) {
+    if (window.TransportExplorer) {
+      window.TransportExplorer.highlightCrossingRelationship(id);
+    }
+  };
+
+  async function initGeoenvironmentalIntelligenceIntegration() {
+    try {
+      const [geoenvData, gwData, disData, distData, watData, structData, roadsData, powData] = await Promise.all([
+        fetchCachedGeoJson("data/gujarat_geoenvironmental.geojson"),
+        fetchCachedGeoJson("data/gujarat_groundwater_geology.geojson"),
+        fetchCachedGeoJson("data/gujarat_environment_disaster.geojson"),
+        fetchCachedGeoJson("data/gujarat_districts.geojson"),
+        fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
+        fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
+        fetchCachedGeoJson("data/gujarat_roads.geojson"),
+        fetchCachedGeoJson("data/gujarat_power.geojson")
+      ]);
+
+      if (window.GeoenvironmentalIntelligence && typeof window.GeoenvironmentalIntelligence.init === "function") {
+        window.GeoenvironmentalIntelligence.init(map, {
+          geoenvData,
+          groundwaterData: gwData,
+          disasterData: disData,
+          districtsData: distData,
+          waterData: watData,
+          structuresData: structData,
+          roadsData,
+          powerData: powData
+        }, {
+          onInspect: (asset, cat) => inspectAsset(asset, cat)
+        });
+      }
+    } catch (err) {
+      console.warn("[GeoenvironmentalIntelligence] Initialization notice:", err);
+    }
+  }
+
+  // --- G. Water Resources, CWC Dams & Irrigation Canals Engine ---
+  const damsByName = {};
+  const waterAssetsById = {};
+  const allDamsList = [];
+  const allWaterAssetsList = [];
+  let waterResourcesPromise = null;
+  let damsExplorerInitialized = false;
+  let activeDamsSort = { field: "gross", asc: false };
+
+  async function loadWaterResourcesLayer() {
+    try {
+      const data = await fetchCachedGeoJson("data/gujarat_water_resources.geojson");
+      if (!data || !data.features) return;
+
+      // Initialize Water Systems Network Graph Engine
+      if (window.WaterSystemsNetwork && typeof window.WaterSystemsNetwork.init === "function") {
+        window.WaterSystemsNetwork.init(data, map, {
+          onInspect: (asset) => inspectAsset(asset),
+          onSelectDam: (name) => selectDamByName(name, false)
+        });
+      }
+
+      // Initialize Hydropower & Gujarat Energy Infrastructure Explorer Engine
+      if (typeof initEnergyExplorerIntegration === "function") {
+        initEnergyExplorerIntegration();
+      }
+
+      data.features.forEach(feature => {
+        const p = feature.properties || {};
+        const geom = feature.geometry || {};
+        const cat = p.asset_category || "water_dam";
+        const name = p.name || "Water Structure";
+        const id = p.id || ("GJ-WR-" + allWaterAssetsList.length);
+        const grossCap = parseFloat(p.gross_storage_mcm) || 0;
+        const liveCap = parseFloat(p.live_storage_mcm) || 0;
+        const frl = p.frl_m || "N/A";
+        const spill = p.spillway_capacity_cumecs || "N/A";
+        const hydro = parseFloat(p.hydropower_capacity_mw || p.hydropower_mw) || 0;
+        const river = p.river || "Basin River";
+        const basin = p.parent_basin || p.basin || "Gujarat Basin";
+        const district = p.district || "Gujarat";
+        const agency = p.operating_agency || p.operating_authority || "WRD Gujarat";
+        const year = p.commission_year || "—";
+        const status = p.status || "Operational";
+
+        if (geom.type === "Point") {
+          const latlng = [geom.coordinates[1], geom.coordinates[0]];
+
+          let markerRadius = 8.0;
+          let markerFill = "#0284c7";
+          let markerColor = "#ffffff";
+          let catLabel = "WATER RESOURCES • CWC NRLD";
+          let catIcon = "💧";
+
+          if (cat === "monitoring_station") {
+            markerRadius = 7.5;
+            markerFill = "#f59e0b";
+            markerColor = "#ffffff";
+            catLabel = "HYDROMETRIC • CWC GAUGE STATION";
+            catIcon = "📡";
+          } else if (cat === "water_treatment_plant") {
+            markerRadius = 8.0;
+            markerFill = "#10b981";
+            markerColor = "#ffffff";
+            catLabel = "MUNICIPAL WATER TREATMENT PLANT";
+            catIcon = "🏭";
+          } else if (cat === "pumping_station") {
+            markerRadius = 8.0;
+            markerFill = "#8b5cf6";
+            markerColor = "#ffffff";
+            catLabel = "BULK WATER PUMPING STATION";
+            catIcon = "⚙️";
+          } else if (cat === "barrage") {
+            markerRadius = 9.0;
+            markerFill = "#0891b2";
+            markerColor = "#22d3ee";
+            catLabel = "WATER INFRASTRUCTURE • BARRAGE";
+            catIcon = "🚪";
+          } else if (cat === "weir") {
+            markerRadius = 7.5;
+            markerFill = "#0284c7";
+            markerColor = "#7dd3fc";
+            catLabel = "HYDRAULIC WEIR • PICK-UP HEADWORKS";
+            catIcon = "🌊";
+          } else if (cat === "check_dam") {
+            markerRadius = 6.5;
+            markerFill = "#0d9488";
+            markerColor = "#2dd4bf";
+            catLabel = "WATERSHED RECHARGE • CHECK DAM";
+            catIcon = "🧱";
+          } else {
+            // water_dam
+            markerRadius = Math.max(6.5, Math.min(18.0, Math.sqrt(grossCap) / 3.8));
+            markerFill = "#0284c7";
+            markerColor = "#ffffff";
+            catLabel = "WATER RESOURCES • CWC NRLD DAM";
+            catIcon = "💧";
+          }
+
+          const marker = L.circleMarker(latlng, {
+            pane: "damsPane",
+            radius: markerRadius,
+            fillColor: markerFill,
+            color: markerColor,
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.92
+          }).addTo(layerGroups.waterDams);
+
+          const assetRecord = {
+            id,
+            name,
+            cat,
+            river,
+            basin,
+            district,
+            grossCap,
+            liveCap,
+            frl,
+            hydro,
+            commandHa: p.irrigation_command_ha || 0,
+            year,
+            agency,
+            status,
+            latlng,
+            marker,
+            feature,
+            geomType: "Point"
+          };
+
+          if (["water_dam", "barrage", "weir", "check_dam"].includes(cat)) {
+            damsByName[name] = { marker, feature, latlng, id };
+            allDamsList.push({ marker, feature, latlng, name, grossCap, basin, cat, id });
+          }
+          waterAssetsById[id] = assetRecord;
+          allWaterAssetsList.push(assetRecord);
+
+          let tooltipSub = `${river}`;
+          if (grossCap > 0) tooltipSub = `${grossCap.toLocaleString()} MCM • ${river}`;
+          else if (p.capacity_mld > 0) tooltipSub = `${p.capacity_mld} MLD • ${p.service_area || river}`;
+          else if (p.danger_level_m) tooltipSub = `Danger: ${p.danger_level_m}m • ${river}`;
+
+          marker.bindTooltip(`<strong>${catIcon} ${name}</strong><br><small style="color: #38bdf8;">${tooltipSub}</small>`, {
+            direction: "top",
+            offset: [0, -8],
+            opacity: 0.95
+          });
+
+          // Category-specific popup rendering
+          let popupContent = "";
+          if (cat === "monitoring_station") {
+            popupContent = `
+              <div class="popup-card">
+                <div class="popup-card-header">
+                  <span class="popup-category cat-water">${catLabel}</span>
+                  <h4 class="popup-card-title">${catIcon} ${name}</h4>
+                </div>
+                <div class="popup-grid">
+                  <span class="grid-key">Monitored River:</span>
+                  <span class="grid-val"><strong>${river}</strong> (${basin})</span>
+                  <span class="grid-key">Danger Level:</span>
+                  <span class="grid-val"><strong style="color: #ef4444;">${p.danger_level_m ? p.danger_level_m + ' m MSL' : '—'}</strong></span>
+                  <span class="grid-key">Warning Level:</span>
+                  <span class="grid-val" style="color: #fbbf24;">${p.warning_level_m ? p.warning_level_m + ' m MSL' : '—'}</span>
+                  <span class="grid-key">Parameters:</span>
+                  <span class="grid-val">${p.parameters_monitored || 'Discharge & Level'}</span>
+                  <span class="grid-key">Agency:</span>
+                  <span class="grid-val">${agency}</span>
+                </div>
+                <div class="popup-action-row">
+                  <button class="popup-btn-zoom" onclick="window.selectWaterAssetById('${id}', true)">
+                    🔍 Inspect Station
+                  </button>
+                  <button class="popup-btn-lab popup-btn-flow" onclick="window.WaterSystemsNetwork && window.WaterSystemsNetwork.startFollowWater('${id}')">
+                    🌊 Follow Water
+                  </button>
+                </div>
+              </div>
+            `;
+          } else if (cat === "water_treatment_plant") {
+            popupContent = `
+              <div class="popup-card">
+                <div class="popup-card-header">
+                  <span class="popup-category cat-water">${catLabel}</span>
+                  <h4 class="popup-card-title">${catIcon} ${name}</h4>
+                </div>
+                <div class="popup-grid">
+                  <span class="grid-key">Design Capacity:</span>
+                  <span class="grid-val"><strong style="color: #10b981;">${p.capacity_mld} MLD</strong></span>
+                  <span class="grid-key">Service Zone:</span>
+                  <span class="grid-val">${p.service_area || district}</span>
+                  <span class="grid-key">Raw Water Source:</span>
+                  <span class="grid-val">${p.raw_water_source || river}</span>
+                  <span class="grid-key">Technology:</span>
+                  <span class="grid-val">${p.treatment_technology || 'Rapid Filtration'}</span>
+                  <span class="grid-key">Operating Agency:</span>
+                  <span class="grid-val">${agency}</span>
+                </div>
+                <div class="popup-action-row">
+                  <button class="popup-btn-zoom" onclick="window.selectWaterAssetById('${id}', true)">
+                    🔍 Inspect Plant
+                  </button>
+                  <button class="popup-btn-lab popup-btn-flow" onclick="window.WaterSystemsNetwork && window.WaterSystemsNetwork.startFollowWater('${id}')">
+                    🌊 Follow Water
+                  </button>
+                </div>
+              </div>
+            `;
+          } else if (cat === "pumping_station") {
+            popupContent = `
+              <div class="popup-card">
+                <div class="popup-card-header">
+                  <span class="popup-category cat-water">${catLabel}</span>
+                  <h4 class="popup-card-title">${catIcon} ${name}</h4>
+                </div>
+                <div class="popup-grid">
+                  <span class="grid-key">Pumping Capacity:</span>
+                  <span class="grid-val"><strong style="color: #8b5cf6;">${p.capacity_mld} MLD</strong></span>
+                  <span class="grid-key">Static Lift Head:</span>
+                  <span class="grid-val">${p.pumping_head_m ? p.pumping_head_m + ' m' : '—'}</span>
+                  <span class="grid-key">Installed Motors:</span>
+                  <span class="grid-val">${p.installed_motor_mw ? p.installed_motor_mw + ' MW' : '—'}</span>
+                  <span class="grid-key">Intake Conduit:</span>
+                  <span class="grid-val">${p.intake_source || river}</span>
+                  <span class="grid-key">Service Grid:</span>
+                  <span class="grid-val">${p.service_area || district}</span>
+                </div>
+                <div class="popup-action-row">
+                  <button class="popup-btn-zoom" onclick="window.selectWaterAssetById('${id}', true)">
+                    🔍 Inspect Node
+                  </button>
+                  <button class="popup-btn-lab popup-btn-flow" onclick="window.WaterSystemsNetwork && window.WaterSystemsNetwork.startFollowWater('${id}')">
+                    🌊 Follow Water
+                  </button>
+                </div>
+              </div>
+            `;
+          } else {
+            // Dams, barrages, weirs, check dams
+            popupContent = `
+              <div class="popup-card">
+                <div class="popup-card-header">
+                  <span class="popup-category cat-water">${catLabel}</span>
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 3px;">
+                    <h4 class="popup-card-title">${catIcon} ${name}</h4>
+                    ${grossCap > 0 ? `<span class="telemetry-cap-badge" style="background: ${markerFill}; color: #fff;">${grossCap.toLocaleString()} MCM</span>` : ''}
+                  </div>
+                </div>
+                <div class="popup-grid">
+                  <span class="grid-key">River / Basin:</span>
+                  <span class="grid-val">${river} (${basin})</span>
+                  <span class="grid-key">Full Reservoir Level (FRL):</span>
+                  <span class="grid-val"><strong style="color: #38bdf8;">${frl !== 'N/A' && frl ? frl + ' m' : '—'}</strong></span>
+                  <span class="grid-key">Live Storage:</span>
+                  <span class="grid-val">${liveCap > 0 ? liveCap.toLocaleString() + ' MCM' : '—'}</span>
+                  <span class="grid-key">Design Spillway:</span>
+                  <span class="grid-val">${spill !== 'N/A' && spill ? spill + ' m³/s' : (p.gates_count ? p.gates_count + ' Sluice Gates' : '—')}</span>
+                  <span class="grid-key">Hydropower Generation:</span>
+                  <span class="grid-val">${hydro > 0 ? hydro + ' MW' : 'Non-Power Irrigation / Municipal'}</span>
+                  <span class="grid-key">Operating Agency:</span>
+                  <span class="grid-val">${agency}</span>
+                </div>
+                <div class="popup-action-row">
+                  <button class="popup-btn-zoom" onclick="window.selectDamByName('${name.replace(/'/g, "\\'")}', true)">
+                    🔍 Zoom
+                  </button>
+                  <button class="popup-btn-lab" onclick="window.openDamScienceLabById('${id}')">
+                    🔬 Science Lab
+                  </button>
+                  <button class="popup-btn-lab popup-btn-flow" onclick="window.WaterSystemsNetwork && window.WaterSystemsNetwork.startFollowWater('${id}')">
+                    🌊 Flow
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+
+          marker.bindPopup(popupContent, { maxWidth: 330 });
+
+          marker.on("click", (e) => {
+            if (e && e.originalEvent) {
+              e.originalEvent._infraHandled = true;
+              L.DomEvent.stopPropagation(e.originalEvent);
+            }
+            if (typeof selectDam === "function" && ["water_dam", "barrage", "weir", "check_dam"].includes(cat)) {
+              selectDam(name, false);
+            }
+            inspectAsset({
+              properties: { ...p, asset_category: cat },
+              geometry: geom,
+              type: cat
+            });
+          });
+
+          searchIndex.push({
+            title: name,
+            subtitle: `${grossCap > 0 ? grossCap.toLocaleString() + ' MCM • ' : ''}${river} • ${basin} • ${agency}`,
+            type: cat,
+            category: "WATER",
+            badgeClass: "tag-water",
+            icon: catIcon,
+            priority: grossCap >= 1000 ? 98 : (grossCap >= 100 ? 88 : 82),
+            gross_storage_mcm: grossCap,
+            district: district,
+            layerKey: "waterDams",
+            searchTerms: [name, id, river, basin, district, agency, cat, "water", "irrigation", "gauge", "wtp", "pumping", `${grossCap} mcm`].join(" ").toLowerCase(),
+            damName: name,
+            waterAssetId: id,
+            latlng: latlng,
+            layer: marker
+          });
+
+        } else if (geom.type === "Polygon") {
+          if (cat === "reservoir") {
+            // Reservoir Water Spread Boundary
+            const poly = L.geoJSON(feature, {
+              pane: "reservoirsPane",
+              style: {
+                fillColor: "#0284c7",
+                fillOpacity: 0.35,
+                color: "#38bdf8",
+                weight: 1.5,
+                dashArray: "4, 4"
+              }
+            }).addTo(layerGroups.reservoirs || layerGroups.waterDams);
+
+            const assetRecord = {
+              id,
+              name,
+              cat: "reservoir",
+              river,
+              basin,
+              district,
+              grossCap,
+              liveCap,
+              frl,
+              hydro: 0,
+              commandHa: 0,
+              year: "—",
+              agency,
+              status,
+              layer: poly,
+              feature,
+              bounds: poly.getBounds(),
+              geomType: "Polygon"
+            };
+
+            waterAssetsById[id] = assetRecord;
+            allWaterAssetsList.push(assetRecord);
+
+            poly.bindTooltip(`<strong>💧 Reservoir Spread: ${name}</strong><br><small style="color: #60a5fa;">${p.surface_area_ha ? p.surface_area_ha.toLocaleString() + ' ha' : ''} at FRL ${frl}m</small>`, {
+              sticky: true,
+              opacity: 0.95
+            });
+
+            poly.bindPopup(`
+              <div class="popup-card">
+                <div class="popup-card-header">
+                  <span class="popup-category cat-water">WATER BODY • RESERVOIR SPREAD</span>
+                  <h4 class="popup-card-title">💧 ${name}</h4>
+                </div>
+                <div class="popup-grid">
+                  <span class="grid-key">Parent Dam Headworks:</span>
+                  <span class="grid-val"><strong>${p.parent_dam_name || 'Associated Dam'}</strong></span>
+                  <span class="grid-key">Water Spread Area:</span>
+                  <span class="grid-val">${p.surface_area_ha ? p.surface_area_ha.toLocaleString() + ' ha (' + p.surface_area_sqkm + ' km²)' : '—'}</span>
+                  <span class="grid-key">Full Reservoir Level:</span>
+                  <span class="grid-val"><strong style="color: #38bdf8;">${frl} m MSL</strong></span>
+                  <span class="grid-key">Gross Storage Capacity:</span>
+                  <span class="grid-val">${grossCap.toLocaleString()} MCM</span>
+                  <span class="grid-key">River Basin:</span>
+                  <span class="grid-val">${river} (${basin})</span>
+                </div>
+                <div class="popup-action-row">
+                  <button class="popup-btn-zoom" onclick="window.selectWaterAssetById('${id}', true)">
+                    🔍 Inspect
+                  </button>
+                  <button class="popup-btn-lab" onclick="window.openDamScienceLabById('${p.parent_dam_id || id}')">
+                    🔬 Science Lab
+                  </button>
+                  <button class="popup-btn-lab popup-btn-flow" onclick="window.WaterSystemsNetwork && window.WaterSystemsNetwork.startFollowWater('${id}')">
+                    🌊 Follow
+                  </button>
+                </div>
+              </div>
+            `, { maxWidth: 330 });
+
+            poly.on("click", (e) => {
+              if (e && e.originalEvent) {
+                e.originalEvent._infraHandled = true;
+                L.DomEvent.stopPropagation(e.originalEvent);
+              }
+              inspectAsset({
+                properties: { ...p, asset_category: "reservoir" },
+                geometry: geom,
+                type: "reservoir"
+              });
+            });
+
+            searchIndex.push({
+              title: name,
+              subtitle: `Reservoir Water Spread • ${p.surface_area_ha ? p.surface_area_ha.toLocaleString() + ' ha • ' : ''}${river} • ${basin}`,
+              type: "reservoir",
+              category: "WATER",
+              badgeClass: "tag-water",
+              icon: "💧",
+              priority: 85,
+              gross_storage_mcm: grossCap,
+              district: district,
+              layerKey: "reservoirs",
+              searchTerms: [name, id, "reservoir", "lake", river, basin, district].join(" ").toLowerCase(),
+              bounds: poly.getBounds(),
+              layer: poly
+            });
+
+          } else if (cat === "command_area") {
+            // Culturable Irrigation Command Footprint
+            const poly = L.geoJSON(feature, {
+              pane: "commandPane",
+              style: {
+                fillColor: "#84cc16",
+                fillOpacity: 0.22,
+                color: "#a3e635",
+                weight: 1.5,
+                dashArray: "4, 4"
+              }
+            }).addTo(layerGroups.commandAreas || layerGroups.waterDams);
+
+            const assetRecord = {
+              id,
+              name,
+              cat: "command_area",
+              river,
+              basin,
+              district,
+              grossCap: 0,
+              liveCap: 0,
+              frl: "—",
+              hydro: 0,
+              commandHa: p.culturable_command_ha || 0,
+              year: "—",
+              agency,
+              status,
+              layer: poly,
+              feature,
+              bounds: poly.getBounds(),
+              geomType: "Polygon"
+            };
+
+            waterAssetsById[id] = assetRecord;
+            allWaterAssetsList.push(assetRecord);
+
+            poly.bindTooltip(`<strong>🌾 Command: ${name}</strong><br><small style="color: #a3e635;">${p.culturable_command_ha ? p.culturable_command_ha.toLocaleString() + ' ha CADA footprint' : ''}</small>`, {
+              sticky: true,
+              opacity: 0.95
+            });
+
+            poly.bindPopup(`
+              <div class="popup-card">
+                <div class="popup-card-header">
+                  <span class="popup-category cat-water">IRRIGATION • CULTURABLE COMMAND AREA</span>
+                  <h4 class="popup-card-title">🌾 ${name}</h4>
+                </div>
+                <div class="popup-grid">
+                  <span class="grid-key">Command Area:</span>
+                  <span class="grid-val"><strong style="color: #a3e635;">${p.culturable_command_ha ? p.culturable_command_ha.toLocaleString() + ' ha' : '—'}</strong></span>
+                  <span class="grid-key">Irrigation Intensity:</span>
+                  <span class="grid-val">${p.irrigation_intensity_percent ? p.irrigation_intensity_percent + '%' : '—'}</span>
+                  <span class="grid-key">Benefited Districts:</span>
+                  <span class="grid-val">${p.districts_benefited || district}</span>
+                  <span class="grid-key">Operating Agency:</span>
+                  <span class="grid-val">${agency}</span>
+                  <span class="grid-key">Parent Basin:</span>
+                  <span class="grid-val">${basin}</span>
+                </div>
+                <div class="popup-action-row">
+                  <button class="popup-btn-zoom" onclick="window.selectWaterAssetById('${id}', true)">
+                    🔍 Inspect Command
+                  </button>
+                  <button class="popup-btn-lab popup-btn-flow" onclick="window.WaterSystemsNetwork && window.WaterSystemsNetwork.startFollowWater('${id}')">
+                    🌊 Follow Water
+                  </button>
+                </div>
+              </div>
+            `, { maxWidth: 330 });
+
+            poly.on("click", (e) => {
+              if (e && e.originalEvent) {
+                e.originalEvent._infraHandled = true;
+                L.DomEvent.stopPropagation(e.originalEvent);
+              }
+              inspectAsset({
+                properties: { ...p, asset_category: "command_area" },
+                geometry: geom,
+                type: "command_area"
+              });
+            });
+
+            searchIndex.push({
+              title: name,
+              subtitle: `Irrigation Command Area • ${p.culturable_command_ha ? p.culturable_command_ha.toLocaleString() + ' ha • ' : ''}${basin}`,
+              type: "command_area",
+              category: "WATER",
+              badgeClass: "tag-water",
+              icon: "🌾",
+              priority: 84,
+              district: district,
+              layerKey: "commandAreas",
+              searchTerms: [name, id, "command", "irrigation", "agriculture", "cada", basin].join(" ").toLowerCase(),
+              bounds: poly.getBounds(),
+              layer: poly
+            });
+
+          } else if (cat === "river_basin") {
+            // River Basin Drainage Boundary
+            const poly = L.geoJSON(feature, {
+              pane: "basinsPane",
+              style: {
+                fillColor: "#6366f1",
+                fillOpacity: 0.10,
+                color: "#818cf8",
+                weight: 1.5,
+                dashArray: "6, 4"
+              }
+            }).addTo(layerGroups.waterways);
+
+            const assetRecord = {
+              id,
+              name,
+              cat: "river_basin",
+              river,
+              basin: name,
+              district,
+              grossCap: 0,
+              liveCap: 0,
+              frl: "—",
+              hydro: 0,
+              commandHa: 0,
+              year: "—",
+              agency,
+              status,
+              layer: poly,
+              feature,
+              bounds: poly.getBounds(),
+              geomType: "Polygon"
+            };
+
+            waterAssetsById[id] = assetRecord;
+            allWaterAssetsList.push(assetRecord);
+
+            poly.bindTooltip(`<strong>🗺️ Basin: ${name}</strong><br><small style="color: #a5b4fc;">${p.drainage_area_sqkm ? p.drainage_area_sqkm.toLocaleString() + ' km² drainage area' : ''}</small>`, {
+              sticky: true,
+              opacity: 0.95
+            });
+
+            poly.bindPopup(`
+              <div class="popup-card">
+                <div class="popup-card-header">
+                  <span class="popup-category cat-water">HYDROLOGY • RIVER DRAINAGE BASIN</span>
+                  <h4 class="popup-card-title">🗺️ ${name}</h4>
+                </div>
+                <div class="popup-grid">
+                  <span class="grid-key">Drainage Area:</span>
+                  <span class="grid-val"><strong style="color: #818cf8;">${p.drainage_area_sqkm ? p.drainage_area_sqkm.toLocaleString() + ' km²' : '—'}</strong></span>
+                  <span class="grid-key">Annual Yield Runoff:</span>
+                  <span class="grid-val">${p.average_annual_runoff_mcm ? p.average_annual_runoff_mcm.toLocaleString() + ' MCM' : '—'}</span>
+                  <span class="grid-key">Major Rivers:</span>
+                  <span class="grid-val">${Array.isArray(p.major_rivers) ? p.major_rivers.join(', ') : 'Trunk River'}</span>
+                  <span class="grid-key">Governing Authority:</span>
+                  <span class="grid-val">${p.governing_interstate_body || agency}</span>
+                </div>
+                <div class="popup-action-row">
+                  <button class="popup-btn-zoom" onclick="window.selectWaterAssetById('${id}', true)">
+                    🔍 Inspect Basin
+                  </button>
+                  <button class="popup-btn-lab popup-btn-flow" onclick="window.WaterSystemsNetwork && window.WaterSystemsNetwork.openNetworkModal()">
+                    🕸️ Network Model
+                  </button>
+                </div>
+              </div>
+            `, { maxWidth: 330 });
+
+            poly.on("click", (e) => {
+              if (e && e.originalEvent) {
+                e.originalEvent._infraHandled = true;
+                L.DomEvent.stopPropagation(e.originalEvent);
+              }
+              inspectAsset({
+                properties: { ...p, asset_category: "river_basin" },
+                geometry: geom,
+                type: "river_basin"
+              });
+            });
+
+            searchIndex.push({
+              title: name,
+              subtitle: `River Basin Catchment • ${p.drainage_area_sqkm ? p.drainage_area_sqkm.toLocaleString() + ' km² • ' : ''}Hydrology`,
+              type: "river_basin",
+              category: "WATER",
+              badgeClass: "tag-water",
+              icon: "🗺️",
+              priority: 86,
+              layerKey: "waterways",
+              searchTerms: [name, id, "basin", "catchment", "watershed", "hydrology", "drainage"].join(" ").toLowerCase(),
+              bounds: poly.getBounds(),
+              layer: poly
+            });
+          }
+
+        } else if (geom.type === "LineString") {
+          const cat = p.asset_category || "irrigation_canal";
+          const isCanal = cat === "irrigation_canal";
+          const lengthKm = p.length_km || 0;
+          const discharge = p.design_discharge_cusecs || p.avg_annual_yield_mcm || "N/A";
+
+          const line = L.geoJSON(feature, {
+            pane: "waterwaysPane",
+            style: {
+              color: isCanal ? "#06b6d4" : "#0284c7",
+              weight: isCanal ? 3.5 : 3.0,
+              opacity: 0.9,
+              dashArray: isCanal ? "8, 4" : null
+            }
+          }).addTo(isCanal ? (layerGroups.canals || layerGroups.waterways) : (layerGroups.rivers || layerGroups.waterways));
+
+          line.bindTooltip(`<strong>${isCanal ? '🌊 Canal' : '🏞️ River'}: ${name}</strong><br><small style="color: #38bdf8;">${lengthKm} km • ${discharge} ${isCanal ? 'cusecs' : 'MCM yield'}</small>`, {
+            sticky: true,
+            opacity: 0.95
+          });
+
+          line.bindPopup(`
+            <div class="popup-card">
+              <div class="popup-card-header">
+                <span class="popup-category ${isCanal ? 'cat-water' : 'cat-river'}">${isCanal ? 'IRRIGATION LIFELINE CANAL' : 'MAJOR RIVER SYSTEM'}</span>
+                <h4 class="popup-card-title">${name}</h4>
+              </div>
+              <div class="popup-grid">
+                <span class="grid-key">Length:</span>
+                <span class="grid-val"><strong style="color: #38bdf8;">${lengthKm} km</strong></span>
+                <span class="grid-key">${isCanal ? 'Design Discharge:' : 'Annual Yield:'}</span>
+                <span class="grid-val">${discharge} ${isCanal ? 'cusecs' : 'MCM'}</span>
+                <span class="grid-key">Authority:</span>
+                <span class="grid-val">${p.operating_agency || p.authority || 'Govt of Gujarat'}</span>
+                <span class="grid-key">Parent Basin:</span>
+                <span class="grid-val">${basin}</span>
+              </div>
+              <div class="popup-action-row">
+                <button class="popup-btn-zoom" onclick="window.selectWaterAssetById('${id}', true)">
+                  🔍 Inspect Waterway
+                </button>
+                <button class="popup-btn-lab popup-btn-flow" onclick="window.WaterSystemsNetwork && window.WaterSystemsNetwork.startFollowWater('${id}')">
+                  🌊 Follow Water
+                </button>
+              </div>
+            </div>
+          `, { maxWidth: 330 });
+
+          line.on("click", (e) => {
+            if (e && e.originalEvent) {
+              e.originalEvent._infraHandled = true;
+              L.DomEvent.stopPropagation(e.originalEvent);
+            }
+            inspectAsset({
+              properties: { ...p, asset_category: cat },
+              geometry: feature.geometry,
+              type: cat
+            });
+          });
+
+          searchIndex.push({
+            title: name,
+            subtitle: `${isCanal ? 'Canal' : 'River'} • ${lengthKm} km • ${discharge} ${isCanal ? 'cusecs' : 'MCM yield'}`,
+            type: "waterway",
+            category: "WATERWAYS",
+            badgeClass: "tag-water",
+            icon: isCanal ? "🌊" : "🏞️",
+            priority: 82,
+            layerKey: isCanal ? "canals" : "rivers",
+            searchTerms: [name, id, "canal", "river", "waterway", "irrigation", "narmada", "nmc", basin].join(" ").toLowerCase(),
+            bounds: line.getBounds(),
+            layer: line
+          });
+        }
+      });
+
+      // Initialize Dams & Reservoirs Explorer Modal & Ledger Table
+      initDamsExplorerModal();
+
+      // Initialize Water Systems Network Explorer Modal
+      initWaterNetworkModal();
+
+      // Initialize Water Scenarios Lab Module
+      if (window.WaterScenariosLab && typeof window.WaterScenariosLab.init === "function") {
+        window.WaterScenariosLab.init(map, allWaterAssetsList);
+      }
+    } catch (err) {
+      console.error("Failed to load water resources layer:", err);
+    }
+  }
+
+  function ensureWaterResourcesLoaded() {
+    if (waterResourcesPromise) return waterResourcesPromise;
+    waterResourcesPromise = loadWaterResourcesLayer();
+    return waterResourcesPromise;
+  }
+
+  // --- H. CGWB Groundwater & Hydrogeology Assessment Engine ---
+  const groundwaterByDistrict = {};
+  const allGroundwaterList = [];
+  let groundwaterPromise = null;
+
+  async function loadGroundwaterLayer() {
+    try {
+      const data = await fetchCachedGeoJson("data/gujarat_groundwater_geology.geojson");
+      if (!data || !data.features) return;
+
+      data.features.forEach(feature => {
+        const p = feature.properties || {};
+        const geom = feature.geometry || {};
+        const dist = p.district || "District";
+        const cat = p.cgwb_category || "Safe";
+        const pct = parseFloat(p.stage_of_extraction_pct) || 0;
+        const aquifer = p.dominant_aquifer || "Alluvial Aquifer";
+        const depth = p.water_table_depth_m_bgl || "10 - 25";
+        const terrain = p.geological_terrain || "Alluvium";
+        const saline = p.salinity_risk || "Low";
+        const latlng = [geom.coordinates[1], geom.coordinates[0]];
+
+        let color = "#10b981";
+        if (cat === "Over-Exploited") color = "#ef4444";
+        else if (cat === "Critical") color = "#f97316";
+        else if (cat === "Semi-Critical") color = "#eab308";
+        else if (cat === "Saline / Coastal") color = "#a855f7";
+
+        const radius = Math.max(5.5, Math.min(13, pct / 12));
+        const marker = L.circleMarker(latlng, {
+          pane: "groundwaterPane",
+          radius: radius,
+          fillColor: color,
+          color: "#ffffff",
+          weight: 1.6,
+          opacity: 0.95,
+          fillOpacity: 0.90
+        }).addTo(layerGroups.groundwater);
+
+        groundwaterByDistrict[dist] = { marker, feature, latlng };
+        allGroundwaterList.push({ marker, feature, latlng, dist, cat, pct, color });
+
+        marker.bindTooltip(`<strong>🌍 ${dist} Groundwater</strong><br><span style="color: ${color}; font-weight: 600;">${cat}</span> • <small style="color: #cbd5e1;">${pct}% Extraction</small>`, {
+          direction: "top",
+          offset: [0, -8],
+          opacity: 0.95
+        });
+
+        marker.bindPopup(`
+          <div class="popup-card">
+            <div class="popup-card-header">
+              <span class="popup-category" style="background: ${color}; color: #fff;">CGWB AQUIFER ASSESSMENT</span>
+              <h4 class="popup-card-title">${dist} Aquifer Profile</h4>
+            </div>
+            <div class="popup-grid">
+              <span class="grid-key">Statutory Classification:</span>
+              <span class="grid-val"><strong style="color: ${color};">${cat}</strong></span>
+              <span class="grid-key">Stage of Extraction:</span>
+              <span class="grid-val"><strong style="color: #38bdf8;">${pct}%</strong> of Annual Recharge</span>
+              <span class="grid-key">Dominant Aquifer:</span>
+              <span class="grid-val">${aquifer}</span>
+              <span class="grid-key">Water Table Depth:</span>
+              <span class="grid-val">${depth} m bgl</span>
+              <span class="grid-key">Geological Terrain:</span>
+              <span class="grid-val">${terrain}</span>
+              <span class="grid-key">Salinity / Seawater Ingress:</span>
+              <span class="grid-val">${saline}</span>
+              <span class="grid-key">Source & Methodology:</span>
+              <span class="grid-val">CGWB / Ministry of Jal Shakti (GEC-2015 Methodology)</span>
+            </div>
+          </div>
+        `, { maxWidth: 320 });
+
+        marker.on("click", (e) => {
+          if (e && e.originalEvent) {
+            e.originalEvent._infraHandled = true;
+            L.DomEvent.stopPropagation(e.originalEvent);
+          }
+          inspectAsset({
+            properties: { ...p, asset_category: "groundwater_assessment" },
+            geometry: geom,
+            type: "groundwater_assessment"
+          });
+        });
+
+        searchIndex.push({
+          title: `${dist} Groundwater & Geology`,
+          subtitle: `CGWB Category: ${cat} (${pct}% Extraction) • Aquifer: ${aquifer}`,
+          type: "groundwater",
+          category: "GROUNDWATER",
+          badgeClass: "tag-groundwater",
+          icon: "🌍",
+          priority: pct >= 100 ? 88 : 70,
+          district: dist,
+          layerKey: "groundwater",
+          searchTerms: [dist, cat, aquifer, terrain, "groundwater", "aquifer", "cgwb", "water table", "geology", "well", "extraction"].join(" ").toLowerCase(),
+          latlng: latlng,
+          layer: marker
+        });
+      });
+    } catch (err) {
+      console.error("Failed to load groundwater layer:", err);
+    }
+  }
+
+  function ensureGroundwaterLoaded() {
+    if (groundwaterPromise) return groundwaterPromise;
+    groundwaterPromise = loadGroundwaterLayer();
+    return groundwaterPromise;
+  }
+
+  // --- I. Urban, Smart Cities, Ports, Airports & Industry Engine ---
+  const urbanAssetsByName = {};
+  const allUrbanList = [];
+  const allPortsList = [];
+  const allAirportsList = [];
+  let urbanIndustryPromise = null;
+
+  async function loadUrbanIndustryLayer() {
+    try {
+      const data = await fetchCachedGeoJson("data/gujarat_urban_industry.geojson");
+      if (!data || !data.features) return;
+
+      data.features.forEach(feature => {
+        const p = feature.properties || {};
+        const geom = feature.geometry || {};
+        const rawCat = (p.asset_category || p.category || "").toLowerCase();
+        const name = p.name || "Urban Asset";
+
+        const isSeaport = rawCat === "seaport" || rawCat === "commercial_seaport";
+        const isAirport = rawCat === "airport" || rawCat === "commercial_airport";
+        const isIndustry = rawCat === "industrial_estate" || rawCat === "industrial_sez" || rawCat === "industry";
+        const isMunicipal = rawCat === "municipal_corporation";
+
+        if (geom.type === "Point") {
+          const latlng = [geom.coordinates[1], geom.coordinates[0]];
+          let targetGroup = layerGroups.urbanMetro;
+          let paneName = "urbanMetroPane";
+          let color = "#06b6d4";
+          let radius = 7;
+          let typeLabel = "Smart City";
+          let badgeBg = "#0284c7";
+          let icon = "🏙️";
+          let canonicalCat = "municipal_corporation";
+
+          if (isSeaport) {
+            targetGroup = layerGroups.portsAirports;
+            paneName = "portsAirportsPane";
+            color = "#6366f1";
+            badgeBg = "#4f46e5";
+            typeLabel = "Commercial Seaport";
+            icon = "⚓";
+            canonicalCat = "commercial_seaport";
+            const cap = parseFloat(p.capacity_mmt || p.annual_capacity_mmt) || 10;
+            radius = Math.max(6, Math.min(14, Math.sqrt(cap) * 0.8));
+            allPortsList.push({ name, latlng, properties: p, feature });
+          } else if (isAirport) {
+            targetGroup = layerGroups.portsAirports;
+            paneName = "portsAirportsPane";
+            color = "#0284c7";
+            badgeBg = "#0369a1";
+            typeLabel = "Commercial Airport";
+            icon = "✈️";
+            canonicalCat = "commercial_airport";
+            radius = 7.5;
+            allAirportsList.push({ name, latlng, properties: p, feature });
+          } else if (isIndustry) {
+            targetGroup = layerGroups.industries;
+            paneName = "industryPane";
+            color = "#f59e0b";
+            badgeBg = "#d97706";
+            typeLabel = "Mega GIDC / SEZ";
+            icon = "🏭";
+            canonicalCat = "industrial_sez";
+            radius = 8.0;
+          } else if (isMunicipal) {
+            targetGroup = layerGroups.urbanMetro;
+            paneName = "urbanMetroPane";
+            color = "#06b6d4";
+            badgeBg = "#0891b2";
+            typeLabel = "Municipal Corporation";
+            icon = "🏛️";
+            canonicalCat = "municipal_corporation";
+            radius = 8.5;
+          }
+
+          const marker = L.circleMarker(latlng, {
+            pane: paneName,
+            radius: radius,
+            fillColor: color,
+            color: "#ffffff",
+            weight: 1.8,
+            opacity: 0.95,
+            fillOpacity: 0.92
+          }).addTo(targetGroup);
+
+          urbanAssetsByName[name] = { marker, feature, latlng, category: canonicalCat };
+          allUrbanList.push({ marker, feature, latlng, name, category: canonicalCat, typeLabel, color });
+
+          marker.bindTooltip(`<strong>${icon} ${name}</strong><br><small style="color: ${color};">${typeLabel}</small>`, {
+            direction: "top",
+            offset: [0, -8],
+            opacity: 0.95
+          });
+
+          let detailsHtml = "";
+          if (isSeaport) {
+            const capVal = p.capacity_mmt || p.annual_capacity_mmt || "10";
+            const draftVal = p.draft_m || p.max_draft_m || "12";
+            const berthsVal = p.berths_count || p.berths || "—";
+            const authVal = p.authority || p.operator || "Gujarat Maritime Board";
+            detailsHtml = `
+              <span class="grid-key">Annual Cargo Capacity:</span>
+              <span class="grid-val"><strong style="color: #818cf8;">${capVal} MMT</strong></span>
+              <span class="grid-key">Maximum Draft:</span>
+              <span class="grid-val">${draftVal} meters</span>
+              <span class="grid-key">Berths Count:</span>
+              <span class="grid-val">${berthsVal} Berths</span>
+              <span class="grid-key">Port Authority:</span>
+              <span class="grid-val">${authVal}</span>
+            `;
+          } else if (isAirport) {
+            const iataVal = p.iata || p.iata_code || "—";
+            const icaoVal = p.icao || p.icao_code || "—";
+            const runwayVal = p.runway_length_m ? `${p.runway_length_m} m` : "Operational";
+            const paxVal = p.passenger_traffic_fy24 || (p.terminal_capacity_mppa ? `${p.terminal_capacity_mppa} MPPA` : "Commercial");
+            const opVal = p.operator || p.authority || "Airports Authority of India (AAI)";
+            detailsHtml = `
+              <span class="grid-key">IATA / ICAO Code:</span>
+              <span class="grid-val"><strong style="color: #38bdf8;">${iataVal} / ${icaoVal}</strong></span>
+              <span class="grid-key">Runway Length:</span>
+              <span class="grid-val">${runwayVal}</span>
+              <span class="grid-key">Traffic / Capacity:</span>
+              <span class="grid-val">${paxVal}</span>
+              <span class="grid-key">Airport Operator:</span>
+              <span class="grid-val">${opVal}</span>
+            `;
+          } else if (isIndustry) {
+            const areaVal = p.area_sqkm ? `${p.area_sqkm} sq km` : (p.area_acres ? `${p.area_acres} acres` : "—");
+            const focusVal = p.focus || p.key_sectors || "Industrial Manufacturing";
+            const devVal = p.governing_body || p.developer || "GIDC";
+            detailsHtml = `
+              <span class="grid-key">Notified Area:</span>
+              <span class="grid-val"><strong style="color: #fbbf24;">${areaVal}</strong></span>
+              <span class="grid-key">Anchor Focus:</span>
+              <span class="grid-val">${focusVal}</span>
+              <span class="grid-key">Nodal Developer:</span>
+              <span class="grid-val">${devVal}</span>
+            `;
+          } else if (isMunicipal) {
+            detailsHtml = `
+              <span class="grid-key">Civic Area:</span>
+              <span class="grid-val"><strong style="color: #22d3ee;">${p.area_sqkm || '—'} sq km</strong></span>
+              <span class="grid-key">Population (2011 Census):</span>
+              <span class="grid-val">${p.population_2011 ? parseFloat(p.population_2011).toLocaleString() : '—'}</span>
+              <span class="grid-key">Smart City Status:</span>
+              <span class="grid-val">${p.smart_city_status || 'Municipal Corporation'}</span>
+            `;
+          }
+
+          marker.bindPopup(`
+            <div class="popup-card">
+              <div class="popup-card-header">
+                <span class="popup-category" style="background: ${badgeBg}; color: #fff;">${typeLabel.toUpperCase()}</span>
+                <h4 class="popup-card-title">${icon} ${name}</h4>
+              </div>
+              <div class="popup-grid">
+                ${detailsHtml}
+                <span class="grid-key">Data Source:</span>
+                <span class="grid-val">${p.source_org}</span>
+              </div>
+              <div class="popup-action-row">
+                <button class="popup-btn-zoom" onclick="window.selectUrbanAssetByName('${name.replace(/'/g, "\\'")}', true)">
+                  🔍 Zoom & Inspect
+                </button>
+              </div>
+            </div>
+          `, { maxWidth: 320 });
+
+          marker.on("click", (e) => {
+            if (e && e.originalEvent) {
+              e.originalEvent._infraHandled = true;
+              L.DomEvent.stopPropagation(e.originalEvent);
+            }
+            if (typeof selectUrbanAsset === "function") selectUrbanAsset(name, false);
+            inspectAsset({
+              properties: { ...p, asset_category: canonicalCat },
+              geometry: feature.geometry,
+              type: canonicalCat
+            });
+          });
+
+          searchIndex.push({
+            title: name,
+            subtitle: `${typeLabel} • ${p.source_org || 'Gujarat'}`,
+            type: "urban",
+            category: typeLabel.toUpperCase(),
+            badgeClass: isSeaport ? "tag-port" : (isAirport ? "tag-airport" : (isIndustry ? "tag-industry" : "tag-urban")),
+            icon: icon,
+            priority: isSeaport ? 95 : (isAirport ? 93 : (isIndustry ? 84 : 75)),
+            layerKey: targetGroup === layerGroups.portsAirports ? "portsAirports" : (targetGroup === layerGroups.industries ? "industries" : "urbanMetro"),
+            searchTerms: [name, typeLabel, p.source_org, p.iata || p.iata_code || "", p.operator || p.authority || "", "port", "airport", "gidc", "sez", "smart city", "urban"].join(" ").toLowerCase(),
+            urbanName: name,
+            latlng: latlng,
+            layer: marker
+          });
+
+        } else if (geom.type === "LineString") {
+          const line = L.geoJSON(feature, {
+            pane: "urbanMetroPane",
+            style: {
+              color: "#ec4899",
+              weight: 4.2,
+              opacity: 0.95,
+              dashArray: "6, 3"
+            }
+          }).addTo(layerGroups.urbanMetro);
+
+          line.bindTooltip(`<strong>🚇 Metro: ${name}</strong><br><small style="color: #f472b6;">${p.length_km} km • ${p.stations_count} Stations • ${p.operator}</small>`, {
+            sticky: true,
+            opacity: 0.95
+          });
+
+          line.on("click", (e) => {
+            if (e && e.originalEvent) {
+              e.originalEvent._infraHandled = true;
+              L.DomEvent.stopPropagation(e.originalEvent);
+            }
+            inspectAsset({
+              properties: { ...p, asset_category: "metro_transit" },
+              geometry: feature.geometry,
+              type: "metro_transit"
+            });
+          });
+
+          searchIndex.push({
+            title: name,
+            subtitle: `Metro Rail Alignment • ${p.length_km} km • ${p.stations_count} Stations • ${p.operator}`,
+            type: "urban",
+            category: "METRO",
+            badgeClass: "tag-metro",
+            icon: "🚇",
+            priority: 85,
+            layerKey: "urbanMetro",
+            searchTerms: [name, "metro", "rail", "ahmedabad", "transit", "gmerc"].join(" ").toLowerCase(),
+            bounds: line.getBounds(),
+            layer: line
+          });
+        }
+      });
+    } catch (err) {
+      console.error("Failed to load urban industry layer:", err);
+    }
+  }
+
+  function ensureUrbanIndustryLoaded() {
+    if (urbanIndustryPromise) return urbanIndustryPromise;
+    urbanIndustryPromise = loadUrbanIndustryLayer();
+    return urbanIndustryPromise;
+  }
+
+  // --- J. Disaster Hazards, BIS Seismic, Cyclones & Protected Ecology Engine ---
+  const allHazardList = [];
+  let environmentDisasterPromise = null;
+
+  async function loadEnvironmentDisasterLayer() {
+    try {
+      const data = await fetchCachedGeoJson("data/gujarat_environment_disaster.geojson");
+      if (!data || !data.features) return;
+
+      data.features.forEach(feature => {
+        const p = feature.properties || {};
+        const geom = feature.geometry || {};
+        const cat = p.asset_category || "";
+        const name = p.name || "Hazard Feature";
+
+        if (geom.type === "Point") {
+          const latlng = [geom.coordinates[1], geom.coordinates[0]];
+          let targetGroup = layerGroups.cycloneFlood;
+          let paneName = "disasterPane";
+          let color = "#f97316";
+          let radius = 8;
+          let typeLabel = "Disaster Hazard";
+
+          if (cat === "SEISMIC_HAZARD") {
+            targetGroup = layerGroups.seismic;
+            paneName = "seismicPane";
+            color = p.zone_code === "ZONE_V" ? "#dc2626" : (p.zone_code === "ZONE_IV" ? "#ea580c" : "#eab308");
+            radius = p.zone_code === "ZONE_V" ? 11 : 8.5;
+            typeLabel = `BIS Seismic ${p.zone_code.replace('_', ' ')}`;
+          } else if (cat === "CYCLONE_HAZARD") {
+            targetGroup = layerGroups.cycloneFlood;
+            paneName = "disasterPane";
+            color = "#fb923c";
+            radius = 8.5;
+            typeLabel = "Cyclone & Storm Surge Risk";
+          } else if (cat === "FLOOD_HAZARD") {
+            targetGroup = layerGroups.cycloneFlood;
+            paneName = "disasterPane";
+            color = "#0284c7";
+            radius = 8.0;
+            typeLabel = "Riverine Flood Plain";
+          } else if (cat === "ECOLOGICAL_RESERVE") {
+            targetGroup = layerGroups.sanctuaries;
+            paneName = "sanctuariesPane";
+            color = "#10b981";
+            radius = 8.5;
+            typeLabel = "Ecological Reserve & Sanctuary";
+          }
+
+          const marker = L.circleMarker(latlng, {
+            pane: paneName,
+            radius: radius,
+            fillColor: color,
+            color: "#ffffff",
+            weight: 2,
+            opacity: 0.95,
+            fillOpacity: 0.90
+          }).addTo(targetGroup);
+
+          allHazardList.push({ marker, feature, latlng, name, cat, color, typeLabel });
+
+          marker.bindTooltip(`<strong>⚠️ ${name}</strong><br><small style="color: ${color};">${typeLabel}</small>`, {
+            direction: "top",
+            offset: [0, -8],
+            opacity: 0.95
+          });
+
+          let detailsHtml = "";
+          if (cat === "SEISMIC_HAZARD") {
+            detailsHtml = `
+              <span class="grid-key">Zone Factor (Z):</span>
+              <span class="grid-val"><strong style="color: #f87171;">Z = ${p.zone_factor_z} (${p.expected_pga_g}g PGA)</strong></span>
+              <span class="grid-key">Active Tectonic Faults:</span>
+              <span class="grid-val">${p.active_faults}</span>
+              <span class="grid-key">Historical Events:</span>
+              <span class="grid-val">${p.historical_events}</span>
+              <span class="grid-key">Design Standard:</span>
+              <span class="grid-val">${p.design_code}</span>
+            `;
+          } else if (cat === "CYCLONE_HAZARD") {
+            detailsHtml = `
+              <span class="grid-key">Design Wind Speed:</span>
+              <span class="grid-val"><strong style="color: #fb923c;">V_b = ${p.wind_speed_ms} m/s (${p.wind_speed_kmh} km/h)</strong></span>
+              <span class="grid-key">Storm Surge Potential:</span>
+              <span class="grid-val">${p.surge_potential_m}</span>
+              <span class="grid-key">Exposed Coastline:</span>
+              <span class="grid-val">${p.affected_coastline_km} km</span>
+            `;
+          } else if (cat === "FLOOD_HAZARD") {
+            detailsHtml = `
+              <span class="grid-key">River Basin:</span>
+              <span class="grid-val"><strong style="color: #38bdf8;">${p.river_basin}</strong></span>
+              <span class="grid-key">Choke Points:</span>
+              <span class="grid-val">${p.critical_hazard_points}</span>
+              <span class="grid-key">Historical Floods:</span>
+              <span class="grid-val">${p.past_major_floods}</span>
+            `;
+          } else if (cat === "ECOLOGICAL_RESERVE") {
+            detailsHtml = `
+              <span class="grid-key">Flagship Species:</span>
+              <span class="grid-val"><strong style="color: #4ade80;">${p.flagship_species}</strong></span>
+              <span class="grid-key">Protected Area:</span>
+              <span class="grid-val">${p.area_sqkm} sq km</span>
+              <span class="grid-key">Conservation Status:</span>
+              <span class="grid-val">${p.conservation_status}</span>
+              <span class="grid-key">Authority:</span>
+              <span class="grid-val">${p.authority}</span>
+            `;
+          }
+
+          marker.bindPopup(`
+            <div class="popup-card">
+              <div class="popup-card-header">
+                <span class="popup-category" style="background: ${color}; color: #fff;">${typeLabel.toUpperCase()}</span>
+                <h4 class="popup-card-title">⚠️ ${name}</h4>
+              </div>
+              <div class="popup-grid">
+                ${detailsHtml}
+                <span class="grid-key">Authority:</span>
+                <span class="grid-val">${p.source_org}</span>
+              </div>
+            </div>
+          `, { maxWidth: 320 });
+
+          marker.on("click", (e) => {
+            if (e && e.originalEvent) {
+              e.originalEvent._infraHandled = true;
+              L.DomEvent.stopPropagation(e.originalEvent);
+            }
+            let catType = "seismic_hazard_zone";
+            if (cat === "CYCLONE_HAZARD") catType = "cyclone_hazard_zone";
+            else if (cat === "FLOOD_HAZARD") catType = "flood_hazard_zone";
+            else if (cat === "ECOLOGICAL_RESERVE") catType = "ecological_reserve";
+            inspectAsset({
+              properties: { ...p, asset_category: catType },
+              geometry: geom,
+              type: catType
+            });
+          });
+
+          searchIndex.push({
+            title: name,
+            subtitle: `${typeLabel} • ${p.source_org || 'Disaster Risk Management'}`,
+            type: "hazard",
+            category: "HAZARD",
+            badgeClass: cat === "ECOLOGICAL_RESERVE" ? "tag-green" : "tag-hazard",
+            icon: cat === "ECOLOGICAL_RESERVE" ? "🦁" : "⚠️",
+            priority: p.zone_code === "ZONE_V" ? 95 : 78,
+            layerKey: targetGroup === layerGroups.seismic ? "seismic" : (targetGroup === layerGroups.sanctuaries ? "sanctuaries" : "cycloneFlood"),
+            searchTerms: [name, typeLabel, p.active_faults || "", p.flagship_species || "", "hazard", "disaster", "seismic", "cyclone", "flood", "sanctuary", "environment"].join(" ").toLowerCase(),
+            latlng: latlng,
+            layer: marker
+          });
+        }
+      });
+    } catch (err) {
+      console.error("Failed to load environment disaster layer:", err);
+    }
+  }
+
+  let geoenvironmentalPromise = null;
+  async function loadGeoenvironmentalLayers() {
+    if (geoenvironmentalPromise) return geoenvironmentalPromise;
+    geoenvironmentalPromise = (async () => {
+      try {
+        const data = await fetchCachedGeoJson("data/gujarat_geoenvironmental.geojson");
+        if (!data || !data.features) return;
+
+        data.features.forEach(feature => {
+          const p = feature.properties || {};
+          const geom = feature.geometry || {};
+          const cat = p.asset_category || "";
+          const name = p.name || "Geoenvironmental Asset";
+          const id = p.id || ("GJ-GEOENV-" + Math.random().toString(36).substr(2, 6));
+
+          if (cat === "geological_formation") {
+            const latlng = geom.type === "Point" ? [geom.coordinates[1], geom.coordinates[0]] : null;
+            if (latlng) {
+              const marker = L.circleMarker(latlng, {
+                pane: "geologyPane",
+                radius: 8.5,
+                fillColor: "#b45309",
+                color: "#ffffff",
+                weight: 1.8,
+                opacity: 0.95,
+                fillOpacity: 0.90
+              }).addTo(layerGroups.geology);
+
+              marker.bindTooltip(`<strong>🌍 Geology: ${name}</strong><br><small style="color: #fbbf24;">${p.lithology || ''} • ${p.formation_code || ''}</small>`, {
+                direction: "top",
+                offset: [0, -8],
+                opacity: 0.95
+              });
+
+              marker.bindPopup(`
+                <div class="popup-card">
+                  <div class="popup-card-header">
+                    <span class="popup-category cat-geology">GSI BHUKOSH • BEDROCK FORMATION</span>
+                    <h4 class="popup-card-title">🌍 ${name}</h4>
+                  </div>
+                  <div class="popup-grid">
+                    <span class="grid-key">Formation Code:</span>
+                    <span class="grid-val"><strong>${p.formation_code || '—'}</strong></span>
+                    <span class="grid-key">Lithology:</span>
+                    <span class="grid-val">${p.lithology || '—'}</span>
+                    <span class="grid-key">Geological Age:</span>
+                    <span class="grid-val">${p.age_era || '—'}</span>
+                    <span class="grid-key">Spatial Extent:</span>
+                    <span class="grid-val">${p.spatial_extent || '—'}</span>
+                    <span class="grid-key">Engineering Context:</span>
+                    <span class="grid-val" style="grid-column: span 2; font-size: 0.72rem; color: #cbd5e1; margin-top: 4px; line-height: 1.35;">${p.engineering_significance || '—'}</span>
+                  </div>
+                  <div class="popup-action-row">
+                    <button class="popup-btn-zoom" onclick="window.inspectAsset && window.inspectAsset({ properties: ${JSON.stringify(p).replace(/"/g, '&quot;')}, geometry: ${JSON.stringify(geom)}, type: 'geological_formation' })">
+                      🔍 Inspect Formation
+                    </button>
+                  </div>
+                </div>
+              `, { maxWidth: 320 });
+
+              marker.on("click", (e) => {
+                if (e && e.originalEvent) {
+                  e.originalEvent._infraHandled = true;
+                  L.DomEvent.stopPropagation(e.originalEvent);
+                }
+                inspectAsset({
+                  properties: { ...p, asset_category: "geological_formation" },
+                  geometry: geom,
+                  type: "geological_formation"
+                });
+              });
+
+              searchIndex.push({
+                title: name,
+                subtitle: `${p.lithology || 'Bedrock'} • ${p.formation_code || 'GSI'} • Geology`,
+                type: "geology",
+                category: "GEOLOGY",
+                badgeClass: "tag-geology",
+                icon: "🌍",
+                priority: 84,
+                layerKey: "geology",
+                searchTerms: [name, id, p.formation_code, p.lithology, p.age_era, "geology", "bedrock", "rock", "formation"].join(" ").toLowerCase(),
+                latlng: latlng,
+                layer: marker
+              });
+            }
+          } else if (cat === "seismic_fault_line") {
+            const line = L.geoJSON(feature, {
+              pane: "faultsPane",
+              style: {
+                color: "#dc2626",
+                weight: 2.8,
+                dashArray: "6, 4",
+                opacity: 0.92
+              }
+            }).addTo(layerGroups.faults);
+
+            line.bindTooltip(`<strong>⚡ Active Fault: ${name}</strong><br><small style="color: #f87171;">${p.seismic_capability || 'Seismogenic'} • ${p.length_km ? p.length_km + ' km' : ''}</small>`, {
+              sticky: true,
+              opacity: 0.95
+            });
+
+            line.bindPopup(`
+              <div class="popup-card">
+                <div class="popup-card-header">
+                  <span class="popup-category cat-hazard">ACTIVE SEISMIC FAULT LINE</span>
+                  <h4 class="popup-card-title">⚡ ${name}</h4>
+                </div>
+                <div class="popup-grid">
+                  <span class="grid-key">Fault Type:</span>
+                  <span class="grid-val"><strong style="color: #ef4444;">${p.fault_type || '—'}</strong></span>
+                  <span class="grid-key">Seismic Capability:</span>
+                  <span class="grid-val">${p.seismic_capability || '—'}</span>
+                  <span class="grid-key">Trace Length:</span>
+                  <span class="grid-val">${p.length_km ? p.length_km + ' km' : '—'}</span>
+                  <span class="grid-key">Slip Rate:</span>
+                  <span class="grid-val">${p.slip_rate_mm_yr ? p.slip_rate_mm_yr + ' mm/yr' : '—'}</span>
+                  <span class="grid-key">Dip Direction:</span>
+                  <span class="grid-val">${p.dip_direction || '—'}</span>
+                  <span class="grid-key">Historical Events:</span>
+                  <span class="grid-val" style="grid-column: span 2; font-size: 0.72rem; color: #cbd5e1; margin-top: 4px; line-height: 1.35;">${p.historical_rupture || '—'}</span>
+                </div>
+                <div class="popup-action-row">
+                  <button class="popup-btn-zoom" onclick="window.inspectAsset && window.inspectAsset({ properties: ${JSON.stringify(p).replace(/"/g, '&quot;')}, geometry: ${JSON.stringify(geom)}, type: 'seismic_fault_line' })">
+                    🔍 Inspect Fault
+                  </button>
+                </div>
+              </div>
+            `, { maxWidth: 320 });
+
+            line.on("click", (e) => {
+              if (e && e.originalEvent) {
+                e.originalEvent._infraHandled = true;
+                L.DomEvent.stopPropagation(e.originalEvent);
+              }
+              inspectAsset({
+                properties: { ...p, asset_category: "seismic_fault_line" },
+                geometry: geom,
+                type: "seismic_fault_line"
+              });
+            });
+
+            searchIndex.push({
+              title: name,
+              subtitle: `Active Fault • ${p.fault_type || ''} • ${p.length_km ? p.length_km + ' km' : ''} • ISR Seismology`,
+              type: "fault",
+              category: "SEISMOLOGY",
+              badgeClass: "tag-hazard",
+              icon: "⚡",
+              priority: 88,
+              layerKey: "faults",
+              searchTerms: [name, id, p.fault_type, p.seismic_capability, "fault", "earthquake", "seismic", "kmf", "khf"].join(" ").toLowerCase(),
+              bounds: line.getBounds(),
+              layer: line
+            });
+          } else if (cat === "soil_engineering_formation") {
+            const latlng = geom.type === "Point" ? [geom.coordinates[1], geom.coordinates[0]] : null;
+            if (latlng) {
+              const marker = L.circleMarker(latlng, {
+                pane: "soilsPane",
+                radius: 8.0,
+                fillColor: "#15803d",
+                color: "#ffffff",
+                weight: 1.8,
+                opacity: 0.95,
+                fillOpacity: 0.90
+              }).addTo(layerGroups.soils);
+
+              marker.bindTooltip(`<strong>🌱 Soil: ${name}</strong><br><small style="color: #4ade80;">${p.soil_code || ''} • ${p.taxonomy || 'Soil Series'}</small>`, {
+                direction: "top",
+                offset: [0, -8],
+                opacity: 0.95
+              });
+
+              marker.bindPopup(`
+                <div class="popup-card">
+                  <div class="popup-card-header">
+                    <span class="popup-category cat-soil">NBSS&LUP • SOIL ENGINEERING FORMATION</span>
+                    <h4 class="popup-card-title">🌱 ${name}</h4>
+                  </div>
+                  <div class="popup-grid">
+                    <span class="grid-key">Soil Code:</span>
+                    <span class="grid-val"><strong>${p.soil_code || '—'}</strong></span>
+                    <span class="grid-key">Taxonomy:</span>
+                    <span class="grid-val">${p.taxonomy || '—'}</span>
+                    <span class="grid-key">Spatial Extent:</span>
+                    <span class="grid-val">${p.spatial_extent || '—'}</span>
+                    <span class="grid-key">Index Properties:</span>
+                    <span class="grid-val" style="grid-column: span 2; font-size: 0.72rem; color: #cbd5e1; margin-top: 4px; line-height: 1.35;">${typeof p.index_properties === 'object' ? JSON.stringify(p.index_properties) : (p.index_properties || '—')}</span>
+                    <span class="grid-key">Civil Implication:</span>
+                    <span class="grid-val" style="grid-column: span 2; font-size: 0.72rem; color: #cbd5e1; margin-top: 4px; line-height: 1.35;">${p.engineering_significance || '—'}</span>
+                  </div>
+                  <div class="popup-action-row">
+                    <button class="popup-btn-zoom" onclick="window.inspectAsset && window.inspectAsset({ properties: ${JSON.stringify(p).replace(/"/g, '&quot;')}, geometry: ${JSON.stringify(geom)}, type: 'soil_engineering_formation' })">
+                      🔍 Inspect Soil
+                    </button>
+                  </div>
+                </div>
+              `, { maxWidth: 320 });
+
+              marker.on("click", (e) => {
+                if (e && e.originalEvent) {
+                  e.originalEvent._infraHandled = true;
+                  L.DomEvent.stopPropagation(e.originalEvent);
+                }
+                inspectAsset({
+                  properties: { ...p, asset_category: "soil_engineering_formation" },
+                  geometry: geom,
+                  type: "soil_engineering_formation"
+                });
+              });
+
+              searchIndex.push({
+                title: name,
+                subtitle: `${p.taxonomy || 'Soil Series'} • ${p.soil_code || ''} • Geotechnical`,
+                type: "soil",
+                category: "SOILS",
+                badgeClass: "tag-soil",
+                icon: "🌱",
+                priority: 80,
+                layerKey: "soils",
+                searchTerms: [name, id, p.soil_code, p.taxonomy, "soil", "vertisol", "clay", "geotechnical"].join(" ").toLowerCase(),
+                latlng: latlng,
+                layer: marker
+              });
+            }
+          } else if (cat === "terrain_elevation_regime") {
+            const latlng = geom.type === "Point" ? [geom.coordinates[1], geom.coordinates[0]] : null;
+            if (latlng) {
+              const marker = L.circleMarker(latlng, {
+                pane: "terrainPane",
+                radius: 8.0,
+                fillColor: "#0284c7",
+                color: "#ffffff",
+                weight: 1.8,
+                opacity: 0.95,
+                fillOpacity: 0.90
+              }).addTo(layerGroups.terrain);
+
+              marker.bindTooltip(`<strong>⛰️ Terrain: ${name}</strong><br><small style="color: #38bdf8;">${p.elevation_range_m || ''} • ${p.slope_classification || ''}</small>`, {
+                direction: "top",
+                offset: [0, -8],
+                opacity: 0.95
+              });
+
+              marker.bindPopup(`
+                <div class="popup-card">
+                  <div class="popup-card-header">
+                    <span class="popup-category cat-terrain">SRTM DEM • TERRAIN REGIME</span>
+                    <h4 class="popup-card-title">⛰️ ${name}</h4>
+                  </div>
+                  <div class="popup-grid">
+                    <span class="grid-key">Elevation Range:</span>
+                    <span class="grid-val"><strong style="color: #38bdf8;">${p.elevation_range_m || '—'}</strong></span>
+                    <span class="grid-key">Slope Class:</span>
+                    <span class="grid-val">${p.slope_classification || '—'}</span>
+                    <span class="grid-key">Geomorphology:</span>
+                    <span class="grid-val">${p.geomorphology || '—'}</span>
+                    <span class="grid-key">Civil Relevance:</span>
+                    <span class="grid-val" style="grid-column: span 2; font-size: 0.72rem; color: #cbd5e1; margin-top: 4px; line-height: 1.35;">${p.civil_implications || '—'}</span>
+                  </div>
+                  <div class="popup-action-row">
+                    <button class="popup-btn-zoom" onclick="window.inspectAsset && window.inspectAsset({ properties: ${JSON.stringify(p).replace(/"/g, '&quot;')}, geometry: ${JSON.stringify(geom)}, type: 'terrain_elevation_regime' })">
+                      🔍 Inspect Terrain
+                    </button>
+                  </div>
+                </div>
+              `, { maxWidth: 320 });
+
+              marker.on("click", (e) => {
+                if (e && e.originalEvent) {
+                  e.originalEvent._infraHandled = true;
+                  L.DomEvent.stopPropagation(e.originalEvent);
+                }
+                inspectAsset({
+                  properties: { ...p, asset_category: "terrain_elevation_regime" },
+                  geometry: geom,
+                  type: "terrain_elevation_regime"
+                });
+              });
+
+              searchIndex.push({
+                title: name,
+                subtitle: `Terrain • ${p.elevation_range_m || ''} • ${p.slope_classification || ''} • Relief`,
+                type: "terrain",
+                category: "TERRAIN",
+                badgeClass: "tag-water",
+                icon: "⛰️",
+                priority: 78,
+                layerKey: "terrain",
+                searchTerms: [name, id, p.elevation_range_m, p.slope_classification, p.geomorphology, "terrain", "srtm", "dem", "relief"].join(" ").toLowerCase(),
+                latlng: latlng,
+                layer: marker
+              });
+            }
+          } else if (cat === "groundwater_monitoring_station") {
+            const latlng = geom.type === "Point" ? [geom.coordinates[1], geom.coordinates[0]] : null;
+            if (latlng) {
+              const marker = L.circleMarker(latlng, {
+                pane: "groundwaterPane",
+                radius: 6.5,
+                fillColor: "#06b6d4",
+                color: "#ffffff",
+                weight: 1.5,
+                opacity: 1.0,
+                fillOpacity: 0.95
+              }).addTo(layerGroups.gwStations);
+
+              marker.bindTooltip(`<strong>💧 Well: ${name}</strong><br><small style="color: #22d3ee;">${p.district || ''} • ${p.aquifer_type || 'Hydrograph Station'}</small>`, {
+                direction: "top",
+                offset: [0, -8],
+                opacity: 0.95
+              });
+
+              marker.bindPopup(`
+                <div class="popup-card">
+                  <div class="popup-card-header">
+                    <span class="popup-category cat-water">CGWB HYDROGRAPH MONITORING WELL</span>
+                    <h4 class="popup-card-title">💧 ${name}</h4>
+                  </div>
+                  <div class="popup-grid">
+                    <span class="grid-key">Host District:</span>
+                    <span class="grid-val"><strong>${p.district || '—'}</strong></span>
+                    <span class="grid-key">Aquifer Type:</span>
+                    <span class="grid-val">${p.aquifer_type || '—'}</span>
+                    <span class="grid-key">Pre-Monsoon Depth:</span>
+                    <span class="grid-val">${p.pre_monsoon_depth_m_bgl ? p.pre_monsoon_depth_m_bgl + ' m bgl' : '—'}</span>
+                    <span class="grid-key">Post-Monsoon Depth:</span>
+                    <span class="grid-val">${p.post_monsoon_depth_m_bgl ? p.post_monsoon_depth_m_bgl + ' m bgl' : '—'}</span>
+                    <span class="grid-key">Annual Fluctuation:</span>
+                    <span class="grid-val"><strong style="color: #38bdf8;">${p.annual_fluctuation_m ? p.annual_fluctuation_m + ' m' : '—'}</strong></span>
+                  </div>
+                  <div class="popup-action-row">
+                    <button class="popup-btn-zoom" onclick="window.inspectAsset && window.inspectAsset({ properties: ${JSON.stringify(p).replace(/"/g, '&quot;')}, geometry: ${JSON.stringify(geom)}, type: 'groundwater_monitoring_station' })">
+                      🔍 Inspect Well
+                    </button>
+                  </div>
+                </div>
+              `, { maxWidth: 320 });
+
+              marker.on("click", (e) => {
+                if (e && e.originalEvent) {
+                  e.originalEvent._infraHandled = true;
+                  L.DomEvent.stopPropagation(e.originalEvent);
+                }
+                inspectAsset({
+                  properties: { ...p, asset_category: "groundwater_monitoring_station" },
+                  geometry: geom,
+                  type: "groundwater_monitoring_station"
+                });
+              });
+
+              searchIndex.push({
+                title: name,
+                subtitle: `Monitoring Well • ${p.district || ''} • ${p.aquifer_type || ''} • CGWB`,
+                type: "groundwater",
+                category: "GROUNDWATER",
+                badgeClass: "tag-water",
+                icon: "💧",
+                priority: 76,
+                layerKey: "gwStations",
+                searchTerms: [name, id, p.district, p.aquifer_type, "well", "piezometer", "hydrograph", "cgwb"].join(" ").toLowerCase(),
+                latlng: latlng,
+                layer: marker
+              });
+            }
+          } else if (cat === "coastal_hazard_sector") {
+            const latlng = geom.type === "Point" ? [geom.coordinates[1], geom.coordinates[0]] : null;
+            if (latlng) {
+              const marker = L.circleMarker(latlng, {
+                pane: "coastalPane",
+                radius: 8.5,
+                fillColor: "#8b5cf6",
+                color: "#ffffff",
+                weight: 1.8,
+                opacity: 0.95,
+                fillOpacity: 0.90
+              }).addTo(layerGroups.coastal);
+
+              marker.bindTooltip(`<strong>🌊 Coastal: ${name}</strong><br><small style="color: #c084fc;">${p.coastal_stretch || ''} • ${p.hazard_type || 'Coastal Risk'}</small>`, {
+                direction: "top",
+                offset: [0, -8],
+                opacity: 0.95
+              });
+
+              marker.bindPopup(`
+                <div class="popup-card">
+                  <div class="popup-card-header">
+                    <span class="popup-category cat-hazard">COASTAL HAZARD & SALINITY SECTOR</span>
+                    <h4 class="popup-card-title">🌊 ${name}</h4>
+                  </div>
+                  <div class="popup-grid">
+                    <span class="grid-key">Coastal Stretch:</span>
+                    <span class="grid-val"><strong>${p.coastal_stretch || '—'}</strong></span>
+                    <span class="grid-key">Hazard Type:</span>
+                    <span class="grid-val">${p.hazard_type || '—'}</span>
+                    <span class="grid-key">Primary Hazards:</span>
+                    <span class="grid-val" style="grid-column: span 2; font-size: 0.72rem; color: #cbd5e1; margin-top: 4px; line-height: 1.35;">${Array.isArray(p.primary_hazards) ? p.primary_hazards.join(', ') : (p.primary_hazards || '—')}</span>
+                    <span class="grid-key">Mitigation Strategy:</span>
+                    <span class="grid-val" style="grid-column: span 2; font-size: 0.72rem; color: #cbd5e1; margin-top: 4px; line-height: 1.35;">${p.engineering_mitigation || '—'}</span>
+                  </div>
+                  <div class="popup-action-row">
+                    <button class="popup-btn-zoom" onclick="window.inspectAsset && window.inspectAsset({ properties: ${JSON.stringify(p).replace(/"/g, '&quot;')}, geometry: ${JSON.stringify(geom)}, type: 'coastal_hazard_sector' })">
+                      🔍 Inspect Hazard
+                    </button>
+                  </div>
+                </div>
+              `, { maxWidth: 320 });
+
+              marker.on("click", (e) => {
+                if (e && e.originalEvent) {
+                  e.originalEvent._infraHandled = true;
+                  L.DomEvent.stopPropagation(e.originalEvent);
+                }
+                inspectAsset({
+                  properties: { ...p, asset_category: "coastal_hazard_sector" },
+                  geometry: geom,
+                  type: "coastal_hazard_sector"
+                });
+              });
+
+              searchIndex.push({
+                title: name,
+                subtitle: `Coastal Sector • ${p.coastal_stretch || ''} • Salinity & Inundation`,
+                type: "hazard",
+                category: "HAZARD",
+                badgeClass: "tag-hazard",
+                icon: "🌊",
+                priority: 82,
+                layerKey: "coastal",
+                searchTerms: [name, id, p.coastal_stretch, p.hazard_type, "coastal", "salinity", "erosion", "tide"].join(" ").toLowerCase(),
+                latlng: latlng,
+                layer: marker
+              });
+            }
+          } else if (cat === "environmentally_sensitive_area") {
+            const latlng = geom.type === "Point" ? [geom.coordinates[1], geom.coordinates[0]] : null;
+            if (latlng) {
+              const marker = L.circleMarker(latlng, {
+                pane: "sanctuariesPane",
+                radius: 9.0,
+                fillColor: "#10b981",
+                color: "#ffffff",
+                weight: 2.0,
+                opacity: 0.95,
+                fillOpacity: 0.90
+              }).addTo(layerGroups.sanctuaries);
+
+              marker.bindTooltip(`<strong>🦁 Protected: ${name}</strong><br><small style="color: #34d399;">${p.designation || 'Sanctuary'} • ${p.district || ''}</small>`, {
+                direction: "top",
+                offset: [0, -8],
+                opacity: 0.95
+              });
+
+              marker.bindPopup(`
+                <div class="popup-card">
+                  <div class="popup-card-header">
+                    <span class="popup-category cat-green">PROTECTED AREA • RAMSAR SITE</span>
+                    <h4 class="popup-card-title">🦁 ${name}</h4>
+                  </div>
+                  <div class="popup-grid">
+                    <span class="grid-key">Designation:</span>
+                    <span class="grid-val"><strong>${p.designation || '—'}</strong></span>
+                    <span class="grid-key">District:</span>
+                    <span class="grid-val">${p.district || '—'}</span>
+                    <span class="grid-key">Area:</span>
+                    <span class="grid-val">${p.area_sqkm ? p.area_sqkm + ' sq km' : '—'}</span>
+                    <span class="grid-key">Ecological Context:</span>
+                    <span class="grid-val" style="grid-column: span 2; font-size: 0.72rem; color: #cbd5e1; margin-top: 4px; line-height: 1.35;">${p.ecological_importance || '—'}</span>
+                    <span class="grid-key">Statutory Restrictions:</span>
+                    <span class="grid-val" style="grid-column: span 2; font-size: 0.72rem; color: #cbd5e1; margin-top: 4px; line-height: 1.35;">${p.statutory_restrictions || '—'}</span>
+                  </div>
+                  <div class="popup-action-row">
+                    <button class="popup-btn-zoom" onclick="window.inspectAsset && window.inspectAsset({ properties: ${JSON.stringify(p).replace(/"/g, '&quot;')}, geometry: ${JSON.stringify(geom)}, type: 'environmentally_sensitive_area' })">
+                      🔍 Inspect Reserve
+                    </button>
+                  </div>
+                </div>
+              `, { maxWidth: 320 });
+
+              marker.on("click", (e) => {
+                if (e && e.originalEvent) {
+                  e.originalEvent._infraHandled = true;
+                  L.DomEvent.stopPropagation(e.originalEvent);
+                }
+                inspectAsset({
+                  properties: { ...p, asset_category: "environmentally_sensitive_area" },
+                  geometry: geom,
+                  type: "environmentally_sensitive_area"
+                });
+              });
+
+              searchIndex.push({
+                title: name,
+                subtitle: `${p.designation || 'Sanctuary'} • ${p.district || ''} • Protected`,
+                type: "sanctuary",
+                category: "HAZARD",
+                badgeClass: "tag-green",
+                icon: "🦁",
+                priority: 85,
+                layerKey: "sanctuaries",
+                searchTerms: [name, id, p.designation, p.district, "sanctuary", "ramsar", "wetland", "national park"].join(" ").toLowerCase(),
+                latlng: latlng,
+                layer: marker
+              });
+            }
+          }
+        });
+      } catch (err) {
+        console.warn("[GeoenvironmentalLayers] Error loading layer:", err);
+      }
+    })();
+    return geoenvironmentalPromise;
+  }
+
+  function ensureGeoenvironmentalLoaded() {
+    if (geoenvironmentalPromise) return geoenvironmentalPromise;
+    return loadGeoenvironmentalLayers();
+  }
+
+  function ensureEnvironmentDisasterLoaded() {
+    if (environmentDisasterPromise) return environmentDisasterPromise;
+    environmentDisasterPromise = loadEnvironmentDisasterLayer();
+    return environmentDisasterPromise;
+  }
+
   // Unified Layer Loader & Deferred Preloader Engine
   function ensureLayerLoaded(layerKey) {
     switch (layerKey) {
@@ -1813,9 +3634,39 @@ document.addEventListener("DOMContentLoaded", () => {
       case "stations":
         return ensureStationsLoaded();
       case "transmission":
+      case "substations":
         return ensureTransmissionLoaded();
       case "roads":
         return ensureRoadsLoaded();
+      case "structures":
+        if (typeof loadTransportStructuresLayer === "function") {
+          return loadTransportStructuresLayer();
+        }
+        return Promise.resolve();
+      case "waterDams":
+      case "reservoirs":
+      case "rivers":
+      case "canals":
+      case "commandAreas":
+      case "waterways":
+        return ensureWaterResourcesLoaded();
+      case "urbanMetro":
+      case "portsAirports":
+      case "industries":
+        return ensureUrbanIndustryLoaded();
+      case "groundwater":
+      case "gwStations":
+        return Promise.all([ensureGroundwaterLoaded(), ensureGeoenvironmentalLoaded()]);
+      case "geology":
+      case "faults":
+      case "soils":
+      case "terrain":
+      case "coastal":
+        return ensureGeoenvironmentalLoaded();
+      case "seismic":
+      case "cycloneFlood":
+      case "sanctuaries":
+        return Promise.all([ensureEnvironmentDisasterLoaded(), ensureGeoenvironmentalLoaded()]);
       default:
         return Promise.resolve();
     }
@@ -1826,6 +3677,14 @@ document.addEventListener("DOMContentLoaded", () => {
     ensureRailwaysLoaded();
     ensureStationsLoaded();
     ensureTransmissionLoaded();
+    ensureWaterResourcesLoaded();
+    ensureGroundwaterLoaded();
+    ensureUrbanIndustryLoaded();
+    ensureEnvironmentDisasterLoaded();
+    ensureGeoenvironmentalLoaded();
+    if (typeof loadTransportStructuresLayer === "function") {
+      loadTransportStructuresLayer();
+    }
   }
 
   // Preload deferred layers in idle cycles after critical render path settles
@@ -1882,11 +3741,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     layer.openPopup();
+    inspectAsset({
+      properties: { ...(layer.feature ? layer.feature.properties : {}), district: name, asset_category: "district_boundary" },
+      geometry: layer.feature ? layer.feature.geometry : null,
+      type: "district_boundary"
+    });
   }
 
   // Dynamic Level-of-Detail (LOD) Rendering Engine (Prevents GIS Visual Clutter)
   function applyZoomDependentRendering(zoom) {
     const z = typeof zoom === "number" ? zoom : map.getZoom();
+
+    if (window.LayerManager && typeof window.LayerManager.updateZoomLOD === "function") {
+      window.LayerManager.updateZoomLOD(z);
+    }
 
     // 1. Administrative District Boundaries
     if (map.hasLayer(layerGroups.districts)) {
@@ -1935,6 +3803,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function resetToStateView() {
     map.closePopup();
+    if (window.LayerManager && typeof window.LayerManager.clearSelectedHighlight === "function") {
+      window.LayerManager.clearSelectedHighlight();
+    }
     if (activeDistrictLayer) {
       activeDistrictLayer.setStyle(DEFAULT_DISTRICT_STYLE);
       activeDistrictLayer = null;
@@ -2017,6 +3888,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (telemetrySpeed) telemetrySpeed.textContent = `${firstProps.speed_limit_kmh || 80} km/h`;
     if (corridorBadge) corridorBadge.textContent = corridorName;
     if (corridorSelect && corridorSelect.value !== corridorName) corridorSelect.value = corridorName;
+
+    inspectAsset({
+      properties: { ...firstProps, corridor: corridorName, asset_category: "highway_corridor" },
+      geometry: segments[0].feature.geometry,
+      type: "highway_corridor"
+    });
   }
 
   function clearHighwayHighlight(resetSelect = true) {
@@ -2112,6 +3989,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (powerTelGreen) powerTelGreen.textContent = p.is_renewable ? "100% Clean RE" : "Baseload Grid";
     if (powerActiveBadge) powerActiveBadge.textContent = `${cap.toLocaleString()} MW`;
     if (powerSelect) powerSelect.value = name;
+
+    const isHydro = p.is_hydropower || (p.category || "").toLowerCase() === "hydro";
+    inspectAsset({
+      properties: { ...p, asset_category: isHydro ? "hydropower_plant" : "power_plant" },
+      geometry: feature.geometry,
+      type: isHydro ? "hydropower_plant" : "power_plant"
+    });
   }
 
   function clearPowerFocus(resetSelect = true) {
@@ -2205,6 +4089,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const transSelect = document.getElementById("transmissionSelect");
     if (transSelect) transSelect.value = corridorCode;
+
+    inspectAsset({
+      properties: { ...(feature.properties || {}), asset_category: "transmission_line" },
+      geometry: feature.geometry,
+      type: "transmission_line"
+    });
   }
 
   function focusRailwayStation(code, zoomTo = false) {
@@ -2252,6 +4142,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (stationTelZone) stationTelZone.textContent = p.division_code || "WR";
     if (stationActiveBadge) stationActiveBadge.textContent = code;
     if (stationSelect) stationSelect.value = code;
+
+    inspectAsset({
+      properties: { ...p, asset_category: "railway_station" },
+      geometry: feature.geometry,
+      type: "railway_station"
+    });
   }
 
   function clearStationFocus(resetSelect = true) {
@@ -2410,6 +4306,1603 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ==========================================================================
+  // Water Resources, Dams & Hydrology Balance Controls
+  // ==========================================================================
+  let activeHighlightedDam = null;
+  let currentSimFloodTarget = null;
+
+  function selectDam(damName, zoom = false) {
+    if (!damName) {
+      clearDamFocus(true);
+      return;
+    }
+    const entry = damsByName[damName] || allWaterAssetsList.find(a => a.name === damName);
+    if (!entry) {
+      clearDamFocus(true);
+      return;
+    }
+    const { marker, layer, feature, latlng } = entry;
+    const p = (feature && feature.properties) || entry.properties || {};
+    const cat = p.asset_category || "water_dam";
+
+    if (!map.hasLayer(layerGroups.waterDams)) {
+      map.addLayer(layerGroups.waterDams);
+      const chk = document.getElementById("layerWaterDams");
+      if (chk) chk.checked = true;
+      updateActiveLayersCount();
+    }
+    switchInspectorTab("tabWater");
+
+    activeHighlightedDam = damName;
+
+    if (latlng && marker) {
+      if (zoom) {
+        map.flyTo(latlng, 12.5, { duration: 1.2 });
+        setTimeout(() => marker.openPopup(), 450);
+      } else {
+        marker.openPopup();
+      }
+    } else if (layer && typeof layer.getBounds === "function") {
+      if (zoom) {
+        map.fitBounds(layer.getBounds(), { padding: [50, 50], maxZoom: 13, duration: 1.2 });
+        setTimeout(() => layer.openPopup(), 450);
+      } else {
+        layer.openPopup();
+      }
+    }
+
+    const telemetry = document.getElementById("damTelemetry");
+    const damTelName = document.getElementById("damTelName");
+    const damTelCap = document.getElementById("damTelCap");
+    const damTelRiver = document.getElementById("damTelRiver");
+    const damTelFRL = document.getElementById("damTelFRL");
+    const damTelLive = document.getElementById("damTelLive");
+    const damTelSpillway = document.getElementById("damTelSpillway");
+    const damTelHydro = document.getElementById("damTelHydro");
+    const damTelCommand = document.getElementById("damTelCommand");
+    const damTelAgency = document.getElementById("damTelAgency");
+    const damSelect = document.getElementById("damSelect");
+
+    if (telemetry) telemetry.classList.remove("hidden");
+    if (damTelName) damTelName.textContent = damName;
+    if (damTelCap) damTelCap.textContent = p.gross_storage_mcm ? `${Number(p.gross_storage_mcm).toLocaleString()} MCM` : '—';
+    if (damTelRiver) damTelRiver.textContent = `${p.river || 'River'} — ${p.basin || 'Basin'} Basin`;
+    if (damTelFRL) damTelFRL.textContent = p.frl_m ? `${p.frl_m} m` : '—';
+    if (damTelLive) damTelLive.textContent = p.live_storage_mcm ? `${Number(p.live_storage_mcm).toLocaleString()} MCM` : '—';
+    if (damTelSpillway) damTelSpillway.textContent = p.spillway_capacity_cumecs ? `${Number(p.spillway_capacity_cumecs).toLocaleString()} m³/s` : (p.gates_count ? `${p.gates_count} Sluice Gates` : '—');
+    const hydroMw = p.hydropower_capacity_mw || p.hydropower_mw;
+    if (damTelHydro) damTelHydro.textContent = hydroMw ? `${hydroMw} MW` : 'Non-Power';
+    const cmdHa = p.irrigation_command_ha || p.irrigated_area_ha;
+    if (damTelCommand) damTelCommand.textContent = cmdHa ? `${(cmdHa / 100000).toFixed(2)} L ha` : '—';
+    if (damTelAgency) damTelAgency.textContent = p.operating_agency || p.operating_authority || 'WRD Gujarat';
+    if (damSelect && damSelect.value !== damName) damSelect.value = damName;
+
+    inspectAsset({
+      properties: { ...p, name: damName, asset_category: cat },
+      geometry: feature ? feature.geometry : null,
+      type: cat
+    });
+  }
+
+  function clearDamFocus(resetDropdown = true) {
+    activeHighlightedDam = null;
+    const telemetry = document.getElementById("damTelemetry");
+    const damSelect = document.getElementById("damSelect");
+    const simFloodAlert = document.getElementById("simFloodAlert");
+    if (telemetry) telemetry.classList.add("hidden");
+    if (simFloodAlert) simFloodAlert.classList.add("hidden");
+    if (resetDropdown && damSelect) damSelect.value = "";
+  }
+
+  function filterDamsByBasin(basin) {
+    allWaterAssetsList.forEach(item => {
+      const b = (item.basin || "").toLowerCase();
+      const r = (item.river || "").toLowerCase();
+      const match = basin === "all" || b.includes(basin.toLowerCase()) || r.includes(basin.toLowerCase());
+      if (item.geomType === "Point" && item.marker) {
+        if (match) {
+          item.marker.setStyle({ opacity: 1, fillOpacity: 0.92 });
+        } else {
+          item.marker.setStyle({ opacity: 0.12, fillOpacity: 0.05 });
+        }
+      } else if (item.geomType === "Polygon" && item.layer) {
+        if (match) {
+          item.layer.setStyle({ opacity: 0.8, fillOpacity: 0.35 });
+        } else {
+          item.layer.setStyle({ opacity: 0.08, fillOpacity: 0.03 });
+        }
+      }
+    });
+  }
+
+  // Dams & Reservoirs Explorer Engine
+  function initDamsExplorerModal() {
+    if (damsExplorerInitialized) return;
+    damsExplorerInitialized = true;
+
+    const modal = document.getElementById("damsExplorerModal");
+    const openBtn = document.getElementById("openDamsExplorerBtn");
+    const openTabBtn = document.getElementById("openDamsExplorerTabBtn");
+    const closeBtn = document.getElementById("closeDamsExplorerBtn");
+    const closeBottomBtn = document.getElementById("closeDamsExplorerBottomBtn");
+    const searchInput = document.getElementById("damsTableSearch");
+    const basinFilter = document.getElementById("damsBasinFilter");
+    const catFilter = document.getElementById("damsCategoryFilter");
+    const districtFilter = document.getElementById("damsDistrictFilter");
+    const capFilter = document.getElementById("damsCapacityFilter");
+    const resetBtn = document.getElementById("damsResetFiltersBtn");
+    const exportBtn = document.getElementById("damsExpExportCsvBtn");
+
+    // Populate District Filter Dropdown
+    if (districtFilter) {
+      const districts = Array.from(new Set(allWaterAssetsList.map(a => a.district).filter(Boolean))).sort();
+      districts.forEach(d => {
+        const opt = document.createElement("option");
+        opt.value = d;
+        opt.textContent = d;
+        districtFilter.appendChild(opt);
+      });
+    }
+
+    const openModal = () => {
+      if (modal) {
+        modal.showModal();
+        renderDamsLedgerTable();
+      }
+    };
+
+    const closeModal = () => {
+      if (modal) modal.close();
+    };
+
+    if (openBtn) openBtn.addEventListener("click", openModal);
+    if (openTabBtn) openTabBtn.addEventListener("click", openModal);
+    if (closeBtn) closeBtn.addEventListener("click", closeModal);
+    if (closeBottomBtn) closeBottomBtn.addEventListener("click", closeModal);
+
+    const openLabBtn = document.getElementById("openDamScienceLabBtn");
+    const openLabTabBtn = document.getElementById("openDamScienceLabTabBtn");
+    if (openLabBtn) {
+      openLabBtn.addEventListener("click", () => {
+        if (window.DamScienceLab) window.DamScienceLab.openCurrentAsset();
+      });
+    }
+    if (openLabTabBtn) {
+      openLabTabBtn.addEventListener("click", () => {
+        if (window.DamScienceLab) window.DamScienceLab.openCurrentAsset();
+      });
+    }
+
+    // Close on overlay backdrop click
+    if (modal) {
+      modal.addEventListener("click", (e) => {
+        const rect = modal.getBoundingClientRect();
+        const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height && rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+        if (!isInDialog) modal.close();
+      });
+    }
+
+    // Filter Listeners
+    if (searchInput) searchInput.addEventListener("input", debounce(() => renderDamsLedgerTable(), 120));
+    if (basinFilter) basinFilter.addEventListener("change", () => renderDamsLedgerTable());
+    if (catFilter) catFilter.addEventListener("change", () => renderDamsLedgerTable());
+    if (districtFilter) districtFilter.addEventListener("change", () => renderDamsLedgerTable());
+    if (capFilter) capFilter.addEventListener("change", () => renderDamsLedgerTable());
+
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+        if (searchInput) searchInput.value = "";
+        if (basinFilter) basinFilter.value = "all";
+        if (catFilter) catFilter.value = "all";
+        if (districtFilter) districtFilter.value = "all";
+        if (capFilter) capFilter.value = "all";
+        renderDamsLedgerTable();
+      });
+    }
+
+    // Sort Headers
+    const headers = document.querySelectorAll("#damsLedgerTable th[data-sort]");
+    headers.forEach(th => {
+      th.addEventListener("click", () => {
+        const field = th.getAttribute("data-sort");
+        if (activeDamsSort.field === field) {
+          activeDamsSort.asc = !activeDamsSort.asc;
+        } else {
+          activeDamsSort.field = field;
+          activeDamsSort.asc = (field === "name" || field === "id" || field === "category" || field === "river" || field === "district");
+        }
+        renderDamsLedgerTable();
+      });
+    });
+
+    // CSV Export
+    if (exportBtn) {
+      exportBtn.addEventListener("click", exportDamsToCsv);
+    }
+  }
+
+  // Water Systems Network Explorer Modal Engine
+  function initWaterNetworkModal() {
+    const openBtn = document.getElementById("openWaterNetworkBtn");
+    const openTabBtn = document.getElementById("openWaterNetworkModalBtn");
+    const startFollowBtn = document.getElementById("startFollowWaterBtn");
+    const closeBtn = document.getElementById("closeWaterNetworkModalBtn");
+    const closeBottomBtn = document.getElementById("closeWaterNetworkBottomBtn");
+
+    const openModal = () => {
+      if (window.WaterSystemsNetwork && typeof window.WaterSystemsNetwork.openNetworkModal === "function") {
+        window.WaterSystemsNetwork.openNetworkModal();
+      }
+    };
+
+    const closeModal = () => {
+      if (window.WaterSystemsNetwork && typeof window.WaterSystemsNetwork.closeNetworkModal === "function") {
+        window.WaterSystemsNetwork.closeNetworkModal();
+      }
+    };
+
+    if (openBtn) openBtn.addEventListener("click", openModal);
+    if (openTabBtn) openTabBtn.addEventListener("click", openModal);
+    if (closeBtn) closeBtn.addEventListener("click", closeModal);
+    if (closeBottomBtn) closeBottomBtn.addEventListener("click", closeModal);
+
+    if (startFollowBtn) {
+      startFollowBtn.addEventListener("click", () => {
+        if (window.WaterSystemsNetwork && typeof window.WaterSystemsNetwork.startFollowWater === "function") {
+          window.WaterSystemsNetwork.startFollowWater("GJ-WR-DAM-001");
+        }
+      });
+    }
+
+    const modal = document.getElementById("waterNetworkModal");
+    if (modal) {
+      modal.addEventListener("click", (e) => {
+        const rect = modal.getBoundingClientRect();
+        const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height && rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+        if (!isInDialog) modal.close();
+      });
+    }
+  }
+
+  function renderDamsLedgerTable() {
+    const tableBody = document.getElementById("damsTableBody");
+    if (!tableBody) return;
+
+    const query = (document.getElementById("damsTableSearch")?.value || "").trim().toLowerCase();
+    const basinVal = document.getElementById("damsBasinFilter")?.value || "all";
+    const catVal = document.getElementById("damsCategoryFilter")?.value || "all";
+    const distVal = document.getElementById("damsDistrictFilter")?.value || "all";
+    const capVal = document.getElementById("damsCapacityFilter")?.value || "all";
+
+    let filtered = allWaterAssetsList.filter(item => {
+      if (query) {
+        const searchBlob = `${item.id} ${item.name} ${item.river} ${item.basin} ${item.district} ${item.cat}`.toLowerCase();
+        if (!searchBlob.includes(query)) return false;
+      }
+      if (basinVal !== "all") {
+        if (!item.basin.toLowerCase().includes(basinVal.toLowerCase()) && !item.river.toLowerCase().includes(basinVal.toLowerCase())) {
+          return false;
+        }
+      }
+      if (catVal !== "all" && item.cat !== catVal) return false;
+      if (distVal !== "all" && item.district !== distVal) return false;
+      if (capVal !== "all") {
+        if (capVal === "mega" && item.grossCap < 1000) return false;
+        if (capVal === "major" && (item.grossCap < 150 || item.grossCap >= 1000)) return false;
+        if (capVal === "medium" && (item.grossCap < 50 || item.grossCap >= 150)) return false;
+        if (capVal === "minor" && item.grossCap >= 50) return false;
+      }
+      return true;
+    });
+
+    // Sort
+    const { field, asc } = activeDamsSort;
+    filtered.sort((a, b) => {
+      let va = a[field];
+      let vb = b[field];
+      if (field === "gross") { va = a.grossCap; vb = b.grossCap; }
+      else if (field === "live") { va = a.liveCap; vb = b.liveCap; }
+      else if (field === "frl") { va = parseFloat(a.frl) || 0; vb = parseFloat(b.frl) || 0; }
+      else if (field === "hydro") { va = a.hydro; vb = b.hydro; }
+      else if (field === "year") { va = parseInt(a.year) || 0; vb = parseInt(b.year) || 0; }
+      else if (typeof va === "string") {
+        return asc ? va.localeCompare(vb) : vb.localeCompare(va);
+      }
+      return asc ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
+    });
+
+    // Update Header Sort Indicators
+    document.querySelectorAll("#damsLedgerTable th[data-sort]").forEach(th => {
+      const f = th.getAttribute("data-sort");
+      const ind = th.querySelector(".sort-indicator");
+      if (ind) {
+        if (f === activeDamsSort.field) {
+          ind.textContent = activeDamsSort.asc ? " ▲" : " ▼";
+        } else {
+          ind.textContent = "";
+        }
+      }
+    });
+
+    // Update Count & KPI
+    const countBadge = document.getElementById("damsExpCountBadge");
+    if (countBadge) countBadge.textContent = `Showing ${filtered.length} of ${allWaterAssetsList.length} Water Assets`;
+
+    // Dynamic Hydraulic & Operational KPI Calculations based on active filtered cohort
+    const kpiGrossEl = document.getElementById("kpiGrossStorage");
+    const kpiLiveEl = document.getElementById("kpiLiveStorage");
+    const kpiIrrEl = document.getElementById("kpiIrrigationCommand");
+    const kpiHydroEl = document.getElementById("kpiHydropower");
+    const kpiVerEl = document.getElementById("kpiVerifiedCount");
+
+    // Exclude reservoir water-spread polygons from summing if point structures exist to prevent double-counting storage
+    const structuresOnly = filtered.filter(item => item.cat !== "reservoir");
+    const kpiSource = structuresOnly.length > 0 ? structuresOnly : filtered;
+
+    const totGross = kpiSource.reduce((acc, it) => acc + (it.grossCap || 0), 0);
+    const totLive = kpiSource.reduce((acc, it) => acc + (it.liveCap || 0), 0);
+    const totHydro = kpiSource.reduce((acc, it) => acc + (it.hydro || 0), 0);
+    const totCommand = kpiSource.reduce((acc, it) => acc + (it.commandHa || 0), 0);
+
+    if (kpiGrossEl) kpiGrossEl.textContent = `${Math.round(totGross).toLocaleString()} MCM`;
+    if (kpiLiveEl) kpiLiveEl.textContent = `${Math.round(totLive).toLocaleString()} MCM`;
+    if (kpiIrrEl) kpiIrrEl.textContent = totCommand > 0 ? `${(totCommand / 100000).toFixed(2)} Lakh ha` : "—";
+    if (kpiHydroEl) kpiHydroEl.textContent = totHydro > 0 ? `${Math.round(totHydro).toLocaleString()} MW` : "0 MW";
+    if (kpiVerEl) kpiVerEl.textContent = filtered.length > 0 ? "100% Verified" : "—";
+
+    // Render Rows
+    if (filtered.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="11" style="text-align:center; padding: 2.5rem; color: #94a3b8;">No water assets match the current filter selection. Click 'Reset' to clear filters.</td></tr>`;
+      return;
+    }
+
+    const catBadgeClass = {
+      water_dam: "cat-badge-dam",
+      barrage: "cat-badge-barrage",
+      weir: "cat-badge-weir",
+      reservoir: "cat-badge-reservoir",
+      check_dam: "cat-badge-check"
+    };
+
+    const catLabels = {
+      water_dam: "Dam",
+      barrage: "Barrage",
+      weir: "Weir",
+      reservoir: "Reservoir",
+      check_dam: "Check Dam"
+    };
+
+    tableBody.innerHTML = filtered.map(item => `
+      <tr class="dams-table-row" onclick="window.selectWaterAssetById('${item.id}', true)">
+        <td style="font-family: var(--font-mono); color: #94a3b8; font-size: 0.7rem;">${item.id}</td>
+        <td><strong style="color: #e0f2fe;">${item.name}</strong></td>
+        <td><span class="dams-cat-badge ${catBadgeClass[item.cat] || 'cat-badge-dam'}">${catLabels[item.cat] || item.cat}</span></td>
+        <td>${item.river} <small style="color: #64748b;">(${item.basin})</small></td>
+        <td>${item.district}</td>
+        <td class="num-col" style="color: #38bdf8; font-weight: 600;">${item.grossCap > 0 ? item.grossCap.toLocaleString() + ' MCM' : '—'}</td>
+        <td class="num-col">${item.liveCap > 0 ? item.liveCap.toLocaleString() + ' MCM' : '—'}</td>
+        <td class="num-col">${item.frl !== 'N/A' && item.frl ? item.frl + ' m' : '—'}</td>
+        <td class="num-col" style="color: ${item.hydro > 0 ? '#facc15' : '#64748b'};">${item.hydro > 0 ? item.hydro + ' MW' : '—'}</td>
+        <td class="num-col" style="color: #94a3b8;">${item.year}</td>
+        <td class="actions-col">
+          <button class="dams-inspect-btn" onclick="event.stopPropagation(); window.selectWaterAssetById('${item.id}', true)">
+            Inspect ➔
+          </button>
+          <button class="dams-inspect-btn" style="margin-left: 4px; background: rgba(250, 204, 21, 0.15); border-color: rgba(250, 204, 21, 0.4); color: #facc15;" onclick="event.stopPropagation(); window.openDamScienceLabById('${item.id}')">
+            🔬 Lab
+          </button>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  function selectWaterAssetById(id, zoom = true) {
+    const modal = document.getElementById("damsExplorerModal");
+    if (modal && typeof modal.close === "function") modal.close();
+
+    const assetEntry = waterAssetsById[id];
+    if (!assetEntry) return;
+
+    if (!map.hasLayer(layerGroups.waterDams)) {
+      map.addLayer(layerGroups.waterDams);
+      const chk = document.getElementById("layerWaterDams");
+      if (chk) chk.checked = true;
+      updateActiveLayersCount();
+    }
+
+    const { marker, layer, feature, latlng, properties, geomType } = assetEntry;
+    const p = properties || (feature ? feature.properties : {});
+    const cat = p.asset_category || "water_dam";
+
+    if (latlng && marker) {
+      if (zoom) {
+        map.flyTo(latlng, 12.5, { duration: 1.2 });
+        setTimeout(() => marker.openPopup(), 450);
+      } else {
+        marker.openPopup();
+      }
+      if (typeof selectDam === "function") selectDam(p.name, false);
+      inspectAsset({ properties: p, geometry: feature.geometry, type: cat });
+    } else if (layer && typeof layer.getBounds === "function") {
+      const b = layer.getBounds();
+      if (zoom) {
+        map.fitBounds(b, { padding: [60, 60], maxZoom: 13, duration: 1.2 });
+        setTimeout(() => layer.openPopup(), 450);
+      } else {
+        layer.openPopup();
+      }
+      inspectAsset({ properties: p, geometry: feature.geometry, type: cat });
+    }
+  }
+
+  function exportDamsToCsv() {
+    if (!allWaterAssetsList || allWaterAssetsList.length === 0) return;
+    const headers = ["Asset ID", "Name", "Category", "River", "Basin", "District", "Gross Storage (MCM)", "Live Storage (MCM)", "FRL (m MSL)", "Hydropower (MW)", "Commission Year", "Operating Agency", "Status", "Source"];
+    const rows = allWaterAssetsList.map(a => [
+      `"${a.id}"`,
+      `"${(a.name || '').replace(/"/g, '""')}"`,
+      `"${a.cat}"`,
+      `"${(a.river || '').replace(/"/g, '""')}"`,
+      `"${(a.basin || '').replace(/"/g, '""')}"`,
+      `"${a.district}"`,
+      a.grossCap || "",
+      a.liveCap || "",
+      a.frl !== "N/A" ? a.frl : "",
+      a.hydro || "",
+      a.year !== "—" ? a.year : "",
+      `"${(a.agency || '').replace(/"/g, '""')}"`,
+      `"${a.status}"`,
+      `"Central Water Commission (CWC NRLD 2023) & WRD Gujarat"`
+    ]);
+
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `gujarat_dams_reservoirs_inventory_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  function runWaterBalanceSimulation() {
+    const qIn = parseFloat(document.getElementById("simInflowInput")?.value) || 0;
+    const qOut = parseFloat(document.getElementById("simOutflowInput")?.value) || 0;
+    const hours = parseFloat(document.getElementById("simHoursInput")?.value) || 24;
+
+    const deltaSeconds = hours * 3600;
+    const deltaCubicMeters = (qIn - qOut) * deltaSeconds;
+    const deltaMCM = deltaCubicMeters / 1e6;
+
+    let surfaceAreaSqMeters = 200 * 1e6;
+    if (activeHighlightedDam && damsByName[activeHighlightedDam]) {
+      const cap = damsByName[activeHighlightedDam].feature.properties.gross_storage_mcm || 1000;
+      surfaceAreaSqMeters = Math.max(25, Math.min(450, cap * 0.045)) * 1e6;
+    }
+    const deltaStageMeters = deltaCubicMeters / surfaceAreaSqMeters;
+
+    const simDeltaStorage = document.getElementById("simDeltaStorage");
+    const simDeltaStage = document.getElementById("simDeltaStage");
+    const simTrend = document.getElementById("simTrend");
+
+    const sign = deltaMCM >= 0 ? "+" : "";
+    if (simDeltaStorage) {
+      simDeltaStorage.textContent = `${sign}${deltaMCM.toFixed(2)} MCM`;
+      simDeltaStorage.style.color = deltaMCM >= 0 ? "#38bdf8" : "#f43f5e";
+    }
+    if (simDeltaStage) {
+      simDeltaStage.textContent = `${sign}${deltaStageMeters.toFixed(2)} meters`;
+      simDeltaStage.style.color = deltaStageMeters >= 0 ? "#4ade80" : "#fb923c";
+    }
+    if (simTrend) {
+      if (deltaMCM > 0.01) {
+        simTrend.textContent = "Accumulating (Reservoir Filling)";
+        simTrend.style.color = "#38bdf8";
+      } else if (deltaMCM < -0.01) {
+        simTrend.textContent = "Depleting (Storage Drawdown)";
+        simTrend.style.color = "#f43f5e";
+      } else {
+        simTrend.textContent = "Steady State (Inflow = Outflow)";
+        simTrend.style.color = "#e2e8f0";
+      }
+    }
+
+    // Downstream Floodplain Warning Assessment
+    const simFloodAlert = document.getElementById("simFloodAlert");
+    const simFloodAlertText = document.getElementById("simFloodAlertText");
+    const simInspectFloodBtn = document.getElementById("simInspectFloodBtn");
+    currentSimFloodTarget = null;
+
+    if (simFloodAlert && simFloodAlertText) {
+      simFloodAlert.classList.remove("hidden", "alert-safe", "alert-caution");
+
+      const damName = activeHighlightedDam || "";
+      if (damName.includes("Ukai") && qOut >= 8500) {
+        simFloodAlert.className = "sim-flood-alert";
+        simFloodAlertText.innerHTML = `<strong>⚠️ CRITICAL TAPI FLOOD WARNING:</strong> Discharge of <strong>${qOut.toLocaleString()} m³/s</strong> exceeds Surat city safe bankful capacity (8,500 m³/s). High inundation risk for Rander, Adajan & SMC Causeway lowlands (Ref: 2006 Surat Floods).`;
+        currentSimFloodTarget = { name: "Tapi River Floodplain & Surat Urban Inundation Zone", latlng: [21.18, 72.83], district: "Surat", river: "Tapi River", threshold: "8,500 m³/s safe bankful capacity" };
+      } else if (damName.includes("Ukai") && qOut >= 5000) {
+        simFloodAlert.className = "sim-flood-alert alert-caution";
+        simFloodAlertText.innerHTML = `<strong>⚠️ TAPI SPILLWAY CAUTION:</strong> Outflow of <strong>${qOut.toLocaleString()} m³/s</strong>. Coordinated releases active. Downstream Surat district emergency control room notified.`;
+        currentSimFloodTarget = { name: "Tapi River Floodplain & Surat Urban Inundation Zone", latlng: [21.18, 72.83], district: "Surat", river: "Tapi River", threshold: "8,500 m³/s safe bankful capacity" };
+      } else if (damName.includes("Sardar Sarovar") && qOut >= 14000) {
+        simFloodAlert.className = "sim-flood-alert";
+        simFloodAlertText.innerHTML = `<strong>⚠️ CRITICAL NARMADA FLOOD ALERT:</strong> Outflow of <strong>${qOut.toLocaleString()} m³/s</strong> approaches Golden Bridge Bharuch warning stage (24 ft mark). Low-lying Ankleshwar & Bharuch riverbed villages on alert.`;
+        currentSimFloodTarget = { name: "Narmada Downstream & Bharuch-Ankleshwar Lowland Flood Zone", latlng: [21.71, 72.98], district: "Bharuch", river: "Narmada River", threshold: "14,000 m³/s Golden Bridge warning mark" };
+      } else if (damName.includes("Sardar Sarovar") && qOut >= 8000) {
+        simFloodAlert.className = "sim-flood-alert alert-caution";
+        simFloodAlertText.innerHTML = `<strong>⚠️ NARMADA SPILLWAY CAUTION:</strong> High discharge of <strong>${qOut.toLocaleString()} m³/s</strong> into downstream river bed. Hydro RBPH units operating at full peaking load.`;
+        currentSimFloodTarget = { name: "Narmada Downstream & Bharuch-Ankleshwar Lowland Flood Zone", latlng: [21.71, 72.98], district: "Bharuch", river: "Narmada River", threshold: "14,000 m³/s Golden Bridge warning mark" };
+      } else if (damName.includes("Machhu") && qOut >= 3500) {
+        simFloodAlert.className = "sim-flood-alert";
+        simFloodAlertText.innerHTML = `<strong>⚠️ MACHHU BASIN FLASH FLOOD ALERT:</strong> Outflow of <strong>${qOut.toLocaleString()} m³/s</strong> exceeds Morbi downstream industrial river corridor threshold. Embankment monitoring activated.`;
+        currentSimFloodTarget = { name: "Machhu River Morbi Floodplain Corridor", latlng: [22.7833, 70.8833], district: "Morbi", river: "Machhu River", threshold: "3,500 m³/s industrial threshold" };
+      } else if (damName.includes("Kadana") && qOut >= 7500) {
+        simFloodAlert.className = "sim-flood-alert";
+        simFloodAlertText.innerHTML = `<strong>⚠️ MAHI BASIN SPILLWAY ALERT:</strong> Heavy release of <strong>${qOut.toLocaleString()} m³/s</strong> towards Lunawada, Anand & Kheda agricultural plains.`;
+        currentSimFloodTarget = { name: "Mahi Downstream Basin & Agricultural Plains", latlng: [22.82, 73.32], district: "Mahisagar", river: "Mahi River", threshold: "7,500 m³/s downstream capacity" };
+      } else if (damName.includes("Dharoi") && qOut >= 2500) {
+        simFloodAlert.className = "sim-flood-alert alert-caution";
+        simFloodAlertText.innerHTML = `<strong>⚠️ SABARMATI HIGH DISCHARGE ALERT:</strong> Outflow of <strong>${qOut.toLocaleString()} m³/s</strong> approaches Ahmedabad Riverfront lower promenade submergence limit.`;
+        currentSimFloodTarget = { name: "Sabarmati Ahmedabad Riverfront Corridor", latlng: [23.0266, 72.5891], district: "Ahmedabad", river: "Sabarmati River", threshold: "2,500 m³/s Lower Promenade limit" };
+      } else if (damName.includes("Dantiwada") && qOut >= 3000) {
+        simFloodAlert.className = "sim-flood-alert";
+        simFloodAlertText.innerHTML = `<strong>⚠️ BANAS BASIN FLASH FLOOD ALERT:</strong> Outflow of <strong>${qOut.toLocaleString()} m³/s</strong> exceeds Dantiwada downstream river channel threshold.`;
+        currentSimFloodTarget = { name: "Banas River & North Gujarat Flash Flood Zone", latlng: [24.0, 72.15], district: "Banaskantha", river: "Banas River", threshold: "3,000 m³/s flash flood threshold" };
+      } else if (qOut > 10000) {
+        simFloodAlert.className = "sim-flood-alert";
+        simFloodAlertText.innerHTML = `<strong>⚠️ HIGH SPILLWAY DISCHARGE ALERT:</strong> Major release of <strong>${qOut.toLocaleString()} m³/s</strong> exceeds standard downstream safe flood routing capacity.`;
+      } else {
+        simFloodAlert.className = "sim-flood-alert alert-safe";
+        simFloodAlertText.innerHTML = `<strong>✓ SAFE DISCHARGE REGIME:</strong> Gate outflow of <strong>${qOut.toLocaleString()} m³/s</strong> is within downstream bankful capacity and design spillway thresholds.`;
+      }
+
+      if (simInspectFloodBtn) {
+        if (currentSimFloodTarget) {
+          simInspectFloodBtn.classList.remove("hidden");
+          simInspectFloodBtn.innerHTML = `<span>📍 Zoom & Inspect Downstream Inundation Zone (${currentSimFloodTarget.river})</span>`;
+        } else {
+          simInspectFloodBtn.classList.add("hidden");
+        }
+      }
+    }
+
+    showToast(`💧 Simulation Complete: Net ${sign}${deltaMCM.toFixed(1)} MCM over ${hours}h (${sign}${deltaStageMeters.toFixed(2)}m stage).`);
+  }
+
+  function inspectDownstreamFloodZone() {
+    if (!currentSimFloodTarget) return;
+    ensureEnvironmentDisasterLoaded();
+    if (!map.hasLayer(layerGroups.cycloneFlood)) {
+      map.addLayer(layerGroups.cycloneFlood);
+      const chk = document.getElementById("layerCycloneFlood");
+      if (chk) chk.checked = true;
+      updateActiveLayersCount();
+    }
+    const t = currentSimFloodTarget;
+    map.flyTo(t.latlng, 12, { duration: 1.2 });
+
+    const alertCircle = L.circleMarker(t.latlng, {
+      pane: "disasterPane",
+      radius: 26,
+      color: "#ef4444",
+      weight: 3,
+      fillColor: "#ef4444",
+      fillOpacity: 0.25
+    }).addTo(map);
+
+    setTimeout(() => {
+      map.removeLayer(alertCircle);
+    }, 6000);
+
+    if (t.district) {
+      selectHazardDistrict(t.district, false);
+    }
+    showToast(`⚠️ Downstream Floodplain: Inspecting ${t.name} (${t.river}). Threshold: ${t.threshold}.`);
+  }
+
+  const simInspectFloodBtn = document.getElementById("simInspectFloodBtn");
+  if (simInspectFloodBtn) {
+    simInspectFloodBtn.addEventListener("click", inspectDownstreamFloodZone);
+  }
+
+  const damSelect = document.getElementById("damSelect");
+  if (damSelect) {
+    damSelect.addEventListener("change", (e) => {
+      if (e.target.value) {
+        selectDam(e.target.value, true);
+      } else {
+        clearDamFocus(false);
+      }
+    });
+  }
+
+  const clearDamBtn = document.getElementById("clearDamBtn");
+  if (clearDamBtn) {
+    clearDamBtn.addEventListener("click", () => clearDamFocus(true));
+  }
+
+  const damPills = document.querySelectorAll("#damFilterPills .w-pill");
+  damPills.forEach(pill => {
+    pill.addEventListener("click", () => {
+      damPills.forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+      const targetBasin = pill.getAttribute("data-basin");
+      filterDamsByBasin(targetBasin);
+    });
+  });
+
+  const simCalculateBtn = document.getElementById("simCalculateBtn");
+  if (simCalculateBtn) {
+    simCalculateBtn.addEventListener("click", runWaterBalanceSimulation);
+  }
+
+  // ==========================================================================
+  // Urban, Smart Cities, Ports, Airports & Industry Controls
+  // ==========================================================================
+  let activeHighlightedUrban = null;
+
+  function selectUrbanAsset(name, zoom = false) {
+    if (!name || !urbanAssetsByName[name]) {
+      clearUrbanFocus(true);
+      return;
+    }
+    const { marker, feature, latlng, category } = urbanAssetsByName[name];
+    const p = feature.properties || {};
+
+    const catKey = (category || "").toLowerCase();
+    const isSeaport = catKey === "seaport" || catKey === "commercial_seaport";
+    const isAirport = catKey === "airport" || catKey === "commercial_airport";
+    const isIndustry = catKey === "industrial_estate" || catKey === "industrial_sez" || catKey === "industry";
+    const isMunicipal = catKey === "municipal_corporation";
+
+    let group = layerGroups.urbanMetro;
+    let toggleId = "layerUrbanMetro";
+    if (isSeaport || isAirport) {
+      group = layerGroups.portsAirports;
+      toggleId = "layerPortsAirports";
+    } else if (isIndustry) {
+      group = layerGroups.industries;
+      toggleId = "layerIndustries";
+    }
+    if (!map.hasLayer(group)) {
+      map.addLayer(group);
+      const chk = document.getElementById(toggleId);
+      if (chk) chk.checked = true;
+      updateActiveLayersCount();
+    }
+    switchInspectorTab("tabUrban");
+
+    activeHighlightedUrban = name;
+
+    if (zoom) {
+      map.flyTo(latlng, 13, { duration: 1.2 });
+      setTimeout(() => marker.openPopup(), 450);
+    } else {
+      marker.openPopup();
+    }
+
+    const telemetry = document.getElementById("urbanTelemetry");
+    const urbanTelName = document.getElementById("urbanTelName");
+    const urbanTelBadge = document.getElementById("urbanTelBadge");
+    const urbanTelAuthority = document.getElementById("urbanTelAuthority");
+    const urbanTelMetric1 = document.getElementById("urbanTelMetric1");
+    const urbanTelLbl1 = document.getElementById("urbanTelLbl1");
+    const urbanTelMetric2 = document.getElementById("urbanTelMetric2");
+    const urbanTelLbl2 = document.getElementById("urbanTelLbl2");
+    const urbanTelStatus = document.getElementById("urbanTelStatus");
+    const urbanSelect = document.getElementById("urbanSelect");
+
+    if (telemetry) telemetry.classList.remove("hidden");
+    if (urbanTelName) urbanTelName.textContent = name;
+    if (urbanSelect && urbanSelect.value !== name) urbanSelect.value = name;
+
+    if (isSeaport) {
+      const cap = p.capacity_mmt || p.annual_capacity_mmt || "10";
+      const draft = p.draft_m || p.max_draft_m || "12";
+      const berths = p.berths_count || p.berths || "—";
+      const auth = p.authority || p.operator || "Gujarat Maritime Board";
+      if (urbanTelBadge) { urbanTelBadge.textContent = `${cap} MMT`; urbanTelBadge.style.background = "#4f46e5"; }
+      if (urbanTelAuthority) urbanTelAuthority.textContent = `${auth} — Maritime Gateway`;
+      if (urbanTelMetric1) urbanTelMetric1.textContent = `${draft} m`;
+      if (urbanTelLbl1) urbanTelLbl1.textContent = "Draft Depth";
+      if (urbanTelMetric2) urbanTelMetric2.textContent = `${berths}`;
+      if (urbanTelLbl2) urbanTelLbl2.textContent = "Berths Count";
+      if (urbanTelStatus) urbanTelStatus.textContent = p.status || "Operational";
+    } else if (isAirport) {
+      const iataCode = p.iata || p.iata_code || "—";
+      const icaoCode = p.icao || p.icao_code || "—";
+      const op = p.operator || p.authority || "Airports Authority of India (AAI)";
+      const rwy = p.runway_length_m ? `${p.runway_length_m} m` : "3,500 m";
+      const pax = p.passenger_traffic_fy24 || (p.terminal_capacity_mppa ? `${p.terminal_capacity_mppa} MPPA` : "Commercial Operations");
+      if (urbanTelBadge) { urbanTelBadge.textContent = `${iataCode} / ${icaoCode}`; urbanTelBadge.style.background = "#0284c7"; }
+      if (urbanTelAuthority) urbanTelAuthority.textContent = `${op} — Aviation Infrastructure`;
+      if (urbanTelMetric1) urbanTelMetric1.textContent = rwy;
+      if (urbanTelLbl1) urbanTelLbl1.textContent = "Runway Length";
+      if (urbanTelMetric2) urbanTelMetric2.textContent = pax;
+      if (urbanTelLbl2) urbanTelLbl2.textContent = "Traffic / Capacity";
+      if (urbanTelStatus) urbanTelStatus.textContent = p.status || "Operational";
+    } else if (isIndustry) {
+      const area = p.area_sqkm ? `${p.area_sqkm} sq km` : (p.area_acres ? `${p.area_acres} ac` : "—");
+      const dev = p.governing_body || p.developer || "GIDC";
+      const focus = p.focus || p.key_sectors || "Industrial Estate";
+      if (urbanTelBadge) { urbanTelBadge.textContent = area; urbanTelBadge.style.background = "#d97706"; }
+      if (urbanTelAuthority) urbanTelAuthority.textContent = `${dev} — Industrial Hub`;
+      if (urbanTelMetric1) urbanTelMetric1.textContent = p.area_sqkm ? `${p.area_sqkm} km²` : '—';
+      if (urbanTelLbl1) urbanTelLbl1.textContent = "Notified Area";
+      if (urbanTelMetric2) urbanTelMetric2.textContent = (p.notable_units || p.anchor_units || focus).split(",")[0] || "Multiple Units";
+      if (urbanTelLbl2) urbanTelLbl2.textContent = "Anchor Units";
+      if (urbanTelStatus) urbanTelStatus.textContent = p.status || "Active";
+    } else if (isMunicipal) {
+      if (urbanTelBadge) { urbanTelBadge.textContent = `${p.area_sqkm || '—'} sq km`; urbanTelBadge.style.background = "#0891b2"; }
+      if (urbanTelAuthority) urbanTelAuthority.textContent = `${name} — Urban Governance`;
+      if (urbanTelMetric1) urbanTelMetric1.textContent = p.population_2011 ? `${(parseFloat(p.population_2011) / 1e6).toFixed(2)}M` : '—';
+      if (urbanTelLbl1) urbanTelLbl1.textContent = "Population";
+      if (urbanTelMetric2) urbanTelMetric2.textContent = `${p.area_sqkm || '—'} km²`;
+      if (urbanTelLbl2) urbanTelLbl2.textContent = "Area";
+      if (urbanTelStatus) urbanTelStatus.textContent = p.smart_city_status || "Municipal Corporation";
+    }
+
+    const canonicalType = isSeaport ? "commercial_seaport" : (isAirport ? "commercial_airport" : (isIndustry ? "industrial_sez" : "municipal_corporation"));
+    inspectAsset({
+      properties: { ...p, name: name, asset_category: canonicalType },
+      geometry: feature.geometry,
+      type: canonicalType
+    });
+  }
+
+  function clearUrbanFocus(resetDropdown = true) {
+    activeHighlightedUrban = null;
+    const telemetry = document.getElementById("urbanTelemetry");
+    const urbanSelect = document.getElementById("urbanSelect");
+    if (telemetry) telemetry.classList.add("hidden");
+    if (resetDropdown && urbanSelect) urbanSelect.value = "";
+  }
+
+  function filterUrbanByType(type) {
+    allUrbanList.forEach(({ marker, category }) => {
+      const c = (category || "").toLowerCase();
+      let match = (type === "all");
+      if (type === "seaport" && (c === "seaport" || c === "commercial_seaport")) match = true;
+      else if (type === "airport" && (c === "airport" || c === "commercial_airport")) match = true;
+      else if (type === "industrial_estate" && (c === "industrial_estate" || c === "industrial_sez" || c === "industry")) match = true;
+      else if (type === "municipal_corporation" && c === "municipal_corporation") match = true;
+
+      if (match) {
+        marker.setStyle({ opacity: 0.95, fillOpacity: 0.92 });
+      } else {
+        marker.setStyle({ opacity: 0.08, fillOpacity: 0.05 });
+      }
+    });
+  }
+
+  const urbanSelect = document.getElementById("urbanSelect");
+  if (urbanSelect) {
+    urbanSelect.addEventListener("change", (e) => {
+      if (e.target.value) {
+        selectUrbanAsset(e.target.value, true);
+      } else {
+        clearUrbanFocus(false);
+      }
+    });
+  }
+
+  const clearUrbanBtn = document.getElementById("clearUrbanBtn");
+  if (clearUrbanBtn) {
+    clearUrbanBtn.addEventListener("click", () => clearUrbanFocus(true));
+  }
+
+  const urbanPills = document.querySelectorAll("#urbanFilterPills .u-pill");
+  urbanPills.forEach(pill => {
+    pill.addEventListener("click", () => {
+      urbanPills.forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+      const targetType = pill.getAttribute("data-type");
+      filterUrbanByType(targetType);
+    });
+  });
+
+  // ==========================================================================
+  // Disaster Hazards & CGWB Groundwater Profiler
+  // ==========================================================================
+  const DISTRICT_HAZARD_PROFILES = {
+    "Kachchh": { seismic: "Zone V (Z = 0.36g) • Active Faults", cyclone: "V_b = 50 m/s • High Storm Surge", flood: "Rann Tidal Inundation Hotspot", gwPct: 91.5, gwCat: "Critical", score: 88, rating: "VERY HIGH", summary: "BIS IS 1893 Zone V • Very High Cyclone Vulnerability • Saline Aquifer" },
+    "Ahmedabad": { seismic: "Zone IV (Z = 0.24g) • Moderate Ground Shaking", cyclone: "V_b = 39 m/s • Moderate Inland Gales", flood: "Sabarmati Basin & Lowland Waterlogging", gwPct: 94.0, gwCat: "Critical", score: 72, rating: "HIGH", summary: "BIS Zone IV • High Aquifer Extraction (94%) • Urban Flood Vulnerability" },
+    "Morbi": { seismic: "Zone IV (Z = 0.24g) • Active Fault Line Proximity", cyclone: "V_b = 50 m/s • High Wind Vulnerability", flood: "Machhu Basin Flash Flood Risk", gwPct: 86.4, gwCat: "Semi-Critical", score: 76, rating: "HIGH", summary: "BIS Zone IV • Machhu Floodplain • High Industrial Concentration" },
+    "Patan": { seismic: "Zone IV (Z = 0.24g) • Alluvial Amplification", cyclone: "V_b = 44 m/s • Inland Gale Risk", flood: "Saraswati & Banas Overflow Plains", gwPct: 117.2, gwCat: "Over-Exploited", score: 81, rating: "VERY HIGH", summary: "BIS Zone IV • CGWB Over-Exploited (117%) • Severe Aquifer Depletion" },
+    "Mehsana": { seismic: "Zone IV (Z = 0.24g) • Cambay Basin Faulting", cyclone: "V_b = 44 m/s • Moderate Risk", flood: "Sabarmati Western Tributary Plains", gwPct: 126.4, gwCat: "Over-Exploited", score: 83, rating: "VERY HIGH", summary: "BIS Zone IV • CGWB Over-Exploited (126%) • Groundwater Stress Hotspot" },
+    "Surendranagar": { seismic: "Zone IV (Z = 0.24g) • Little Rann Boundary Fault", cyclone: "V_b = 44 m/s • Moderate Risk", flood: "Bhogavo River Seasonal Spate", gwPct: 78.5, gwCat: "Semi-Critical", score: 68, rating: "MODERATE", summary: "BIS Zone IV • Little Rann Eco-Boundary • Moderate Groundwater" },
+    "Rajkot": { seismic: "Zone IV (Z = 0.24g) • Central Saurashtra Faults", cyclone: "V_b = 47 m/s • Elevated Wind Risk", flood: "Aji & Nyari River Urban Chokepoints", gwPct: 94.2, gwCat: "Critical", score: 75, rating: "HIGH", summary: "BIS Zone IV • High Wind Exposure • Critical Aquifer Stress (94%)" },
+    "Jamnagar": { seismic: "Zone IV (Z = 0.24g) • Gulf of Kutch Margin", cyclone: "V_b = 50 m/s • Severe Coastal Surge Risk", flood: "Rangmati & Nagmati River Basin", gwPct: 82.0, gwCat: "Semi-Critical", score: 79, rating: "HIGH", summary: "BIS Zone IV • Very High Cyclone Surge (50 m/s) • Coastal Vulnerability" },
+    "Bharuch": { seismic: "Zone IV (Z = 0.24g) • Narmada Rift Zone", cyclone: "V_b = 44 m/s • Estuarine Surge Risk", flood: "Narmada Mega River Flood Risk (Golden Bridge)", gwPct: 56.0, gwCat: "Safe", score: 74, rating: "HIGH", summary: "BIS Zone IV (Narmada Rift) • Extreme Narmada Flood Hazard" },
+    "Surat": { seismic: "Zone III (Z = 0.16g) • Moderate Seismicity", cyclone: "V_b = 44 m/s • High Tidal Inundation", flood: "Tapi River Floodplain Chokepoints (Ukai Releases)", gwPct: 62.5, gwCat: "Safe", score: 66, rating: "MODERATE", summary: "BIS Zone III • Severe Tapi River Flood Inundation Vulnerability" },
+    "Vadodara": { seismic: "Zone III (Z = 0.16g) • Moderate Seismicity", cyclone: "V_b = 39 m/s • Inland Risk", flood: "Vishwamitri River Urban Flash Floods (Ajwa Releases)", gwPct: 74.0, gwCat: "Semi-Critical", score: 64, rating: "MODERATE", summary: "BIS Zone III • Recurrent Vishwamitri River Urban Flood Plain" },
+    "Bhavnagar": { seismic: "Zone III (Z = 0.16g) • Gulf of Khambhat Tectonics", cyclone: "V_b = 50 m/s • Very High Storm Surge", flood: "Shetrunji River Overflow Risk", gwPct: 85.0, gwCat: "Semi-Critical", score: 71, rating: "HIGH", summary: "BIS Zone III • Very High Cyclone Surge Hazard • Shetrunji Basin" },
+    "Junagadh": { seismic: "Zone III (Z = 0.16g) • Girnar Volcanic Complex", cyclone: "V_b = 47 m/s • High Coastal/Inland Gales", flood: "Ozat & Uben River Basin", gwPct: 79.0, gwCat: "Semi-Critical", score: 63, rating: "MODERATE", summary: "BIS Zone III • Gir Ecological Buffer • Moderate Multi-Hazard" },
+    "Gir Somnath": { seismic: "Zone III (Z = 0.16g) • Coastal Shelf", cyclone: "V_b = 50 m/s • Severe Arabian Sea Surge (Cat 4)", flood: "Hiran & Shingoda Basin", gwPct: 68.0, gwCat: "Safe", score: 73, rating: "HIGH", summary: "BIS Zone III • Severe Arabian Sea Cyclone Landfall Hazard" },
+    "Valsad": { seismic: "Zone III (Z = 0.16g) • Western Ghats Foothills", cyclone: "V_b = 44 m/s • Heavy Monsoon Coastal Inundation", flood: "Auranga & Damanganga Severe Flash Floods", gwPct: 54.0, gwCat: "Safe", score: 65, rating: "MODERATE", summary: "BIS Zone III • High Rainfall (>2000mm) • Damanganga Flood Hazard" }
+  };
+
+  function selectHazardDistrict(districtName, zoom = false) {
+    if (!districtName) {
+      clearHazardFocus(true);
+      return;
+    }
+
+    const profile = DISTRICT_HAZARD_PROFILES[districtName] || {
+      seismic: "Zone III (Z = 0.16g) • Standard IS 1893",
+      cyclone: "V_b = 44 m/s • Moderate Wind Risk",
+      flood: "Local Lowland Drainage Concern",
+      gwPct: 70.0,
+      gwCat: "Safe",
+      score: 55,
+      rating: "MODERATE",
+      summary: "Evaluated under State Disaster Management Plan criteria"
+    };
+
+    if (!map.hasLayer(layerGroups.seismic) && !map.hasLayer(layerGroups.cycloneFlood)) {
+      map.addLayer(layerGroups.seismic);
+      map.addLayer(layerGroups.cycloneFlood);
+      const chkS = document.getElementById("layerSeismic");
+      const chkC = document.getElementById("layerCycloneFlood");
+      if (chkS) chkS.checked = true;
+      if (chkC) chkC.checked = true;
+      updateActiveLayersCount();
+    }
+    switchInspectorTab("tabHazard");
+
+    if (zoom && districtLayers[districtName]) {
+      const bounds = districtLayers[districtName].getBounds();
+      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 11, duration: 1.2 });
+    }
+
+    const telemetry = document.getElementById("hazardTelemetry");
+    const hazardDistName = document.getElementById("hazardDistName");
+    const hazardCompositeBadge = document.getElementById("hazardCompositeBadge");
+    const hazardSummary = document.getElementById("hazardSummary");
+    const chipSeismic = document.getElementById("chipSeismic");
+    const chipCyclone = document.getElementById("chipCyclone");
+    const chipFlood = document.getElementById("chipFlood");
+    const chipGroundwater = document.getElementById("chipGroundwater");
+    const hazardScoreVal = document.getElementById("hazardScoreVal");
+    const hazardSelect = document.getElementById("hazardDistrictSelect");
+
+    if (telemetry) telemetry.classList.remove("hidden");
+    if (hazardDistName) hazardDistName.textContent = `${districtName} District`;
+    if (hazardSummary) hazardSummary.textContent = profile.summary;
+    if (hazardCompositeBadge) {
+      hazardCompositeBadge.textContent = `Score: ${profile.score}/100`;
+      hazardCompositeBadge.style.background = profile.score >= 80 ? "#dc2626" : (profile.score >= 70 ? "#ea580c" : "#0284c7");
+    }
+    if (chipSeismic) {
+      chipSeismic.innerHTML = `<strong>SEISMIC HAZARD</strong><span>${profile.seismic}</span>`;
+    }
+    if (chipCyclone) {
+      chipCyclone.innerHTML = `<strong>CYCLONE / WIND</strong><span>${profile.cyclone}</span>`;
+    }
+    if (chipFlood) {
+      chipFlood.innerHTML = `<strong>FLOOD RISK</strong><span>${profile.flood}</span>`;
+    }
+    if (chipGroundwater) {
+      chipGroundwater.innerHTML = `<strong>CGWB GROUNDWATER</strong><span>${profile.gwCat} (${profile.gwPct}% Extraction)</span>`;
+    }
+    if (hazardScoreVal) {
+      hazardScoreVal.textContent = `${profile.score} / 100 (${profile.rating})`;
+      hazardScoreVal.className = `composite-badge ${profile.score >= 80 ? 'high' : 'medium'}`;
+    }
+    if (hazardSelect && hazardSelect.value !== districtName) {
+      hazardSelect.value = districtName;
+    }
+    updateGroundwaterInterventionDistrict(districtName);
+
+    inspectAsset({
+      properties: {
+        district: districtName,
+        name: `${districtName} Hazard & Vulnerability Profile`,
+        seismic: profile.seismic,
+        cyclone: profile.cyclone,
+        flood: profile.flood,
+        gwPct: profile.gwPct,
+        gwCat: profile.gwCat,
+        score: profile.score,
+        summary: profile.summary,
+        asset_category: "seismic_hazard_zone"
+      },
+      type: "seismic_hazard_zone"
+    });
+  }
+
+  function clearHazardFocus(resetDropdown = true) {
+    const telemetry = document.getElementById("hazardTelemetry");
+    const hazardSelect = document.getElementById("hazardDistrictSelect");
+    if (telemetry) telemetry.classList.add("hidden");
+    if (resetDropdown && hazardSelect) hazardSelect.value = "";
+  }
+
+  const hazardDistrictSelect = document.getElementById("hazardDistrictSelect");
+  if (hazardDistrictSelect) {
+    hazardDistrictSelect.addEventListener("change", (e) => {
+      if (e.target.value) {
+        selectHazardDistrict(e.target.value, true);
+      } else {
+        clearHazardFocus(false);
+      }
+    });
+  }
+
+  const clearHazardBtn = document.getElementById("clearHazardBtn");
+  if (clearHazardBtn) {
+    clearHazardBtn.addEventListener("click", () => clearHazardFocus(true));
+  }
+
+  // ==========================================================================
+  // CGWB Dynamic Aquifer Stress & Intervention Model Engine
+  // ==========================================================================
+  const CGWB_DISTRICT_BASELINES = {
+    "Ahmedabad": { draft: 94.2, recharge: 100, aquifer: "Alluvial Sand & Gravel (Multi-Aquifer)", cat: "Critical" },
+    "Amreli": { draft: 78.5, recharge: 100, aquifer: "Fractured Deccan Basalt Trap", cat: "Semi-Critical" },
+    "Anand": { draft: 84.1, recharge: 100, aquifer: "Alluvial Silt & Sand", cat: "Semi-Critical" },
+    "Aravalli": { draft: 82.0, recharge: 100, aquifer: "Aravalli Quartzite & Schist (Hard Rock)", cat: "Semi-Critical" },
+    "Banaskantha": { draft: 118.6, recharge: 100, aquifer: "Deep Alluvial & Semi-Consolidated Sandstone", cat: "Over-Exploited" },
+    "Bharuch": { draft: 52.4, recharge: 100, aquifer: "Tertiary Sandstone & Alluvium", cat: "Safe" },
+    "Bhavnagar": { draft: 79.8, recharge: 100, aquifer: "Deccan Basalt & Tertiary Formations", cat: "Semi-Critical" },
+    "Botad": { draft: 76.2, recharge: 100, aquifer: "Fractured Deccan Basalt", cat: "Semi-Critical" },
+    "Chhota Udepur": { draft: 38.6, recharge: 100, aquifer: "Crystalline Gneiss & Granite", cat: "Safe" },
+    "Dahod": { draft: 46.2, recharge: 100, aquifer: "Crystalline Quartzite & Phyllite", cat: "Safe" },
+    "Dang": { draft: 24.8, recharge: 100, aquifer: "Deccan Basalt Plateau & Lava Flows", cat: "Safe" },
+    "Devbhumi Dwarka": { draft: 74.3, recharge: 100, aquifer: "Miliolite Limestone & Basalt", cat: "Semi-Critical" },
+    "Gandhinagar": { draft: 112.5, recharge: 100, aquifer: "Deep Alluvial Aquifer System", cat: "Over-Exploited" },
+    "Gir Somnath": { draft: 71.0, recharge: 100, aquifer: "Miliolite Limestone & Coastal Alluvium", cat: "Semi-Critical" },
+    "Jamnagar": { draft: 77.8, recharge: 100, aquifer: "Deccan Basalt & Coastal Mudflats", cat: "Semi-Critical" },
+    "Junagadh": { draft: 75.4, recharge: 100, aquifer: "Deccan Basalt & Girnar Plutonic Complex", cat: "Semi-Critical" },
+    "Kachchh": { draft: 91.5, recharge: 100, aquifer: "Mesozoic Sandstone & Tertiary Formations", cat: "Critical" },
+    "Kheda": { draft: 82.6, recharge: 100, aquifer: "Alluvial Silt & Sand Multilayered", cat: "Semi-Critical" },
+    "Mahisagar": { draft: 54.0, recharge: 100, aquifer: "Aravalli Metasediments & Granite", cat: "Safe" },
+    "Mehsana": { draft: 126.4, recharge: 100, aquifer: "Deep Alluvial Multi-Aquifer (>300m)", cat: "Over-Exploited" },
+    "Morbi": { draft: 92.8, recharge: 100, aquifer: "Basalt & Mesozoic Sandstone", cat: "Critical" },
+    "Narmada": { draft: 32.5, recharge: 100, aquifer: "Deccan Basalt & Alluvial Terrace", cat: "Safe" },
+    "Navsari": { draft: 58.2, recharge: 100, aquifer: "Deccan Basalt & Coastal Alluvium", cat: "Safe" },
+    "Panchmahal": { draft: 61.2, recharge: 100, aquifer: "Crystalline Gneiss, Schist & Granite", cat: "Safe" },
+    "Patan": { draft: 116.8, recharge: 100, aquifer: "Deep Alluvium Overlying Basement", cat: "Over-Exploited" },
+    "Porbandar": { draft: 72.1, recharge: 100, aquifer: "Miliolite Limestone & Coastal Sediments", cat: "Semi-Critical" },
+    "Rajkot": { draft: 93.6, recharge: 100, aquifer: "Fractured Deccan Basalt System", cat: "Critical" },
+    "Sabarkantha": { draft: 108.4, recharge: 100, aquifer: "Alluvium over Aravalli Hard Rock", cat: "Over-Exploited" },
+    "Surat": { draft: 64.8, recharge: 100, aquifer: "Tapi Alluvial Delta & Deccan Basalt", cat: "Safe" },
+    "Surendranagar": { draft: 90.7, recharge: 100, aquifer: "Mesozoic Sandstone & Basalt", cat: "Critical" },
+    "Tapi": { draft: 36.2, recharge: 100, aquifer: "Deccan Basalt Lava Flows", cat: "Safe" },
+    "Vadodara": { draft: 66.5, recharge: 100, aquifer: "Alluvial Sand & Gravel (Vishwamitri Basin)", cat: "Safe" },
+    "Valsad": { draft: 31.8, recharge: 100, aquifer: "Deccan Basalt & Coastal Marine Sand", cat: "Safe" }
+  };
+
+  let activeGwDistrict = "Mehsana";
+  const sliderMicroIrr = document.getElementById("sliderMicroIrr");
+  const sliderRecharge = document.getElementById("sliderRecharge");
+  const sliderCanalSub = document.getElementById("sliderCanalSub");
+  const valMicroIrr = document.getElementById("valMicroIrr");
+  const valRecharge = document.getElementById("valRecharge");
+  const valCanalSub = document.getElementById("valCanalSub");
+  const gwBaselineBadge = document.getElementById("gwBaselineBadge");
+  const gwStatBaseline = document.getElementById("gwStatBaseline");
+  const gwStatProjected = document.getElementById("gwStatProjected");
+  const gwStatCategory = document.getElementById("gwStatCategory");
+  const gwStatTrajectory = document.getElementById("gwStatTrajectory");
+  const gwResetBtn = document.getElementById("gwResetBtn");
+  const gwMemoBtn = document.getElementById("gwMemoBtn");
+
+  function calculateGroundwaterInterventions() {
+    const base = CGWB_DISTRICT_BASELINES[activeGwDistrict] || CGWB_DISTRICT_BASELINES["Mehsana"];
+    const microPct = parseFloat(sliderMicroIrr ? sliderMicroIrr.value : 0) || 0;
+    const rechPct = parseFloat(sliderRecharge ? sliderRecharge.value : 0) || 0;
+    const canalPct = parseFloat(sliderCanalSub ? sliderCanalSub.value : 0) || 0;
+
+    if (valMicroIrr) valMicroIrr.textContent = `${microPct}% Savings`;
+    if (valRecharge) valRecharge.textContent = `${rechPct}% Boost`;
+    if (valCanalSub) valCanalSub.textContent = `${canalPct}% Diverted`;
+
+    const s0 = base.draft;
+    // S_proj = [S0 * (1 - microSavings - canalSubstitution)] / (1 + rechargeAugmentation)
+    const draftMultiplier = Math.max(0.1, 1 - (microPct / 100) - (canalPct / 100));
+    const rechargeMultiplier = 1 + (rechPct / 100);
+    const sProj = (s0 * draftMultiplier) / rechargeMultiplier;
+
+    let projCat = "Over-Exploited";
+    let catColor = "#ef4444";
+    if (sProj < 70) {
+      projCat = "Safe";
+      catColor = "#10b981";
+    } else if (sProj < 90) {
+      projCat = "Semi-Critical";
+      catColor = "#eab308";
+    } else if (sProj < 100) {
+      projCat = "Critical";
+      catColor = "#f97316";
+    }
+
+    let trajectory = "Unchanged Baseline";
+    let trajColor = "#94a3b8";
+    if (sProj < s0) {
+      const delta = s0 - sProj;
+      trajectory = `Recovering (↓ ${delta.toFixed(1)}% Extraction Reduction)`;
+      trajColor = "#38bdf8";
+    }
+
+    if (gwBaselineBadge) gwBaselineBadge.textContent = `${activeGwDistrict}: ${s0.toFixed(1)}% (${base.cat})`;
+    if (gwStatBaseline) gwStatBaseline.textContent = `${s0.toFixed(1)}% (${base.cat})`;
+    if (gwStatProjected) {
+      gwStatProjected.textContent = `${sProj.toFixed(1)}%`;
+      gwStatProjected.style.color = catColor;
+    }
+    if (gwStatCategory) {
+      gwStatCategory.textContent = projCat;
+      gwStatCategory.style.color = catColor;
+    }
+    if (gwStatTrajectory) {
+      gwStatTrajectory.textContent = trajectory;
+      gwStatTrajectory.style.color = trajColor;
+    }
+  }
+
+  function updateGroundwaterInterventionDistrict(districtName) {
+    if (CGWB_DISTRICT_BASELINES[districtName]) {
+      activeGwDistrict = districtName;
+      calculateGroundwaterInterventions();
+    }
+  }
+
+  if (sliderMicroIrr) sliderMicroIrr.addEventListener("input", calculateGroundwaterInterventions);
+  if (sliderRecharge) sliderRecharge.addEventListener("input", calculateGroundwaterInterventions);
+  if (sliderCanalSub) sliderCanalSub.addEventListener("input", calculateGroundwaterInterventions);
+
+  if (gwResetBtn) {
+    gwResetBtn.addEventListener("click", () => {
+      if (sliderMicroIrr) sliderMicroIrr.value = 0;
+      if (sliderRecharge) sliderRecharge.value = 0;
+      if (sliderCanalSub) sliderCanalSub.value = 0;
+      calculateGroundwaterInterventions();
+      showToast("↺ Groundwater intervention sliders reset to baseline.");
+    });
+  }
+
+  if (gwMemoBtn) {
+    gwMemoBtn.addEventListener("click", () => {
+      const base = CGWB_DISTRICT_BASELINES[activeGwDistrict] || CGWB_DISTRICT_BASELINES["Mehsana"];
+      const microPct = sliderMicroIrr ? sliderMicroIrr.value : 0;
+      const rechPct = sliderRecharge ? sliderRecharge.value : 0;
+      const canalPct = sliderCanalSub ? sliderCanalSub.value : 0;
+      const s0 = base.draft;
+      const draftMultiplier = Math.max(0.1, 1 - (microPct / 100) - (canalPct / 100));
+      const rechargeMultiplier = 1 + (rechPct / 100);
+      const sProj = (s0 * draftMultiplier) / rechargeMultiplier;
+
+      let projCat = sProj < 70 ? "Safe" : (sProj < 90 ? "Semi-Critical" : (sProj < 100 ? "Critical" : "Over-Exploited"));
+
+      const memo = `### Gujarat Groundwater Sustainability Memo — ${activeGwDistrict} District\n` +
+        `**Authoritative Source:** Central Ground Water Board (CGWB) Dynamic Assessment 2022\n` +
+        `**Dominant Hydrogeological Formation:** ${base.aquifer}\n\n` +
+        `- **Baseline Stage of Extraction:** ${s0.toFixed(1)}% (${base.cat})\n` +
+        `- **Simulated Micro-Irrigation Adoption:** +${microPct}% demand reduction\n` +
+        `- **Simulated Artificial Recharge Interventions:** +${rechPct}% replenishment augmentation\n` +
+        `- **Simulated Surface Canal Water Diversion:** +${canalPct}% tubewell draft substitution\n` +
+        `- **Projected Stage of Extraction:** ${sProj.toFixed(1)}% (${projCat})\n\n` +
+        `*DERIVED HYDROLOGICAL SCENARIO MODEL (CGWB 2022 Methodology)*`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(memo).then(() => {
+          showToast(`📋 Copied ${activeGwDistrict} Groundwater Sustainability Memo!`);
+        }).catch(() => {
+          showToast(`Memo generated for ${activeGwDistrict}: ${sProj.toFixed(1)}% (${projCat})`);
+        });
+      } else {
+        showToast(`Memo generated for ${activeGwDistrict}: ${sProj.toFixed(1)}% (${projCat})`);
+      }
+    });
+  }
+
+  calculateGroundwaterInterventions();
+
+  // ==========================================================================
+  // Multi-Modal Infrastructure Proximity & Site Audit Analyzer
+  // ==========================================================================
+  const proximityToolBtn = document.getElementById("proximityToolBtn");
+  const proximityHud = document.getElementById("proximityHud");
+  const proximityExitBtn = document.getElementById("proximityExitBtn");
+  const proximityDoneBtn = document.getElementById("proximityDoneBtn");
+  const proximityClearBtn = document.getElementById("proximityClearBtn");
+  const proximityCopyBtn = document.getElementById("proximityCopyBtn");
+  const proximityStatusChip = document.getElementById("proximityStatusChip");
+
+  let isProximityAuditing = false;
+  let lastProximityAudit = null;
+  const proximityLayerGroup = L.layerGroup().addTo(map);
+
+  function startProximityAudit() {
+    isProximityAuditing = true;
+    ensureAllDeferredLoaded();
+    if (proximityToolBtn) proximityToolBtn.classList.add("active");
+    if (proximityHud) proximityHud.classList.remove("hidden");
+    map.getContainer().classList.add("proximity-active");
+    if (proximityStatusChip) proximityStatusChip.textContent = "Click map to audit coordinates";
+    showToast("📍 Proximity Audit Active: Click any point in Gujarat to calculate connectivity to highways, rail, power, dams, and ports.");
+  }
+
+  function exitProximityAudit() {
+    isProximityAuditing = false;
+    clearProximityAudit();
+    if (proximityToolBtn) proximityToolBtn.classList.remove("active");
+    if (proximityHud) proximityHud.classList.add("hidden");
+    map.getContainer().classList.remove("proximity-active");
+  }
+
+  function toggleProximityAudit() {
+    if (isProximityAuditing) {
+      exitProximityAudit();
+    } else {
+      startProximityAudit();
+    }
+  }
+
+  function clearProximityAudit() {
+    proximityLayerGroup.clearLayers();
+    lastProximityAudit = null;
+    const coordsEl = document.getElementById("proximitySelectedCoords");
+    if (coordsEl) coordsEl.textContent = "Inspection Coordinates: Pending Selection";
+    const hwyName = document.getElementById("proxHighwayName");
+    const hwyDist = document.getElementById("proxHighwayDist");
+    const stName = document.getElementById("proxStationName");
+    const stDist = document.getElementById("proxStationDist");
+    const pwrName = document.getElementById("proxPowerName");
+    const pwrDist = document.getElementById("proxPowerDist");
+    const wtrName = document.getElementById("proxWaterName");
+    const wtrDist = document.getElementById("proxWaterDist");
+    const portName = document.getElementById("proxPortName");
+    const portDist = document.getElementById("proxPortDist");
+    const airName = document.getElementById("proxAirportName");
+    const airDist = document.getElementById("proxAirportDist");
+    const scoreBadge = document.getElementById("proxScoreBadge");
+
+    if (hwyName) hwyName.textContent = "—";
+    if (hwyDist) hwyDist.textContent = "— km";
+    if (stName) stName.textContent = "—";
+    if (stDist) stDist.textContent = "— km";
+    if (pwrName) pwrName.textContent = "—";
+    if (pwrDist) pwrDist.textContent = "— km";
+    if (wtrName) wtrName.textContent = "—";
+    if (wtrDist) wtrDist.textContent = "— km";
+    if (portName) portName.textContent = "—";
+    if (portDist) portDist.textContent = "— km";
+    if (airName) airName.textContent = "—";
+    if (airDist) airDist.textContent = "— km";
+    if (scoreBadge) scoreBadge.textContent = "— / 100";
+    if (proximityStatusChip) proximityStatusChip.textContent = "Click map to audit coordinates";
+  }
+
+  function runProximityAudit(latlng) {
+    proximityLayerGroup.clearLayers();
+
+    // 1. Draw Inspection Crosshair
+    L.circleMarker(latlng, {
+      pane: "proximityPane",
+      radius: 7,
+      fillColor: "#00f0ff",
+      color: "#ffffff",
+      weight: 2.5,
+      opacity: 1,
+      fillOpacity: 0.95
+    }).addTo(proximityLayerGroup);
+
+    L.circleMarker(latlng, {
+      pane: "proximityPane",
+      radius: 14,
+      color: "#00f0ff",
+      weight: 1.5,
+      opacity: 0.8,
+      fillOpacity: 0,
+      dashArray: "3, 3"
+    }).addTo(proximityLayerGroup);
+
+    // 2. Query Nearest Highway
+    let nearestHwy = null;
+    let minHwyDist = Infinity;
+    highwayLayers.forEach(({ layer, feature }) => {
+      if (layer && typeof layer.getLatLngs === "function") {
+        const pts = layer.getLatLngs();
+        const flatPts = Array.isArray(pts[0]) ? pts.flat(Infinity) : pts;
+        flatPts.forEach(pt => {
+          if (pt && pt.lat) {
+            const d = latlng.distanceTo(pt);
+            if (d < minHwyDist) {
+              minHwyDist = d;
+              nearestHwy = { feature, pt };
+            }
+          }
+        });
+      }
+    });
+
+    // 3. Query Nearest Railway Station (from 623 stations)
+    let nearestStation = null;
+    let minStationDist = Infinity;
+    allStationMarkers.forEach(({ marker, feature }) => {
+      const pt = marker.getLatLng();
+      const d = latlng.distanceTo(pt);
+      if (d < minStationDist) {
+        minStationDist = d;
+        nearestStation = { feature, pt };
+      }
+    });
+
+    // 4. Query Nearest Power Plant
+    let nearestPower = null;
+    let minPowerDist = Infinity;
+    allPowerMarkers.forEach(({ marker, feature }) => {
+      const pt = marker.getLatLng();
+      const d = latlng.distanceTo(pt);
+      if (d < minPowerDist) {
+        minPowerDist = d;
+        nearestPower = { feature, pt };
+      }
+    });
+
+    // 5. Query Nearest Major Dam
+    let nearestDam = null;
+    let minDamDist = Infinity;
+    allDamsList.forEach(({ marker, feature, latlng: damPt }) => {
+      const d = latlng.distanceTo(damPt);
+      if (d < minDamDist) {
+        minDamDist = d;
+        nearestDam = { feature, pt: damPt };
+      }
+    });
+
+    // 6. Query Nearest Commercial Seaport
+    let nearestPort = null;
+    let minPortDist = Infinity;
+    allPortsList.forEach(({ name, latlng: portPt, properties }) => {
+      const d = latlng.distanceTo(portPt);
+      if (d < minPortDist) {
+        minPortDist = d;
+        nearestPort = { name, pt: portPt, properties };
+      }
+    });
+
+    // 7. Query Nearest Commercial Airport
+    let nearestAirport = null;
+    let minAirportDist = Infinity;
+    allAirportsList.forEach(({ name, latlng: airPt, properties }) => {
+      const d = latlng.distanceTo(airPt);
+      if (d < minAirportDist) {
+        minAirportDist = d;
+        nearestAirport = { name, pt: airPt, properties };
+      }
+    });
+
+    // 8. Draw Vectors on Map
+    const connectors = [
+      { pt: nearestHwy && nearestHwy.pt, color: "#f97316" },
+      { pt: nearestStation && nearestStation.pt, color: "#22c55e" },
+      { pt: nearestPower && nearestPower.pt, color: "#eab308" },
+      { pt: nearestDam && nearestDam.pt, color: "#0284c7" },
+      { pt: nearestPort && nearestPort.pt, color: "#6366f1" },
+      { pt: nearestAirport && nearestAirport.pt, color: "#06b6d4" }
+    ];
+
+    connectors.forEach(c => {
+      if (c.pt) {
+        L.polyline([latlng, c.pt], {
+          pane: "proximityPane",
+          color: c.color,
+          weight: 1.8,
+          opacity: 0.85,
+          dashArray: "4, 6"
+        }).addTo(proximityLayerGroup);
+
+        L.circleMarker(c.pt, {
+          pane: "proximityPane",
+          radius: 4.5,
+          fillColor: c.color,
+          color: "#ffffff",
+          weight: 1.5,
+          opacity: 1,
+          fillOpacity: 0.95
+        }).addTo(proximityLayerGroup);
+      }
+    });
+
+    const hwyKm = minHwyDist < Infinity ? (minHwyDist / 1000) : 0;
+    const stKm = minStationDist < Infinity ? (minStationDist / 1000) : 0;
+    const pwrKm = minPowerDist < Infinity ? (minPowerDist / 1000) : 0;
+    const damKm = minDamDist < Infinity ? (minDamDist / 1000) : 0;
+    const portKm = minPortDist < Infinity ? (minPortDist / 1000) : 0;
+    const airKm = minAirportDist < Infinity ? (minAirportDist / 1000) : 0;
+
+    const sHwy = Math.max(0, 100 - hwyKm * 2.5);
+    const sSt = Math.max(0, 100 - stKm * 1.8);
+    const sPwr = Math.max(0, 100 - pwrKm * 1.2);
+    const sDam = Math.max(0, 100 - damKm * 0.8);
+    const sPort = Math.max(0, 100 - portKm * 0.6);
+    const sAir = Math.max(0, 100 - airKm * 0.7);
+
+    const score = Math.min(98, Math.max(12, Math.round(
+      0.25 * sHwy + 0.20 * sSt + 0.15 * sPwr + 0.15 * sDam + 0.15 * sPort + 0.10 * sAir
+    )));
+
+    let rating = "MODERATE (TIER 3)";
+    if (score >= 80) rating = "EXCELLENT (TIER 1)";
+    else if (score >= 65) rating = "STRONG (TIER 2)";
+    else if (score < 45) rating = "REMOTE / DEVELOPING";
+
+    const coordsEl = document.getElementById("proximitySelectedCoords");
+    if (coordsEl) coordsEl.textContent = `Inspection Point: ${latlng.lat.toFixed(4)}° N, ${latlng.lng.toFixed(4)}° E`;
+
+    const hwyProps = nearestHwy && nearestHwy.feature.properties;
+    const stProps = nearestStation && nearestStation.feature.properties;
+    const pwrProps = nearestPower && nearestPower.feature.properties;
+    const damProps = nearestDam && nearestDam.feature.properties;
+    const portProps = nearestPort && nearestPort.properties;
+    const airProps = nearestAirport && nearestAirport.properties;
+
+    const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+    setEl("proxHighwayName", hwyProps ? `${hwyProps.corridor || 'Highway'} (${hwyProps.title || 'Alignment'})` : "N/A");
+    setEl("proxHighwayDist", `${hwyKm.toFixed(1)} km`);
+
+    setEl("proxStationName", stProps ? `${stProps.name} (${stProps.code})` : "N/A");
+    setEl("proxStationDist", `${stKm.toFixed(1)} km`);
+
+    setEl("proxPowerName", pwrProps ? `${pwrProps.name} (${pwrProps.capacity_mw} MW)` : "N/A");
+    setEl("proxPowerDist", `${pwrKm.toFixed(1)} km`);
+
+    setEl("proxWaterName", damProps ? `${damProps.name} (${damProps.gross_storage_mcm} MCM)` : "N/A");
+    setEl("proxWaterDist", `${damKm.toFixed(1)} km`);
+
+    setEl("proxPortName", portProps ? `${portProps.name} (${portProps.annual_capacity_mmt} MMT)` : "N/A");
+    setEl("proxPortDist", `${portKm.toFixed(1)} km`);
+
+    setEl("proxAirportName", airProps ? `${airProps.name} (${airProps.iata_code})` : "N/A");
+    setEl("proxAirportDist", `${airKm.toFixed(1)} km`);
+
+    const badge = document.getElementById("proxScoreBadge");
+    if (badge) {
+      badge.textContent = `${score} / 100 (${rating})`;
+      badge.className = `prox-score-badge ${score >= 75 ? 'high' : (score >= 55 ? 'medium' : 'low')}`;
+    }
+
+    if (proximityStatusChip) proximityStatusChip.textContent = `✓ Audited (${score}/100)`;
+
+    lastProximityAudit = {
+      lat: latlng.lat.toFixed(4),
+      lng: latlng.lng.toFixed(4),
+      score,
+      rating,
+      hwy: `${hwyProps ? hwyProps.corridor : 'Highway'} (${hwyKm.toFixed(1)} km)`,
+      rail: `${stProps ? stProps.name + ' [' + stProps.code + ']' : 'Station'} (${stKm.toFixed(1)} km)`,
+      power: `${pwrProps ? pwrProps.name : 'Power'} (${pwrKm.toFixed(1)} km)`,
+      water: `${damProps ? damProps.name : 'Dam'} (${damKm.toFixed(1)} km)`,
+      port: `${portProps ? portProps.name : 'Port'} (${portKm.toFixed(1)} km)`,
+      airport: `${airProps ? airProps.name : 'Airport'} (${airKm.toFixed(1)} km)`
+    };
+
+    showToast(`✓ Proximity Audit: Score ${score}/100 (${rating}). Nearest Hwy: ${hwyKm.toFixed(1)}km, Rail: ${stKm.toFixed(1)}km.`);
+  }
+
+  if (proximityToolBtn) proximityToolBtn.addEventListener("click", toggleProximityAudit);
+  if (proximityExitBtn) proximityExitBtn.addEventListener("click", exitProximityAudit);
+  if (proximityDoneBtn) proximityDoneBtn.addEventListener("click", exitProximityAudit);
+  if (proximityClearBtn) proximityClearBtn.addEventListener("click", clearProximityAudit);
+
+  if (proximityCopyBtn) {
+    proximityCopyBtn.addEventListener("click", () => {
+      if (!lastProximityAudit) {
+        showToast("⚠️ Click a point on the map first to audit.");
+        return;
+      }
+      const a = lastProximityAudit;
+      const text = `### Gujarat InfraMap — Site Infrastructure Proximity Audit\n` +
+        `**Inspection Coordinates:** ${a.lat}° N, ${a.lng}° E\n` +
+        `**Multi-Modal Accessibility Score:** ${a.score} / 100 (${a.rating})\n\n` +
+        `- 🛣️ **Nearest Highway / Expressway:** ${a.hwy}\n` +
+        `- 🚆 **Nearest Railway Hub:** ${a.rail}\n` +
+        `- ⚡ **Nearest Power Facility:** ${a.power}\n` +
+        `- 💧 **Nearest Major Dam / Reservoir:** ${a.water}\n` +
+        `- ⚓ **Nearest Commercial Seaport:** ${a.port}\n` +
+        `- ✈️ **Nearest Commercial Airport:** ${a.airport}\n\n` +
+        `*EPSG:4326 Geodesic Spherical Evaluation • Authoritative Government Data*`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("📋 Copied site proximity audit to clipboard!");
+        }).catch(() => {
+          showToast(`Audited score: ${a.score}/100`);
+        });
+      } else {
+        showToast(`Audited score: ${a.score}/100`);
+      }
+    });
+  }
+
+  // GeoJSON Export Handler for Site Proximity Audit
+  const proximityExportGeoJsonBtn = document.getElementById("proximityExportGeoJsonBtn");
+  if (proximityExportGeoJsonBtn) {
+    proximityExportGeoJsonBtn.addEventListener("click", () => {
+      if (!lastProximityAudit) {
+        showToast("⚠️ Perform a proximity audit on the map first.");
+        return;
+      }
+      const a = lastProximityAudit;
+      const feature = {
+        type: "Feature",
+        id: `GJ-AUDIT-${Date.now()}`,
+        geometry: {
+          type: "Point",
+          coordinates: [parseFloat(a.lng), parseFloat(a.lat)]
+        },
+        properties: {
+          audit_title: "Gujarat Multi-Modal Infrastructure Proximity Audit",
+          timestamp: new Date().toISOString(),
+          latitude: parseFloat(a.lat),
+          longitude: parseFloat(a.lng),
+          accessibility_score: a.score,
+          tier_rating: a.rating,
+          nearest_highway: a.hwy,
+          nearest_rail_station: a.rail,
+          nearest_power_plant: a.power,
+          nearest_dam_reservoir: a.water,
+          nearest_seaport: a.port,
+          nearest_airport: a.airport,
+          crs: "EPSG:4326 (WGS 84)",
+          data_quality: "DERIVED_SPATIAL_CALCULATION"
+        }
+      };
+      const blob = new Blob([JSON.stringify(feature, null, 2)], { type: "application/geo+json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `gujarat_site_audit_${a.lat}_${a.lng}.geojson`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast("📥 Exported GeoJSON Site Audit Dossier.");
+    });
+  }
+
+  // Multi-Site Infrastructure Comparison Engine
+  let siteAComparison = null;
+  let siteBComparison = null;
+
+  function renderSiteComparison() {
+    const body = document.getElementById("compareTableBody");
+    const aName = document.getElementById("compSiteAName");
+    const bName = document.getElementById("compSiteBName");
+    if (!body) return;
+
+    if (aName) aName.textContent = siteAComparison ? `Site A (${siteAComparison.lat}°N, ${siteAComparison.lng}°E)` : "Site A (Pending)";
+    if (bName) bName.textContent = siteBComparison ? `Site B (${siteBComparison.lat}°N, ${siteBComparison.lng}°E)` : "Site B (Click map)";
+
+    const rows = [
+      { label: "Accessibility Score", a: siteAComparison ? `${siteAComparison.score}/100` : "—", b: siteBComparison ? `${siteBComparison.score}/100` : "—" },
+      { label: "Tier Classification", a: siteAComparison ? siteAComparison.rating : "—", b: siteBComparison ? siteBComparison.rating : "—" },
+      { label: "Nearest Highway", a: siteAComparison ? siteAComparison.hwy : "—", b: siteBComparison ? siteBComparison.hwy : "—" },
+      { label: "Nearest Railway Hub", a: siteAComparison ? siteAComparison.rail : "—", b: siteBComparison ? siteBComparison.rail : "—" },
+      { label: "Nearest Power Facility", a: siteAComparison ? siteAComparison.power : "—", b: siteBComparison ? siteBComparison.power : "—" },
+      { label: "Nearest Major Dam", a: siteAComparison ? siteAComparison.water : "—", b: siteBComparison ? siteBComparison.water : "—" },
+      { label: "Nearest Seaport", a: siteAComparison ? siteAComparison.port : "—", b: siteBComparison ? siteBComparison.port : "—" },
+      { label: "Nearest Airport", a: siteAComparison ? siteAComparison.airport : "—", b: siteBComparison ? siteBComparison.airport : "—" }
+    ];
+
+    body.innerHTML = rows.map(r => `
+      <tr>
+        <td><strong>${r.label}</strong></td>
+        <td style="color: #38bdf8;">${r.a}</td>
+        <td style="color: #a78bfa;">${r.b}</td>
+      </tr>
+    `).join("");
+  }
+
+  const proximityCompareBtn = document.getElementById("proximityCompareBtn");
+  const proximityCompareBox = document.getElementById("proximityCompareBox");
+  const closeCompareBtn = document.getElementById("closeCompareBtn");
+  const clearCompareBtn = document.getElementById("clearCompareBtn");
+  const exportCompareMemoBtn = document.getElementById("exportCompareMemoBtn");
+
+  if (proximityCompareBtn) {
+    proximityCompareBtn.addEventListener("click", () => {
+      if (!lastProximityAudit) {
+        showToast("⚠️ Audit a point on the map first.");
+        return;
+      }
+      if (!siteAComparison) {
+        siteAComparison = Object.assign({}, lastProximityAudit);
+        if (proximityCompareBox) proximityCompareBox.classList.remove("hidden");
+        renderSiteComparison();
+        showToast("✓ Site A saved! Now audit a second location on the map to compare with Site B.");
+      } else {
+        siteBComparison = Object.assign({}, lastProximityAudit);
+        if (proximityCompareBox) proximityCompareBox.classList.remove("hidden");
+        renderSiteComparison();
+        showToast("⚖️ Multi-Site Comparison ready (Site A vs Site B).");
+      }
+    });
+  }
+
+  if (closeCompareBtn && proximityCompareBox) {
+    closeCompareBtn.addEventListener("click", () => proximityCompareBox.classList.add("hidden"));
+  }
+
+  if (clearCompareBtn) {
+    clearCompareBtn.addEventListener("click", () => {
+      siteAComparison = null;
+      siteBComparison = null;
+      renderSiteComparison();
+      if (proximityCompareBox) proximityCompareBox.classList.add("hidden");
+      showToast("✕ Site comparison reset.");
+    });
+  }
+
+  if (exportCompareMemoBtn) {
+    exportCompareMemoBtn.addEventListener("click", () => {
+      if (!siteAComparison && !siteBComparison) {
+        showToast("⚠️ Save at least one site to copy memo.");
+        return;
+      }
+      const a = siteAComparison;
+      const b = siteBComparison;
+      const memo = `### Gujarat InfraMap — Comparative Site Selection Dossier\n` +
+        `**Methodology:** Geodesic Spherical Distance Analysis (EPSG:4326 WGS 84)\n\n` +
+        `| Infrastructure Dimension | Site A (${a ? a.lat + '°N, ' + a.lng + '°E' : 'N/A'}) | Site B (${b ? b.lat + '°N, ' + b.lng + '°E' : 'N/A'}) |\n` +
+        `| :--- | :--- | :--- |\n` +
+        `| **Accessibility Score** | ${a ? a.score + '/100 (' + a.rating + ')' : '—'} | ${b ? b.score + '/100 (' + b.rating + ')' : '—'} |\n` +
+        `| **Nearest Highway** | ${a ? a.hwy : '—'} | ${b ? b.hwy : '—'} |\n` +
+        `| **Nearest Rail Station** | ${a ? a.rail : '—'} | ${b ? b.rail : '—'} |\n` +
+        `| **Nearest Power Plant** | ${a ? a.power : '—'} | ${b ? b.power : '—'} |\n` +
+        `| **Nearest Major Dam** | ${a ? a.water : '—'} | ${b ? b.water : '—'} |\n` +
+        `| **Nearest Seaport** | ${a ? a.port : '—'} | ${b ? b.port : '—'} |\n` +
+        `| **Nearest Airport** | ${a ? a.airport : '—'} | ${b ? b.airport : '—'} |\n\n` +
+        `*DERIVED SPATIAL CALCULATION • Gujarat Digital Twin Platform*`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(memo).then(() => {
+          showToast("📋 Copied comparative site memo to clipboard!");
+        }).catch(() => {
+          showToast("Comparative site memo ready.");
+        });
+      }
+    });
+  }
+
+  // Window bridges for popup actions & dams explorer
+  window.selectDamByName = (name, zoom) => selectDam(name, zoom);
+  window.selectUrbanAssetByName = (name, zoom) => selectUrbanAsset(name, zoom);
+  window.selectHazardDistrictByName = (name, zoom) => selectHazardDistrict(name, zoom);
+  window.selectWaterAssetById = selectWaterAssetById;
+  window.openDamsExplorer = () => {
+    const modal = document.getElementById("damsExplorerModal");
+    if (modal) {
+      if (typeof modal.showModal === "function") {
+        modal.showModal();
+      } else {
+        modal.setAttribute("open", "");
+      }
+      renderDamsLedgerTable();
+    }
+  };
+  window.closeDamsExplorer = () => {
+    const modal = document.getElementById("damsExplorerModal");
+    if (modal && typeof modal.close === "function") modal.close();
+  };
+  window.openDamScienceLabById = (id) => {
+    if (window.DamScienceLab) window.DamScienceLab.open(id);
+  };
+  window.openDamScienceLab = () => {
+    if (window.DamScienceLab) window.DamScienceLab.openCurrentAsset();
+  };
+  window.closeDamScienceLab = () => {
+    if (window.DamScienceLab) window.DamScienceLab.close();
+  };
+
   // 8. Universal Smart Search & Spatial Navigation Engine (Week 7 Production Architecture)
   const searchInput = document.getElementById("universalSearch");
   const searchResults = document.getElementById("searchResults");
@@ -2516,6 +6009,26 @@ document.addEventListener("DOMContentLoaded", () => {
         score += Math.min(400, Math.round(item.capacity_mw / 12));
       }
 
+      // Natural Query Intent Boosts for Domain Assets (Water, Dams, Ports, Airports, SEZs, Hazards, Groundwater)
+      if ((raw.includes("dam") || raw.includes("reservoir") || raw.includes("water") || raw.includes("hydro")) && item.type === "dam") {
+        score += 1500;
+      }
+      if ((raw.includes("port") || raw.includes("harbour") || raw.includes("maritime") || raw.includes("shipping")) && item.type === "urban" && (item.searchTerms || "").includes("port")) {
+        score += 1500;
+      }
+      if ((raw.includes("airport") || raw.includes("flight") || raw.includes("aviation") || raw.includes("runway")) && item.type === "urban" && (item.searchTerms || "").includes("airport")) {
+        score += 1500;
+      }
+      if ((raw.includes("sez") || raw.includes("gidc") || raw.includes("industrial") || raw.includes("estate") || raw.includes("dholera") || raw.includes("gift")) && item.type === "urban" && (item.searchTerms || "").includes("sez")) {
+        score += 1500;
+      }
+      if ((raw.includes("seismic") || raw.includes("earthquake") || raw.includes("fault") || raw.includes("cyclone") || raw.includes("flood") || raw.includes("hazard")) && item.type === "hazard") {
+        score += 1500;
+      }
+      if ((raw.includes("groundwater") || raw.includes("aquifer") || raw.includes("cgwb") || raw.includes("water table")) && item.type === "groundwater") {
+        score += 1500;
+      }
+
       // 6. Add Base Infrastructure Priority (Mega-plants, Expressways, Terminals ranked higher)
       score += (item.priority || 50);
 
@@ -2534,20 +6047,20 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!item) return;
 
     // 1. Guaranteed Underlying Layer Activation
-    if (item.layerKey && layerGroups[item.layerKey]) {
-      const targetGroup = layerGroups[item.layerKey];
-      if (!map.hasLayer(targetGroup)) {
-        map.addLayer(targetGroup);
-      }
-      const toggleObj = layerToggles.find(t => t.key === item.layerKey);
-      if (toggleObj) {
-        const chk = document.getElementById(toggleObj.id);
+    if (item.layerKey) {
+      if (window.LayerManager && typeof window.LayerManager.setLayerActive === "function") {
+        window.LayerManager.setLayerActive(item.layerKey, true);
+      } else if (layerGroups[item.layerKey]) {
+        const targetGroup = layerGroups[item.layerKey];
+        if (!map.hasLayer(targetGroup)) {
+          map.addLayer(targetGroup);
+        }
+        const chk = document.querySelector(`.layer-toggle-input[data-layer="${item.layerKey}"]`);
         if (chk && !chk.checked) {
           chk.checked = true;
         }
+        updateActiveLayersCount();
       }
-      updateActiveLayersCount();
-      checkCurrentPresetMatch();
       if (typeof applyZoomDependentRendering === "function") {
         applyZoomDependentRendering(map.getZoom());
       }
@@ -2564,6 +6077,20 @@ document.addEventListener("DOMContentLoaded", () => {
       focusPowerPlant(item.powerName, true);
     } else if (item.transmissionCode) {
       selectTransmissionCorridor(item.transmissionCode, true);
+    } else if (item.damName) {
+      selectDam(item.damName, true);
+    } else if (item.urbanName) {
+      selectUrbanAsset(item.urbanName, true);
+    } else if (item.district && item.type === "groundwater") {
+      selectDistrict(item.district, true);
+      if (groundwaterByDistrict[item.district]) {
+        const gw = groundwaterByDistrict[item.district];
+        inspectAsset({
+          properties: { ...(gw.feature ? gw.feature.properties : {}), asset_category: "groundwater_assessment" },
+          geometry: gw.feature ? gw.feature.geometry : null,
+          type: "groundwater_assessment"
+        });
+      }
     } else if (item.railwayName) {
       if (item.bounds) {
         map.fitBounds(item.bounds, { padding: [55, 55], maxZoom: 13, duration: 1.2 });
@@ -2571,15 +6098,36 @@ document.addEventListener("DOMContentLoaded", () => {
       if (item.layer && item.layer.openPopup) {
         setTimeout(() => item.layer.openPopup(), 450);
       }
+      if (item.layer && item.layer.feature) {
+        inspectAsset({
+          properties: { ...item.layer.feature.properties, asset_category: "railway_line" },
+          geometry: item.layer.feature.geometry,
+          type: "railway_line"
+        });
+      }
     } else if (item.bounds) {
       map.fitBounds(item.bounds, { padding: [55, 55], maxZoom: 12, duration: 1.2 });
       if (item.layer && item.layer.openPopup) {
         setTimeout(() => item.layer.openPopup(), 450);
       }
+      if (item.layer && item.layer.feature) {
+        inspectAsset({
+          properties: item.layer.feature.properties,
+          geometry: item.layer.feature.geometry,
+          type: item.type
+        });
+      }
     } else if (item.latlng) {
       map.flyTo(item.latlng, 13.5, { duration: 1.2 });
       if (item.layer && item.layer.openPopup) {
         setTimeout(() => item.layer.openPopup(), 450);
+      }
+      if (item.layer && item.layer.feature) {
+        inspectAsset({
+          properties: item.layer.feature.properties,
+          geometry: item.layer.feature.geometry,
+          type: item.type
+        });
       }
     }
 
@@ -2784,6 +6332,14 @@ document.addEventListener("DOMContentLoaded", () => {
     applyZoomDependentRendering(map.getZoom());
   });
 
+  map.on("popupclose", () => {
+    setTimeout(() => {
+      if (!map._popup && window.LayerManager && typeof window.LayerManager.clearSelectedHighlight === "function") {
+        window.LayerManager.clearSelectedHighlight();
+      }
+    }, 150);
+  });
+
   // 11. Technical Specifications Modal Dialog
   const modal = document.getElementById("aboutModal");
   document.getElementById("aboutBtn").addEventListener("click", () => modal.showModal());
@@ -2826,15 +6382,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setDrawerCollapsed(collapsed) {
     if (!layerDrawer) return;
+    const activeLegend = document.getElementById("activeLayerLegend");
     if (collapsed) {
       layerDrawer.classList.add("drawer-collapsed");
+      document.body.classList.remove("drawer-open");
       if (floatingDrawerBtn) floatingDrawerBtn.classList.add("visible");
       if (toggleDrawerBtn) toggleDrawerBtn.classList.remove("active");
+      if (activeLegend) activeLegend.classList.remove("drawer-open");
     } else {
       layerDrawer.classList.remove("drawer-collapsed");
+      document.body.classList.add("drawer-open");
       if (floatingDrawerBtn) floatingDrawerBtn.classList.remove("visible");
       if (toggleDrawerBtn) toggleDrawerBtn.classList.add("active");
+      if (activeLegend) activeLegend.classList.add("drawer-open");
     }
+    setTimeout(() => {
+      if (map) map.invalidateSize({ debounceMove: true });
+    }, 350);
   }
 
   function toggleDrawer() {
@@ -2851,6 +6415,61 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (floatingDrawerBtn) {
     floatingDrawerBtn.addEventListener("click", () => setDrawerCollapsed(false));
+  }
+
+  // Initialize Active Legend drawer avoidance based on initial layout state
+  const initialLegend = document.getElementById("activeLayerLegend");
+  if (layerDrawer && !layerDrawer.classList.contains("drawer-collapsed") && window.innerWidth > 1024) {
+    document.body.classList.add("drawer-open");
+    if (initialLegend) initialLegend.classList.add("drawer-open");
+  }
+
+  // 14. Responsive Header "More Tools" Dropdown Engine
+  const headerMoreMenuBtn = document.getElementById("headerMoreMenuBtn");
+  const headerMoreMenu = document.getElementById("headerMoreMenu");
+  if (headerMoreMenuBtn && headerMoreMenu) {
+    headerMoreMenuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = headerMoreMenu.classList.contains("open");
+      if (isOpen) {
+        headerMoreMenu.classList.remove("open");
+        headerMoreMenuBtn.setAttribute("aria-expanded", "false");
+      } else {
+        headerMoreMenu.classList.add("open");
+        headerMoreMenuBtn.setAttribute("aria-expanded", "true");
+      }
+    });
+
+    headerMoreMenu.addEventListener("click", (e) => {
+      const targetBtn = e.target.closest("button.action-btn");
+      if (targetBtn) {
+        headerMoreMenu.classList.remove("open");
+        headerMoreMenuBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!headerMoreMenu.contains(e.target) && e.target !== headerMoreMenuBtn) {
+        headerMoreMenu.classList.remove("open");
+        headerMoreMenuBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && headerMoreMenu.classList.contains("open")) {
+        headerMoreMenu.classList.remove("open");
+        headerMoreMenuBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  // Automatic Viewport ResizeObserver for Map Invalidation
+  const appViewport = document.querySelector(".app-viewport");
+  if (appViewport && window.ResizeObserver) {
+    const ro = new ResizeObserver(() => {
+      if (map) map.invalidateSize({ debounceMove: true });
+    });
+    ro.observe(appViewport);
   }
 
   // ==========================================================================
@@ -2978,8 +6597,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Map click listener for placing measurement waypoints
+  // Map click listener for placing measurement waypoints and proximity audits
   map.on("click", (e) => {
+    // 1. Proximity Audit Tool handling
+    if (isProximityAuditing) {
+      runProximityAudit(e.latlng);
+      return;
+    }
+
     if (!isMeasuring || measureCompleted) return;
 
     const latlng = e.latlng;
@@ -3228,15 +6853,149 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if ((e.key === "m" || e.key === "M") && !isTyping) {
       e.preventDefault();
       toggleMeasurement();
+    } else if ((e.key === "p" || e.key === "P") && !isTyping) {
+      e.preventDefault();
+      toggleProximityAudit();
     } else if ((e.key === "e" || e.key === "E") && !isTyping) {
       e.preventDefault();
       exportMapToPng();
+    } else if ((e.key === "w" || e.key === "W") && !isTyping) {
+      e.preventDefault();
+      const damsModal = document.getElementById("damsExplorerModal");
+      if (damsModal && damsModal.open) {
+        damsModal.close();
+      } else if (typeof window.openDamsExplorer === "function") {
+        window.openDamsExplorer();
+      }
+    } else if ((e.key === "l" || e.key === "L") && !isTyping) {
+      e.preventDefault();
+      const labModal = document.getElementById("damScienceLabModal");
+      if (labModal && labModal.open) {
+        labModal.close();
+      } else if (window.DamScienceLab) {
+        window.DamScienceLab.openCurrentAsset();
+      }
+    } else if ((e.key === "n" || e.key === "N") && !isTyping) {
+      e.preventDefault();
+      const netModal = document.getElementById("waterNetworkModal");
+      if (netModal && netModal.open) {
+        netModal.close();
+      } else if (window.WaterSystemsNetwork) {
+        window.WaterSystemsNetwork.openNetworkModal();
+      }
+    } else if ((e.key === "f" || e.key === "F") && !isTyping) {
+      e.preventDefault();
+      if (window.WaterSystemsNetwork) {
+        window.WaterSystemsNetwork.startFollowWater("GJ-WR-DAM-001");
+      }
+    } else if ((e.key === "h" || e.key === "H") && !isTyping) {
+      e.preventDefault();
+      const energyModal = document.getElementById("energyExplorerModal");
+      if (energyModal && energyModal.open) {
+        energyModal.close();
+      } else if (window.EnergyExplorer) {
+        window.EnergyExplorer.openModal("generators");
+      }
+    } else if ((e.key === "t" || e.key === "T") && !isTyping) {
+      e.preventDefault();
+      const transModal = document.getElementById("transportExplorerModal");
+      if (transModal && transModal.open) {
+        transModal.close();
+      } else if (window.TransportExplorer) {
+        window.TransportExplorer.open("inventory");
+      }
+    } else if ((e.key === "g" || e.key === "G") && !isTyping) {
+      e.preventDefault();
+      const geoModal = document.getElementById("geoenvironmentalModal");
+      if (geoModal && geoModal.open) {
+        geoModal.close();
+      } else if (window.GeoenvironmentalIntelligence) {
+        window.GeoenvironmentalIntelligence.open("provenance");
+      }
+    } else if ((e.key === "s" || e.key === "S") && !isTyping) {
+      e.preventDefault();
+      const scenModal = document.getElementById("waterScenariosLabModal");
+      if (scenModal && scenModal.open) {
+        scenModal.close();
+      } else if (window.WaterScenariosLab) {
+        window.WaterScenariosLab.open("scenarioA");
+      }
     } else if ((e.key === "r" || e.key === "R") && !isTyping) {
       e.preventDefault();
       resetToStateView();
+    } else if (e.key === "?" && !isTyping) {
+      e.preventDefault();
+      const modal = document.getElementById("aboutModal");
+      if (modal && !modal.open) modal.showModal();
+    } else if (["1", "2", "3", "4", "5", "6", "7", "8"].includes(e.key) && !isTyping) {
+      e.preventDefault();
+      const presetMap = {
+        "1": "overview",
+        "2": "water",
+        "3": "transport",
+        "4": "energy",
+        "5": "urban",
+        "6": "disaster",
+        "7": "admin",
+        "8": "full"
+      };
+      const pKey = presetMap[e.key];
+      if (pKey) applyPreset(pKey);
     } else if (e.key === "Escape") {
+      const scenModal = document.getElementById("waterScenariosLabModal");
+      if (scenModal && scenModal.open) {
+        scenModal.close();
+        return;
+      }
+      const geoModal = document.getElementById("geoenvironmentalModal");
+      if (geoModal && geoModal.open) {
+        geoModal.close();
+        return;
+      }
+      const transModal = document.getElementById("transportExplorerModal");
+      if (transModal && transModal.open) {
+        transModal.close();
+        if (window.TransportExplorer) window.TransportExplorer.clearActiveHighlights();
+        return;
+      }
+      const netModal = document.getElementById("waterNetworkModal");
+      if (netModal && netModal.open) {
+        netModal.close();
+        return;
+      }
+      if (window.WaterSystemsNetwork) {
+        window.WaterSystemsNetwork.exitFollowWater();
+      }
+      const labModal = document.getElementById("damScienceLabModal");
+      if (labModal && labModal.open) {
+        labModal.close();
+        return;
+      }
+      const energyModal = document.getElementById("energyExplorerModal");
+      if (energyModal && energyModal.open) {
+        energyModal.close();
+        return;
+      }
+      const damsModal = document.getElementById("damsExplorerModal");
+      if (damsModal && damsModal.open) {
+        damsModal.close();
+        return;
+      }
+      const compareBox = document.getElementById("proximityCompareBox");
+      if (compareBox && !compareBox.classList.contains("hidden")) {
+        compareBox.classList.add("hidden");
+        return;
+      }
+      if (isProximityAuditing) {
+        exitProximityAudit();
+        return;
+      }
       if (isMeasuring) {
         exitMeasurement();
+        return;
+      }
+      if (window.AssetInspector && window.AssetInspector.isOpen()) {
+        window.AssetInspector.close();
         return;
       }
       const modal = document.getElementById("aboutModal");
@@ -3252,4 +7011,41 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
+
+  // Initialize Water Scenarios Lab Engine
+  if (window.WaterScenariosLab && typeof window.WaterScenariosLab.init === "function") {
+    window.WaterScenariosLab.init(map, []);
+  }
+
+  // ==========================================================================
+  // 19. Progressive Web App (PWA) Offline Engine Synchronization
+  // ==========================================================================
+  const pwaStatusBadge = document.getElementById("pwaStatusBadge");
+  const pwaStatusLabel = document.getElementById("pwaStatusLabel");
+
+  function updatePwaOnlineState() {
+    if (!pwaStatusBadge || !pwaStatusLabel) return;
+    if (navigator.onLine) {
+      pwaStatusBadge.classList.remove("offline");
+      pwaStatusLabel.textContent = "Offline Ready";
+      pwaStatusBadge.title = "11 GIS layers pre-cached for full offline use";
+    } else {
+      pwaStatusBadge.classList.add("offline");
+      pwaStatusLabel.textContent = "Offline Active";
+      pwaStatusBadge.title = "Operating disconnected from network using local GIS cache";
+    }
+  }
+
+  window.addEventListener("online", updatePwaOnlineState);
+  window.addEventListener("offline", updatePwaOnlineState);
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").then(() => {
+        updatePwaOnlineState();
+      }).catch((err) => {
+        console.warn("[PWA] Service worker registration error:", err);
+      });
+    });
+  }
 });

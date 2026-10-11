@@ -78,6 +78,10 @@
         <div class="brand-title-wrap">
           <h1 class="brand-title">Gujarat InfraMap</h1>
           <span class="version-tag">v1.0 • GIS</span>
+          <span class="pwa-status-badge" id="pwaStatusBadge" title="Offline PWA Ready">
+            <span class="pwa-status-dot"></span>
+            <span class="pwa-status-label" id="pwaStatusLabel">Offline Ready</span>
+          </span>
         </div>
         <p class="brand-subtitle">Digital Infrastructure Twin & Spatial Observatory</p>
       </div>
@@ -117,38 +121,125 @@
         </select>
       </div>
 
-      <!-- Action Buttons -->
-      <button id="measureToolBtn" class="action-btn action-btn-secondary" title="Measure Distance on Map (M)" aria-label="Distance Measurement Tool">
+      <!-- Primary Action Buttons -->
+      <button id="openDamsExplorerBtn" class="action-btn action-btn-water" title="Open Gujarat Dams & Reservoirs Explorer Ledger" aria-label="Gujarat Dams & Reservoirs Explorer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-          <path d="M2 12h20"></path>
-          <path d="M6 9v6"></path>
-          <path d="M10 10v4"></path>
-          <path d="M14 9v6"></path>
-          <path d="M18 10v4"></path>
-          <path d="M22 9v6"></path>
-          <path d="M2 9v6"></path>
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
         </svg>
-        <span>Measure</span>
+        <span>Dams & Reservoirs</span>
       </button>
 
-      <button id="exportMapBtn" class="action-btn action-btn-secondary" title="Export Current View as PNG (E)" aria-label="Export Map View as PNG">
+      <button id="openWaterScenariosBtn" class="action-btn action-btn-scenarios" title="Open Educational Water Scenarios Lab (S)" aria-label="Water Scenarios Lab">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-          <circle cx="12" cy="13" r="4"></circle>
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+          <path d="M8 14h8"></path>
+          <path d="M12 11v6"></path>
         </svg>
-        <span>Export</span>
+        <span>Water Scenarios (S)</span>
       </button>
 
-      <button id="resetViewBtn" class="action-btn" title="Reset View to Full Gujarat (R)" aria-label="Reset View to Full Gujarat">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button id="openGeoenvironmentalBtn" class="action-btn action-btn-geoenv" title="Open Gujarat Geoenvironmental Intelligence Suite (G)" aria-label="Geoenvironmental Intelligence Suite">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
           <circle cx="12" cy="12" r="10"></circle>
-          <line x1="22" y1="12" x2="18" y2="12"></line>
-          <line x1="6" y1="12" x2="2" y2="12"></line>
-          <line x1="12" y1="6" x2="12" y2="2"></line>
-          <line x1="12" y1="22" x2="12" y2="18"></line>
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+          <path d="M2 12h20"></path>
         </svg>
-        <span>Reset</span>
+        <span>Geoenvironmental (G)</span>
       </button>
+
+      <!-- Secondary Tools Dropdown (More Tools Menu Architecture) -->
+      <div class="header-more-menu-wrapper" id="headerMoreMenuWrapper">
+        <button id="headerMoreMenuBtn" class="action-btn action-btn-secondary header-more-btn" aria-haspopup="true" aria-expanded="false" title="More Tools & Spatial Analysis">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+            <circle cx="12" cy="12" r="1.5"></circle>
+            <circle cx="19" cy="12" r="1.5"></circle>
+            <circle cx="5" cy="12" r="1.5"></circle>
+          </svg>
+          <span>More Tools ▾</span>
+        </button>
+        <div id="headerMoreMenu" class="header-more-dropdown hidden">
+          <button id="openDamScienceLabBtn" class="action-btn action-btn-science" title="Open Dam Science Lab (Interactive Civil & Hydraulic Simulator)" aria-label="Dam Science Lab">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <span>Science Lab</span>
+          </button>
+          <button id="openWaterNetworkBtn" class="action-btn action-btn-network" title="Open Gujarat Water Systems Network (Topological Basins & Traversal) (N)" aria-label="Water Systems Network">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="6" r="3"></circle>
+              <circle cx="18" cy="18" r="3"></circle>
+              <path d="M8.5 16.5l7-7"></path>
+              <path d="M8.5 18h7"></path>
+            </svg>
+            <span>Water Network</span>
+          </button>
+          <button id="openEnergyExplorerBtn" class="action-btn action-btn-energy" title="Open Hydropower & Gujarat Energy Infrastructure Explorer (H)" aria-label="Energy & Hydropower Explorer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span>Energy & Hydro</span>
+          </button>
+          <button id="openTransportExplorerBtn" class="action-btn action-btn-transport" title="Open Transportation & Civil Structures Explorer (T)" aria-label="Transportation & Civil Structures Explorer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+              <path d="M6 18v2"></path>
+              <path d="M18 18v2"></path>
+              <path d="M2 12h20"></path>
+            </svg>
+            <span>Transport & Bridges</span>
+          </button>
+          <button id="measureToolBtn" class="action-btn action-btn-secondary" title="Measure Distance on Map (M)" aria-label="Distance Measurement Tool">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <path d="M2 12h20"></path>
+              <path d="M6 9v6"></path>
+              <path d="M10 10v4"></path>
+              <path d="M14 9v6"></path>
+              <path d="M18 10v4"></path>
+              <path d="M22 9v6"></path>
+              <path d="M2 9v6"></path>
+            </svg>
+            <span>Measure</span>
+          </button>
+          <button id="proximityToolBtn" class="action-btn action-btn-secondary" title="Site Proximity & Multi-Modal Audit Tool (P)" aria-label="Infrastructure Proximity Analyzer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="4"></circle>
+              <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
+              <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
+              <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line>
+              <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
+            </svg>
+            <span>Proximity</span>
+          </button>
+          <button id="exportMapBtn" class="action-btn action-btn-secondary" title="Export Current View as PNG (E)" aria-label="Export Map View as PNG">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+            <span>Export</span>
+          </button>
+          <button id="resetViewBtn" class="action-btn" title="Reset View to Full Gujarat (R)" aria-label="Reset View to Full Gujarat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="22" y1="12" x2="18" y2="12"></line>
+              <line x1="6" y1="12" x2="2" y2="12"></line>
+              <line x1="12" y1="6" x2="12" y2="2"></line>
+              <line x1="12" y1="22" x2="12" y2="18"></line>
+            </svg>
+            <span>Reset</span>
+          </button>
+          <button id="aboutBtn" class="action-btn action-btn-secondary" title="System Specifications & Metadata" aria-label="System Specifications & Metadata">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>Specs</span>
+          </button>
+        </div>
+      </div>
 
       <button id="toggleDrawerBtn" class="action-btn action-btn-secondary" title="Toggle Layer Management Drawer (D)" aria-label="Toggle Control Drawer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -157,15 +248,6 @@
         </svg>
         <span>Drawer</span>
       </button>
-
-      <button id="aboutBtn" class="action-btn action-btn-secondary" title="System Specifications & Metadata" aria-label="System Specifications & Metadata">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="16" x2="12" y2="12"></line>
-          <line x1="12" y1="8" x2="12.01" y2="8"></line>
-        </svg>
-        <span>Specs</span>
-      </button>
     </div>
   </header>
 
@@ -173,6 +255,9 @@
   <main class="app-viewport">
     <!-- Map Container -->
     <div id="map"></div>
+
+    <!-- Real-Time Active-Layer Legend Widget (Scale-Aware) -->
+    <div id="activeLayerLegend" class="active-layer-legend" role="region" aria-label="Active Map Layers Legend"></div>
 
     <!-- Interactive Geodesic Measurement HUD (Week 9 Stretch Tool) -->
     <div id="measureHud" class="measure-hud hidden" role="region" aria-label="Geodesic Distance Measurement Tool">
@@ -203,6 +288,104 @@
         <button id="measureCopyBtn" class="measure-action-btn btn-copy" title="Copy calculated distance to clipboard">📋 Copy</button>
         <button id="measureClearBtn" class="measure-action-btn btn-clear" title="Clear measurement points">✕ Clear</button>
         <button id="measureDoneBtn" class="measure-action-btn btn-done" title="Exit measurement mode (Esc)">Exit</button>
+      </div>
+    </div>
+
+    <!-- Infrastructure Proximity & Site Audit HUD -->
+    <div id="proximityHud" class="proximity-hud hidden" role="region" aria-label="Infrastructure Proximity Analyzer">
+      <div class="proximity-hud-top">
+        <div class="proximity-hud-title-wrap">
+          <span class="proximity-pulse-indicator"></span>
+          <span class="proximity-hud-title">Multi-Modal Proximity & Site Audit</span>
+        </div>
+        <span id="proximityStatusChip" class="proximity-status-chip">Click map to audit coordinates</span>
+        <button id="proximityExitBtn" class="proximity-close-btn" title="Exit Proximity Audit (Esc)" aria-label="Exit Proximity Audit">&times;</button>
+      </div>
+      <div class="proximity-hud-coords" id="proximitySelectedCoords">Inspection Coordinates: Pending Selection</div>
+      <div class="proximity-hud-grid">
+        <div class="prox-item">
+          <span class="prox-icon">🛣️</span>
+          <div class="prox-meta">
+            <span class="prox-label">NEAREST HIGHWAY / EXP</span>
+            <span class="prox-name" id="proxHighwayName">—</span>
+          </div>
+          <span class="prox-dist" id="proxHighwayDist">— km</span>
+        </div>
+        <div class="prox-item">
+          <span class="prox-icon">🚆</span>
+          <div class="prox-meta">
+            <span class="prox-label">NEAREST RAIL STATION</span>
+            <span class="prox-name" id="proxStationName">—</span>
+          </div>
+          <span class="prox-dist" id="proxStationDist">— km</span>
+        </div>
+        <div class="prox-item">
+          <span class="prox-icon">⚡</span>
+          <div class="prox-meta">
+            <span class="prox-label">POWER PLANT / SUBSTATION</span>
+            <span class="prox-name" id="proxPowerName">—</span>
+          </div>
+          <span class="prox-dist" id="proxPowerDist">— km</span>
+        </div>
+        <div class="prox-item">
+          <span class="prox-icon">💧</span>
+          <div class="prox-meta">
+            <span class="prox-label">MAJOR DAM / WATER BODY</span>
+            <span class="prox-name" id="proxWaterName">—</span>
+          </div>
+          <span class="prox-dist" id="proxWaterDist">— km</span>
+        </div>
+        <div class="prox-item">
+          <span class="prox-icon">⚓</span>
+          <div class="prox-meta">
+            <span class="prox-label">COMMERCIAL SEAPORT</span>
+            <span class="prox-name" id="proxPortName">—</span>
+          </div>
+          <span class="prox-dist" id="proxPortDist">— km</span>
+        </div>
+        <div class="prox-item">
+          <span class="prox-icon">✈️</span>
+          <div class="prox-meta">
+            <span class="prox-label">COMMERCIAL AIRPORT</span>
+            <span class="prox-name" id="proxAirportName">—</span>
+          </div>
+          <span class="prox-dist" id="proxAirportDist">— km</span>
+        </div>
+      </div>
+      <div class="proximity-score-row">
+        <span class="prox-score-label">MULTI-MODAL ACCESSIBILITY INDEX:</span>
+        <span class="prox-score-badge" id="proxScoreBadge">— / 100</span>
+      </div>
+      <div class="proximity-hud-controls">
+        <button id="proximityCopyBtn" class="proximity-action-btn btn-copy" title="Copy proximity audit summary">📋 Copy</button>
+        <button id="proximityExportGeoJsonBtn" class="proximity-action-btn btn-geojson" title="Download GeoJSON Feature Dossier">📥 GeoJSON</button>
+        <button id="proximityCompareBtn" class="proximity-action-btn btn-compare" title="Save as Site A or Site B to compare side-by-side">⚖️ Compare</button>
+        <button id="proximityClearBtn" class="proximity-action-btn btn-clear" title="Clear analysis point">✕ Clear</button>
+        <button id="proximityDoneBtn" class="proximity-action-btn btn-done" title="Exit tool">Exit</button>
+      </div>
+
+      <!-- Side-by-Side Site Comparison Container -->
+      <div id="proximityCompareBox" class="proximity-compare-box hidden">
+        <div class="compare-header">
+          <span class="compare-title">⚖️ Multi-Site Infrastructure Comparison</span>
+          <button id="closeCompareBtn" class="compare-close-btn" title="Close comparison view">&times;</button>
+        </div>
+        <table class="compare-table" id="compareTable">
+          <thead>
+            <tr>
+              <th>Infrastructure Dimension</th>
+              <th id="compSiteAName">Site A</th>
+              <th id="compSiteBName">Site B</th>
+            </tr>
+          </thead>
+          <tbody id="compareTableBody">
+            <!-- Dynamically populated rows -->
+          </tbody>
+        </table>
+        <div class="compare-actions">
+          <button id="exportCompareMemoBtn" class="compare-action-btn">📋 Copy Comparative Memo</button>
+          <button id="clearCompareBtn" class="compare-action-btn btn-clear">✕ Reset</button>
+        </div>
       </div>
     </div>
 
@@ -252,7 +435,11 @@
             <span class="preset-icon">🗺️</span>
             <span class="preset-label">Overview</span>
           </button>
-          <button class="preset-pill" data-preset="transport" title="Highways, expressways, railway network & stations">
+          <button class="preset-pill" data-preset="water" title="Dams, reservoirs, rivers, and Narmada canal network">
+            <span class="preset-icon">💧</span>
+            <span class="preset-label">Water</span>
+          </button>
+          <button class="preset-pill" data-preset="transport" title="Highways, expressways, railway network, stations, ports & airports">
             <span class="preset-icon">🚆</span>
             <span class="preset-label">Transport</span>
           </button>
@@ -260,13 +447,21 @@
             <span class="preset-icon">⚡</span>
             <span class="preset-label">Energy</span>
           </button>
+          <button class="preset-pill" data-preset="urban" title="Municipal corporations, metro lines, ports, and mega GIDC/SEZs">
+            <span class="preset-icon">🏗️</span>
+            <span class="preset-label">Industry</span>
+          </button>
+          <button class="preset-pill" data-preset="disaster" title="BIS seismic zones, cyclone risk, flood plains & CGWB aquifers">
+            <span class="preset-icon">⚠️</span>
+            <span class="preset-label">Hazards</span>
+          </button>
           <button class="preset-pill" data-preset="admin" title="District boundaries, administrative headquarters & stats">
             <span class="preset-icon">🏛️</span>
             <span class="preset-label">Admin</span>
           </button>
           <button class="preset-pill" data-preset="full" title="All infrastructure layers with zoom-dependent decluttering">
             <span class="preset-icon">🌐</span>
-            <span class="preset-label">Full Infra</span>
+            <span class="preset-label">Full Twin</span>
           </button>
         </div>
       </div>
@@ -282,257 +477,9 @@
         </div>
       </div>
 
-      <!-- Infrastructure Layers List with Logical Grouping -->
-      <div class="control-group layers-container">
-        <div class="group-header-row">
-          <span class="group-label">Infrastructure Layers</span>
-          <span class="layer-sublabel" id="layerFilterCount">3 of 7 Active</span>
-        </div>
-        
-        <!-- Category 1: Administrative Geography -->
-        <div class="layer-category-block">
-          <div class="category-header">
-            <span class="category-title">🏛️ Administrative Geography</span>
-          </div>
-
-          <!-- District Boundaries -->
-          <div class="layer-item-wrapper">
-            <div class="layer-item">
-              <label class="custom-toggle">
-                <input type="checkbox" id="layerDistricts" aria-label="Toggle Administrative Districts Layer" checked>
-                <span class="toggle-slider"></span>
-              </label>
-              <div class="layer-meta">
-                <div class="layer-name-row">
-                  <span class="layer-indicator indicator-boundary"></span>
-                  <span class="layer-name">District Boundaries</span>
-                </div>
-                <div class="layer-action-pills">
-                  <span class="asset-badge badge-cyan" id="countDistricts">33 districts</span>
-                  <button class="layer-opacity-btn" data-target="opacityDistrictsWrap" title="Adjust Layer Opacity" aria-label="Adjust Districts Layer Opacity">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                      <circle cx="12" cy="12" r="9"></circle>
-                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="layer-opacity-drawer hidden" id="opacityDistrictsWrap">
-              <div class="opacity-slider-inner">
-                <span class="opacity-label">Opacity</span>
-                <input type="range" class="opacity-slider" id="opacityDistricts" min="0" max="100" value="100" aria-label="Administrative Districts Opacity">
-                <span class="opacity-val" id="valDistricts">100%</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- District Headquarters -->
-          <div class="layer-item-wrapper">
-            <div class="layer-item">
-              <label class="custom-toggle">
-                <input type="checkbox" id="layerHq" aria-label="Toggle District Headquarters Layer">
-                <span class="toggle-slider"></span>
-              </label>
-              <div class="layer-meta">
-                <div class="layer-name-row">
-                  <span class="layer-indicator indicator-hq"></span>
-                  <span class="layer-name">District Headquarters</span>
-                </div>
-                <div class="layer-action-pills">
-                  <span class="asset-badge badge-teal" id="countHq">33 HQs</span>
-                  <button class="layer-opacity-btn" data-target="opacityHqWrap" title="Adjust Layer Opacity" aria-label="Adjust Headquarters Layer Opacity">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                      <circle cx="12" cy="12" r="9"></circle>
-                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="layer-opacity-drawer hidden" id="opacityHqWrap">
-              <div class="opacity-slider-inner">
-                <span class="opacity-label">Opacity</span>
-                <input type="range" class="opacity-slider" id="opacityHq" min="0" max="100" value="100" aria-label="District Headquarters Opacity">
-                <span class="opacity-val" id="valHq">100%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Category 2: Transportation Corridors -->
-        <div class="layer-category-block">
-          <div class="category-header">
-            <span class="category-title">🛣️ Transportation Corridors</span>
-          </div>
-
-          <!-- Highways & Expressways -->
-          <div class="layer-item-wrapper">
-            <div class="layer-item">
-              <label class="custom-toggle">
-                <input type="checkbox" id="layerRoads" aria-label="Toggle Highways and Expressways Layer" checked>
-                <span class="toggle-slider"></span>
-              </label>
-              <div class="layer-meta">
-                <div class="layer-name-row">
-                  <span class="layer-indicator indicator-road"></span>
-                  <span class="layer-name">Highways & Expressways</span>
-                </div>
-                <div class="layer-action-pills">
-                  <span class="asset-badge badge-orange" id="countRoads">4,325 seg</span>
-                  <button class="layer-opacity-btn" data-target="opacityRoadsWrap" title="Adjust Layer Opacity" aria-label="Adjust Roads Layer Opacity">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                      <circle cx="12" cy="12" r="9"></circle>
-                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="layer-opacity-drawer hidden" id="opacityRoadsWrap">
-              <div class="opacity-slider-inner">
-                <span class="opacity-label">Opacity</span>
-                <input type="range" class="opacity-slider" id="opacityRoads" min="0" max="100" value="100" aria-label="Highways and Expressways Opacity">
-                <span class="opacity-val" id="valRoads">100%</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Railway Corridors -->
-          <div class="layer-item-wrapper">
-            <div class="layer-item">
-              <label class="custom-toggle">
-                <input type="checkbox" id="layerRailways" aria-label="Toggle Railway Corridors Layer">
-                <span class="toggle-slider"></span>
-              </label>
-              <div class="layer-meta">
-                <div class="layer-name-row">
-                  <span class="layer-indicator indicator-rail"></span>
-                  <span class="layer-name">Railway Corridors</span>
-                </div>
-                <div class="layer-action-pills">
-                  <span class="asset-badge badge-slate" id="countRailways">2,264 tracks</span>
-                  <button class="layer-opacity-btn" data-target="opacityRailwaysWrap" title="Adjust Layer Opacity" aria-label="Adjust Railways Layer Opacity">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                      <circle cx="12" cy="12" r="9"></circle>
-                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="layer-opacity-drawer hidden" id="opacityRailwaysWrap">
-              <div class="opacity-slider-inner">
-                <span class="opacity-label">Opacity</span>
-                <input type="range" class="opacity-slider" id="opacityRailways" min="0" max="100" value="100" aria-label="Railway Corridors Opacity">
-                <span class="opacity-val" id="valRailways">100%</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Railway Stations -->
-          <div class="layer-item-wrapper">
-            <div class="layer-item">
-              <label class="custom-toggle">
-                <input type="checkbox" id="layerStations" aria-label="Toggle Railway Stations Layer">
-                <span class="toggle-slider"></span>
-              </label>
-              <div class="layer-meta">
-                <div class="layer-name-row">
-                  <span class="layer-indicator indicator-station"></span>
-                  <span class="layer-name">Railway Stations (WR)</span>
-                </div>
-                <div class="layer-action-pills">
-                  <span class="asset-badge badge-blue" id="countStations">623 stations</span>
-                  <button class="layer-opacity-btn" data-target="opacityStationsWrap" title="Adjust Layer Opacity" aria-label="Adjust Stations Layer Opacity">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                      <circle cx="12" cy="12" r="9"></circle>
-                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="layer-opacity-drawer hidden" id="opacityStationsWrap">
-              <div class="opacity-slider-inner">
-                <span class="opacity-label">Opacity</span>
-                <input type="range" class="opacity-slider" id="opacityStations" min="0" max="100" value="100" aria-label="Railway Stations Opacity">
-                <span class="opacity-val" id="valStations">100%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Category 3: Energy & Power Grid -->
-        <div class="layer-category-block">
-          <div class="category-header">
-            <span class="category-title">⚡ Energy & Power Grid</span>
-          </div>
-
-          <!-- Power Generation Plants -->
-          <div class="layer-item-wrapper">
-            <div class="layer-item">
-              <label class="custom-toggle">
-                <input type="checkbox" id="layerPower" aria-label="Toggle Power Generation Facilities Layer" checked>
-                <span class="toggle-slider"></span>
-              </label>
-              <div class="layer-meta">
-                <div class="layer-name-row">
-                  <span class="layer-indicator indicator-power"></span>
-                  <span class="layer-name">Power Generation</span>
-                </div>
-                <div class="layer-action-pills">
-                  <span class="asset-badge badge-amber" id="countPower">44 plants (31.9 GW)</span>
-                  <button class="layer-opacity-btn" data-target="opacityPowerWrap" title="Adjust Layer Opacity" aria-label="Adjust Power Layer Opacity">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                      <circle cx="12" cy="12" r="9"></circle>
-                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="layer-opacity-drawer hidden" id="opacityPowerWrap">
-              <div class="opacity-slider-inner">
-                <span class="opacity-label">Opacity</span>
-                <input type="range" class="opacity-slider" id="opacityPower" min="0" max="100" value="100" aria-label="Power Generation Opacity">
-                <span class="opacity-val" id="valPower">100%</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- GETCO Transmission Grid -->
-          <div class="layer-item-wrapper">
-            <div class="layer-item">
-              <label class="custom-toggle">
-                <input type="checkbox" id="layerTransmission" aria-label="Toggle GETCO Transmission Grid Layer">
-                <span class="toggle-slider"></span>
-              </label>
-              <div class="layer-meta">
-                <div class="layer-name-row">
-                  <span class="layer-indicator indicator-transmission"></span>
-                  <span class="layer-name">GETCO Grid (400/765 kV)</span>
-                </div>
-                <div class="layer-action-pills">
-                  <span class="asset-badge badge-purple" id="countTransmission">12 lines, 10 substations</span>
-                  <button class="layer-opacity-btn" data-target="opacityTransmissionWrap" title="Adjust Layer Opacity" aria-label="Adjust Transmission Layer Opacity">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
-                      <circle cx="12" cy="12" r="9"></circle>
-                      <path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="layer-opacity-drawer hidden" id="opacityTransmissionWrap">
-              <div class="opacity-slider-inner">
-                <span class="opacity-label">Opacity</span>
-                <input type="range" class="opacity-slider" id="opacityTransmission" min="0" max="100" value="100" aria-label="GETCO Transmission Grid Opacity">
-                <span class="opacity-val" id="valTransmission">100%</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- Infrastructure Layers List with 11 Collapsible Categories & Real-time Search -->
+      <div class="control-group layers-container" id="layerManagerContainer">
+        <!-- Rendered dynamically by window.LayerManager into 11 categories -->
       </div>
 
       <!-- Specialized Infrastructure Inspectors (Tabbed Container: Reduces Scroll Clutter) -->
@@ -545,6 +492,9 @@
           <button class="insp-tab-btn active" data-tab="tabHighways">🛣️ Roads</button>
           <button class="insp-tab-btn" data-tab="tabRailways">🚆 Rail</button>
           <button class="insp-tab-btn" data-tab="tabEnergy">⚡ Energy</button>
+          <button class="insp-tab-btn" data-tab="tabWater">💧 Water</button>
+          <button class="insp-tab-btn" data-tab="tabUrban">🏗️ Urban</button>
+          <button class="insp-tab-btn" data-tab="tabHazard">⚠️ Hazards</button>
         </div>
 
         <!-- Tab 1: Highway Corridor Inspector -->
@@ -592,6 +542,26 @@
               <div class="t-stat"><span class="t-val" id="telemetryLen">646.6 km</span><span class="t-lbl">Length</span></div>
               <div class="t-stat"><span class="t-val" id="telemetryAuth">NHAI</span><span class="t-lbl">Authority</span></div>
               <div class="t-stat"><span class="t-val" id="telemetrySpeed">120 km/h</span><span class="t-lbl">Max Speed</span></div>
+            </div>
+          </div>
+
+          <!-- Transportation & Civil Structures Explorer Launcher -->
+          <div class="trans-explorer-hero-card">
+            <div class="trans-hero-header">
+              <span class="trans-hero-tag">CIVIL STRUCTURES & TRANSIT</span>
+              <span class="trans-hero-shortcut">Shortcut: T</span>
+            </div>
+            <h4 class="trans-hero-title">Transportation & Civil Structures Explorer</h4>
+            <p class="trans-hero-desc">
+              Multi-modal inventory covering 43 highway corridors, 31 signature bridges, flyovers, tunnels, freight terminals, and ports with verified crossing relationships.
+            </p>
+            <div class="trans-hero-actions">
+              <button id="openTransportExplorerTabBtn" class="trans-hero-btn primary">
+                📋 Open Transport Ledger
+              </button>
+              <button id="openStructuresTabBtn" class="trans-hero-btn secondary">
+                🌉 Signature Bridges (31)
+              </button>
             </div>
           </div>
         </div>
@@ -657,6 +627,22 @@
 
         <!-- Tab 3: Power Grid & Energy Inspector -->
         <div class="insp-tab-pane" id="tabEnergy">
+          <!-- Energy & Hydropower Explorer Hero Card -->
+          <div class="energy-explorer-hero-card">
+            <div class="we-hero-left">
+              <span class="we-hero-title">⚡ Energy & Hydropower Explorer</span>
+              <span class="we-hero-desc">49 stations (31.9 GW), 14 hydro complexes, Water-Energy Nexus & 37 EHV grid assets</span>
+            </div>
+            <div class="we-hero-actions">
+              <button id="openEnergyExplorerTabBtn" class="we-hero-btn we-hero-btn-energy" title="Open comprehensive generation ledger (H)">
+                <span>📊 Ledger</span>
+              </button>
+              <button id="openEnergyNexusTabBtn" class="we-hero-btn we-hero-btn-nexus" title="Explore Water-Energy Nexus couplings">
+                <span>💧⇄⚡ Nexus</span>
+              </button>
+            </div>
+          </div>
+
           <div class="power-select-box">
             <select id="powerSelect" class="power-dropdown" aria-label="Select Premier Power Generation Asset">
               <option value="">⚡ Select Power Facility...</option>
@@ -726,6 +712,407 @@
             </div>
           </div>
         </div>
+
+        <!-- Tab 4: Water Resources & Hydrology Engineering -->
+        <div class="insp-tab-pane" id="tabWater">
+          <!-- Integrated Water Systems Network Topology Hero Card -->
+          <div class="water-network-hero-card">
+            <div class="wn-hero-top">
+              <div class="wn-hero-badge-row">
+                <span class="wn-hero-badge">TOPOLOGICAL GRAPH</span>
+                <span class="wn-hero-basin-count">8 Basins • 90 Linked Nodes</span>
+              </div>
+              <h4 class="wn-hero-title">🌊 Water Systems Network</h4>
+              <p class="wn-hero-desc">Hydraulic topological model linking river basins, main trunks, reservoirs, canals, gauge stations, treatment plants & command areas.</p>
+            </div>
+            <div class="wn-hero-action-row">
+              <button id="openWaterNetworkModalBtn" class="btn-wn-hero" title="Open Basin Topology & Hydraulic Traversal Modal (N)">
+                <span>🕸️ Network & Basins</span>
+              </button>
+              <button id="startFollowWaterBtn" class="btn-wn-hero btn-wn-follow" title="Navigate along hydrological flow gradient (F)">
+                <span>💧 Follow Water</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="water-explorer-hero-card">
+            <div class="we-hero-left">
+              <span class="we-hero-title">💧 Dams & Reservoirs Explorer</span>
+              <span class="we-hero-desc">36 statutory dams, barrages, weirs & reservoir water spreads</span>
+            </div>
+            <div class="we-hero-actions">
+              <button id="openDamsExplorerTabBtn" class="we-hero-btn" title="Open comprehensive dams inventory ledger">
+                <span>📊 Ledger</span>
+              </button>
+              <button id="openDamScienceLabTabBtn" class="we-hero-btn we-hero-btn-science" title="Open interactive Dam Science Lab">
+                <span>🔬 Science Lab</span>
+              </button>
+              <button id="openWaterScenariosDrawerBtn" class="we-hero-btn we-hero-btn-scenarios" title="Open Educational Water Scenarios Lab (S)">
+                <span>🌊 Scenarios</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="water-select-box">
+            <select id="damSelect" class="dam-dropdown" aria-label="Select Major Dam, Barrage or Weir">
+              <option value="">💧 Select Dam, Barrage, or Weir...</option>
+              <optgroup label="Mega Storage Reservoirs (≥1,000 MCM)">
+                <option value="Sardar Sarovar Dam">Sardar Sarovar Dam — Narmada (9,460 MCM • 1,450 MW)</option>
+                <option value="Ukai Dam (Vallabh Sagar)">Ukai Dam — Tapi Basin (7,414 MCM • 300 MW)</option>
+                <option value="Kadana Dam">Kadana Dam — Mahi Basin (1,542 MCM • 240 MW PSS)</option>
+              </optgroup>
+              <optgroup label="Major Basin Reservoirs (150 - 1,000 MCM)">
+                <option value="Dharoi Dam">Dharoi Dam — Sabarmati Basin (815 MCM)</option>
+                <option value="Panam Dam">Panam Dam — Mahi Basin (738 MCM • 2 MW)</option>
+                <option value="Karjan Dam">Karjan Dam — Narmada Basin (630 MCM)</option>
+                <option value="Damanganga (Madhuban) Dam">Damanganga (Madhuban) Dam — Valsad (567 MCM • 1 MW)</option>
+                <option value="Dantiwada Dam">Dantiwada Dam — Banas Basin (464 MCM)</option>
+                <option value="Shetrunji Dam">Shetrunji Dam — Bhavnagar (308 MCM)</option>
+                <option value="Bhadar Dam">Bhadar Dam — Rajkot Basin (238 MCM)</option>
+                <option value="Sukhi Dam">Sukhi Dam — Chhota Udepur (176 MCM)</option>
+                <option value="Watrak Dam">Watrak Dam — Aravalli (172 MCM)</option>
+                <option value="Sipu Dam">Sipu Dam — Banaskantha (156 MCM)</option>
+              </optgroup>
+              <optgroup label="Medium Storage Reservoirs (50 - 150 MCM)">
+                <option value="Machhu II Dam">Machhu II Dam — Morbi (100 MCM Rebuilt)</option>
+                <option value="Brahmani Dam">Brahmani Dam — Surendranagar (75 MCM)</option>
+                <option value="Machhu-I Dam">Machhu-I Dam — Morbi / Wankaner (71 MCM)</option>
+                <option value="Jhuj Dam">Jhuj Dam — Navsari Tribal Belt (71 MCM)</option>
+                <option value="Rudramata Dam">Rudramata Dam — Kutch / Bhuj (65 MCM)</option>
+                <option value="Und-I Dam">Und-I Dam — Jamnagar (64 MCM)</option>
+                <option value="Guhai Dam">Guhai Dam — Sabarkantha (61 MCM)</option>
+                <option value="Meshwo Dam">Meshwo Dam — Shamlaji / Aravalli (58 MCM)</option>
+              </optgroup>
+              <optgroup label="Regional Water Lifelines & Urban Supply (<50 MCM)">
+                <option value="Mazam Dam">Mazam Dam — Modasa (48 MCM)</option>
+                <option value="Ozat-II (Vanshal) Dam">Ozat-II (Vanshal) Dam — Junagadh (42 MCM)</option>
+                <option value="Mukteshwar Dam">Mukteshwar Dam — Saraswati Basin (38 MCM)</option>
+                <option value="Aji-I Dam">Aji-I Dam — Rajkot SAUNI Lifeline (38 MCM)</option>
+                <option value="Hiran-II Dam">Hiran-II Dam — Gir Somnath (36 MCM)</option>
+                <option value="Kelia Dam">Kelia Dam — Navsari (34 MCM)</option>
+                <option value="Khodiyar Dam">Khodiyar Dam — Amreli / Shetrunji (34 MCM)</option>
+                <option value="Nyari-I Dam">Nyari-I Dam — Rajkot Drinking Water (25 MCM)</option>
+                <option value="Mitti Dam">Mitti Dam — Kutch Coastal Defense (22 MCM)</option>
+              </optgroup>
+              <optgroup label="River Barrages & Pick-up Weirs">
+                <option value="Vasna Barrage">Vasna Barrage — Sabarmati (30 Gates • Fatehwadi Canal)</option>
+                <option value="Wanakbori Barrage (Weir)">Wanakbori Barrage — Mahi (16 Gates • 212k ha MRBC)</option>
+                <option value="Kakrapar Weir">Kakrapar Weir — Tapi (Ukai-Kakrapar • KAPS Cooling)</option>
+                <option value="Singanpur Weir-cum-Causeway">Singanpur Weir — Surat Tapi (Salinity Barrier)</option>
+                <option value="Sujalam Sufalam Watershed Check Dam Network">Sujalam Sufalam Check Dam Network — North Gujarat</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="water-filter-pills" id="damFilterPills">
+            <button class="w-pill active" data-basin="all">All (36)</button>
+            <button class="w-pill" data-basin="Narmada">Narmada</button>
+            <button class="w-pill" data-basin="Tapi">Tapi</button>
+            <button class="w-pill" data-basin="Mahi">Mahi</button>
+            <button class="w-pill" data-basin="Sabarmati">Sabarmati</button>
+            <button class="w-pill" data-basin="West Flowing Rivers">Banas / North</button>
+            <button class="w-pill" data-basin="Saurashtra">Saurashtra</button>
+            <button class="w-pill" data-basin="Kutch">Kutch</button>
+            <button class="w-pill" data-basin="Ambika">South GJ</button>
+          </div>
+
+          <div id="damTelemetry" class="dam-telemetry hidden">
+            <div class="telemetry-header">
+              <span class="telemetry-title" id="damTelName">Sardar Sarovar Dam</span>
+              <span class="telemetry-cap-badge" id="damTelCap" style="background: #0284c7; color: #fff;">9,460 MCM</span>
+              <button class="telemetry-close" id="clearDamBtn" title="Reset dam selection">✕</button>
+            </div>
+            <p class="telemetry-route" id="damTelRiver">Narmada River — Kevadia / Ekta Nagar</p>
+            <div class="telemetry-stats">
+              <div class="t-stat"><span class="t-val" id="damTelFRL">138.68 m</span><span class="t-lbl">FRL Height</span></div>
+              <div class="t-stat"><span class="t-val" id="damTelLive">5,760 MCM</span><span class="t-lbl">Live Storage</span></div>
+              <div class="t-stat"><span class="t-val" id="damTelSpillway">84,949 m³/s</span><span class="t-lbl">Spillway Cap</span></div>
+            </div>
+            <div class="telemetry-stats" style="margin-top: 4px;">
+              <div class="t-stat"><span class="t-val" id="damTelHydro">1,450 MW</span><span class="t-lbl">Hydro Power</span></div>
+              <div class="t-stat"><span class="t-val" id="damTelCommand">18.45 L ha</span><span class="t-lbl">Command Area</span></div>
+              <div class="t-stat"><span class="t-val" id="damTelAgency">SSNNL</span><span class="t-lbl">Authority</span></div>
+            </div>
+          </div>
+
+          <!-- Interactive Reservoir Water Balance & Flood Discharge Simulator -->
+          <div class="hydro-simulator-box" id="hydroSimulatorBox">
+            <div class="sim-header">
+              <span class="sim-title">⚡ Reservoir Flood Balance Simulator</span>
+              <span class="preset-status-tag" style="font-size: 0.6rem;">Hydrology Engine</span>
+            </div>
+            <div class="sim-input-grid">
+              <div class="sim-input-col">
+                <span class="sim-input-lbl">Inflow (Q_in)</span>
+                <input type="number" class="sim-num-input" id="simInflowInput" value="5000" min="0" step="100" title="Inflow rate in cubic meters per second (cumecs)">
+              </div>
+              <div class="sim-input-col">
+                <span class="sim-input-lbl">Discharge (Q_out)</span>
+                <input type="number" class="sim-num-input" id="simOutflowInput" value="3500" min="0" step="100" title="Gate discharge in cubic meters per second (cumecs)">
+              </div>
+              <div class="sim-input-col">
+                <span class="sim-input-lbl">Duration (hrs)</span>
+                <input type="number" class="sim-num-input" id="simHoursInput" value="24" min="1" max="168" step="1" title="Discharge event duration in hours">
+              </div>
+            </div>
+            <button class="sim-calculate-btn" id="simCalculateBtn">
+              <span>▶ Run Water Balance Simulation</span>
+            </button>
+            <div class="sim-stat-box" id="simStatBox">
+              <div class="sim-stat-row">
+                <span class="sim-stat-key">Net Storage Change (ΔS):</span>
+                <span class="sim-stat-val" id="simDeltaStorage" style="color: #38bdf8;">+129.60 MCM</span>
+              </div>
+              <div class="sim-stat-row">
+                <span class="sim-stat-key">Projected Stage Change (ΔH):</span>
+                <span class="sim-stat-val" id="simDeltaStage" style="color: #4ade80;">+0.62 meters</span>
+              </div>
+              <div class="sim-stat-row">
+                <span class="sim-stat-key">Reservoir Storage Trend:</span>
+                <span class="sim-stat-val" id="simTrend" style="color: #60a5fa;">Accumulating (Filling)</span>
+              </div>
+            </div>
+            <div class="sim-flood-alert hidden" id="simFloodAlert">
+              <span class="sim-alert-icon">⚠️</span>
+              <div class="sim-alert-content">
+                <span class="sim-alert-text" id="simFloodAlertText">Downstream channel flood impact alert</span>
+                <button type="button" class="sim-flood-action-btn hidden" id="simInspectFloodBtn">
+                  <span>📍 Zoom & Inspect Downstream Inundation Zone</span>
+                </button>
+              </div>
+            </div>
+            <div class="sim-formula-tag">
+              ΔS = [(Q_in − Q_out) × Δt × 3600] / 10⁶ MCM
+            </div>
+            <p class="sim-disclaimer-box">
+              <strong>DERIVED CALCULATION:</strong> Stage-storage balance computed using CWC rating curves. Illustrative engineering simulation, not a real-time SCADA telemetry feed.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tab 5: Urban, Smart Cities, Ports, Airports & Industry -->
+        <div class="insp-tab-pane" id="tabUrban">
+          <div class="urban-select-box">
+            <select id="urbanSelect" class="urban-dropdown" aria-label="Select Urban or Industrial Asset">
+              <option value="">🏗️ Select Port, Airport, or Mega SEZ...</option>
+              <optgroup label="Major Commercial Seaports">
+                <option value="Mundra Port (APSEZ)">Mundra Port — APSEZ (260 MMT • 17.5m Draft)</option>
+                <option value="Deendayal Port (Kandla)">Deendayal Port (Kandla) — Major Port (137 MMT)</option>
+                <option value="Dahej Port & Petronet LNG">Dahej Port & Petronet LNG (45 MMT)</option>
+                <option value="Hazira Port (Adani / AMNS)">Hazira Deep Draft Port (50 MMT)</option>
+                <option value="Pipavav Port (APM Terminals)">Pipavav Port — APM Terminals (20 MMT)</option>
+                <option value="Sikka Marine Terminal">Sikka Marine SPM — Reliance (125 MMT VLCC)</option>
+              </optgroup>
+              <optgroup label="Commercial Airports">
+                <option value="Sardar Vallabhbhai Patel International Airport (SVPIA)">SVPIA Ahmedabad (AMD / VAAH • 3,505m Runway)</option>
+                <option value="Surat International Airport">Surat International Airport (STV • 2,905m Runway)</option>
+                <option value="Vadodara Airport (Civil Aerodrome Harni)">Vadodara Airport (BDQ • Green Domestic)</option>
+                <option value="Rajkot Hirasar International Airport">Rajkot Hirasar International (HSR • Greenfield)</option>
+              </optgroup>
+              <optgroup label="Mega Industrial Estates & SEZs">
+                <option value="Dahej PCPIR (Petroleum & Chemicals Region)">Dahej PCPIR — Petroleum & Chemicals (453 sq km)</option>
+                <option value="Dholera Special Investment Region (DSIR)">Dholera SIR — Smart Greenfield Fab City (920 sq km)</option>
+                <option value="Mundra Multi-Product SEZ (APSEZ)">Mundra Multi-Product SEZ (84 sq km)</option>
+                <option value="Sanand Industrial Estate (GIDC Auto Hub)">Sanand GIDC — Auto & Semiconductor Hub (21.5 sq km)</option>
+                <option value="GIFT City (International Financial Services Centre)">GIFT City — IFSC Gandhinagar (3.6 sq km)</option>
+                <option value="Hazira Heavy Industrial Complex">Hazira Heavy Industrial Belt — Steel & LNG</option>
+                <option value="Ankleshwar GIDC (Asia's Largest Chemical Hub)">Ankleshwar GIDC — Pharmaceuticals & Chemicals</option>
+                <option value="Morbi Ceramic Industrial Cluster">Morbi Ceramic Cluster — >70% National Output</option>
+              </optgroup>
+              <optgroup label="Municipal Corporations">
+                <option value="Ahmedabad Municipal Corporation (AMC)">Ahmedabad (AMC • 466 sq km • 5.58M Pop)</option>
+                <option value="Surat Municipal Corporation (SMC)">Surat (SMC • 462 sq km • 4.47M Pop)</option>
+                <option value="Vadodara Municipal Corporation (VMC)">Vadodara (VMC • 220 sq km • 1.82M Pop)</option>
+                <option value="Rajkot Municipal Corporation (RMC)">Rajkot (RMC • 129 sq km • 1.39M Pop)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="urban-filter-pills" id="urbanFilterPills">
+            <button class="u-pill active" data-type="all">All (34)</button>
+            <button class="u-pill" data-type="seaport">Ports</button>
+            <button class="u-pill" data-type="airport">Airports</button>
+            <button class="u-pill" data-type="industrial_estate">GIDC/SEZ</button>
+            <button class="u-pill" data-type="municipal_corporation">Smart Cities</button>
+          </div>
+
+          <div id="urbanTelemetry" class="urban-telemetry hidden">
+            <div class="telemetry-header">
+              <span class="telemetry-title" id="urbanTelName">Mundra Port (APSEZ)</span>
+              <span class="telemetry-cap-badge" id="urbanTelBadge" style="background: #4f46e5; color: #fff;">260 MMT</span>
+              <button class="telemetry-close" id="clearUrbanBtn" title="Reset selection">✕</button>
+            </div>
+            <p class="telemetry-route" id="urbanTelAuthority">Adani Ports & SEZ — Kutch Gateway</p>
+            <div class="telemetry-stats">
+              <div class="t-stat"><span class="t-val" id="urbanTelMetric1">17.5 m</span><span class="t-lbl" id="urbanTelLbl1">Draft Depth</span></div>
+              <div class="t-stat"><span class="t-val" id="urbanTelMetric2">28</span><span class="t-lbl" id="urbanTelLbl2">Berths Count</span></div>
+              <div class="t-stat"><span class="t-val" id="urbanTelStatus">Active</span><span class="t-lbl">Status</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 6: Disaster Hazards & CGWB Groundwater Profiler -->
+        <div class="insp-tab-pane" id="tabHazard">
+          <!-- Integrated Geoenvironmental Intelligence Hero Card -->
+          <div class="geoenv-hero-card">
+            <div class="gh-hero-top">
+              <div class="gh-hero-badge-row">
+                <span class="gh-hero-badge">GEOTECHNICAL & HAZARDS SUITE</span>
+                <span class="gh-hero-count">11 Official Registers • 41 Layers</span>
+              </div>
+              <h4 class="gh-hero-title">🌍 Gujarat Geoenvironmental Intelligence</h4>
+              <p class="gh-hero-desc">Integrated terrain elevation, slope, bedrock geology, expansive Vertisols, CGWB hydrogeology, coastal salinity & BIS IS 1893 seismic risk.</p>
+            </div>
+            <div class="gh-hero-action-row">
+              <button id="openGeoenvDrawerBtn" class="btn-gh-hero" title="Open Geoenvironmental Intelligence Suite (G)">
+                <span>📊 Open Intelligence Suite</span>
+              </button>
+              <button id="startScreeningDrawerBtn" class="btn-gh-hero btn-gh-screen" title="Screen a project location or alignment on map">
+                <span>📍 Screen Project Site</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="hazard-select-box">
+            <select id="hazardDistrictSelect" class="hazard-dropdown" aria-label="Select District for Multi-Hazard Profile">
+              <option value="">⚠️ Select District for Hazard Profile...</option>
+              <optgroup label="Zone V (Very High Seismic Risk — Z = 0.36)">
+                <option value="Kachchh">Kachchh (Zone V • Faults • 2001 Epicenter)</option>
+              </optgroup>
+              <optgroup label="Zone IV (High Seismic Risk — Z = 0.24)">
+                <option value="Ahmedabad">Ahmedabad (Zone IV • Alluvial Aquifer 94% Extraction)</option>
+                <option value="Morbi">Morbi (Zone IV • High Industrial Density)</option>
+                <option value="Patan">Patan (Zone IV • Over-Exploited CGWB 117%)</option>
+                <option value="Mehsana">Mehsana (Zone IV • Over-Exploited CGWB 126%)</option>
+                <option value="Surendranagar">Surendranagar (Zone IV • Little Rann border)</option>
+                <option value="Rajkot">Rajkot (Zone IV • Critical CGWB 94%)</option>
+                <option value="Jamnagar">Jamnagar (Zone IV • Gulf of Kutch Coastal)</option>
+                <option value="Bharuch">Bharuch (Zone IV • Narmada Rift Fault)</option>
+              </optgroup>
+              <optgroup label="Zone III (Moderate Seismic Risk — Z = 0.16)">
+                <option value="Surat">Surat (Zone III • Tapi Floodplain • Safe CGWB)</option>
+                <option value="Vadodara">Vadodara (Zone III • Vishwamitri Basin)</option>
+                <option value="Bhavnagar">Bhavnagar (Zone III • Gulf Surge Risk)</option>
+                <option value="Junagadh">Junagadh (Zone III • Gir Eco-Zone)</option>
+                <option value="Gir Somnath">Gir Somnath (Zone III • Cat 4 Cyclone Surge)</option>
+                <option value="Valsad">Valsad (Zone III • High Monsoon Rainfall)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div id="hazardTelemetry" class="hazard-telemetry hidden">
+            <div class="telemetry-header">
+              <span class="telemetry-title" id="hazardDistName">Kachchh District</span>
+              <span class="telemetry-cap-badge" id="hazardCompositeBadge" style="background: #e11d48; color: #fff;">Score: 88/100</span>
+              <button class="telemetry-close" id="clearHazardBtn" title="Reset hazard focus">✕</button>
+            </div>
+            <p class="telemetry-route" id="hazardSummary">BIS IS 1893 Zone V • Very High Cyclone Vulnerability</p>
+            <div class="hazard-stat-grid">
+              <div class="risk-chip risk-chip-v" id="chipSeismic">
+                <strong>SEISMIC HAZARD</strong>
+                <span>Zone V (Z = 0.36g) • Active Faults</span>
+              </div>
+              <div class="risk-chip risk-chip-iv" id="chipCyclone">
+                <strong>CYCLONE / WIND</strong>
+                <span>V_b = 50 m/s (180 km/h) • High Surge</span>
+              </div>
+              <div class="risk-chip risk-chip-iii" id="chipFlood">
+                <strong>FLOOD RISK</strong>
+                <span>Rann Tidal Inundation Hotspot</span>
+              </div>
+              <div class="risk-chip risk-chip-oe" id="chipGroundwater">
+                <strong>CGWB GROUNDWATER</strong>
+                <span>Critical (91.5% Extraction) • Saline</span>
+              </div>
+            </div>
+            <div class="composite-score-row">
+              <span style="font-size: 0.68rem; color: #cbd5e1; font-weight: 600;">COMPOSITE VULNERABILITY INDEX:</span>
+              <span class="composite-badge high" id="hazardScoreVal">88 / 100 (VERY HIGH)</span>
+            </div>
+            <p class="sim-disclaimer-box" style="border-left-color: #f43f5e; margin-top: 6px;">
+              <strong>DERIVED ENGINEERING INDEX:</strong> Weighted risk evaluated from statutory BIS IS 1893:2016 zonation, IMD basic wind speed maps, and CGWB aquifer stress criteria.
+            </p>
+          </div>
+
+          <!-- Interactive CGWB Groundwater Stress & Intervention Simulator -->
+          <div class="gw-simulator-box" id="gwSimulatorBox">
+            <div class="gw-sim-header">
+              <div class="gw-sim-title-wrap">
+                <span class="sim-title">💧 CGWB Aquifer Stress & Intervention Model</span>
+                <span class="preset-status-tag" style="font-size: 0.6rem;">Groundwater Engine</span>
+              </div>
+              <span class="gw-baseline-badge" id="gwBaselineBadge">Mehsana: 126.4% (Over-Exploited)</span>
+            </div>
+
+            <p class="gw-sim-intro">
+              Simulate civil and policy water interventions to evaluate whether critical aquifers can recover to safe statutory extraction thresholds (CGWB 2022 Assessment).
+            </p>
+
+            <div class="gw-slider-grid">
+              <!-- Slider 1: Micro-Irrigation Delta -->
+              <div class="gw-slider-item">
+                <div class="gw-slider-top">
+                  <label for="sliderMicroIrr" class="gw-slider-lbl">1. Micro-Irrigation Adoption (Drip/Sprinkler)</label>
+                  <span class="gw-slider-val" id="valMicroIrr">0% Savings</span>
+                </div>
+                <input type="range" class="gw-range-slider" id="sliderMicroIrr" min="0" max="40" step="5" value="0">
+                <span class="gw-slider-desc">Reduces agricultural groundwater draft through precision pressurized irrigation.</span>
+              </div>
+
+              <!-- Slider 2: Artificial Recharge / Watershed Structures -->
+              <div class="gw-slider-item">
+                <div class="gw-slider-top">
+                  <label for="sliderRecharge" class="gw-slider-lbl">2. Artificial Recharge & Watershed Structures</label>
+                  <span class="gw-slider-val" id="valRecharge">0% Boost</span>
+                </div>
+                <input type="range" class="gw-range-slider" id="sliderRecharge" min="0" max="30" step="5" value="0">
+                <span class="gw-slider-desc">Augments annual replenishable recharge via check dams, recharge shafts & Amrit Sarovars.</span>
+              </div>
+
+              <!-- Slider 3: Surface Water Canal Substitution -->
+              <div class="gw-slider-item">
+                <div class="gw-slider-top">
+                  <label for="sliderCanalSub" class="gw-slider-lbl">3. Surface Canal Grid Substitution (SAUNI / NMC)</label>
+                  <span class="gw-slider-val" id="valCanalSub">0% Diverted</span>
+                </div>
+                <input type="range" class="gw-range-slider" id="sliderCanalSub" min="0" max="30" step="5" value="0">
+                <span class="gw-slider-desc">Replaces tubewell draft with pressurized bulk surface canal piped distribution.</span>
+              </div>
+            </div>
+
+            <div class="gw-sim-stat-box" id="gwStatBox">
+              <div class="sim-stat-row">
+                <span class="sim-stat-key">Baseline Stage of Extraction:</span>
+                <span class="sim-stat-val" id="gwStatBaseline" style="color: #f87171;">126.4%</span>
+              </div>
+              <div class="sim-stat-row">
+                <span class="sim-stat-key">Projected Extraction Stage (S_proj):</span>
+                <span class="sim-stat-val" id="gwStatProjected" style="color: #38bdf8;">126.4%</span>
+              </div>
+              <div class="sim-stat-row">
+                <span class="sim-stat-key">Projected CGWB Aquifer Category:</span>
+                <span class="sim-stat-val" id="gwStatCategory" style="color: #ef4444;">Over-Exploited</span>
+              </div>
+              <div class="sim-stat-row">
+                <span class="sim-stat-key">Sustainability Trajectory:</span>
+                <span class="sim-stat-val" id="gwStatTrajectory" style="color: #94a3b8;">Unchanged Baseline</span>
+              </div>
+            </div>
+
+            <div class="sim-formula-tag">
+              S_proj = [Draft × (1 − Δ_irr − Δ_canal)] / [Recharge × (1 + Δ_rech)] × 100%
+            </div>
+
+            <div class="gw-btn-row">
+              <button type="button" class="gw-reset-btn" id="gwResetBtn">↺ Reset Sliders</button>
+              <button type="button" class="gw-memo-btn" id="gwMemoBtn">📋 Copy Hydrological Memo</button>
+            </div>
+
+            <p class="sim-disclaimer-box" style="border-left-color: #06b6d4; margin-top: 4px;">
+              <strong>DERIVED HYDROLOGICAL SCENARIO MODEL:</strong> Scenario simulation derived from CGWB 2022 methodology. Illustrative planning decision-support calculation.
+            </p>
+          </div>
+        </div>
       </div>
 
       <!-- Compact Refined Symbology Key -->
@@ -741,9 +1128,77 @@
           <div class="legend-chip"><span class="sym-dot sym-power-major"></span> Major Plant (≥500 MW)</div>
           <div class="legend-chip"><span class="sym-line sym-trans-765"></span> 765 kV UHV Line</div>
           <div class="legend-chip"><span class="sym-line sym-trans-400"></span> 400 kV EHV Line</div>
+          <div class="legend-chip"><span class="sym-dam"></span> Major Dam (CWC)</div>
+          <div class="legend-chip"><span class="sym-canal"></span> Narmada Main Canal</div>
+          <div class="legend-chip"><span class="sym-port"></span> Commercial Seaport</div>
+          <div class="legend-chip"><span class="sym-airport"></span> Commercial Airport</div>
+          <div class="legend-chip"><span class="sym-sez"></span> Mega GIDC / SEZ</div>
+          <div class="legend-chip"><span class="sym-seismic-v"></span> Seismic Zone V (IS 1893)</div>
+          <div class="legend-chip"><span class="sym-cgwb-oe"></span> CGWB Over-Exploited</div>
+          <div class="legend-chip"><span class="sym-cgwb-safe"></span> CGWB Safe Aquifer</div>
+          <div class="legend-chip"><span class="sym-reserve"></span> Ecological Sanctuary</div>
           <div class="legend-chip"><span class="sym-border sym-border-subtle"></span> District Boundary</div>
           <div class="legend-chip"><span class="sym-border sym-border-active"></span> Selected District</div>
         </div>
+      </div>
+    </aside>
+
+    <!-- Reusable Infrastructure Asset Inspector Drawer -->
+    <aside id="assetInspectorDrawer" class="asset-inspector-drawer hidden" role="region" aria-label="Infrastructure Asset Inspector">
+      <!-- Desktop Width Resizing Handle -->
+      <div id="inspectorResizeHandle" class="inspector-resize-handle" title="Drag to resize drawer width" aria-hidden="true"></div>
+
+      <!-- Drawer Header -->
+      <div class="insp-header" id="inspHeader">
+        <div class="insp-meta-row">
+          <div class="insp-badge-group">
+            <span id="inspCategoryBadge" class="insp-cat-badge">INFRASTRUCTURE ASSET</span>
+            <span id="inspStatusBadge" class="insp-status-badge"><span class="insp-pulse-dot"></span><span id="inspStatusText">OPERATIONAL</span></span>
+            <span id="inspIdBadge" class="insp-id-badge">GJ-INFRA-NODE</span>
+          </div>
+          <div class="insp-header-actions">
+            <button id="inspOpenLabBtn" class="insp-open-lab-btn hidden" title="Open Dam Science Lab for this asset" onclick="window.DamScienceLab && window.DamScienceLab.openCurrentAsset()">
+              🔬 Science Lab
+            </button>
+            <button id="inspZoomBtn" class="insp-action-btn" title="Zoom Camera to Asset Extent" aria-label="Zoom to Asset">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+            <button id="inspWidthToggleBtn" class="insp-action-btn" title="Cycle Drawer Width (380 / 520 / 680px)" aria-label="Cycle Drawer Width">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="4 14 10 14 10 20"></polyline>
+                <polyline points="20 10 14 10 14 4"></polyline>
+                <line x1="14" y1="10" x2="21" y2="3"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+              </svg>
+            </button>
+            <button id="inspCloseBtn" class="insp-action-btn btn-close" title="Close Asset Inspector (Esc)" aria-label="Close Inspector">
+              &times;
+            </button>
+          </div>
+        </div>
+
+        <div class="insp-title-row">
+          <h2 id="inspTitle" class="insp-title">Infrastructure Asset</h2>
+          <div id="inspSubtitle" class="insp-subtitle">Gujarat Authoritative Digital Infrastructure Register</div>
+        </div>
+
+        <!-- 5 to 7 Key Metrics Instant Glance -->
+        <div id="inspKeyMetricsGrid" class="insp-metrics-grid" role="region" aria-label="Key Asset Metrics">
+          <!-- Populated dynamically by typed schema -->
+        </div>
+      </div>
+
+      <!-- Context-Aware Category Tabs Navigation -->
+      <nav id="inspTabsNav" class="insp-tabs-nav" role="tablist" aria-label="Asset Information Tabs">
+        <!-- Tab buttons populated dynamically per category schema -->
+      </nav>
+
+      <!-- Active Tab Content Panel -->
+      <div id="inspBody" class="insp-body" role="tabpanel" tabindex="0">
+        <!-- Rendered dynamically by current category tab renderer -->
       </div>
     </aside>
 
@@ -844,6 +1299,34 @@
                 <td>IRCTC / DataMeet</td>
                 <td>Point Node</td>
               </tr>
+              <tr>
+                <td><strong>Water Resources & Dams</strong></td>
+                <td>18</td>
+                <td>12 Major Dams (21.8 BCM), 2 Canals (NMC 458 km), 4 River trunks</td>
+                <td>CWC NRLD / WRD Gujarat / SSNNL</td>
+                <td>Point & LineString</td>
+              </tr>
+              <tr>
+                <td><strong>CGWB Hydrogeology</strong></td>
+                <td>33</td>
+                <td>33 District Aquifer Extraction assessments (Over-Exploited / Safe)</td>
+                <td>Central Ground Water Board (CGWB)</td>
+                <td>Point Node</td>
+              </tr>
+              <tr>
+                <td><strong>Urban, Ports & Industry</strong></td>
+                <td>34</td>
+                <td>8 Municipalities, 8 Ports, 7 Airports, 9 SEZs/PCPIR, 2 Metro lines</td>
+                <td>GMB / AAI / GIDC / GMRC / UD&UHD</td>
+                <td>Point & LineString</td>
+              </tr>
+              <tr>
+                <td><strong>Disaster Hazards & Ecology</strong></td>
+                <td>16</td>
+                <td>3 Seismic Zones (IS 1893), 3 Cyclone Zones, 4 Flood zones, 6 Reserves</td>
+                <td>BIS / IMD / GSDMA / Forest Dept</td>
+                <td>Point Node</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -863,16 +1346,44 @@
             <span class="shortcut-desc">Toggle Distance Measurement Tool</span>
           </div>
           <div class="shortcut-chip">
+            <kbd class="kbd-key">P</kbd>
+            <span class="shortcut-desc">Toggle Site Proximity & Audit Tool</span>
+          </div>
+          <div class="shortcut-chip">
             <kbd class="kbd-key">E</kbd>
             <span class="shortcut-desc">Export Current Map View as PNG</span>
           </div>
           <div class="shortcut-chip">
+            <kbd class="kbd-key">W</kbd>
+            <span class="shortcut-desc">Open Gujarat Dams & Reservoirs Explorer Ledger</span>
+          </div>
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">L</kbd>
+            <span class="shortcut-desc">Open Dam Science Lab (Hydro-Civil Engineering Simulator)</span>
+          </div>
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">N</kbd>
+            <span class="shortcut-desc">Open Water Systems Network (Topological Basins & Traversal)</span>
+          </div>
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">F</kbd>
+            <span class="shortcut-desc">Start 'Follow the Water' Navigation Mode</span>
+          </div>
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">1 – 8</kbd>
+            <span class="shortcut-desc">Switch Intelligence Presets (Water, Transport, Energy, Hazards...)</span>
+          </div>
+          <div class="shortcut-chip">
+            <kbd class="kbd-key">?</kbd>
+            <span class="shortcut-desc">Open Specifications & Data Ledger</span>
+          </div>
+          <div class="shortcut-chip">
             <kbd class="kbd-key">Esc</kbd>
-            <span class="shortcut-desc">Close Modal / Exit Measuring</span>
+            <span class="shortcut-desc">Close Modal / Exit Measuring / Reset Tools</span>
           </div>
           <div class="shortcut-chip">
             <kbd class="kbd-key">R</kbd>
-            <span class="shortcut-desc">Reset View to Full Gujarat</span>
+            <span class="shortcut-desc">Reset View to Full Gujarat Extent</span>
           </div>
         </div>
 
@@ -905,11 +1416,1433 @@
     </div>
   </dialog>
 
+  <!-- Gujarat Dams & Reservoirs Explorer Modal -->
+  <dialog id="damsExplorerModal" class="modal-card-dialog dams-explorer-dialog" aria-labelledby="damsExpTitle" aria-modal="true">
+    <div class="modal-card dams-explorer-card">
+      <div class="modal-card-header">
+        <div class="dams-exp-header-left">
+          <div class="dams-exp-icon-wrap">
+            <span class="dams-exp-icon">💧</span>
+          </div>
+          <div>
+            <h2 id="damsExpTitle" class="modal-card-title">Gujarat Dams, Reservoirs & Water Assets Explorer</h2>
+            <div class="dams-exp-badges">
+              <span class="dams-exp-source-badge">CWC NRLD 2023 • India-WRIS • Gujarat WRD</span>
+              <span class="dams-exp-count-badge" id="damsExpCountBadge">36 Water Assets</span>
+            </div>
+          </div>
+        </div>
+        <div class="dams-exp-header-actions">
+          <button id="damsExpExportCsvBtn" class="dams-exp-action-btn" title="Export Filtered Dams Inventory as CSV">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Export CSV</span>
+          </button>
+          <button id="closeDamsExplorerBtn" class="modal-close-icon" aria-label="Close Dams Explorer">&times;</button>
+        </div>
+      </div>
+
+      <div class="dams-explorer-body">
+        <!-- Live Hydraulic KPI Strip -->
+        <div class="dams-kpi-strip">
+          <div class="dams-kpi-card">
+            <span class="kpi-val" id="kpiGrossStorage">23,646 MCM</span>
+            <span class="kpi-lbl">Total Gross Storage (23.65 BCM)</span>
+          </div>
+          <div class="dams-kpi-card">
+            <span class="kpi-val" id="kpiLiveStorage">18,307 MCM</span>
+            <span class="kpi-lbl">Active Live Storage</span>
+          </div>
+          <div class="dams-kpi-card">
+            <span class="kpi-val" id="kpiIrrigationCommand">34.29 Lakh ha</span>
+            <span class="kpi-lbl">Irrigation Command Area</span>
+          </div>
+          <div class="dams-kpi-card">
+            <span class="kpi-val" id="kpiHydropower">1,993 MW</span>
+            <span class="kpi-lbl">Installed Hydropower Capacity</span>
+          </div>
+          <div class="dams-kpi-card">
+            <span class="kpi-val" id="kpiVerifiedCount">100% Verified</span>
+            <span class="kpi-lbl">Statutory Government Records</span>
+          </div>
+        </div>
+
+        <!-- Multi-Criteria Filter Toolbar -->
+        <div class="dams-filter-bar">
+          <div class="dams-search-col">
+            <input type="text" id="damsTableSearch" placeholder="Search by dam name, river, district, ID, purpose..." aria-label="Search dams inventory">
+          </div>
+          <div class="dams-select-col">
+            <select id="damsBasinFilter" aria-label="Filter by River Basin">
+              <option value="all">All River Basins</option>
+              <option value="Narmada">Narmada Basin</option>
+              <option value="Tapi">Tapi Basin</option>
+              <option value="Mahi">Mahi Basin</option>
+              <option value="Sabarmati">Sabarmati Basin</option>
+              <option value="West Flowing Rivers">Banas / Saraswati / West</option>
+              <option value="Saurashtra">Saurashtra (Bhadar, Shetrunji, Machhu)</option>
+              <option value="Kutch">Kutch Basin</option>
+              <option value="Ambika">South Gujarat (Ambika / Damanganga)</option>
+            </select>
+          </div>
+          <div class="dams-select-col">
+            <select id="damsCategoryFilter" aria-label="Filter by Structure Category">
+              <option value="all">All Structure Categories</option>
+              <option value="water_dam">Large & Medium Dams (30)</option>
+              <option value="barrage">River Sluice Barrages (2)</option>
+              <option value="weir">Pick-up Weirs & Tidal Barriers (2)</option>
+              <option value="reservoir">Reservoir Water Spreads (6)</option>
+              <option value="check_dam">Watershed Check Dam Networks (1)</option>
+            </select>
+          </div>
+          <div class="dams-select-col">
+            <select id="damsDistrictFilter" aria-label="Filter by District">
+              <option value="all">All Districts (33)</option>
+            </select>
+          </div>
+          <div class="dams-select-col">
+            <select id="damsCapacityFilter" aria-label="Filter by Gross Storage Capacity">
+              <option value="all">All Capacities</option>
+              <option value="mega">Mega Storage (≥1,000 MCM)</option>
+              <option value="major">Major (150 – 1,000 MCM)</option>
+              <option value="medium">Medium (50 – 150 MCM)</option>
+              <option value="minor">Minor / Weirs (<50 MCM)</option>
+            </select>
+          </div>
+          <button id="damsResetFiltersBtn" class="dams-reset-btn" title="Reset all filters">Reset</button>
+        </div>
+
+        <!-- Searchable & Sortable Ledger Table -->
+        <div class="dams-table-container">
+          <table class="dams-ledger-table" id="damsLedgerTable">
+            <thead>
+              <tr>
+                <th data-sort="id">Asset ID <span class="sort-indicator"></span></th>
+                <th data-sort="name">Dam / Structure Name <span class="sort-indicator"></span></th>
+                <th data-sort="category">Category <span class="sort-indicator"></span></th>
+                <th data-sort="river">River & Basin <span class="sort-indicator"></span></th>
+                <th data-sort="district">District <span class="sort-indicator"></span></th>
+                <th data-sort="gross" class="num-col">Gross Storage <span class="sort-indicator"></span></th>
+                <th data-sort="live" class="num-col">Live Storage <span class="sort-indicator"></span></th>
+                <th data-sort="frl" class="num-col">FRL (m) <span class="sort-indicator"></span></th>
+                <th data-sort="hydro" class="num-col">Hydro (MW) <span class="sort-indicator"></span></th>
+                <th data-sort="year" class="num-col">Year <span class="sort-indicator"></span></th>
+                <th class="actions-col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="damsTableBody">
+              <!-- Dynamically rendered rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-card-footer dams-modal-footer">
+        <span class="dams-footer-note">Coordinates & parameters verified against Central Water Commission (CWC NRLD 2023) and Gujarat Water Resources Department.</span>
+        <button id="closeDamsExplorerBottomBtn" class="btn-dismiss">Close Explorer</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Dam Science Lab Modal (Hydraulic & Civil Engineering Educational Suite) -->
+  <dialog id="damScienceLabModal" class="dam-science-modal" aria-labelledby="damLabModalTitle">
+    <div class="dam-lab-dialog-wrapper">
+      <!-- Header -->
+      <div class="dam-lab-header">
+        <div class="dam-lab-title-row">
+          <div class="dam-lab-icon-box">🔬</div>
+          <div class="dam-lab-title-group">
+            <div class="dam-lab-pre-badge">HYDRO-CIVIL ENGINEERING SUITE • PARAMETRIC SIMULATOR</div>
+            <h2 id="damLabModalTitle" class="dam-lab-title">Dam Science Lab: <span id="damLabActiveName">Sardar Sarovar Dam</span></h2>
+            <div class="dam-lab-meta-row">
+              <span class="dam-lab-cat-badge" id="damLabCatBadge">Concrete Gravity Dam</span>
+              <span class="dam-lab-river-badge" id="damLabRiverBadge">Narmada River • Narmada Basin</span>
+              <span class="dam-lab-id-badge" id="damLabIdBadge">GJ-WR-DAM-001</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dam-lab-header-controls">
+          <div class="dam-lab-select-wrapper">
+            <label for="damLabAssetSelect" class="dam-lab-select-label">Switch Dam / Reservoir:</label>
+            <select id="damLabAssetSelect" class="dam-lab-select" aria-label="Select Dam to Analyze"></select>
+          </div>
+          <button id="closeDamLabBtn" class="modal-close-icon" aria-label="Close Dam Science Lab">&times;</button>
+        </div>
+      </div>
+
+      <!-- Navigation Tab Bar for Sections A-E -->
+      <div class="dam-lab-tab-nav" role="tablist">
+        <button class="dam-lab-tab-btn active" data-tab="sectionA" role="tab" aria-selected="true">
+          <span class="tab-step">A</span>
+          <span class="tab-name">Understand Structure</span>
+        </button>
+        <button class="dam-lab-tab-btn" data-tab="sectionB" role="tab" aria-selected="false">
+          <span class="tab-step">B</span>
+          <span class="tab-name">Hydraulics Calculator</span>
+        </button>
+        <button class="dam-lab-tab-btn" data-tab="sectionC" role="tab" aria-selected="false">
+          <span class="tab-step">C</span>
+          <span class="tab-name">Reservoir Science</span>
+        </button>
+        <button class="dam-lab-tab-btn" data-tab="sectionD" role="tab" aria-selected="false">
+          <span class="tab-step">D</span>
+          <span class="tab-name">Dam Safety & Geotechnical</span>
+        </button>
+        <button class="dam-lab-tab-btn" data-tab="sectionE" role="tab" aria-selected="false">
+          <span class="tab-step">E</span>
+          <span class="tab-name">Why This Dam Matters</span>
+        </button>
+      </div>
+
+      <!-- Dynamic Content Area -->
+      <div class="dam-lab-content" id="damLabContent">
+        <!-- Rendered dynamically by DamScienceLab.render() -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="dam-lab-footer">
+        <div class="dam-lab-footer-meta">
+          <span>Central Water Commission (CWC NRLD 2023) & Gujarat WRD Masterplan</span>
+          <span class="footer-divider">•</span>
+          <span>Parametric Civil & Hydraulic Engineering Engine</span>
+        </div>
+        <div class="dam-lab-footer-actions">
+          <button id="damLabFlyToBtn" class="dam-lab-btn secondary">📍 Locate on Map</button>
+          <button id="damLabInspectBtn" class="dam-lab-btn primary">📋 Open Asset Inspector</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Gujarat Water Systems Network Explorer Modal -->
+  <dialog id="waterNetworkModal" class="modal-card-dialog water-network-dialog" aria-labelledby="waterNetModalTitle" aria-modal="true">
+    <div class="modal-card wn-modal-card">
+      <div class="modal-card-header wn-modal-header">
+        <div class="wn-exp-header-left">
+          <div class="wn-exp-icon-wrap">🌊</div>
+          <div>
+            <div class="dams-exp-badge">TOPOLOGICAL HYDRAULIC GRAPH • CWC & SSNNL REGISTERS</div>
+            <h3 id="waterNetModalTitle" class="modal-card-title">Gujarat Water Systems Network Explorer</h3>
+            <span class="dams-exp-subtitle">Directional connectivity across 8 river basins, 12 river trunks, 10 canals, 7 CWC gauge stations & 6 command areas</span>
+          </div>
+        </div>
+        <button id="closeWaterNetworkModalBtn" class="modal-close-btn" aria-label="Close Water Systems Network Explorer">&times;</button>
+      </div>
+
+      <div class="modal-card-body wn-modal-body" id="waterNetworkModalBody">
+        <!-- Rendered dynamically by WaterSystemsNetwork.renderNetworkModalContent() -->
+      </div>
+
+      <div class="modal-card-footer dams-modal-footer">
+        <span class="dams-footer-note">Structural & hydrological network topology model. Not live SCADA dispatch telemetry.</span>
+        <button id="closeWaterNetworkBottomBtn" class="btn-dismiss">Close Explorer</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Hydropower & Gujarat Energy Infrastructure Explorer Modal -->
+  <dialog id="energyExplorerModal" class="modal-card-dialog energy-explorer-dialog" aria-labelledby="energyExpModalTitle" aria-modal="true">
+    <div class="modal-card energy-modal-card">
+      <div class="modal-card-header energy-modal-header">
+        <div class="energy-exp-header-left">
+          <div class="energy-exp-icon-wrap">⚡</div>
+          <div>
+            <div class="energy-exp-badge">CEA FY 2023-24 AUDITED • 31,900+ MW GRID INFRASTRUCTURE</div>
+            <h3 id="energyExpModalTitle" class="modal-card-title">Hydropower & Gujarat Energy Infrastructure Explorer</h3>
+            <span class="energy-exp-subtitle">Multi-source generation ledger, 14 hydropower complexes, Water-Energy Nexus, and 37 EHV grid assets</span>
+          </div>
+        </div>
+        <button id="closeEnergyExplorerBtn" class="modal-close-btn" aria-label="Close Energy Explorer">&times;</button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="energy-tab-nav" role="tablist">
+        <button class="energy-tab-btn active" data-tab="generators" role="tab" aria-selected="true">
+          <span>⚡ Generating Stations Ledger</span>
+        </button>
+        <button class="energy-tab-btn" data-tab="nexus" role="tab" aria-selected="false">
+          <span>💧⇄⚡ Water–Energy Nexus</span>
+        </button>
+        <button class="energy-tab-btn" data-tab="benchmark" role="tab" aria-selected="false">
+          <span>📊 Capacity vs Generation Benchmark</span>
+        </button>
+        <button class="energy-tab-btn" data-tab="science" role="tab" aria-selected="false">
+          <span>🔬 Hydropower Conversion Lab</span>
+        </button>
+      </div>
+
+      <div class="modal-card-body energy-modal-body">
+        <!-- Tab 1: Generating Stations Ledger -->
+        <div class="energy-tab-pane active" id="energy-pane-generators">
+          <!-- Dynamic KPI Strip -->
+          <div class="energy-kpi-strip">
+            <div class="energy-kpi-card">
+              <span class="kpi-val" id="kpiEnergyCount">49</span>
+              <span class="kpi-lbl">Facilities Filtered</span>
+            </div>
+            <div class="energy-kpi-card highlight-cyan">
+              <span class="kpi-val" id="kpiEnergyCap">31,900 MW</span>
+              <span class="kpi-lbl">Installed Capacity</span>
+            </div>
+            <div class="energy-kpi-card highlight-yellow">
+              <span class="kpi-val" id="kpiEnergyGen">115,000 MU</span>
+              <span class="kpi-lbl">Annual Generation (CEA)</span>
+            </div>
+            <div class="energy-kpi-card highlight-green">
+              <span class="kpi-val" id="kpiEnergyGreen">35.2%</span>
+              <span class="kpi-lbl">Clean / Renewable Share</span>
+            </div>
+            <div class="energy-kpi-card highlight-blue">
+              <span class="kpi-val" id="kpiEnergyHydroCount">14 Hydro Units</span>
+              <span class="kpi-lbl">Hydropower & PSP</span>
+            </div>
+          </div>
+
+          <!-- Multi-filter Toolbar -->
+          <div class="energy-filter-toolbar">
+            <div class="energy-select-col">
+              <select id="energyFilterSource" aria-label="Filter by Energy Source">
+                <option value="all">All Energy Sources (6)</option>
+                <option value="hydro">Hydropower & PSP (14)</option>
+                <option value="solar">Solar PV Parks (4)</option>
+                <option value="wind">Wind Energy Farms (3)</option>
+                <option value="thermal">Thermal Coal / Lignite (13)</option>
+                <option value="gas">Natural Gas CCGT (14)</option>
+                <option value="nuclear">Nuclear PHWR (1)</option>
+              </select>
+            </div>
+            <div class="energy-select-col">
+              <select id="energyFilterCapacity" aria-label="Filter by Capacity Tier">
+                <option value="all">All Capacity Tiers</option>
+                <option value="mega">Mega Generating Plants (≥1,500 MW)</option>
+                <option value="large">Large Generating Plants (500 – 1,500 MW)</option>
+                <option value="medium">Medium Generating Plants (100 – 500 MW)</option>
+                <option value="small">Small / Decentralized (<100 MW)</option>
+              </select>
+            </div>
+            <div class="energy-select-col">
+              <select id="energyFilterDistrict" aria-label="Filter by District">
+                <option value="all">All Districts (33)</option>
+              </select>
+            </div>
+            <div class="energy-select-col">
+              <select id="energyFilterRole" aria-label="Filter by Grid Role">
+                <option value="all">All Grid Roles</option>
+                <option value="renewable">Clean Renewable Variable</option>
+                <option value="baseload">Baseload Thermal / Nuclear</option>
+                <option value="peaking">Peaking / Black-Start Storage</option>
+              </select>
+            </div>
+            <div class="energy-search-col">
+              <input type="text" id="energySearchInput" placeholder="Search station, operator..." aria-label="Search Generating Stations">
+            </div>
+            <button id="energyResetFiltersBtn" class="energy-reset-btn" title="Reset all filters">Reset</button>
+            <button id="energyExportCsvBtn" class="energy-export-btn" title="Export Filtered Ledger to CSV">📥 Export CSV</button>
+          </div>
+
+          <!-- Table Container -->
+          <div class="energy-table-container">
+            <table class="energy-ledger-table" id="energyLedgerTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Generating Station</th>
+                  <th>Installed Capacity</th>
+                  <th>Reported Generation</th>
+                  <th>PLF / CUF</th>
+                  <th>Technical Layout / Units</th>
+                  <th>District & Utility</th>
+                  <th>Map Action</th>
+                </tr>
+              </thead>
+              <tbody id="energyTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 2: Water–Energy Nexus View -->
+        <div class="energy-tab-pane" id="energy-pane-nexus">
+          <div id="waterEnergyNexusContent">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Tab 3: Capacity vs Generation Benchmark -->
+        <div class="energy-tab-pane" id="energy-pane-benchmark">
+          <div id="energyBenchmarkContent">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Tab 4: Hydropower Physics Lab -->
+        <div class="energy-tab-pane" id="energy-pane-science">
+          <div class="hydro-lab-container">
+            <div class="hydro-lab-left">
+              <div class="hydro-formula-banner">
+                <div class="hydro-formula-math">P = ρ · g · Q · H_{net} · η_{overall}</div>
+                <p class="hydro-formula-explainer">
+                  Where water density $\rho = 1000\text{ kg/m}^3$, gravitational acceleration $g = 9.80665\text{ m/s}^2$,
+                  $Q$ is volumetric flow rate ($m^3/s$), $H_{net}$ is effective hydraulic head ($m$), and $\eta$ is overall electromechanical efficiency.
+                </p>
+              </div>
+
+              <div class="hydro-slider-group">
+                <div class="hydro-slider-item">
+                  <div class="slider-header-row">
+                    <label for="hydroLabHeadSlider">Effective Hydraulic Head ($H$):</label>
+                    <span class="slider-badge" id="hydroLabHeadVal">92.0 m</span>
+                  </div>
+                  <input type="range" id="hydroLabHeadSlider" min="5" max="150" step="1" value="92">
+                  <span class="slider-hint">Sardar Sarovar RBPH ~92m | Ukai ~48m | Kadana ~43m | Canal Drops ~5-15m</span>
+                </div>
+
+                <div class="hydro-slider-item">
+                  <div class="slider-header-row">
+                    <label for="hydroLabFlowSlider">Volumetric Discharge ($Q$):</label>
+                    <span class="slider-badge" id="hydroLabFlowVal">1,600 m³/s</span>
+                  </div>
+                  <input type="range" id="hydroLabFlowSlider" min="10" max="2500" step="10" value="1600">
+                  <span class="slider-hint">Total penstock intake discharge across running units ($m^3/s$)</span>
+                </div>
+
+                <div class="hydro-slider-item">
+                  <div class="slider-header-row">
+                    <label for="hydroLabEffSlider">Electromechanical Efficiency ($\eta$):</label>
+                    <span class="slider-badge" id="hydroLabEffVal">91.5%</span>
+                  </div>
+                  <input type="range" id="hydroLabEffSlider" min="75" max="96" step="0.5" value="91.5">
+                  <span class="slider-hint">Turbine runner ($\approx 94\%$) × Generator ($\approx 98\%$) × Step-up transformer ($\approx 99.5\%$)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hydro-lab-right">
+              <div class="calc-results-card">
+                <h4>Computed Hydrodynamic Power Output</h4>
+                <div class="calc-metrics-grid">
+                  <div class="calc-metric-box">
+                    <span class="calc-val-lbl">Theoretical Potential Power</span>
+                    <span class="calc-val-num" id="calcResTheo">1,444 MW</span>
+                  </div>
+                  <div class="calc-metric-box highlight-cyan">
+                    <span class="calc-val-lbl">Delivered Electrical Output</span>
+                    <span class="calc-val-num" id="calcResElec">1,321 MW</span>
+                  </div>
+                  <div class="calc-metric-box">
+                    <span class="calc-val-lbl">Annual Energy (30% Peaking)</span>
+                    <span class="calc-val-num" id="calcResPeaking">3,471 MU / yr</span>
+                  </div>
+                  <div class="calc-metric-box">
+                    <span class="calc-val-lbl">Annual Energy (100% Baseload)</span>
+                    <span class="calc-val-num" id="calcResCont">11,572 MU / yr</span>
+                  </div>
+                </div>
+
+                <div class="calc-turbine-box">
+                  <span class="calc-val-lbl">Recommended Turbine Selection (Specific Speed $N_s$):</span>
+                  <div id="calcResTurbine" class="turbine-recommendation-box">
+                    <span class="badge-turbine francis">FRANCIS REACTION TURBINE</span> (Medium Head 40m - 250m)
+                  </div>
+                </div>
+              </div>
+
+              <div class="hydro-hydrology-box">
+                <h4>Seasonal Hydrology & Peaking Energy Dynamics</h4>
+                <div class="hydrology-phase-timeline">
+                  <div class="phase-item">
+                    <span class="phase-badge phase-1">MONSOON (JUL–OCT)</span>
+                    <p>Heavy catchment inflows fill reservoir to Full Reservoir Level (FRL). High gross head and surplus spillway surcharges produce peak firm and secondary energy.</p>
+                  </div>
+                  <div class="phase-item">
+                    <span class="phase-badge phase-2">WINTER RABI (NOV–FEB)</span>
+                    <p>Irrigation releases into canal networks generate electricity at Canal Head Power Houses (CHPH) and dam toes, synchronizing food security with clean power.</p>
+                  </div>
+                  <div class="phase-item">
+                    <span class="phase-badge phase-3">SUMMER LEAN (MAR–JUN)</span>
+                    <p>Reservoir stage approaches MDDL. Hydro generation is strictly conserved for high-value peak shaving (1–3 hours/day) and grid frequency defense.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-card-footer energy-modal-footer">
+        <span class="energy-footer-note">Central Electricity Authority (CEA 2024), GSECL & SLDC Gujarat. Nameplate MW ratings distinguished from audited MU work.</span>
+        <button id="closeEnergyExplorerBottomBtn" class="btn-dismiss">Close Explorer</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal 6: Transportation & Civil Structures Explorer Modal (Phase 17) -->
+  <dialog id="transportExplorerModal" class="modal-card-dialog transport-explorer-dialog" aria-labelledby="transExpModalTitle" aria-modal="true">
+    <div class="modal-card transport-modal-card">
+      <div class="modal-card-header transport-modal-header">
+        <div class="transport-title-group">
+          <div class="transport-badge">CIVIL STRUCTURES & MULTI-MODAL LOGISTICS</div>
+          <h3 id="transExpModalTitle" class="modal-card-title">Transportation & Civil Structures Explorer</h3>
+          <p class="modal-subtitle">Highways • Signature Bridges • Western Railway Lines • Multimodal Freight Terminals • Commercial Seaports & Airports • Civil Engineering Lab</p>
+        </div>
+        <button id="closeTransportExplorerBtn" class="modal-close-btn" aria-label="Close Transport Explorer">&times;</button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="transport-tabs-nav" role="tablist">
+        <button class="trans-tab-btn active" data-tab="inventory" role="tab" aria-selected="true">
+          📋 1. Infrastructure Inventory & Ledger
+        </button>
+        <button class="trans-tab-btn" data-tab="structures" role="tab" aria-selected="false">
+          🌉 2. Signature Bridges & Structures (31)
+        </button>
+        <button class="trans-tab-btn" data-tab="multimodal" role="tab" aria-selected="false">
+          🚢 3. Multi-Modal Corridors & Freight
+        </button>
+        <button class="trans-tab-btn" data-tab="lab" role="tab" aria-selected="false">
+          🔬 4. Transport Civil Engineering Lab
+        </button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="transport-tab-content">
+        <!-- TAB 1: INVENTORY & LEDGER -->
+        <div class="trans-tab-pane active" id="transPane_inventory" role="tabpanel">
+          <!-- Dynamic KPI Strip -->
+          <div class="trans-kpi-strip">
+            <div class="trans-kpi-card">
+              <span class="kpi-icon">🛣️</span>
+              <div class="kpi-meta">
+                <span class="kpi-val" id="kpiTransCorridors">43 Corridors (8,940+ km)</span>
+                <span class="kpi-lbl">National Highways & Expressways</span>
+              </div>
+            </div>
+            <div class="trans-kpi-card">
+              <span class="kpi-icon">🌉</span>
+              <div class="kpi-meta">
+                <span class="kpi-val" id="kpiTransBridges">18 Signature Bridges</span>
+                <span class="kpi-lbl">River, Marine & Strait Crossings</span>
+              </div>
+            </div>
+            <div class="trans-kpi-card">
+              <span class="kpi-icon">🚆</span>
+              <div class="kpi-meta">
+                <span class="kpi-val" id="kpiTransStations">623 Rail Stations</span>
+                <span class="kpi-lbl">Western Railway Passenger Network</span>
+              </div>
+            </div>
+            <div class="trans-kpi-card">
+              <span class="kpi-icon">⚓</span>
+              <div class="kpi-meta">
+                <span class="kpi-val" id="kpiTransPorts">8 Seaports (640+ MMT)</span>
+                <span class="kpi-lbl">Deep-Draft Maritime Gateways</span>
+              </div>
+            </div>
+            <div class="trans-kpi-card">
+              <span class="kpi-icon">✈️</span>
+              <div class="kpi-meta">
+                <span class="kpi-val" id="kpiTransAirports">7 Civil Aerodromes</span>
+                <span class="kpi-lbl">International & Domestic Terminals</span>
+              </div>
+            </div>
+            <div class="trans-kpi-card">
+              <span class="kpi-icon">📦</span>
+              <div class="kpi-meta">
+                <span class="kpi-val" id="kpiTransICDs">6 Freight Terminals</span>
+                <span class="kpi-lbl">WDFC & Port Rail Siding Logistics</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Multi-Filter Toolbar -->
+          <div class="trans-filter-bar">
+            <div class="filter-col">
+              <label for="transCatFilter">Infrastructure Category</label>
+              <select id="transCatFilter" class="trans-select">
+                <option value="all">All Infrastructure Assets</option>
+                <option value="bridge">Signature Bridges (18)</option>
+                <option value="flyover">Elevated Flyovers (5)</option>
+                <option value="tunnel">Tunnels & Passes (2)</option>
+                <option value="freight_terminal">Freight Terminals & ICDs (6)</option>
+                <option value="highway">Highways & Expressways (43)</option>
+                <option value="seaport">Commercial Seaports (8)</option>
+                <option value="airport">Commercial Airports (7)</option>
+              </select>
+            </div>
+            <div class="filter-col">
+              <label for="transDistFilter">District / Region</label>
+              <select id="transDistFilter" class="trans-select">
+                <option value="all">All Districts</option>
+              </select>
+            </div>
+            <div class="filter-col">
+              <label for="transAuthFilter">Responsible Authority</label>
+              <select id="transAuthFilter" class="trans-select">
+                <option value="all">All Authorities</option>
+              </select>
+            </div>
+            <div class="filter-col search-col">
+              <label for="transSearchInput">Quick Filter Search</label>
+              <input type="text" id="transSearchInput" class="trans-search-input" placeholder="Search by name, corridor, river..." />
+            </div>
+            <div class="filter-actions-col">
+              <button id="transResetFiltersBtn" class="btn-trans-reset" title="Reset Filters">↺ Reset</button>
+              <button id="transExportCsvBtn" class="btn-trans-export" title="Export to CSV">📥 CSV</button>
+            </div>
+          </div>
+
+          <!-- Count Bar -->
+          <div class="trans-table-count-row">
+            <span id="transTableCountBadge" class="table-count-badge">Loading inventory...</span>
+            <span class="table-notice">Click 🎯 Map to locate, 🔗 Link to highlight crossing relationships, or 🔍 Details to open inspector.</span>
+          </div>
+
+          <!-- Inventory Table -->
+          <div class="trans-table-wrapper">
+            <table class="trans-data-table">
+              <thead>
+                <tr>
+                  <th>Asset Name & ID</th>
+                  <th>Category</th>
+                  <th>District</th>
+                  <th>Supporting Route / Crossing</th>
+                  <th>Key Engineering Metrics</th>
+                  <th>Responsible Authority</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="transInventoryTableBody">
+                <!-- Dynamically populated by TransportExplorer -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: SIGNATURE BRIDGES & STRUCTURES -->
+        <div class="trans-tab-pane" id="transPane_structures" role="tabpanel">
+          <div class="struct-pills-bar">
+            <button class="struct-pill-btn active" data-struct-type="all">All Structures (31)</button>
+            <button class="struct-pill-btn" data-struct-type="bridge">River & Sea Bridges (18)</button>
+            <button class="struct-pill-btn" data-struct-type="flyover">Elevated Flyovers (5)</button>
+            <button class="struct-pill-btn" data-struct-type="tunnel">Tunnels & Rock Passes (2)</button>
+            <button class="struct-pill-btn" data-struct-type="freight_terminal">Freight ICDs & Yards (6)</button>
+          </div>
+          <div class="struct-grid-container" id="transStructuresGrid">
+            <!-- Dynamically populated by TransportExplorer -->
+          </div>
+        </div>
+
+        <!-- TAB 3: MULTI-MODAL CORRIDORS & FREIGHT -->
+        <div class="trans-tab-pane" id="transPane_multimodal" role="tabpanel">
+          <div class="multimodal-content-grid">
+            <!-- Card 1: WDFC vs NH-48 -->
+            <div class="multimodal-card">
+              <div class="mm-card-header">
+                <span class="mm-tag">HEAVY FREIGHT TRANSIT ARTERIES</span>
+                <h4>Western Dedicated Freight Corridor (WDFC) vs NH-48 Golden Quad</h4>
+              </div>
+              <p class="mm-intro">Comparative civil and operational logistics parameters between Gujarat's premier electric freight railway and express highway arterial:</p>
+              <table class="mm-compare-table">
+                <thead>
+                  <tr>
+                    <th>Parameter</th>
+                    <th>Western DFC (Rail)</th>
+                    <th>NH 48 Golden Quad (Road)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Mode & Track Standard</strong></td>
+                    <td>Double Line Broad Gauge (25 kV AC Electrified)</td>
+                    <td>6 to 8 Lane Dual Carriageway (Bituminous/PQC)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Axle Load Capacity</strong></td>
+                    <td><strong style="color: #4ade80;">25t (Designed for 32.5t)</strong> Heavy Haul</td>
+                    <td>10.2t Legal Standard Axle Load (IRC:37)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Max Permissible Speed</strong></td>
+                    <td>100 km/h Freight Trains (Automated Signalling)</td>
+                    <td>80 – 100 km/h Posted Truck Limit</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Consist / Haulage Capacity</strong></td>
+                    <td><strong style="color: #38bdf8;">13,000 Tonnes (Double-Stack)</strong> / Train (~400 Trucks)</td>
+                    <td>25 to 40 Tonnes per Multi-Axle Trailer</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Gujarat Alignment Distance</strong></td>
+                    <td>565 km (Palanpur ➔ Mehsana ➔ Sanand ➔ Vadodara ➔ Vapi)</td>
+                    <td>646.6 km (Vapi ➔ Surat ➔ Vadodara ➔ Ahmedabad)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Carbon Emissions Efficiency</strong></td>
+                    <td>~80% lower greenhouse gas emissions per ton-km</td>
+                    <td>Higher specific energy consumption per ton-km</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Card 2: Port-Hinterland Connectivity -->
+            <div class="multimodal-card">
+              <div class="mm-card-header">
+                <span class="mm-tag">MARITIME-HINTERLAND CONNECTIVITY</span>
+                <h4>Gujarat Maritime Evacuation & Port-Rail Matrix</h4>
+              </div>
+              <p class="mm-intro">Authoritative road and rail connectivity links for Gujarat's premier deep-draft commercial seaports:</p>
+              <div class="port-matrix-list">
+                <div class="port-matrix-item">
+                  <div class="pmi-header">
+                    <span class="pmi-name">Mundra Port (APSEZ)</span>
+                    <span class="pmi-badge">260 MMT Capacity</span>
+                  </div>
+                  <div class="pmi-routes">
+                    <div><strong>Highway Link:</strong> NH 41 & 4-lane dedicated Coastal Port Expressway</div>
+                    <div><strong>Rail Link:</strong> 64 km Private Port Railway to Adipur ➔ direct double-stack connection to WDFC</div>
+                  </div>
+                </div>
+                <div class="port-matrix-item">
+                  <div class="pmi-header">
+                    <span class="pmi-name">Deendayal Port (Kandla)</span>
+                    <span class="pmi-badge">137 MMT Capacity</span>
+                  </div>
+                  <div class="pmi-routes">
+                    <div><strong>Highway Link:</strong> NH 41 & NH 27 (East-West Porbandar-Silchar Corridor)</div>
+                    <div><strong>Rail Link:</strong> Western Railway Gandhidham Division + Palanpur WDFC interchange</div>
+                  </div>
+                </div>
+                <div class="port-matrix-item">
+                  <div class="pmi-header">
+                    <span class="pmi-name">Pipavav Port (APM Terminals)</span>
+                    <span class="pmi-badge">20 MMT Capacity</span>
+                  </div>
+                  <div class="pmi-routes">
+                    <div><strong>Highway Link:</strong> NH 51 (Coastal Saurashtra National Highway)</div>
+                    <div><strong>Rail Link:</strong> 271 km Pipavav Railway Corp (PRCL) broad gauge line to Surendranagar</div>
+                  </div>
+                </div>
+                <div class="port-matrix-item">
+                  <div class="pmi-header">
+                    <span class="pmi-name">Hazira Port (Adani / AMNS)</span>
+                    <span class="pmi-badge">50 MMT Capacity</span>
+                  </div>
+                  <div class="pmi-routes">
+                    <div><strong>Highway Link:</strong> NH 53 / Surat-Hazira Port Expressway</div>
+                    <div><strong>Rail Link:</strong> Surat-Hazira Port Rail Corridor connecting to Western Railway mainline</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: MAHSR Bullet Train Corridor -->
+            <div class="multimodal-card" style="grid-column: span 2;">
+              <div class="mm-card-header">
+                <span class="mm-tag">HIGH-SPEED PASSENGER RAIL</span>
+                <h4>Mumbai–Ahmedabad High Speed Rail (MAHSR Bullet Train) Corridor</h4>
+              </div>
+              <div class="bullet-train-stats-strip">
+                <div class="bts-item">
+                  <span class="bts-val">508 km</span>
+                  <span class="bts-lbl">Total Corridor Length</span>
+                </div>
+                <div class="bts-item">
+                  <span class="bts-val">352 km</span>
+                  <span class="bts-lbl">Gujarat Alignment Length</span>
+                </div>
+                <div class="bts-item">
+                  <span class="bts-val">320 km/h</span>
+                  <span class="bts-lbl">Operating Commercial Speed</span>
+                </div>
+                <div class="bts-item">
+                  <span class="bts-val">8 Stations</span>
+                  <span class="bts-lbl">Gujarat HSR Terminals</span>
+                </div>
+                <div class="bts-item">
+                  <span class="bts-val">24 Bridges</span>
+                  <span class="bts-lbl">Major River Crossings</span>
+                </div>
+              </div>
+              <p class="mm-intro" style="margin-top: 10px;">
+                Traversing 8 administrative districts in Gujarat (Valsad, Navsari, Surat, Bharuch, Vadodara, Anand, Kheda, Ahmedabad). Engineered with standard gauge ballastless slab track, Japanese Shinkansen E5 trainsets, and massive civil structures including the 1.4 km continuous steel truss bridge across the Narmada River in Bharuch and the 350 m Sabarmati bridge.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: CIVIL ENGINEERING LAB -->
+        <div class="trans-tab-pane" id="transPane_lab" role="tabpanel">
+          <div class="lab-modules-grid">
+            <!-- Module 1: Highway Sight Distance & Superelevation -->
+            <div class="lab-module-card">
+              <div class="lab-card-header">
+                <span class="lab-badge">IRC:73 GEOMETRIC DESIGN</span>
+                <h4>Stopping Sight Distance (SSD) & Superelevation Calculator</h4>
+              </div>
+              <div class="lab-formula-box">
+                <div class="formula-title">Mathematical Formulation (Indian Roads Congress IRC:73):</div>
+                <div class="formula-line">SSD = 0.278 · V · t + V² / [254 · (f ± G)]</div>
+                <div class="formula-line">e = V² / (225 · R)  (Superelevation for 75% Design Speed)</div>
+              </div>
+
+              <div class="lab-controls-grid">
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <span>Design Speed (V):</span>
+                    <strong id="lblLabSpeed">100 km/h</strong>
+                  </div>
+                  <input type="range" id="labSpeedSlider" min="40" max="120" step="5" value="100" />
+                </div>
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <span>Driver Reaction Time (t):</span>
+                    <strong id="lblLabReaction">2.5 s</strong>
+                  </div>
+                  <input type="range" id="labReactionSlider" min="1.5" max="3.5" step="0.1" value="2.5" />
+                </div>
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <span>Friction Coefficient (f):</span>
+                    <strong id="lblLabFriction">0.35</strong>
+                  </div>
+                  <input type="range" id="labFrictionSlider" min="0.30" max="0.40" step="0.01" value="0.35" />
+                </div>
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <span>Roadway Gradient (G):</span>
+                    <strong id="lblLabGrade">0.0%</strong>
+                  </div>
+                  <input type="range" id="labGradeSlider" min="-6" max="6" step="0.5" value="0" />
+                </div>
+                <div class="slider-group" style="grid-column: span 2;">
+                  <div class="slider-header">
+                    <span>Horizontal Curve Radius (R):</span>
+                    <strong id="lblLabRadius">500 m</strong>
+                  </div>
+                  <input type="range" id="labRadiusSlider" min="100" max="1500" step="25" value="500" />
+                </div>
+              </div>
+
+              <div class="lab-results-grid">
+                <div class="result-box">
+                  <span class="r-lbl">Lag (Perception) Distance</span>
+                  <span class="r-val" id="resLabLagDist">69.5 m</span>
+                </div>
+                <div class="result-box">
+                  <span class="r-lbl">Braking Distance</span>
+                  <span class="r-val" id="resLabBrakeDist">112.5 m</span>
+                </div>
+                <div class="result-box highlight">
+                  <span class="r-lbl">Total Safe Sight Distance (SSD)</span>
+                  <span class="r-val" id="resLabSSD">182.0 m</span>
+                </div>
+                <div class="result-box highlight">
+                  <span class="r-lbl">Required Superelevation (e)</span>
+                  <span class="r-val" id="resLabSuperelevation">8.89%</span>
+                  <small id="resLabSuperStatus" style="display: block; font-size: 0.68rem; margin-top: 2px;">IRC Compliance</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Module 2: Bridge Hydraulics & Lacey Scour Depth -->
+            <div class="lab-module-card">
+              <div class="lab-card-header">
+                <span class="lab-badge">IRC:5 & IRC:78 HYDRAULICS</span>
+                <h4>Bridge Pier Lacey Regime Scour Depth Calculator</h4>
+              </div>
+              <div class="lab-formula-box">
+                <div class="formula-title">Regime Scour Depth & Foundation Grip (Lacey's Theory):</div>
+                <div class="formula-line">R = 1.35 · (q² / f)^(1/3)  and  d_max = 2.0 · R</div>
+              </div>
+
+              <div class="lab-controls-grid">
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <span>Discharge Intensity (q):</span>
+                    <strong id="lblLabScourDischarge">20 m³/s per m</strong>
+                  </div>
+                  <input type="range" id="labScourDischargeSlider" min="5" max="50" step="1" value="20" />
+                </div>
+                <div class="slider-group">
+                  <div class="slider-header">
+                    <span>Lacey's Silt Factor (f):</span>
+                    <strong id="lblLabScourSilt">1.00</strong>
+                  </div>
+                  <input type="range" id="labScourSiltSlider" min="0.60" max="1.50" step="0.05" value="1.00" />
+                </div>
+              </div>
+
+              <div class="lab-results-grid">
+                <div class="result-box">
+                  <span class="r-lbl">Mean Regime Scour Depth (R)</span>
+                  <span class="r-val" id="resLabRegimeScour">9.95 m below HFL</span>
+                </div>
+                <div class="result-box highlight">
+                  <span class="r-lbl">Maximum Pier Scour Depth (d_max)</span>
+                  <span class="r-val" id="resLabPierScour">19.90 m below HFL</span>
+                </div>
+                <div class="result-box highlight" style="grid-column: span 2;">
+                  <span class="r-lbl">Minimum Foundation Well/Pile Grip Length (0.33 R)</span>
+                  <span class="r-val" id="resLabFoundationGrip">3.28 m minimum grip below scour</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Module 3: Pavement Structural Anatomy -->
+            <div class="lab-module-card" style="grid-column: span 2;">
+              <div class="lab-card-header">
+                <span class="lab-badge">PAVEMENT ENGINEERING</span>
+                <h4>Pavement Structural Anatomy: Flexible Asphalt vs Rigid Concrete</h4>
+              </div>
+              <div class="pavement-compare-container">
+                <div class="pavement-col">
+                  <h5 style="color: #f59e0b; margin-bottom: 8px;">Flexible Bituminous Pavement (IRC:37)</h5>
+                  <div class="pavement-layer p-bc">Bituminous Concrete (BC Wearing Course: 40-50 mm)</div>
+                  <div class="pavement-layer p-dbm">Dense Bituminous Macadam (DBM Binder: 100-150 mm)</div>
+                  <div class="pavement-layer p-wmm">Wet Mix Macadam (WMM Base: 250 mm)</div>
+                  <div class="pavement-layer p-gsb">Granular Sub-Base (GSB Drainage: 200 mm)</div>
+                  <div class="pavement-layer p-subgrade">Compacted Subgrade (CBR ≥ 8%: 500 mm)</div>
+                  <p class="pavement-note">Distributes wheel loads grain-to-grain in a conical shear zone down to subgrade.</p>
+                </div>
+                <div class="pavement-col">
+                  <h5 style="color: #38bdf8; margin-bottom: 8px;">Rigid Concrete Pavement (IRC:58)</h5>
+                  <div class="pavement-layer p-pqc">Pavement Quality Concrete (PQC M40 Slab: 280-320 mm with Dowel Bars)</div>
+                  <div class="pavement-layer p-dlc">Dry Lean Concrete (DLC Sub-Base: 150 mm)</div>
+                  <div class="pavement-layer p-drainage">Granular Drainage Layer / Separation Membrane (100 mm)</div>
+                  <div class="pavement-layer p-subgrade">Compacted Subgrade (CBR ≥ 8%: 500 mm)</div>
+                  <p class="pavement-note">Distributes wheel loads through beam flexural slab action over wide base area.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-card-footer transport-modal-footer">
+        <span class="trans-footer-note">Ministry of Road Transport and Highways (MoRTH), NHAI, Western Railway, and Gujarat Maritime Board. Structural health not inferred from appearance.</span>
+        <button id="closeTransportExplorerBottomBtn" class="btn-dismiss">Close Explorer</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal 7: Gujarat Geoenvironmental Intelligence Suite (Phase 18) -->
+  <dialog id="geoenvironmentalModal" class="modal-card-dialog geoenv-modal-dialog" aria-labelledby="geoenvModalTitle" aria-modal="true">
+    <div class="modal-card geoenv-modal-card">
+      <div class="modal-card-header geoenv-modal-header">
+        <div class="geoenv-title-group">
+          <div class="geoenv-badge">PUBLIC GEOLOGICAL, GEOTECHNICAL & HAZARDS REGISTRY</div>
+          <h3 id="geoenvModalTitle" class="modal-card-title">Gujarat Geoenvironmental Intelligence</h3>
+          <p class="modal-subtitle">GSI Bedrock Lithology • NBSS&LUP Vertisol Expansive Soils • CGWB Aquifers • NRSC 30m DEM • BIS IS 1893:2016 Seismic Zonation • Coastal Salinity Ingress • Ramsar Protected Wetlands</p>
+        </div>
+        <button id="closeGeoenvironmentalModalBtn" class="modal-close-btn" aria-label="Close Geoenvironmental Suite">&times;</button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="geoenv-tabs-nav" role="tablist">
+        <button class="geoenv-tab-btn active" data-tab="provenance" role="tab" aria-selected="true">
+          📋 1. Dataset Provenance & Reliability Ledger
+        </button>
+        <button class="geoenv-tab-btn" data-tab="thematic" role="tab" aria-selected="false">
+          🗺️ 2. Thematic Overlays & Legends (7)
+        </button>
+        <button class="geoenv-tab-btn" data-tab="context" role="tab" aria-selected="false">
+          📐 3. Asset & Location Engineering Context
+        </button>
+        <button class="geoenv-tab-btn" data-tab="screening" role="tab" aria-selected="false">
+          🔬 4. Project Site & Alignment Screening Tool
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-card-body geoenv-modal-body">
+        <!-- Tab 1: Dataset Provenance & Reliability Ledger -->
+        <div class="geoenv-tab-pane active" id="geoenvTab_provenance" role="tabpanel">
+          <div class="geoenv-tab-intro-banner">
+            <div>
+              <h4>Authoritative Public Scientific Registers</h4>
+              <p>Every dataset indexes official geographic resolution, measurement date, licensing terms, and explicit civil engineering limitations.</p>
+            </div>
+            <div class="prov-counter-wrap">
+              <span class="prov-badge-count" id="geoenvProvCountBadge">11 Datasets</span>
+            </div>
+          </div>
+
+          <div class="geoenv-toolbar-row">
+            <div class="geoenv-search-box">
+              <input type="text" id="geoenvProvSearch" class="geoenv-input" placeholder="Search datasets, agencies, parameters..." autocomplete="off">
+            </div>
+            <div class="geoenv-filter-box">
+              <select id="geoenvProvDomainFilter" class="geoenv-select">
+                <option value="all">All Thematic Domains</option>
+                <option value="Geology">Bedrock Geology</option>
+                <option value="Seismic & Tectonics">Seismic & Tectonic Faults</option>
+                <option value="Seismic Design">Seismic Design Standard</option>
+                <option value="Geotechnical / Soils">Geotechnical & Soils</option>
+                <option value="Topography">Topography & DEM</option>
+                <option value="Groundwater">Groundwater & Aquifers</option>
+                <option value="Natural Hazards">Cyclone & Wind Speeds</option>
+                <option value="Hydrology & Floods">River Floods</option>
+                <option value="Coastal Hazards">Coastal Shoreline & Salinity</option>
+                <option value="Ecology & Environment">Protected Ecology & Ramsar</option>
+              </select>
+            </div>
+            <button id="exportGeoenvProvCsvBtn" class="btn-geoenv-action" title="Export Provenance Ledger to CSV">
+              📥 Export CSV
+            </button>
+          </div>
+
+          <div class="geoenv-table-wrap">
+            <table class="geoenv-table">
+              <thead>
+                <tr>
+                  <th>Dataset / ID</th>
+                  <th>Authoritative Agency</th>
+                  <th>Domain</th>
+                  <th>Resolution / Scale</th>
+                  <th>Pub Year</th>
+                  <th>License Status</th>
+                  <th>Known Civil Engineering Limitations</th>
+                </tr>
+              </thead>
+              <tbody id="geoenvProvTableBody">
+                <!-- Dynamically Rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 2: Thematic Overlays & Legends -->
+        <div class="geoenv-tab-pane" id="geoenvTab_thematic" role="tabpanel">
+          <div class="geoenv-tab-intro-banner">
+            <div>
+              <h4>Thematic Overlays & Engineering Visualizers</h4>
+              <p>Toggle individual scientific layers onto the interactive digital twin map canvas to inspect spatial distributions and hazard perimeters.</p>
+            </div>
+          </div>
+          <div class="thematic-cards-grid" id="geoenvThematicGrid">
+            <!-- Dynamically Rendered -->
+          </div>
+        </div>
+
+        <!-- Tab 3: Asset & Location Engineering Context -->
+        <div class="geoenv-tab-pane" id="geoenvTab_context" role="tabpanel">
+          <div class="geoenv-tab-intro-banner">
+            <div>
+              <h4>Asset & Infrastructure Location Profiler</h4>
+              <p>Inspect contextual lithology, expansive clay hazards, groundwater depth, and statutory seismic acceleration for any mapped asset or district.</p>
+            </div>
+          </div>
+
+          <div class="geoenv-toolbar-row">
+            <div class="geoenv-filter-box" style="flex: 1;">
+              <label for="geoenvContextTypeSelect" class="geoenv-label">Asset Category:</label>
+              <select id="geoenvContextTypeSelect" class="geoenv-select">
+                <option value="dams">Water Dams & Reservoirs</option>
+                <option value="structures">Signature Bridges & Civil Structures</option>
+                <option value="roads">Highway Corridors</option>
+                <option value="districts">Administrative Districts</option>
+              </select>
+            </div>
+            <div class="geoenv-filter-box" style="flex: 2;">
+              <label for="geoenvContextAssetSelect" class="geoenv-label">Select Asset:</label>
+              <select id="geoenvContextAssetSelect" class="geoenv-select">
+                <!-- Dynamically Populated -->
+              </select>
+            </div>
+          </div>
+
+          <div id="geoenvContextCard" class="geoenv-context-container hidden">
+            <!-- Dynamically Rendered Context Profile -->
+          </div>
+        </div>
+
+        <!-- Tab 4: Project Site & Alignment Screening Tool -->
+        <div class="geoenv-tab-pane" id="geoenvTab_screening" role="tabpanel">
+          <div class="geoenv-tab-intro-banner">
+            <div>
+              <h4>Project Site & Alignment Screening Tool</h4>
+              <p>Perform an automated desktop screening for a proposed project site or infrastructure alignment across all intersecting geoenvironmental layers.</p>
+            </div>
+          </div>
+
+          <div class="screening-form-card">
+            <div class="screening-input-grid">
+              <div class="screening-input-group">
+                <label for="screenProjectNameInput" class="screening-label">Proposed Project / Structure Name:</label>
+                <input type="text" id="screenProjectNameInput" class="screening-input" value="Proposed Infrastructure Project" placeholder="e.g. Sabarmati Bridge Alignment">
+              </div>
+              <div class="screening-input-group">
+                <label for="screenProjectTypeSelect" class="screening-label">Civil Asset Category:</label>
+                <select id="screenProjectTypeSelect" class="screening-select">
+                  <option value="Highway / Expressway Corridor">Highway / Expressway Corridor</option>
+                  <option value="Bridge / Flyover Structure">Bridge / River Viaduct Structure</option>
+                  <option value="Dam / Hydraulic Weir">Dam / Hydraulic Weir Reservoir</option>
+                  <option value="Railway / Transit Corridor">Railway / High-Speed Transit Corridor</option>
+                  <option value="Port / Marine Terminal">Port / Marine Coastal Terminal</option>
+                  <option value="Industrial Estate / Building Complex">Industrial Estate / Commercial Complex</option>
+                  <option value="General Civil Infrastructure">General Civil Infrastructure</option>
+                </select>
+              </div>
+              <div class="screening-input-group">
+                <label for="screenLatInput" class="screening-label">Latitude (°N):</label>
+                <input type="number" id="screenLatInput" class="screening-input" step="0.0001" value="23.0225" placeholder="e.g. 23.0225">
+              </div>
+              <div class="screening-input-group">
+                <label for="screenLonInput" class="screening-label">Longitude (°E):</label>
+                <input type="number" id="screenLonInput" class="screening-input" step="0.0001" value="72.5714" placeholder="e.g. 72.5714">
+              </div>
+            </div>
+            <div class="screening-actions-row">
+              <button id="runProjectScreeningBtn" class="btn-screening-run">
+                <span>▶ Run Preliminary Desktop Screening</span>
+              </button>
+              <button id="screenPickOnMapBtn" class="btn-screening-pick" title="Click on Leaflet map to select coordinates">
+                <span>📍 Pick Location on Map</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Screening Results Output -->
+          <div id="geoenvScreeningOutput" class="screening-output-wrap hidden">
+            <!-- Dynamically Rendered Screening Memo -->
+          </div>
+          <div class="screening-export-toolbar">
+            <button id="copyScreeningMemoBtn" class="btn-memo-export" title="Copy Screening Memo to Clipboard">📋 Copy Memo</button>
+            <button id="exportScreeningMdBtn" class="btn-memo-export" title="Export as Markdown Report">📥 Export Markdown</button>
+            <button id="flyToScreenedSiteBtn" class="btn-memo-export" title="Fly to Site on Map">🗺️ Center Map on Site</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-card-footer geoenv-modal-footer">
+        <span class="geoenv-footer-note">Authoritative Public Sources: Geological Survey of India (GSI), Central Ground Water Board (CGWB), Bureau of Indian Standards (BIS IS 1893), NBSS&LUP, NRSC Bhuvan, and NCSCM. Regional screening only — not a statutory geotechnical design certification.</span>
+        <button id="closeGeoenvBottomBtn" class="btn-dismiss" onclick="document.getElementById('geoenvironmentalModal').close()">Close Suite</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Water Scenarios Lab Modal Dialog (Educational Hydro-Environmental Simulator) -->
+  <dialog id="waterScenariosLabModal" class="modal-card-dialog water-scenarios-dialog" aria-labelledby="waterScenariosTitle" aria-modal="true">
+    <div class="modal-card-container">
+      <!-- Header -->
+      <div class="modal-card-header">
+        <div class="modal-header-left">
+          <div class="modal-badge-row">
+            <span class="modal-pill modal-pill-water">🌊 EDUCATIONAL HYDRO-ENVIRONMENTAL SIMULATOR</span>
+            <span class="modal-pill modal-pill-geo">ZERO FABRICATION • GWRD & CWC BENCHMARKS</span>
+            <span class="modal-pill modal-pill-shortcut">KEYBOARD SHORTCUT: S</span>
+          </div>
+          <h2 id="waterScenariosTitle" class="modal-title">Gujarat Water Scenarios Lab</h2>
+          <p class="modal-subtitle">Interactive hydrologic laboratory modeling reservoir storage mass-balance, catchment rainfall-runoff routing, and regional drought water availability stress.</p>
+        </div>
+        <div class="modal-header-actions">
+          <button id="closeScenariosTopBtn" class="btn-modal-close" aria-label="Close Water Scenarios Lab">✕</button>
+        </div>
+      </div>
+
+      <!-- Action Toolbar (Import/Export/Report) -->
+      <div class="scen-top-toolbar">
+        <div class="scen-tabs-nav" role="tablist">
+          <button class="scenarios-tab-btn active" data-mode="scenarioA" role="tab" aria-selected="true">
+            <span>📦 Scenario A: Reservoir Storage (Mass-Balance)</span>
+          </button>
+          <button class="scenarios-tab-btn" data-mode="scenarioB" role="tab" aria-selected="false">
+            <span>🌧️ Scenario B: Heavy Rainfall & Flood Routing</span>
+          </button>
+          <button class="scenarios-tab-btn" data-mode="scenarioC" role="tab" aria-selected="false">
+            <span>🏜️ Scenario C: Drought & Water Availability</span>
+          </button>
+        </div>
+        <div class="scen-util-actions">
+          <label class="btn-scen-util" title="Import Scenario Configuration JSON">
+            📥 Import JSON
+            <input type="file" id="importScenarioConfigFile" accept=".json" style="display: none;">
+          </label>
+          <button id="exportScenarioConfigBtn" class="btn-scen-util" title="Save Scenario Configuration JSON">
+            💾 Save Config
+          </button>
+          <button id="exportScenarioReportBtn" class="btn-scen-util btn-scen-util-primary" title="Export Technical Hydrologic Memo">
+            📄 Technical Memo
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body Panes -->
+      <div class="modal-card-body scenarios-modal-body">
+        <!-- MODE A: RESERVOIR STORAGE -->
+        <div class="scenarios-tab-pane active" id="scenPane_scenarioA" role="tabpanel">
+          <div id="scenAReservoirMeta" class="scen-meta-wrapper">
+            <!-- Dynamically Populated Header -->
+          </div>
+
+          <!-- Controls Container -->
+          <div class="scen-controls-card">
+            <div class="scen-controls-grid">
+              <div class="scen-control-group" style="grid-column: span 2;">
+                <label for="scenAReservoirSelect" class="scen-label">Select Gujarat Reservoir:</label>
+                <select id="scenAReservoirSelect" class="scen-select">
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenA_initialPct" class="scen-label">Initial Storage (% of Gross):</label>
+                  <strong id="lbl_scenA_initialPct" class="scen-val-disp">75%</strong>
+                </div>
+                <input type="range" id="scenA_initialPct" min="5" max="100" step="1" value="75" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenA_inflowCumecs" class="scen-label">Hypothetical Inflow Rate:</label>
+                  <strong id="lbl_scenA_inflowCumecs" class="scen-val-disp">1,200 m³/s</strong>
+                </div>
+                <input type="range" id="scenA_inflowCumecs" min="0" max="6000" step="50" value="1200" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenA_outflowCumecs" class="scen-label">Controlled Outflow (Canals + Power):</label>
+                  <strong id="lbl_scenA_outflowCumecs" class="scen-val-disp">800 m³/s</strong>
+                </div>
+                <input type="range" id="scenA_outflowCumecs" min="0" max="4000" step="25" value="800" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenA_evapRate" class="scen-label">Pan Evaporation Rate:</label>
+                  <strong id="lbl_scenA_evapRate" class="scen-val-disp">6.0 mm/day</strong>
+                </div>
+                <input type="range" id="scenA_evapRate" min="2.0" max="14.0" step="0.5" value="6.0" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenA_seepageRate" class="scen-label">Foundation / Rim Seepage:</label>
+                  <strong id="lbl_scenA_seepageRate" class="scen-val-disp">0.05%/day</strong>
+                </div>
+                <input type="range" id="scenA_seepageRate" min="0.01" max="0.30" step="0.01" value="0.05" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenA_durationDays" class="scen-label">Simulation Horizon:</label>
+                  <strong id="lbl_scenA_durationDays" class="scen-val-disp">14 Days</strong>
+                </div>
+                <input type="range" id="scenA_durationDays" min="1" max="60" step="1" value="14" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenA_timeStep" class="scen-label">Computational Time-Step (Δt):</label>
+                  <strong id="lbl_scenA_timeStep" class="scen-val-disp">6 Hours</strong>
+                </div>
+                <select id="scenA_timeStep" class="scen-select">
+                  <option value="1">1 Hour (High resolution)</option>
+                  <option value="6" selected>6 Hours (Hydrologic standard)</option>
+                  <option value="12">12 Hours</option>
+                  <option value="24">24 Hours (Daily aggregated)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="scen-actions-bar">
+              <button id="runScenarioABtn" class="btn-scen-run">
+                <span>▶ Run Mass-Balance Simulation</span>
+              </button>
+              <button id="resetScenarioABtn" class="btn-scen-reset">
+                <span>↺ Reset Parameters</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Results Output -->
+          <div id="scenA_resultsOutput" class="scen-results-wrapper">
+            <!-- Dynamically Rendered -->
+          </div>
+        </div>
+
+        <!-- MODE B: RAINFALL & FLOOD ROUTING -->
+        <div class="scenarios-tab-pane" id="scenPane_scenarioB" role="tabpanel">
+          <div id="scenBCatchmentMeta" class="scen-meta-wrapper">
+            <!-- Dynamically Populated Header -->
+          </div>
+
+          <div class="scen-controls-card">
+            <div class="scen-controls-grid">
+              <div class="scen-control-group" style="grid-column: span 2;">
+                <label for="scenBCatchmentSelect" class="scen-label">Select Documented Catchment:</label>
+                <select id="scenBCatchmentSelect" class="scen-select">
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenB_rainfallMm" class="scen-label">Storm Total Rainfall Depth (P):</label>
+                  <strong id="lbl_scenB_rainfallMm" class="scen-val-disp">150 mm</strong>
+                </div>
+                <input type="range" id="scenB_rainfallMm" min="20" max="600" step="10" value="150" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenB_durationHr" class="scen-label">Storm Duration (D):</label>
+                  <strong id="lbl_scenB_durationHr" class="scen-val-disp">24 Hours</strong>
+                </div>
+                <input type="range" id="scenB_durationHr" min="6" max="72" step="3" value="24" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenB_curveNumber" class="scen-label">SCS Soil Curve Number (CN):</label>
+                  <strong id="lbl_scenB_curveNumber" class="scen-val-disp">CN 78</strong>
+                </div>
+                <input type="range" id="scenB_curveNumber" min="50" max="95" step="1" value="78" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <label for="scenB_amcSelect" class="scen-label">Antecedent Moisture Condition (AMC):</label>
+                <select id="scenB_amcSelect" class="scen-select">
+                  <option value="dry">AMC I — Dry Catchment (High Infiltration)</option>
+                  <option value="normal" selected>AMC II — Normal Soil Saturation</option>
+                  <option value="wet">AMC III — Saturated Basin (Preceding Rains)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="scen-actions-bar">
+              <button id="runScenarioBBtn" class="btn-scen-run">
+                <span>▶ Run Runoff & Flood Routing</span>
+              </button>
+              <button id="resetScenarioBBtn" class="btn-scen-reset">
+                <span>↺ Reset Parameters</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="scenB_resultsOutput" class="scen-results-wrapper">
+            <!-- Dynamically Rendered -->
+          </div>
+        </div>
+
+        <!-- MODE C: DROUGHT & WATER AVAILABILITY -->
+        <div class="scenarios-tab-pane" id="scenPane_scenarioC" role="tabpanel">
+          <div id="scenCRegionMeta" class="scen-meta-wrapper">
+            <!-- Dynamically Populated Header -->
+          </div>
+
+          <div class="scen-controls-card">
+            <div class="scen-controls-grid">
+              <div class="scen-control-group" style="grid-column: span 2;">
+                <label for="scenCRegionSelect" class="scen-label">Select Regional Hydro-Climatic Zone:</label>
+                <select id="scenCRegionSelect" class="scen-select">
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenC_deficitPct" class="scen-label">Monsoon Rainfall / Replenishment Deficit:</label>
+                  <strong id="lbl_scenC_deficitPct" class="scen-val-disp">35% Deficit</strong>
+                </div>
+                <input type="range" id="scenC_deficitPct" min="0" max="80" step="5" value="35" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenC_demandMultiplier" class="scen-label">Annual Demand Scaling Multiplier:</label>
+                  <strong id="lbl_scenC_demandMultiplier" class="scen-val-disp">100%</strong>
+                </div>
+                <input type="range" id="scenC_demandMultiplier" min="80" max="130" step="5" value="100" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenC_irrigCurtail" class="scen-label">Voluntary Irrigation Curtailment:</label>
+                  <strong id="lbl_scenC_irrigCurtail" class="scen-val-disp">15% Voluntary Rationing</strong>
+                </div>
+                <input type="range" id="scenC_irrigCurtail" min="0" max="50" step="5" value="15" class="scen-slider">
+              </div>
+
+              <div class="scen-control-group">
+                <div class="scen-label-row">
+                  <label for="scenC_indCurtail" class="scen-label">Industrial Curtailment / Recycling:</label>
+                  <strong id="lbl_scenC_indCurtail" class="scen-val-disp">10% Voluntary Rationing</strong>
+                </div>
+                <input type="range" id="scenC_indCurtail" min="0" max="50" step="5" value="10" class="scen-slider">
+              </div>
+            </div>
+
+            <div class="scen-actions-bar">
+              <button id="runScenarioCBtn" class="btn-scen-run">
+                <span>▶ Run Drought Balance Simulation</span>
+              </button>
+              <button id="resetScenarioCBtn" class="btn-scen-reset">
+                <span>↺ Reset Parameters</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="scenC_resultsOutput" class="scen-results-wrapper">
+            <!-- Dynamically Rendered -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer with Permanent Statutory Disclaimer -->
+      <div class="modal-card-footer scenarios-modal-footer">
+        <div class="scen-statutory-notice">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#facc15" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span><strong>STATUTORY NOTICE & EDUCATIONAL DISCLAIMER:</strong> The Water Scenarios Lab is an exploratory educational tool designed to demonstrate fundamental hydrologic mass-balance, rainfall-runoff, and drought dynamics. It <strong>MUST NOT</strong> be used for real dam-release decisions, flood evacuation warnings, engineering design, or operational reservoir control. Operational water management is governed exclusively by the Gujarat Water Resources Department (GWRD) and the Central Water Commission (CWC).</span>
+        </div>
+        <button id="closeScenariosBottomBtn" class="btn-dismiss">Close Lab</button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Leaflet Library -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <!-- HTML2Canvas Library for Client-Side High-Res Map Snapshotting (Week 9) -->
   <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- Reusable Civil Science Stop Framework Component -->
+  <script src="js/civil_science_stop.js?v=5.0.0"></script>
+
+  <!-- Infrastructure Asset Inspector Component -->
+  <script src="js/asset_inspector.js?v=5.0.0"></script>
+
+  <!-- Dam Science Lab Component -->
+  <script src="js/dam_science_lab.js?v=4.0.0"></script>
+
+  <!-- Water Systems Network Topology Engine Component -->
+  <script src="js/water_systems_network.js?v=4.2.0"></script>
+
+  <!-- Hydropower & Energy Infrastructure Explorer Engine Component -->
+  <script src="js/energy_infrastructure_explorer.js?v=4.0.0"></script>
+
+  <!-- Transportation & Civil Structures Explorer Engine Component -->
+  <script src="js/transportation_explorer.js?v=4.0.0"></script>
+
+  <!-- Gujarat Geoenvironmental Intelligence Suite Engine Component -->
+  <script src="js/geoenvironmental_intelligence.js?v=4.0.0"></script>
+
+  <!-- Gujarat Water Scenarios Lab Engine Component -->
+  <script src="js/water_scenarios_lab.js?v=4.5.0"></script>
+
+  <!-- Modular Layer Manager & Scale-Dependent LOD Engine Component -->
+  <script src="js/layer_manager.js?v=5.0.0"></script>
+
+  <!-- Multi-Modal District Infrastructure Registry Matrix -->
+  <script src="js/district_registry.js?v=5.0.0"></script>
 
   <!-- Application Logic -->
   <script src="js/app.js?v=4.0.0"></script>
