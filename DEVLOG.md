@@ -997,7 +997,33 @@ Stabilize and harmonize the complete Gujarat InfraMap presentation shell across 
   - Tablet Portrait (768×1024)
   - Mobile Phone (390×844)
 
+---
 
+## Phase 23: Gujarat Temporal Explorer — Verified Historical Records & Extensible Telemetry Gateway
 
+### Objective & Architectural Mandate
+Integrate a dedicated **Temporal Explorer Engine** into the Gujarat Digital Twin that enables users to scrub across verified historical time series, evaluate seasonal reservoir storage hydrographs, inspect CWC river gauge stages, benchmark regional monsoon rainfall departures, and visualize the milestone evolution of Gujarat's infrastructure footprint from 1965 to 2026+.
 
+### Core Architectural Principles & Data Rigor
+1. **Strict Three-Tier Separation**:
+   - **Tier 1 (Static Inventory):** Fixed GIS assets (dam coordinates, structural height, road alignments, power plant nameplate capacities).
+   - **Tier 2 (Historical Observations):** Actual dated measurements from official statutory agencies (CWC, IMD, GWRD, CGWB). Explicit disclosure of observation date, source, retrieval date, and temporal resolution.
+   - **Tier 3 (Live Telemetry):** Explicitly marked as `DISCONNECTED_HISTORICAL_ONLY` ("No active SCADA gateway feed connected"). Strict anti-fabrication policy: zero synthetic animations or simulated real-time telemetry.
+2. **Transparent Missing-Interval Representation**:
+   - For datasets with incomplete historical records (e.g. Shetrunji Dam in early 2018 or Machhu-II in mid-2021), missing observation intervals are explicitly rendered as broken gaps with prominent alert tags (`[ Missing Observation Interval ]`), prohibiting silent linear or cubic interpolation.
+3. **Map-Linked Timeline Synchronization (`#temporalMapHUD`)**:
+   - Floating timeline scrubber HUD docked at `bottom: 20px; left: 50%; transform: translateX(-50%);` with play/pause, step forward/backward, and mode switching.
+   - Synchronizes Leaflet map in real time:
+     - **Hydrology Mode:** Shading reservoir markers and polygons dynamically by % capacity on the selected date (Deep Blue $\ge 90\%$, Cyan $70-89\%$, Amber $40-69\%$, Red $<40\%$) and coloring river gauges by flood status (Normal, Warning, High Flood).
+     - **Milestones Mode:** Highlighting assets commissioned by the selected year while dimming future assets.
+4. **Multi-Asset Comparative SVG Workbench (`#temporalExplorerModal`)**:
+   - High-performance responsive SVG hydrographs allowing users to plot multiple reservoirs simultaneously (e.g. Sardar Sarovar vs Ukai vs Kadana) with metric toggles (`storage_mcm`, `pct_storage`, `level_m`).
+   - Regional rainfall departure tables across Gujarat's 5 agro-climatic zones (South, Central, North, Saurashtra, Kutch) benchmarked against Long Period Average (LPA) normals.
+5. **Extensible Telemetry Gateway Architecture (`TelemetryProvider`)**:
+   - Class-based provider interface ready for authenticated REST / WebSocket / MQTT SCADA connections without rebuilding the Leaflet map canvas.
+
+### Verification & Validation Suite
+- **Deployment Manifests:** `python scripts/verify_deployment.py` passed 100% across all 13 GeoJSON layers (3,327 features), 16 local assets, and 13 JavaScript files.
+- **Dedicated Temporal Automation Suite:** `node scripts/test_temporal_explorer.js` executed with 0 errors, validating HUD timeline stepping, modal tab switching, comparative SVG chart rendering, missing interval indicators, and shortcut <kbd>Y</kbd>.
+- **Regression Testing:** `node scripts/test_browser_interactive.js` and `node scripts/test_ui_rescue_and_ports.js` passed 100% across all modals and viewports.
 

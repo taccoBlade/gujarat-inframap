@@ -181,6 +181,21 @@
             </svg>
             <span>Energy & Hydro</span>
           </button>
+          <button id="openTemporalExplorerBtn" class="action-btn action-btn-temporal" title="Open Gujarat Temporal Explorer (Historical Records & Timeline) (Y)" aria-label="Temporal Explorer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Temporal (Y)</span>
+          </button>
+          <button id="toggleTemporalHudBtn" class="action-btn action-btn-secondary" title="Toggle Map Timeline Scrubber HUD" aria-label="Timeline Scrubber HUD">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+              <circle cx="12" cy="12" r="2"></circle>
+            </svg>
+            <span>Timeline HUD</span>
+          </button>
           <button id="openTransportExplorerBtn" class="action-btn action-btn-transport" title="Open Transportation & Civil Structures Explorer (T)" aria-label="Transportation & Civil Structures Explorer">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
               <rect x="2" y="6" width="20" height="12" rx="2"></rect>
@@ -2807,6 +2822,61 @@
       </div>
     </div>
   </dialog>
+ 
+  <!-- Gujarat Temporal Explorer Modal (Historical Records & Analytics) -->
+  <dialog id="temporalExplorerModal" class="modal-card-dialog temporal-explorer-dialog" aria-labelledby="temporalModalTitle">
+    <div class="modal-card-content">
+      <div class="modal-card-header">
+        <div class="modal-header-text">
+          <div class="modal-header-badge-row">
+            <span class="modal-header-badge">TEMPORAL ANALYTICS</span>
+            <span class="modal-status-badge">Historical Observations Mode</span>
+            <span class="modal-source-badge">CWC • IMD • GWRD • CGWB</span>
+          </div>
+          <h2 id="temporalModalTitle" class="modal-card-title">Gujarat Temporal Explorer</h2>
+          <p class="modal-card-subtitle">Verified historical observations, multi-asset comparative hydrographs, infrastructure milestones, and extensible telemetry gateway architecture.</p>
+        </div>
+        <button id="closeTemporalModalTopBtn" class="modal-close-btn" aria-label="Close Temporal Explorer">&times;</button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="temporal-modal-tabs" role="tablist">
+        <button class="temporal-modal-tab-btn active" data-tab="hydrology" role="tab" aria-selected="true">
+          <span>🌊 Hydrology & Storage (2018–2024)</span>
+        </button>
+        <button class="temporal-modal-tab-btn" data-tab="compare" role="tab" aria-selected="false">
+          <span>📈 Comparative Workbench</span>
+        </button>
+        <button class="temporal-modal-tab-btn" data-tab="milestones" role="tab" aria-selected="false">
+          <span>🏗️ Infrastructure Milestones (1965–2026+)</span>
+        </button>
+        <button class="temporal-modal-tab-btn" data-tab="telemetry" role="tab" aria-selected="false">
+          <span>📡 Telemetry Gateway Architecture</span>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-card-body temporal-modal-body">
+        <div id="temporalPane-hydrology" class="temporal-tab-pane active" role="tabpanel"></div>
+        <div id="temporalPane-compare" class="temporal-tab-pane" role="tabpanel"></div>
+        <div id="temporalPane-milestones" class="temporal-tab-pane" role="tabpanel"></div>
+        <div id="temporalPane-telemetry" class="temporal-tab-pane" role="tabpanel"></div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-card-footer temporal-modal-footer">
+        <div class="scen-statutory-notice">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#facc15" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span><strong>AUTHENTIC HISTORICAL OBSERVATIONS:</strong> Historical records represent actual dated observations from the Central Water Commission (CWC), India Meteorological Department (IMD), and Gujarat Water Resources Department (GWRD). Missing intervals are represented explicitly and are not synthetically interpolated. Live telemetry is disconnected until authenticated SCADA gateway feeds are provisioned.</span>
+        </div>
+        <button id="closeTemporalModalBottomBtn" class="btn-dismiss">Close Explorer</button>
+      </div>
+    </div>
+  </dialog>
 
   <!-- Leaflet Library -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -2843,6 +2913,9 @@
 
   <!-- Multi-Modal District Infrastructure Registry Matrix -->
   <script src="js/district_registry.js?v=5.0.0"></script>
+
+  <!-- Gujarat Temporal Explorer Engine Component -->
+  <script src="js/temporal_explorer.js?v=5.1.0"></script>
 
   <!-- Application Logic -->
   <script src="js/app.js?v=4.0.0"></script>

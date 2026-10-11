@@ -6920,6 +6920,14 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (window.WaterScenariosLab) {
         window.WaterScenariosLab.open("scenarioA");
       }
+    } else if ((e.key === "y" || e.key === "Y") && !isTyping) {
+      e.preventDefault();
+      const tempModal = document.getElementById("temporalExplorerModal");
+      if (tempModal && tempModal.open) {
+        tempModal.close();
+      } else if (window.TemporalExplorer) {
+        window.TemporalExplorer.openModal();
+      }
     } else if ((e.key === "r" || e.key === "R") && !isTyping) {
       e.preventDefault();
       resetToStateView();
@@ -6942,6 +6950,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const pKey = presetMap[e.key];
       if (pKey) applyPreset(pKey);
     } else if (e.key === "Escape") {
+      const tempModal = document.getElementById("temporalExplorerModal");
+      if (tempModal && tempModal.open) {
+        tempModal.close();
+        return;
+      }
       const scenModal = document.getElementById("waterScenariosLabModal");
       if (scenModal && scenModal.open) {
         scenModal.close();
@@ -7015,6 +7028,26 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize Water Scenarios Lab Engine
   if (window.WaterScenariosLab && typeof window.WaterScenariosLab.init === "function") {
     window.WaterScenariosLab.init(map, []);
+  }
+
+  // Initialize Gujarat Temporal Explorer Engine
+  if (window.TemporalExplorer && typeof window.TemporalExplorer.init === "function") {
+    Promise.all([
+      fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
+      fetchCachedGeoJson("data/gujarat_power.geojson"),
+      fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
+      fetchCachedGeoJson("data/gujarat_urban_industry.geojson")
+    ]).then(([watData, powData, structData, urbData]) => {
+      window.TemporalExplorer.init(map, {
+        waterData: watData,
+        powerData: powData,
+        structData: structData,
+        urbanData: urbData
+      });
+    }).catch(err => {
+      console.warn("[TemporalExplorer] Data load notice:", err);
+      window.TemporalExplorer.init(map, {});
+    });
   }
 
   // ==========================================================================
