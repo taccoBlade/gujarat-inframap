@@ -17395,3 +17395,557 @@ dialog.system-modal::backdrop {
   color: #ffffff;
   font-family: ui-monospace, SFMono-Regular, monospace;
 }
+
+/* ==========================================================================
+   KHAVDA HYBRID RENEWABLE PARK & EHV GREEN ENERGY CORRIDOR TWIN STYLES
+   ========================================================================== */
+
+.khavda-modal {
+  width: 95vw;
+  max-width: 1360px;
+  max-height: 92vh;
+  padding: 0;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: 12px;
+  background: #090d16;
+  color: #f1f5f9;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(245, 158, 11, 0.12);
+}
+
+.khavda-modal::backdrop {
+  background: rgba(3, 7, 18, 0.82);
+  backdrop-filter: blur(6px);
+}
+
+.khavda-modal-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+  overflow: hidden;
+}
+
+.khavda-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 24px 12px;
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+  gap: 16px;
+}
+
+.khavda-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.khavda-modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.khavda-modal-sub {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  max-width: 820px;
+  line-height: 1.4;
+}
+
+.khavda-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.khavda-select-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.khavda-select-lbl {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.khavda-block-select {
+  background: #1e293b;
+  color: #f8fafc;
+  border: 1px solid #334155;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  min-width: 320px;
+}
+
+/* Diurnal Timeline Bar */
+.khavda-timeline-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 24px;
+  background: #0d1322;
+  border-bottom: 1px solid #1e293b;
+  gap: 16px;
+}
+
+.khavda-timeline-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.khavda-btn-play {
+  background: #f59e0b;
+  color: #0f172a;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.khavda-btn-play:hover {
+  background: #fbbf24;
+}
+
+.khavda-btn-step {
+  background: #1e293b;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.khavda-btn-step:hover {
+  background: #334155;
+  color: #ffffff;
+}
+
+.khavda-slider-wrap {
+  flex: 1;
+  max-width: 440px;
+  display: flex;
+  align-items: center;
+}
+
+.khavda-slider {
+  width: 100%;
+  accent-color: #f59e0b;
+  cursor: pointer;
+}
+
+.khavda-step-badge {
+  font-size: 0.76rem;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  background: #1e293b;
+  color: #f59e0b;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  white-space: nowrap;
+}
+
+.khavda-sun-wind-indicators {
+  display: flex;
+  gap: 8px;
+}
+
+.solar-indicator-pill,
+.wind-indicator-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.solar-indicator-pill {
+  background: rgba(245, 158, 11, 0.16);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.wind-indicator-pill {
+  background: rgba(56, 189, 248, 0.16);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+/* 4-Card KPI Strip */
+.khavda-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 12px 24px;
+  background: #090d16;
+  border-bottom: 1px solid #1e293b;
+}
+
+.khavda-kpi-card {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 10px 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.khavda-kpi-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: #f59e0b;
+}
+
+.khavda-kpi-card .kpi-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.khavda-kpi-card .kpi-value {
+  font-size: 1.32rem;
+  font-weight: 800;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.khavda-kpi-card .kpi-value .unit {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.khavda-kpi-card .kpi-sub {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.loading-safe { background: rgba(16, 185, 129, 0.18); color: #34d399; }
+.loading-warning { background: rgba(245, 158, 11, 0.18); color: #fbbf24; }
+.loading-critical { background: rgba(239, 68, 68, 0.18); color: #f87171; }
+
+/* Sensitivity Bar */
+.khavda-sensitivity-bar {
+  display: flex;
+  padding: 8px 24px;
+  background: #0b111e;
+  border-bottom: 1px solid #1e293b;
+  gap: 20px;
+}
+
+.khavda-sensitivity-bar .sensitivity-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.khavda-sensitivity-bar label {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.khavda-sensitivity-bar label strong {
+  color: #f1f5f9;
+}
+
+.khavda-sensitivity-bar .sensitivity-slider {
+  flex: 1;
+  accent-color: #f59e0b;
+}
+
+/* Tabs */
+.khavda-tab-nav {
+  display: flex;
+  padding: 0 24px;
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+}
+
+.khavda-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #94a3b8;
+  padding: 10px 18px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.khavda-tab-btn:hover {
+  color: #f8fafc;
+}
+
+.khavda-tab-btn.active {
+  color: #f59e0b;
+  border-bottom-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.05);
+}
+
+/* Tab Content */
+.khavda-tab-content-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px;
+  background: #090d16;
+  min-height: 280px;
+}
+
+.khavda-tab-pane {
+  display: none;
+}
+
+.khavda-tab-pane.active {
+  display: block;
+}
+
+/* Tables */
+.khavda-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  background: #0f172a;
+}
+
+.khavda-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+}
+
+.khavda-table th {
+  background: #131c31;
+  color: #94a3b8;
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid #1e293b;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.khavda-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid #162035;
+  vertical-align: middle;
+}
+
+.khavda-table tr:hover {
+  background: rgba(245, 158, 11, 0.04);
+}
+
+.khavda-table tr.selected-row {
+  background: rgba(245, 158, 11, 0.09);
+  border-left: 3px solid #f59e0b;
+}
+
+.khavda-table tr.current-hour-row {
+  background: rgba(56, 189, 248, 0.12);
+  border-left: 3px solid #38bdf8;
+}
+
+.operator-badge {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.tariff-pill {
+  background: rgba(16, 185, 129, 0.14);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.74rem;
+}
+
+.voltage-tag {
+  background: #1e293b;
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.74rem;
+}
+
+.table-bar-bg {
+  width: 100%;
+  height: 5px;
+  background: #1e293b;
+  border-radius: 3px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.table-bar-fill {
+  height: 100%;
+  background: #38bdf8;
+}
+
+.table-focus-btn {
+  background: #1e293b;
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.table-focus-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+/* Grid split */
+.khavda-grid-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.khavda-split-title {
+  margin: 0 0 10px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+/* Dispatch Tab */
+.dispatch-header-note {
+  background: #10192e;
+  border: 1px solid #1e293b;
+  border-left: 3px solid #f59e0b;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  color: #94a3b8;
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+
+/* Footer */
+.khavda-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: #0f172a;
+  border-top: 1px solid #1e293b;
+  gap: 16px;
+}
+
+.khavda-footer-provenance {
+  font-size: 0.72rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.khavda-footer-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Map Pins & Tooltips */
+.substation-load-pin {
+  background: transparent;
+  border: none;
+}
+
+.sub-pin-inner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.sub-pin-inner:hover {
+  transform: scale(1.3);
+}
+
+.sub-pin-val {
+  font-size: 9px;
+  font-weight: 800;
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.khavda-sub-popup {
+  font-size: 0.78rem;
+  color: #0f172a;
+}
+
+.khavda-sub-popup h4 {
+  margin: 0 0 6px;
+  font-size: 0.9rem;
+}
+
+.khavda-sub-popup p {
+  margin: 2px 0;
+}
+
+.khavda-tooltip {
+  background: #0f172a !important;
+  color: #f59e0b !important;
+  border: 1px solid #f59e0b !important;
+  border-radius: 6px;
+  font-size: 0.76rem;
+}
+

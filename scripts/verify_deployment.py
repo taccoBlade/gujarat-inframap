@@ -126,6 +126,7 @@ def test_javascript_syntax():
         "js/digital_twin_report_builder.js",
         "js/sauni_basin_transfer_explorer.js",
         "js/cyclone_coastal_surge_twin.js",
+        "js/khavda_green_energy_twin.js",
         "js/app.js",
         "sw.js"
     ]

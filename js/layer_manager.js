@@ -1355,6 +1355,7 @@
       water: ["districts", "waterDams", "reservoirs", "rivers", "canals", "commandAreas"],
       transport: ["districts", "roads", "structures", "railways", "stations", "portsAirports", "urbanMetro"],
       energy: ["districts", "power", "transmission", "substations"],
+      khavda: ["districts", "power", "transmission", "substations"],
       urban: ["districts", "urbanMetro", "portsAirports", "industries", "roads"],
       disaster: ["districts", "seismic", "cycloneFlood", "coastal", "groundwater", "sanctuaries"],
       admin: ["districts", "hq"],

@@ -1,7 +1,7 @@
 {
   "dataset_name": "sample_unlicensed",
-  "execution_timestamp": "2026-10-12T12:39:49.298253+00:00",
-  "elapsed_seconds": 0.001,
+  "execution_timestamp": "2026-10-12T12:55:23.444566+00:00",
+  "elapsed_seconds": 0.0,
   "pipeline_version": "5.5.0",
   "stats": {
     "total_records": 1,

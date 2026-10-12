@@ -596,6 +596,15 @@
           <p><strong>${p.name}</strong> delivers <strong>${fmtNum(p.capacity_mw, "MW")}</strong> into the Western Regional Electricity Grid (WRLDC). It is a vital pillar powering Gujarat's heavy industrial manufacturing belts, ceramic hubs in Morbi, petrochemical complexes in Dahej, and agricultural feeder separation networks (Jyotigram Yojana).</p>
           <p>The facility operates in coordination with the State Load Despatch Centre (SLDC Vadodara) to maintain grid frequency within statutory CEA operating bands (49.90 Hz – 50.05 Hz).</p>
         </div>
+        <div class="insp-lab-launcher-card" style="border-left: 3px solid #f59e0b; margin-top: 10px;">
+          <div class="launcher-text">
+            <span class="launcher-title">⚡ Khavda Hybrid RE &amp; EHV Green Energy Twin</span>
+            <span class="launcher-desc">Simulate 30 GW Khavda mega-park generation, 765 kV UHV corridor flows, and substation MVA headroom (K).</span>
+          </div>
+          <button class="insp-open-lab-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; font-weight: 700;" onclick="window.KhavdaGreenEnergyTwin && window.KhavdaGreenEnergyTwin.openModal('${p.id && p.id.includes('khavda') ? 'agel_block' : (p.id && p.id.includes('charanka') ? 'charanka_park' : (p.id && p.id.includes('dholera') ? 'dholera_park' : 'agel_block'))}')">
+            Explore RE Grid ⚡
+          </button>
+        </div>
       `,
       scienceStop: (p) => {
         const isSolar = (p.type || "").toLowerCase().includes("solar");
@@ -871,6 +880,15 @@
         <div class="insp-narrative-card">
           <h4>⚡ Long-Distance High-Efficiency Energy Evacuation</h4>
           <p><strong>${p.name}</strong> provides high-capacity, low-loss electrical power transfer over <strong>${p.length_km || 'hundreds of'} km</strong>, evacuating power from generation nodes into Gujarat's heavy industrial demand centers.</p>
+        </div>
+        <div class="insp-lab-launcher-card" style="border-left: 3px solid #f59e0b; margin-top: 10px;">
+          <div class="launcher-text">
+            <span class="launcher-title">⚡ Khavda Hybrid RE &amp; EHV Green Energy Twin</span>
+            <span class="launcher-desc">Simulate 30 GW Khavda mega-park generation, 765 kV UHV corridor flows, and substation MVA headroom (K).</span>
+          </div>
+          <button class="insp-open-lab-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; font-weight: 700;" onclick="window.KhavdaGreenEnergyTwin && window.KhavdaGreenEnergyTwin.openModal()">
+            Explore RE Grid ⚡
+          </button>
         </div>
       `,
       scienceStop: (p) => `

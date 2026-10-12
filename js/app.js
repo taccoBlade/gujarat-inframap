@@ -6343,6 +6343,15 @@ document.addEventListener("DOMContentLoaded", () => {
           command: "cyclone"
         },
         {
+          title: "Studio: /khavda",
+          subtitle: "Khavda Green Energy Corridor Twin — 30 GW RE Mega-Park & 765 kV EHV Grid (K)",
+          category: "WORKSPACE",
+          icon: "⚡",
+          badgeClass: "tag-energy",
+          isSlashCommand: true,
+          command: "khavda"
+        },
+        {
           title: "Studio: /water",
           subtitle: "Hydrology & Scenarios Studio — Water Lab Simulator (S)",
           category: "WORKSPACE",
@@ -7260,6 +7269,12 @@ document.addEventListener("DOMContentLoaded", () => {
         else cycModal.close();
         return;
       }
+      const khavdaModal = document.getElementById("khavdaTwinModal");
+      if (khavdaModal && khavdaModal.open) {
+        if (window.KhavdaGreenEnergyTwin) window.KhavdaGreenEnergyTwin.closeModal();
+        else khavdaModal.close();
+        return;
+      }
       const compareBox = document.getElementById("proximityCompareBox");
       if (compareBox && !compareBox.classList.contains("hidden")) {
         compareBox.classList.add("hidden");
@@ -7539,6 +7554,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Initialize Khavda Hybrid Renewable Park & EHV Green Energy Corridor Twin Component
+  if (window.KhavdaGreenEnergyTwin && typeof window.KhavdaGreenEnergyTwin.init === "function") {
+    window.KhavdaGreenEnergyTwin.init(map);
+  }
+  const openKhavdaTwinBtn = document.getElementById("openKhavdaTwinBtn");
+  if (openKhavdaTwinBtn) {
+    openKhavdaTwinBtn.addEventListener("click", () => {
+      if (window.KhavdaGreenEnergyTwin) {
+        window.KhavdaGreenEnergyTwin.openModal();
+      }
+    });
+  }
+
   // ==========================================================================
   // 19. Studio Workspaces & URL Hash Routing Engine (/#/dams, /#/water, /#/energy, etc.)
   // ==========================================================================
@@ -7576,6 +7604,14 @@ document.addEventListener("DOMContentLoaded", () => {
         preset: "cyclone",
         view: { center: [21.80, 70.20], zoom: 7.2 },
         description: "Arabian Sea cyclone tracks, SLOSH surge hydrodynamics, 8-port alert signals & coastal defenses."
+      },
+      khavda: {
+        id: "khavda",
+        name: "Khavda Green Energy Corridor Studio",
+        icon: "⚡",
+        preset: "khavda",
+        view: { center: [23.88, 70.10], zoom: 7.8 },
+        description: "30 GW Khavda Mega-Park in Kutch, 765 kV Green Energy Corridor & GETCO EHV Grid."
       },
       water: {
         id: "water",
@@ -7729,6 +7765,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const segments = path.split("/").filter(Boolean);
       let studioKey = segments[0] ? segments[0].toLowerCase() : "overview";
       if (studioKey === "coastal") studioKey = "cyclone";
+      if (studioKey === "re-corridor" || studioKey === "khavda-corridor" || studioKey === "green-energy") studioKey = "khavda";
 
       if (this.studios[studioKey]) {
         this.activateStudio(studioKey, false);
@@ -7741,6 +7778,10 @@ document.addEventListener("DOMContentLoaded", () => {
           const params = new URLSearchParams(queryStr || "");
           const stormParam = params.get("storm") || segments[1] || "biparjoy";
           window.CycloneCoastalSurgeTwin.openModal(stormParam);
+        } else if (studioKey === "khavda" && window.KhavdaGreenEnergyTwin) {
+          const params = new URLSearchParams(queryStr || "");
+          const blockParam = params.get("block") || segments[1] || "agel_block";
+          window.KhavdaGreenEnergyTwin.openModal(blockParam);
         }
 
         let targetId = segments[1];
