@@ -16725,3 +16725,673 @@ dialog.system-modal::backdrop {
 .text-emerald { color: #10b981 !important; }
 .text-blue { color: #38bdf8 !important; }
 .text-dim { color: #64748b !important; }
+
+/* ==========================================================================
+   22. CYCLONE COASTAL STORM SURGE TWIN ENGINE STYLES (OBSIDIAN TITANIUM)
+   ========================================================================== */
+
+.action-btn-cyclone {
+  background: rgba(234, 88, 12, 0.12) !important;
+  color: #fb923c !important;
+  border: 1px solid rgba(234, 88, 12, 0.28) !important;
+}
+
+.action-btn-cyclone:hover {
+  background: rgba(234, 88, 12, 0.24) !important;
+  color: #ffffff !important;
+  border-color: rgba(234, 88, 12, 0.5) !important;
+}
+
+.cyclone-modal {
+  width: 94vw;
+  max-width: 1080px;
+  max-height: 90vh;
+  padding: 0;
+  border: 1px solid rgba(234, 88, 12, 0.35);
+  border-radius: 12px;
+  background: rgba(11, 15, 23, 0.97);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.8), 0 0 32px rgba(234, 88, 12, 0.12);
+  color: #f1f5f9;
+  font-family: inherit;
+  overflow: hidden;
+}
+
+.cyclone-modal::backdrop {
+  background: rgba(4, 7, 12, 0.78);
+  backdrop-filter: blur(6px);
+}
+
+.cyclone-modal-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  height: 100%;
+}
+
+.cyclone-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 22px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 16px;
+}
+
+.cyclone-header-title-wrap {
+  flex: 1;
+}
+
+.cyclone-badge {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fb923c;
+  background: rgba(234, 88, 12, 0.14);
+  border: 1px solid rgba(234, 88, 12, 0.35);
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-bottom: 6px;
+}
+
+.cyclone-modal-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cyclone-modal-sub {
+  font-size: 11.5px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cyclone-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cyclone-select-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cyclone-select-lbl {
+  font-size: 10px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.cyclone-storm-select {
+  background: #161f2e;
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.cyclone-storm-select:focus {
+  border-color: #ea580c;
+  box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.25);
+}
+
+/* Timeline Scrubber Bar */
+.cyclone-timeline-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 22px;
+  background: rgba(15, 23, 42, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 16px;
+}
+
+.cyclone-timeline-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.cyclone-btn-play {
+  background: #ea580c;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cyclone-btn-play:hover {
+  background: #c2410c;
+}
+
+.cyclone-btn-play.active {
+  background: #e11d48;
+}
+
+.cyclone-btn-step {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cyclone-btn-step:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+}
+
+.cyclone-slider-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.cyclone-slider {
+  width: 100%;
+  accent-color: #ea580c;
+  cursor: pointer;
+  height: 5px;
+}
+
+.cyclone-step-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.cyclone-timeline-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cyclone-time-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #f8fafc;
+  font-variant-numeric: tabular-nums;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.cyclone-alert-pill {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.cyclone-alert-pill.red-alert,
+.cyclone-alert-pill.red-alert--great-danger-,
+.cyclone-alert-pill.red-alert--landfall-peak-,
+.cyclone-alert-pill.catastrophic-surge {
+  background: rgba(220, 38, 38, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(220, 38, 38, 0.45);
+}
+
+.cyclone-alert-pill.orange-alert {
+  background: rgba(234, 88, 12, 0.2);
+  color: #fb923c;
+  border: 1px solid rgba(234, 88, 12, 0.45);
+}
+
+.cyclone-alert-pill.yellow-alert,
+.cyclone-alert-pill.squall-warning {
+  background: rgba(234, 179, 8, 0.2);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.45);
+}
+
+.cyclone-phase-banner {
+  padding: 6px 22px;
+  background: rgba(11, 15, 25, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phase-prefix {
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.phase-desc {
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+/* 4-Card Real-Time KPI Row */
+.cyclone-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 14px 22px;
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.cyclone-kpi-card {
+  background: rgba(30, 41, 59, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.cyclone-kpi-card .kpi-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.cyclone-kpi-card .kpi-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+  line-height: 1.3;
+}
+
+.cyclone-kpi-card .unit {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.cyclone-kpi-card .badge-sub {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-left: 4px;
+}
+
+/* Sensitivity / Stress Adjuster Bar */
+.cyclone-sensitivity-bar {
+  display: flex;
+  align-items: center;
+  padding: 8px 22px;
+  background: rgba(11, 15, 25, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 20px;
+  font-size: 11px;
+}
+
+.sens-title {
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+}
+
+.sens-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5e1;
+}
+
+.sens-slider {
+  width: 90px;
+  accent-color: #06b6d4;
+  cursor: pointer;
+  height: 4px;
+}
+
+.sens-val {
+  font-weight: 700;
+  color: #06b6d4;
+  min-width: 42px;
+}
+
+/* Tabbed Navigation Bar */
+.cyclone-tabs-bar {
+  display: flex;
+  padding: 0 22px;
+  background: rgba(15, 23, 42, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 6px;
+}
+
+.cyclone-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #94a3b8;
+  padding: 10px 14px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cyclone-tab-btn:hover {
+  color: #f1f5f9;
+}
+
+.cyclone-tab-btn.active {
+  color: #f8fafc;
+  border-bottom-color: #ea580c;
+  background: rgba(234, 88, 12, 0.08);
+}
+
+/* Tab Panes & Content */
+.cyclone-tab-pane {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 22px;
+}
+
+.cyclone-tab-pane.active {
+  display: block;
+}
+
+.cyclone-table-wrap {
+  overflow-x: auto;
+}
+
+.cyclone-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+
+.cyclone-table th {
+  text-align: left;
+  padding: 8px 12px;
+  background: rgba(30, 41, 59, 0.6);
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cyclone-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  vertical-align: middle;
+}
+
+.port-row-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.port-row-item.critical-danger {
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.mono-dist, .mono-wind, .mono-val {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 600;
+}
+
+.port-signal-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.03em;
+}
+
+.port-directive-cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.directive-text {
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.btn-micro-focus {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.btn-micro-focus:hover {
+  background: #38bdf8;
+  color: #0b0f17;
+}
+
+.badge-danger {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.badge-safe {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* Physics Documentation */
+.cyclone-physics-doc {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cyclone-physics-doc .doc-card {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.cyclone-physics-doc h4 {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0 0 8px 0;
+}
+
+.cyclone-physics-doc p {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin: 0 0 10px 0;
+}
+
+.cyclone-physics-doc .formula-box {
+  background: rgba(11, 15, 25, 0.9);
+  border: 1px solid rgba(234, 88, 12, 0.3);
+  border-radius: 6px;
+  padding: 8px 14px;
+  margin-bottom: 12px;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 13px;
+  color: #fb923c;
+}
+
+.cyclone-physics-doc ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 11.5px;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.cyclone-physics-doc .epistemic-badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cyclone-physics-doc .badge-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* Modal Footer */
+.cyclone-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 22px;
+  background: rgba(11, 15, 25, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cyclone-modal-footer .footer-left {
+  display: flex;
+  gap: 10px;
+}
+
+.cyclone-footer-btn {
+  background: #ea580c;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 16px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cyclone-footer-btn:hover {
+  background: #c2410c;
+}
+
+.cyclone-footer-btn.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
+}
+
+.cyclone-footer-btn.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Leaflet Canvas Dynamic Elements */
+.cyclone-eye-div-icon {
+  background: transparent;
+  border: none;
+}
+
+.cyclone-eye-pulse {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2.5px solid #ea580c;
+  background: rgba(234, 88, 12, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: cycloneSpinPulse 3s infinite linear;
+}
+
+.cyclone-center-glyph {
+  font-size: 18px;
+  display: block;
+}
+
+@keyframes cycloneSpinPulse {
+  0% { transform: rotate(0deg) scale(1); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.6); }
+  50% { transform: rotate(180deg) scale(1.15); box-shadow: 0 0 0 10px rgba(234, 88, 12, 0); }
+  100% { transform: rotate(360deg) scale(1); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0); }
+}
+
+.port-storm-alert-pin {
+  background: transparent;
+  border: none;
+}
+
+.port-pin-wrapper {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.port-pin-wrapper:hover {
+  transform: scale(1.25);
+}
+
+.port-pin-wrapper .pin-code {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}

@@ -3100,8 +3100,66 @@ document.addEventListener("DOMContentLoaded", () => {
             latlng: latlng,
             layer: marker
           });
+        } else if (geom.type === "LineString" && Array.isArray(geom.coordinates)) {
+          const coords = geom.coordinates.map(c => [c[1], c[0]]);
+          const isTrack = cat === "cyclone_track";
+          const strokeColor = isTrack ? "#ea580c" : "#06b6d4";
+          const typeLabel = isTrack ? "Historical Cyclone Track" : "Coastal Protection Defense Alignment";
+
+          const line = L.polyline(coords, {
+            pane: "disasterPane",
+            color: strokeColor,
+            weight: isTrack ? 3.5 : 3.0,
+            dashArray: isTrack ? "6, 5" : "3, 5",
+            opacity: 0.85
+          }).addTo(layerGroups.cycloneFlood);
+
+          line.bindTooltip(`<strong>${isTrack ? '🌀' : '🛡️'} ${name}</strong><br><small style="color: ${strokeColor};">${p.status || typeLabel}</small>`, {
+            sticky: true,
+            opacity: 0.95
+          });
+
+          line.bindPopup(`
+            <div class="popup-card">
+              <div class="popup-card-header">
+                <span class="popup-category" style="background: ${strokeColor}; color: #fff;">${typeLabel.toUpperCase()}</span>
+                <h4 class="popup-card-title">${isTrack ? '🌀' : '🛡️'} ${name}</h4>
+              </div>
+              <div class="popup-grid">
+                <span class="grid-key">${isTrack ? 'Peak Wind Speed:' : 'Design Crest Elevation:'}</span>
+                <span class="grid-val"><strong>${isTrack ? (p.max_wind_kmh + ' km/h (' + p.peak_intensity_category + ')') : (p.crest_elevation_m + ' m MSL (' + p.defense_type + ')')}</strong></span>
+                <span class="grid-key">${isTrack ? 'Peak Storm Surge:' : 'Design Surge Tolerance:'}</span>
+                <span class="grid-val" style="color: #38bdf8;">${isTrack ? (p.peak_storm_surge_m + ' m Surge') : (p.design_surge_tolerance_m + ' m Surge')}</span>
+                <span class="grid-key">Corridor Length:</span>
+                <span class="grid-val">${p.length_km} km</span>
+                <span class="grid-key">Districts:</span>
+                <span class="grid-val">${p.districts_covered}</span>
+                <span class="grid-key">Authority:</span>
+                <span class="grid-val">${p.source_org}</span>
+              </div>
+            </div>
+          `, { maxWidth: 320 });
+
+          line.on("click", (e) => {
+            if (e && e.originalEvent) {
+              e.originalEvent._infraHandled = true;
+              L.DomEvent.stopPropagation(e.originalEvent);
+            }
+            inspectAsset({
+              properties: { ...p, asset_category: isTrack ? "cyclone_track" : "coastal_defense_zone" },
+              geometry: geom,
+              type: isTrack ? "cyclone_track" : "coastal_defense_zone"
+            });
+          });
+
+          allHazardList.push({ marker: line, feature, latlng: coords[0], name, cat, color: strokeColor, typeLabel });
         }
       });
+
+      // Initialize Gujarat Coastal Storm Surge & Cyclone Tracking Twin
+      if (window.CycloneCoastalSurgeTwin && typeof window.CycloneCoastalSurgeTwin.init === "function") {
+        window.CycloneCoastalSurgeTwin.init(map);
+      }
     } catch (err) {
       console.error("Failed to load environment disaster layer:", err);
     }
@@ -6276,6 +6334,15 @@ document.addEventListener("DOMContentLoaded", () => {
           command: "sauni"
         },
         {
+          title: "Studio: /cyclone",
+          subtitle: "Cyclone & Coastal Surge Twin — Arabian Sea Tracks, Storm Surges & Port Alerts (C)",
+          category: "WORKSPACE",
+          icon: "🌪️",
+          badgeClass: "tag-hazard",
+          isSlashCommand: true,
+          command: "cyclone"
+        },
+        {
           title: "Studio: /water",
           subtitle: "Hydrology & Scenarios Studio — Water Lab Simulator (S)",
           category: "WORKSPACE",
@@ -7181,6 +7248,18 @@ document.addEventListener("DOMContentLoaded", () => {
         damsModal.close();
         return;
       }
+      const sauniModal = document.getElementById("sauniExplorerModal");
+      if (sauniModal && sauniModal.open) {
+        if (window.SauniBasinTransferExplorer) window.SauniBasinTransferExplorer.closeModal();
+        else sauniModal.close();
+        return;
+      }
+      const cycModal = document.getElementById("cycloneSurgeModal");
+      if (cycModal && cycModal.open) {
+        if (window.CycloneCoastalSurgeTwin) window.CycloneCoastalSurgeTwin.closeModal();
+        else cycModal.close();
+        return;
+      }
       const compareBox = document.getElementById("proximityCompareBox");
       if (compareBox && !compareBox.classList.contains("hidden")) {
         compareBox.classList.add("hidden");
@@ -7447,6 +7526,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Initialize Coastal Storm Surge & Cyclone Tracking Twin Component
+  if (window.CycloneCoastalSurgeTwin && typeof window.CycloneCoastalSurgeTwin.init === "function") {
+    window.CycloneCoastalSurgeTwin.init(map);
+  }
+  const openCycloneSurgeBtn = document.getElementById("openCycloneSurgeBtn");
+  if (openCycloneSurgeBtn) {
+    openCycloneSurgeBtn.addEventListener("click", () => {
+      if (window.CycloneCoastalSurgeTwin) {
+        window.CycloneCoastalSurgeTwin.openModal();
+      }
+    });
+  }
+
   // ==========================================================================
   // 19. Studio Workspaces & URL Hash Routing Engine (/#/dams, /#/water, /#/energy, etc.)
   // ==========================================================================
@@ -7476,6 +7568,14 @@ document.addEventListener("DOMContentLoaded", () => {
         preset: "sauni",
         view: { center: [22.25, 71.10], zoom: 7.8 },
         description: "Pressurized diversion of Narmada floodwaters across Saurashtra & Sujalam recharge canal."
+      },
+      cyclone: {
+        id: "cyclone",
+        name: "Cyclone & Coastal Surge Twin",
+        icon: "🌪️",
+        preset: "cyclone",
+        view: { center: [21.80, 70.20], zoom: 7.2 },
+        description: "Arabian Sea cyclone tracks, SLOSH surge hydrodynamics, 8-port alert signals & coastal defenses."
       },
       water: {
         id: "water",
@@ -7593,6 +7693,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (window.SauniBasinTransferExplorer && typeof window.SauniBasinTransferExplorer.openModal === "function") {
           window.SauniBasinTransferExplorer.openModal();
         }
+      } else if (cfg.id === "cyclone") {
+        showToast("🌪️ Cyclone & Coastal Surge Twin Active — Press C for Storm Tracking");
+        if (window.CycloneCoastalSurgeTwin && typeof window.CycloneCoastalSurgeTwin.openModal === "function") {
+          window.CycloneCoastalSurgeTwin.openModal();
+        }
       } else if (cfg.id === "water") {
         showToast("🌊 Hydrology & Scenarios Studio Active — Press S for Water Lab");
       } else if (cfg.id === "energy") {
@@ -7622,7 +7727,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const [path, queryStr] = rawHash.split("?");
       const segments = path.split("/").filter(Boolean);
-      const studioKey = segments[0] ? segments[0].toLowerCase() : "overview";
+      let studioKey = segments[0] ? segments[0].toLowerCase() : "overview";
+      if (studioKey === "coastal") studioKey = "cyclone";
 
       if (this.studios[studioKey]) {
         this.activateStudio(studioKey, false);
@@ -7631,6 +7737,10 @@ document.addEventListener("DOMContentLoaded", () => {
           const params = new URLSearchParams(queryStr || "");
           const linkParam = params.get("link") || segments[1] || "link1";
           window.SauniBasinTransferExplorer.openModal(linkParam);
+        } else if (studioKey === "cyclone" && window.CycloneCoastalSurgeTwin) {
+          const params = new URLSearchParams(queryStr || "");
+          const stormParam = params.get("storm") || segments[1] || "biparjoy";
+          window.CycloneCoastalSurgeTwin.openModal(stormParam);
         }
 
         let targetId = segments[1];

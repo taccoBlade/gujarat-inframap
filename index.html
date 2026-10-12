@@ -193,7 +193,16 @@
               <span>SAUNI Transfer</span>
               <kbd class="dropdown-kbd">U</kbd>
             </button>
-            <button id="openEnergyExplorerBtn" class="action-btn action-btn-energy" title="Open Hydropower & Gujarat Energy Infrastructure Explorer (H)" aria-label="Energy & Hydropower Explorer">
+            <button id="openCycloneSurgeBtn" class="action-btn action-btn-cyclone" title="Open Coastal Storm Surge &amp; Cyclone Tracking Twin (C)" aria-label="Cyclone &amp; Storm Surge Twin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                <path d="M2 12h20"></path>
+              </svg>
+              <span>Cyclone &amp; Surge</span>
+              <kbd class="dropdown-kbd">C</kbd>
+            </button>
+            <button id="openEnergyExplorerBtn" class="action-btn action-btn-energy" title="Open Hydropower &amp; Gujarat Energy Infrastructure Explorer (H)" aria-label="Energy &amp; Hydropower Explorer">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
               </svg>
@@ -354,12 +363,17 @@
           <span class="studio-icon">💧</span>
           <span class="studio-name">Dams</span>
         </a>
-        <a href="#/sauni" class="studio-pill" data-studio="sauni" title="SAUNI Lifeline & Basin Transfer Twin (#/sauni) — 4 Pressurized Links & Sujalam Spine">
+        <a href="#/sauni" class="studio-pill" data-studio="sauni" title="SAUNI Lifeline &amp; Basin Transfer Twin (#/sauni) — 4 Pressurized Links &amp; Sujalam Spine">
           <span class="studio-dot"></span>
           <span class="studio-icon">🚰</span>
           <span class="studio-name">SAUNI Lifeline</span>
         </a>
-        <a href="#/water" class="studio-pill" data-studio="water" title="Hydrology & Scenarios Studio (#/water) — Simulation Lab & Catchments">
+        <a href="#/cyclone" class="studio-pill" data-studio="cyclone" title="Cyclone &amp; Coastal Surge Twin (#/cyclone) — Storm Tracks, Surge Hydrodynamics &amp; Port Alerts">
+          <span class="studio-dot"></span>
+          <span class="studio-icon">🌪️</span>
+          <span class="studio-name">Cyclone &amp; Surge</span>
+        </a>
+        <a href="#/water" class="studio-pill" data-studio="water" title="Hydrology &amp; Scenarios Studio (#/water) — Simulation Lab &amp; Catchments">
           <span class="studio-dot"></span>
           <span class="studio-icon">🌊</span>
           <span class="studio-name">Water Lab</span>
@@ -3068,6 +3082,9 @@
 
   <!-- Gujarat SAUNI Yojana & Basin Water Transfer Explorer Engine Component -->
   <script src="js/sauni_basin_transfer_explorer.js?v=5.7.0"></script>
+
+  <!-- Gujarat Coastal Storm Surge & Cyclone Tracking Twin Engine Component -->
+  <script src="js/cyclone_coastal_surge_twin.js?v=5.7.0"></script>
 
   <!-- Application Logic -->
   <script src="js/app.js?v=5.7.0"></script>

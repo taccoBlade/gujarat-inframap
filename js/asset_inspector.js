@@ -1301,10 +1301,19 @@
         </div>
       `,
       scienceStop: (p) => `
+        <div class="insp-lab-launcher-card" style="margin-top: 8px;">
+          <div class="launcher-info">
+            <span class="launcher-title">🌪️ Coastal Storm Surge &amp; Cyclone Tracking Twin</span>
+            <span class="launcher-desc">Simulate Arabian Sea cyclone tracks, SLOSH surge hydrodynamics, and port emergency danger signals (C).</span>
+          </div>
+          <button class="insp-open-lab-btn" style="background: linear-gradient(135deg, #ea580c, #c2410c);" onclick="window.CycloneCoastalSurgeTwin && window.CycloneCoastalSurgeTwin.openModal()">
+            Track Cyclone Surge ➔
+          </button>
+        </div>
         <div class="insp-science-box">
           <div class="science-header">
             <span class="science-badge">NAUTICAL HYDRODYNAMICS</span>
-            <h4>Under Keel Clearance (UKC) & Shallow Water Squat Effect</h4>
+            <h4>Under Keel Clearance (UKC) &amp; Shallow Water Squat Effect</h4>
           </div>
           <div class="science-formula-card">
             <div class="formula-latex">UKC = Depth - Draft - Squat \ge UKC_{min}</div>
@@ -1542,14 +1551,25 @@
         "Soil Amplification Category": "Type I (Rock/Hard Soil), Type II (Medium), Type III (Soft Marine / Alluvium Amplification)"
       }),
       scienceStop: (p) => `
+        ${(p.asset_category === 'cyclone_hazard_zone' || p.asset_category === 'cyclone_track' || p.asset_category === 'coastal_defense_zone' || (p.name && p.name.toLowerCase().includes('cyclone'))) ? `
+          <div class="insp-lab-launcher-card" style="margin-top: 8px;">
+            <div class="launcher-info">
+              <span class="launcher-title">🌪️ Coastal Storm Surge &amp; Cyclone Tracking Twin</span>
+              <span class="launcher-desc">Simulate Arabian Sea cyclone tracks, SLOSH surge hydrodynamics, and port emergency danger signals (C).</span>
+            </div>
+            <button class="insp-open-lab-btn" style="background: linear-gradient(135deg, #ea580c, #c2410c);" onclick="window.CycloneCoastalSurgeTwin && window.CycloneCoastalSurgeTwin.openModal('${p.storm_name ? (p.storm_name.toLowerCase().includes('tauktae') ? 'tauktae' : 'biparjoy') : 'biparjoy'}')">
+              Track Cyclone Surge ➔
+            </button>
+          </div>
+        ` : ''}
         <div class="insp-science-box">
           <div class="science-header">
-            <span class="science-badge">EARTHQUAKE ENGINEERING</span>
-            <h4>Design Horizontal Acceleration Spectrum</h4>
+            <span class="science-badge">${(p.asset_category === 'cyclone_hazard_zone' || p.asset_category === 'cyclone_track' || p.asset_category === 'coastal_defense_zone') ? 'COASTAL HYDRODYNAMICS' : 'EARTHQUAKE ENGINEERING'}</span>
+            <h4>${(p.asset_category === 'cyclone_hazard_zone' || p.asset_category === 'cyclone_track' || p.asset_category === 'coastal_defense_zone') ? 'Shallow-Water Storm Surge & Wind Shear Stress' : 'Design Horizontal Acceleration Spectrum'}</h4>
           </div>
           <div class="science-formula-card">
-            <div class="formula-latex">A_h = \frac{Z}{2} · \frac{I}{R} · \frac{S_a}{g}</div>
-            <p class="formula-desc">Where <strong>Z</strong> is Zone Factor, <strong>I</strong> is Importance Factor (1.5 for critical infrastructure), <strong>R</strong> is Response Reduction Factor (5 for ductile special moment frames), and <strong>Sa/g</strong> is spectral acceleration response.</p>
+            <div class="formula-latex">${(p.asset_category === 'cyclone_hazard_zone' || p.asset_category === 'cyclone_track' || p.asset_category === 'coastal_defense_zone') ? 'S_{total} = \\beta_{funnel} \\cdot (\\Delta S_{IB} + \\Delta S_{wind}) + S_{tide}' : 'A_h = \\frac{Z}{2} · \\frac{I}{R} · \\frac{S_a}{g}'}</div>
+            <p class="formula-desc">${(p.asset_category === 'cyclone_hazard_zone' || p.asset_category === 'cyclone_track' || p.asset_category === 'coastal_defense_zone') ? 'Where storm surge couples inverted barometer sea-surface elevation, shallow continental shelf wind shear stress, and bathymetric funneling in the Gulf of Khambhat & Kutch.' : 'Where <strong>Z</strong> is Zone Factor, <strong>I</strong> is Importance Factor (1.5 for critical infrastructure), <strong>R</strong> is Response Reduction Factor (5 for ductile special moment frames), and <strong>Sa/g</strong> is spectral acceleration response.'}</p>
           </div>
         </div>
       `,
