@@ -1425,6 +1425,22 @@
     console.log("[LayerManager] Initialized with 11 categories and 27 infrastructure layers.");
   }
 
+  function evaluateZoomLevel(zoom) {
+    const z = typeof zoom === "number" ? zoom : currentZoom;
+    let lod = "DETAILED";
+    if (z < 8.5) {
+      lod = "OVERVIEW";
+    } else if (z < 11.0) {
+      lod = "REGIONAL";
+    }
+    return {
+      zoom: z,
+      lod: lod,
+      suppressDenseLabels: z < 9.0,
+      visibleLayersCount: LAYERS.filter(l => z >= l.minZoom && z <= l.maxZoom).length
+    };
+  }
+
   // Export to global namespace
   window.LayerManager = {
     init,
@@ -1436,6 +1452,7 @@
     resetLayersToDefault,
     applyPreset,
     updateZoomLOD,
+    evaluateZoomLevel,
     highlightSelectedAsset,
     clearSelectedHighlight,
     renderActiveLayerLegend

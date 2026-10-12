@@ -1649,6 +1649,8 @@
   function getSchema(category) {
     if (SCHEMAS[category]) return SCHEMAS[category];
     // Map aliases
+    if (["thermal", "solar", "wind", "gas", "nuclear", "power", "power_plant"].includes(category)) return SCHEMAS.power_plant;
+    if (["hydro", "hydropower", "hydropower_plant"].includes(category)) return SCHEMAS.hydropower_plant;
     if (category === "seaport" || category === "commercial_seaport") return SCHEMAS.commercial_seaport;
     if (category === "airport" || category === "commercial_airport") return SCHEMAS.commercial_airport;
     if (category === "industrial_estate" || category === "industrial_sez" || category === "industry") return SCHEMAS.industrial_sez;
@@ -1662,7 +1664,12 @@
   // Related Assets Graph Matcher (Network Traversal)
   function findConnectedAssets(asset) {
     const p = asset.properties || {};
-    const cat = p.asset_category || asset.type || "";
+    let cat = p.asset_category || asset.category || p.category || asset.type || "";
+    if (["thermal", "solar", "wind", "gas", "nuclear"].includes(cat) || (!p.asset_category && p.capacity_mw && !p.is_hydropower) || (p.id && String(p.id).startsWith("power_") && !p.is_hydropower)) {
+      cat = "power_plant";
+    } else if (cat === "hydro" || p.is_hydropower) {
+      cat = "hydropower_plant";
+    }
     const name = p.name || p.title || "";
     const district = p.district || "";
     const river = p.river || p.basin || "";
@@ -2280,7 +2287,14 @@
       state.isOpen = true;
 
       const p = asset.properties || {};
-      const cat = p.asset_category || asset.type || "infrastructure";
+      let cat = p.asset_category || asset.category || p.category || asset.type || "infrastructure";
+      if (!CATEGORY_THEMES[cat]) {
+        if (["thermal", "solar", "wind", "gas", "nuclear"].includes(p.category) || ["thermal", "solar", "wind", "gas", "nuclear"].includes(cat) || (!p.asset_category && p.capacity_mw && !p.is_hydropower) || (p.id && String(p.id).startsWith("power_") && !p.is_hydropower)) {
+          cat = "power_plant";
+        } else if (p.category === "hydro" || cat === "hydro" || p.is_hydropower) {
+          cat = "hydropower_plant";
+        }
+      }
       const theme = CATEGORY_THEMES[cat] || { label: "INFRASTRUCTURE ASSET", color: "#38bdf8", light: "#bae6fd", icon: "🏛️" };
       const schema = getSchema(cat);
 

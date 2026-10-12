@@ -6992,6 +6992,11 @@ document.addEventListener("DOMContentLoaded", () => {
         window.Terrain3DMode.exit();
         return;
       }
+      const repModal = document.getElementById("reportBuilderModal");
+      if (repModal && repModal.open) {
+        repModal.close();
+        return;
+      }
       const opsModal = document.getElementById("dataOpsModal");
       if (opsModal && opsModal.open) {
         opsModal.close();

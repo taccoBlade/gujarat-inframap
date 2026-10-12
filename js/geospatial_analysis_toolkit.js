@@ -147,6 +147,8 @@
       crs: "EPSG:32643 (WGS 84 / UTM Zone 43N)",
       easting_m: Math.round(easting),
       northing_m: Math.round(northing),
+      easting: Math.round(easting),
+      northing: Math.round(northing),
       central_meridian: "75° E"
     };
   }

@@ -1920,9 +1920,12 @@ interface TelemetryFeed {
     stepTimeline,
     synchronizeMapLayers,
     getTimeline: () => HYDROLOGICAL_TIMELINE,
+    getHistory: () => HYDROLOGICAL_TIMELINE,
     getMilestones: () => INFRASTRUCTURE_MILESTONES,
-    getReservoirSeries: () => RESERVOIR_TIME_SERIES,
-    getProviderInfo: () => telemetryProvider.getStatusInfo()
+    getReservoirSeries: (id) => id ? (RESERVOIR_TIME_SERIES[id]?.observations || RESERVOIR_TIME_SERIES[id] || null) : RESERVOIR_TIME_SERIES,
+    getProviderInfo: () => telemetryProvider.getStatusInfo(),
+    getTelemetryInfo: () => telemetryProvider.getStatusInfo(),
+    getState: () => ({ activeDateIndex, activeMilestoneIndex, activeMode, isPlaying })
   };
 
 })();

@@ -97,7 +97,12 @@ async function run() {
   }
 
   const targets = await getJson(`http://127.0.0.1:${port}/json`);
-  const pageTarget = targets.find(t => t.type === 'page');
+  const pageTarget = targets.find(t => t.type === 'page' && t.url.includes('8080'));
+  if (!pageTarget) {
+    console.error('[FAIL] Page target 8080 not found.');
+    chromeProc.kill();
+    process.exit(1);
+  }
   const client = new CDPClient(pageTarget.webSocketDebuggerUrl);
   await client.connect();
 
@@ -106,7 +111,13 @@ async function run() {
   await client.send('DOM.enable');
 
   console.log('Waiting for application initialization and GeoJSON streaming...');
-  await sleep(4000);
+  for (let i = 0; i < 30; i++) {
+    try {
+      const ready = await client.eval('typeof window.selectUrbanAssetByName === "function"');
+      if (ready) break;
+    } catch (e) {}
+    await sleep(300);
+  }
 
   console.log('\n========================================');
   console.log('TEST 1: SEAPORT & AIRPORT POPUP FIDELITY');

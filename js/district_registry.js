@@ -321,6 +321,7 @@
   };;
   if (typeof window !== 'undefined') {
     window.DISTRICT_INFRA_REGISTRY = registry;
+    window.DistrictRegistry = registry;
   }
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = registry;
