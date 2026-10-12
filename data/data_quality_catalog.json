@@ -1,7 +1,7 @@
 {
   "audit_timestamp": "2026-10-12T05:31:44.762405+00:00",
   "repository_layers_count": 13,
-  "total_features": 3327,
+  "total_features": 3332,
   "overall_validity_pct": 100.0,
   "layers": {
     "gujarat_district_hq": {
@@ -137,13 +137,13 @@
       "quality_index": 100.0
     },
     "gujarat_water_resources": {
-      "features_count": 90,
+      "features_count": 95,
       "crs": "EPSG:4326",
       "geometry_validity_pct": 100.0,
       "repaired_geometries": 0,
       "license_coverage_pct": 100.0,
       "classifications": {
-        "verified": 90
+        "verified": 95
       },
       "quality_index": 100.0
     }

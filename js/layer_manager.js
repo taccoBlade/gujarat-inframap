@@ -1350,6 +1350,7 @@
     const presets = {
       overview: DEFAULT_ACTIVE_KEYS,
       dams: ["districts", "waterDams", "reservoirs", "rivers", "canals"],
+      sauni: ["districts", "waterDams", "reservoirs", "rivers", "canals"],
       water: ["districts", "waterDams", "reservoirs", "rivers", "canals", "commandAreas"],
       transport: ["districts", "roads", "structures", "railways", "stations", "portsAirports", "urbanMetro"],
       energy: ["districts", "power", "transmission", "substations"],

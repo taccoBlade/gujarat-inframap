@@ -184,6 +184,15 @@
               <span>Water Network</span>
               <kbd class="dropdown-kbd">N</kbd>
             </button>
+            <button id="openSauniExplorerBtn" class="action-btn action-btn-sauni" title="Open SAUNI Yojana & Basin Water Transfer Explorer (U)" aria-label="SAUNI Yojana Explorer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="15"></line>
+                <polyline points="9 12 12 15 15 12"></polyline>
+              </svg>
+              <span>SAUNI Transfer</span>
+              <kbd class="dropdown-kbd">U</kbd>
+            </button>
             <button id="openEnergyExplorerBtn" class="action-btn action-btn-energy" title="Open Hydropower & Gujarat Energy Infrastructure Explorer (H)" aria-label="Energy & Hydropower Explorer">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
@@ -344,6 +353,11 @@
           <span class="studio-dot"></span>
           <span class="studio-icon">💧</span>
           <span class="studio-name">Dams</span>
+        </a>
+        <a href="#/sauni" class="studio-pill" data-studio="sauni" title="SAUNI Lifeline & Basin Transfer Twin (#/sauni) — 4 Pressurized Links & Sujalam Spine">
+          <span class="studio-dot"></span>
+          <span class="studio-icon">🚰</span>
+          <span class="studio-name">SAUNI Lifeline</span>
         </a>
         <a href="#/water" class="studio-pill" data-studio="water" title="Hydrology & Scenarios Studio (#/water) — Simulation Lab & Catchments">
           <span class="studio-dot"></span>
@@ -3052,7 +3066,10 @@
   <!-- Gujarat Digital Twin Report Builder Engine Component -->
   <script src="js/digital_twin_report_builder.js?v=5.6.0"></script>
 
+  <!-- Gujarat SAUNI Yojana & Basin Water Transfer Explorer Engine Component -->
+  <script src="js/sauni_basin_transfer_explorer.js?v=5.7.0"></script>
+
   <!-- Application Logic -->
-  <script src="js/app.js?v=5.6.0"></script>
+  <script src="js/app.js?v=5.7.0"></script>
 </body>
 </html>

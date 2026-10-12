@@ -124,6 +124,7 @@ def test_javascript_syntax():
         "js/terrain_3d_mode.js",
         "js/geospatial_data_ops.js",
         "js/digital_twin_report_builder.js",
+        "js/sauni_basin_transfer_explorer.js",
         "js/app.js",
         "sw.js"
     ]

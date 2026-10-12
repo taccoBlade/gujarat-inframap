@@ -156,6 +156,15 @@
               Simulate Scenarios ➔
             </button>
           </div>
+          <div class="insp-lab-launcher-card" style="margin-top: 8px;">
+            <div class="launcher-info">
+              <span class="launcher-title">🚰 SAUNI Yojana &amp; Basin Water Transfer Explorer</span>
+              <span class="launcher-desc">Simulate pressurized Narmada floodwater diversion, Dhanki lift pumping demand, and reservoir replenishment.</span>
+            </div>
+            <button class="insp-open-lab-btn" style="background: linear-gradient(135deg, #0284c7, #0891b2);" onclick="window.SauniBasinTransferExplorer && window.SauniBasinTransferExplorer.openModal('${p.sauni_link_key || 'link1'}')">
+              Explore Basin Transfer ➔
+            </button>
+          </div>
           <div class="insp-science-box">
             <div class="science-header">
               <span class="science-badge">HYDRAULIC ENGINE</span>

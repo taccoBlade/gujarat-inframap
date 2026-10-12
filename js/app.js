@@ -210,6 +210,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (tag) {
       const names = {
         overview: "Overview",
+        dams: "Dams",
+        sauni: "SAUNI",
         water: "Water",
         transport: "Transport",
         energy: "Energy",
@@ -388,6 +390,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return null;
     }
   }
+  window.fetchCachedGeoJson = fetchCachedGeoJson;
 
   // 5. GeoJSON Layer Loader Helper with Non-Blocking Asynchronous Chunking
   async function loadGeoJsonLayer(url, layerGroup, options = {}) {
@@ -2566,6 +2569,11 @@ document.addEventListener("DOMContentLoaded", () => {
       // Initialize Water Scenarios Lab Module
       if (window.WaterScenariosLab && typeof window.WaterScenariosLab.init === "function") {
         window.WaterScenariosLab.init(map, allWaterAssetsList);
+      }
+
+      // Initialize SAUNI Yojana & Basin Water Transfer Explorer Module
+      if (window.SauniBasinTransferExplorer && typeof window.SauniBasinTransferExplorer.init === "function") {
+        window.SauniBasinTransferExplorer.init(map, data);
       }
     } catch (err) {
       console.error("Failed to load water resources layer:", err);
@@ -6259,6 +6267,15 @@ document.addEventListener("DOMContentLoaded", () => {
           command: "dams"
         },
         {
+          title: "Studio: /sauni",
+          subtitle: "SAUNI Lifeline Twin — 4 Pressurized Links & Basin Water Transfer Simulator (U)",
+          category: "WORKSPACE",
+          icon: "🚰",
+          badgeClass: "tag-water",
+          isSlashCommand: true,
+          command: "sauni"
+        },
+        {
           title: "Studio: /water",
           subtitle: "Hydrology & Scenarios Studio — Water Lab Simulator (S)",
           category: "WORKSPACE",
@@ -7420,6 +7437,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Initialize SAUNI Yojana & Basin Water Transfer Explorer Component
+  const openSauniExplorerBtn = document.getElementById("openSauniExplorerBtn");
+  if (openSauniExplorerBtn) {
+    openSauniExplorerBtn.addEventListener("click", () => {
+      if (window.SauniBasinTransferExplorer) {
+        window.SauniBasinTransferExplorer.openModal();
+      }
+    });
+  }
+
   // ==========================================================================
   // 19. Studio Workspaces & URL Hash Routing Engine (/#/dams, /#/water, /#/energy, etc.)
   // ==========================================================================
@@ -7441,6 +7468,14 @@ document.addEventListener("DOMContentLoaded", () => {
         preset: "dams",
         view: { center: [22.10, 72.85], zoom: 7.6 },
         description: "Authoritative ledger of 68 major dams, live storage telemetry & Narmada water spine."
+      },
+      sauni: {
+        id: "sauni",
+        name: "SAUNI Lifeline & Basin Transfer Twin",
+        icon: "🚰",
+        preset: "sauni",
+        view: { center: [22.25, 71.10], zoom: 7.8 },
+        description: "Pressurized diversion of Narmada floodwaters across Saurashtra & Sujalam recharge canal."
       },
       water: {
         id: "water",
@@ -7553,6 +7588,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (cfg.id === "dams") {
         showToast("💧 Dams & Reservoirs Studio Active — 68 Mapped Hydraulic Assets");
+      } else if (cfg.id === "sauni") {
+        showToast("🚰 SAUNI Lifeline Twin Active — Press U for Transfer Simulator");
+        if (window.SauniBasinTransferExplorer && typeof window.SauniBasinTransferExplorer.openModal === "function") {
+          window.SauniBasinTransferExplorer.openModal();
+        }
       } else if (cfg.id === "water") {
         showToast("🌊 Hydrology & Scenarios Studio Active — Press S for Water Lab");
       } else if (cfg.id === "energy") {
@@ -7586,6 +7626,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (this.studios[studioKey]) {
         this.activateStudio(studioKey, false);
+
+        if (studioKey === "sauni" && window.SauniBasinTransferExplorer) {
+          const params = new URLSearchParams(queryStr || "");
+          const linkParam = params.get("link") || segments[1] || "link1";
+          window.SauniBasinTransferExplorer.openModal(linkParam);
+        }
 
         let targetId = segments[1];
         if (!targetId && queryStr) {

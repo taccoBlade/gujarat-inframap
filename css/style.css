@@ -16118,5 +16118,610 @@ dialog.system-modal::backdrop {
   }
 }
 
+/* ==========================================================================
+   20. SAUNI YOJANA & BASIN WATER TRANSFER EXPLORER (OBSIDIAN TITANIUM)
+   ========================================================================== */
 
+#sauniExplorerModal.sauni-modal {
+  width: 95vw;
+  max-width: 1440px;
+  height: 90vh;
+  max-height: 920px;
+  background: rgba(11, 15, 25, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  color: #f1f5f9;
+  padding: 0;
+  margin: auto;
+  overflow: hidden;
+}
 
+#sauniExplorerModal::backdrop {
+  background: rgba(4, 7, 14, 0.75);
+  backdrop-filter: blur(6px);
+}
+
+.sauni-modal-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.sauni-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 18px 24px 14px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.9) 0%, rgba(11, 15, 25, 0.6) 100%);
+}
+
+#closeSauniModalBtn.system-modal-close {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+  flex-shrink: 0;
+}
+
+#closeSauniModalBtn.system-modal-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+}
+
+.sauni-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.sauni-modal-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.01em;
+}
+
+.sauni-modal-sub {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+  max-width: 900px;
+  line-height: 1.4;
+}
+
+.sauni-tabs-bar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 24px;
+  background: rgba(15, 23, 42, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sauni-tabs-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.sauni-tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 8px 14px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.sauni-tab-btn:hover {
+  background: rgba(51, 65, 85, 0.7);
+  color: #f8fafc;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.sauni-tab-btn.active {
+  background: rgba(14, 165, 233, 0.16);
+  border-color: #0284c7;
+  color: #38bdf8;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.25);
+}
+
+.sauni-tab-num {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
+
+.sauni-tab-name {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.sauni-body-grid {
+  display: grid;
+  grid-template-columns: 440px 1fr;
+  gap: 16px;
+  padding: 16px 24px;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.3) rgba(15, 23, 42, 0.5);
+}
+
+.sauni-body-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sauni-body-grid::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.sauni-body-grid::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.3);
+  border-radius: 3px;
+}
+
+@media (max-width: 1080px) {
+  .sauni-body-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sauni-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sauni-card {
+  background: rgba(17, 24, 39, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.sauni-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sauni-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.sauni-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.sauni-tag-blue {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.sauni-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 12px;
+  font-size: 11px;
+}
+
+.sauni-profile-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sauni-meta-k {
+  color: #64748b;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sauni-meta-v {
+  color: #e2e8f0;
+  font-size: 11px;
+}
+
+.sauni-profile-desc {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 10px 0 0 0;
+  line-height: 1.45;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 8px;
+}
+
+.sauni-controls-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sauni-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sauni-control-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.sauni-control-labels label {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.sauni-val-display {
+  color: #38bdf8;
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.sauni-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #1e293b;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.sauni-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
+  cursor: pointer;
+}
+
+.sauni-telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.sauni-telem-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.sauni-telem-val {
+  font-size: 17px;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  letter-spacing: -0.02em;
+}
+
+.sauni-telem-val small {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.sauni-telem-lbl {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.sauni-telem-sub {
+  font-size: 9px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.sauni-table-scroll {
+  overflow-x: auto;
+  margin-bottom: 14px;
+}
+
+.sauni-ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  color: #e2e8f0;
+}
+
+.sauni-ledger-table th {
+  background: rgba(15, 23, 42, 0.85);
+  color: #94a3b8;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sauni-ledger-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sauni-dam-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sauni-dam-icon {
+  font-size: 14px;
+}
+
+.sauni-dam-title {
+  color: #f1f5f9;
+  display: block;
+  font-size: 11px;
+}
+
+.sauni-dam-sub {
+  color: #64748b;
+  font-size: 9px;
+  display: block;
+}
+
+.sauni-district-pill {
+  font-size: 10px;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.sauni-meter-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.sauni-meter-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+
+.sauni-meter-fill-base {
+  background: #64748b;
+  height: 100%;
+}
+
+.sauni-meter-fill-gain {
+  background: #06b6d4;
+  height: 100%;
+  box-shadow: 0 0 6px rgba(6, 182, 212, 0.5);
+}
+
+.sauni-inspect-dam-btn {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.sauni-inspect-dam-btn:hover {
+  background: rgba(56, 189, 248, 0.25);
+  color: #ffffff;
+}
+
+.sauni-action-btn {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sauni-action-btn:hover {
+  background: rgba(51, 65, 85, 0.8);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+
+.sauni-flow-schematic {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+.sauni-schematic-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sauni-node {
+  display: flex;
+  flex-direction: column;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 8px 12px;
+  min-width: 140px;
+}
+
+.sauni-node-badge {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #38bdf8;
+}
+
+.sauni-node-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-top: 2px;
+}
+
+.sauni-node-metric {
+  font-size: 11px;
+  font-family: var(--font-mono, monospace);
+  color: #06b6d4;
+  margin-top: 2px;
+}
+
+.sauni-connector {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.sauni-connector-pulse {
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #0284c7 0%, #38bdf8 50%, #06b6d4 100%);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sauni-connector-pulse::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: #ffffff;
+  animation: sauniPulseAnim 2s infinite linear;
+}
+
+@keyframes sauniPulseAnim {
+  0% { left: -50%; }
+  100% { left: 100%; }
+}
+
+.sauni-connector-lbl {
+  font-size: 9px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.sauni-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: rgba(11, 15, 25, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 16px;
+}
+
+.sauni-statutory-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 10px;
+  color: #94a3b8;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.sauni-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+  border-radius: 6px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sauni-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* Palette utility text accents */
+.text-cyan { color: #06b6d4 !important; }
+.text-amber { color: #f59e0b !important; }
+.text-emerald { color: #10b981 !important; }
+.text-blue { color: #38bdf8 !important; }
+.text-dim { color: #64748b !important; }
