@@ -1,0 +1,41 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "GJ-CONF-001",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [73.8311, 23.3150]
+      },
+      "properties": {
+        "id": "GJ-CONF-001",
+        "name": "Kadana Dam",
+        "river": "Mahi",
+        "district": "Mahisagar",
+        "height_m": 66.0,
+        "gross_storage_mcm": 1542.0,
+        "source_org": "Central Water Commission (CWC NRLD 2023)",
+        "license": "Open Government Data (OGD) India"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-CONF-001",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [73.8315, 23.3152]
+      },
+      "properties": {
+        "id": "GJ-CONF-001",
+        "name": "Kadana Dam",
+        "river": "Mahi",
+        "district": "Mahisagar",
+        "height_m": 95.5,
+        "gross_storage_mcm": 1850.0,
+        "source_org": "Regional Field Survey Memo 2021",
+        "license": "Open Government Data (OGD) India"
+      }
+    }
+  ]
+}

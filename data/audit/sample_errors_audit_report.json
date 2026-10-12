@@ -1,0 +1,49 @@
+{
+  "dataset_name": "sample_errors",
+  "execution_timestamp": "2026-10-12T05:41:11.261231+00:00",
+  "elapsed_seconds": 0.0,
+  "pipeline_version": "5.5.0",
+  "stats": {
+    "total_records": 2,
+    "successful_imports": 0,
+    "rejected_records": 2,
+    "repaired_geometries": 0,
+    "duplicates_detected": 0,
+    "conflicts_detected": 0,
+    "transformed_coordinates": 0,
+    "normalized_properties": 0,
+    "missing_important_props": 0,
+    "quality_score_avg": 0.0
+  },
+  "rejections_count": 2,
+  "rejection_sample": [
+    {
+      "id": "GJ-ERR-001",
+      "name": "Out of Bounds Dam",
+      "reason": "COORDINATE_OUTSIDE_GUJARAT (48.8566°N, 2.3522°E)",
+      "original_geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.3522,
+          48.8566
+        ]
+      }
+    },
+    {
+      "id": "GJ-ERR-002",
+      "name": "Null Coordinates Station",
+      "reason": "NULL_COORDINATE_VALUE",
+      "original_geometry": {
+        "type": "Point",
+        "coordinates": [
+          null,
+          null
+        ]
+      }
+    }
+  ],
+  "conflicts_count": 0,
+  "conflict_register": [],
+  "duplicates_count": 0,
+  "duplicate_register": []
+}

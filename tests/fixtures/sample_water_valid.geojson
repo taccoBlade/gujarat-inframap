@@ -1,0 +1,58 @@
+{
+  "type": "FeatureCollection",
+  "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "GJ-WAT-DAM-001",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [73.7486, 21.8317]
+      },
+      "properties": {
+        "id": "GJ-WAT-DAM-001",
+        "name": "Sardar Sarovar Dam",
+        "name_gu": "સરદાર સરોવર ડેમ",
+        "type": "dam",
+        "category": "water",
+        "river": "Narmada",
+        "district": "Narmada",
+        "height_m": 163.0,
+        "crest_length_m": 1210.0,
+        "gross_storage_mcm": 9460.0,
+        "live_storage_mcm": 5800.0,
+        "hydro_capacity_mw": 1450.0,
+        "commission_year": 2017,
+        "source_org": "Central Water Commission (CWC) / Sardar Sarovar Narmada Nigam Ltd",
+        "license": "Open Government Data (OGD) India",
+        "classification": "verified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ-WAT-DAM-002",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [73.5806, 21.2486]
+      },
+      "properties": {
+        "id": "GJ-WAT-DAM-002",
+        "name": "Ukai Dam",
+        "name_gu": "ઉકાઈ ડેમ",
+        "type": "dam",
+        "category": "water",
+        "river": "Tapi",
+        "district": "Tapi",
+        "height_m": 80.8,
+        "crest_length_m": 4927.0,
+        "gross_storage_mcm": 7414.0,
+        "live_storage_mcm": 6730.0,
+        "hydro_capacity_mw": 300.0,
+        "commission_year": 1972,
+        "source_org": "Central Water Commission (CWC) / Gujarat Water Resources Dept",
+        "license": "Open Government Data (OGD) India",
+        "classification": "verified"
+      }
+    }
+  ]
+}

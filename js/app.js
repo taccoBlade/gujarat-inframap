@@ -6945,6 +6945,14 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (window.InfrastructureIntelligence) {
         window.InfrastructureIntelligence.openModal();
       }
+    } else if ((e.key === "q" || e.key === "Q") && !isTyping) {
+      e.preventDefault();
+      const opsModal = document.getElementById("dataOpsModal");
+      if (opsModal && opsModal.open) {
+        opsModal.close();
+      } else if (window.GeospatialDataOps) {
+        window.GeospatialDataOps.openModal();
+      }
     } else if ((e.key === "v" || e.key === "V") && !isTyping) {
       e.preventDefault();
       if (window.Terrain3DMode) {
@@ -6974,6 +6982,11 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (e.key === "Escape") {
       if (window.Terrain3DMode && window.Terrain3DMode.isActive()) {
         window.Terrain3DMode.exit();
+        return;
+      }
+      const opsModal = document.getElementById("dataOpsModal");
+      if (opsModal && opsModal.open) {
+        opsModal.close();
         return;
       }
       const intelModal = document.getElementById("infraIntelModal");
@@ -7202,6 +7215,41 @@ document.addEventListener("DOMContentLoaded", () => {
     floating3DToggleBtn.addEventListener("click", () => {
       if (window.Terrain3DMode) {
         window.Terrain3DMode.toggle();
+      }
+    });
+  }
+
+  // Initialize Gujarat Geospatial Data Operations & Quality Engine
+  if (window.GeospatialDataOps && typeof window.GeospatialDataOps.init === "function") {
+    Promise.all([
+      fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
+      fetchCachedGeoJson("data/gujarat_power.geojson"),
+      fetchCachedGeoJson("data/gujarat_transmission.geojson"),
+      fetchCachedGeoJson("data/gujarat_roads.geojson"),
+      fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
+      fetchCachedGeoJson("data/gujarat_stations.geojson"),
+      fetchCachedGeoJson("data/gujarat_districts.geojson")
+    ]).then(([watData, powData, transData, roadsData, structData, statData, distData]) => {
+      window.GeospatialDataOps.init(map, {
+        waterData: watData,
+        powerData: powData,
+        transData: transData,
+        roadsData: roadsData,
+        structData: structData,
+        stationsData: statData,
+        districtsData: distData
+      });
+    }).catch(err => {
+      console.warn("[GeospatialDataOps] Data load notice:", err);
+      window.GeospatialDataOps.init(map, {});
+    });
+  }
+
+  const openDataOpsBtn = document.getElementById("openDataOpsBtn");
+  if (openDataOpsBtn) {
+    openDataOpsBtn.addEventListener("click", () => {
+      if (window.GeospatialDataOps) {
+        window.GeospatialDataOps.openModal();
       }
     });
   }

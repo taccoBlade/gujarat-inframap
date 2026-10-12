@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "crs": { "type": "name", "properties": { "name": "EPSG:32643" } },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "GJ-UTM-001",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [370713.0, 2414868.0]
+      },
+      "properties": {
+        "id": "GJ-UTM-001",
+        "name": "Sardar Sarovar Dam Headworks",
+        "district": "Narmada",
+        "crs_original": "EPSG:32643",
+        "source_org": "Central Water Commission (CWC)",
+        "license": "Open Government Data (OGD) India"
+      }
+    }
+  ]
+}

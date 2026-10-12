@@ -1195,3 +1195,67 @@ Integrate an analytical, performance-aware **3D Terrain & Infrastructure Mode** 
   - Floating toggle button and keyboard shortcuts <kbd>V</kbd> and <kbd>Esc</kbd> verified.
 - **Regression Suite:** `node scripts/test_infrastructure_intelligence.js` and `node scripts/test_geospatial_toolkit.js` executed with 100% pass rate.
 
+---
+
+## Phase 27: Geospatial Data Operations & Quality Engine — 10-Stage ETL Pipeline, Visual Data Lineage, Anomaly Review & Controlled Correction
+
+### Objective & Architectural Mandate
+Engineer an authoritative **Geospatial Data Operations & Quality** module (`scripts/geospatial_etl_pipeline.py` and `js/geospatial_data_ops.js`) providing rigorous 10-stage ingestion auditing, data lineage visualization, anomaly and conflict detection, controlled record review with immutable audit trails, and client-side pre-flight sandbox validation. Strict anti-fabrication mandate: zero synthetic inventory, non-destructive conflict preservation (never silently discard conflicting records), and statutory provenance tagging.
+
+### Core Architectural Subsystems & Engineering Implementation
+1. **10-Stage Geospatial ETL & Quality Pipeline (`scripts/geospatial_etl_pipeline.py`)**:
+   - **Stage 1 (Source Discovery & License Verification)**: Registers statutory authorities (CWC, CEA, GETCO, NHAI, WR, GSI, CGWB, GMB, GIDC) and validates legal open licenses (OGD India, MoRTH Open Access, WR Open Spatial). Flags unverified licenses as `pending-review`.
+   - **Stage 2 (File & API Acquisition)**: Seamlessly parses GeoJSON, CSV with coordinate column discovery (`latitude`/`longitude`, `lat`/`lon`, `y`/`x`), and WKT.
+   - **Stage 3 (Schema & CRS Validation)**: Evaluates geographic coordinate ranges against Gujarat's spatial bounding envelope ($68.0^\circ\text{–}74.6^\circ\text{ E}$, $20.0^\circ\text{–}24.8^\circ\text{ N}$).
+   - **Stage 4 (Coordinate Transformation)**: Implements closed-form Snyder inverse transverse Mercator transformation from EPSG:32643 (UTM Zone 43N) to EPSG:4326 (WGS 84), with inverted $[lat, lon]$ pair auto-detection and snapping to 5 decimal places (~$1.1\text{m}$ resolution).
+   - **Stage 5 (Geometry Validation & Safe Repair)**: Safely closes unclosed linear rings, deduplicates consecutive collinear vertices, and rejects collapsed degenerate polygons.
+   - **Stage 6 (Duplicate & Conflicting-Record Detection)**: Computes spatial and ID collision signatures. **Non-Destructive Principle:** Records with contradictory engineering dimensions (e.g. Kadana Dam $66\text{m}$ vs $95.5\text{m}$) are retained, flagged `status: "pending-review"`, and registered in the conflict ledger.
+   - **Stage 7 (Property Normalization)**: Standardizes dates to ISO 8601, normalizes units (storage to float MCM, power to float MW, heights to meters, voltage to kV), and generates deterministic namespaced IDs.
+   - **Stage 8 (Spatial & Attribute Sanity Checks)**: Compares physical dimensions against empirical feasibility limits (e.g. dam height $1\text{–}300\text{m}$, storage $0\text{–}20{,}000\text{ MCM}$, power $0.1\text{–}10{,}000\text{ MW}$).
+   - **Stage 9 (Classification & Provenance Tagging)**: Tags every record with its canonical classification (`verified`, `source-reported`, `derived`, `estimated`, `illustrative`, `pending-review`) and attaches traceable provenance metadata with quality index scoring ($0\text{–}100$).
+   - **Stage 10 (Comparison, Audit Logging & Rollback)**: Creates timestamped layer backup snapshots in `data/backups/`, outputs JSON audit reports in `data/audit/`, and supports `--rollback <layer>` commands.
+2. **Quality Overview & Statewide Layer Health Ledger (`#dataOpsPane-overview`)**:
+   - High-density KPI cards: Audited Features ($3{,}327$), Geometry Validity ($100.0\%$), Quality Confidence Index ($96.8\%$), Open License Compliance ($100.0\%$).
+   - Master Layer Health Table: Audits all 13 core statutory layers with feature count, CRS, validity rate, publishing custodian, and quality index.
+   - Record Classification distribution bar: Verified ($85.7\%$), Source-Reported ($11.2\%$), Derived ($2.1\%$), Illustrative ($0.8\%$), Pending Review ($0.2\%$).
+3. **End-to-End Data Lineage Explorer (`#dataOpsPane-lineage`)**:
+   - Visual 4-stage pipeline flow graph tracing any selected layer from Statutory Origin (CWC, CEA, NHAI) $\to$ Acquisition Protocol $\to$ Normalization $\to$ Digital Twin Consumers (Asset Inspector, 3D Mode, Dam Science Lab, WEA Nexus).
+   - Custodian Registry metadata drawer showing legal license, publication vintage, and geometric specifications.
+4. **Anomaly & Conflict Review Ledger (`#dataOpsPane-anomalies`)**:
+   - Evidence cards for contradictory dimensions (Kadana Dam height conflict), international border margin proximity (Lakhpat Port), unit normalizations (Pirana 400kV substation), and missing gazette fields.
+   - Displays statutory vs conflicting source records side-by-side with engineering recommendations.
+5. **Controlled Record Review & Immutable Audit Trail Workbench (`#dataOpsPane-review`)**:
+   - Controlled manual correction form: Field selector, current value, new validated value, mandatory justification/reason, operator signature, and classification override.
+   - Does not overwrite raw source history; appends chronological updates to local immutable audit trail in `localStorage`.
+   - Audit trail table viewer with export support for RFC-4180 CSV and JSON.
+6. **Pre-Flight Ingestion Sandbox & Validator (`#dataOpsPane-import`)**:
+   - Client-side drag-and-drop zone and raw text paste area.
+   - Evaluates incoming GeoJSON and CSV against the 10 stages in real time and renders a Pre-Flight Quality Report Card with feature counts, valid geometry percentages, bounding envelope checks, and ready-to-ingest verdicts.
+7. **Asset Inspector Linkage & Navigation Accessibility**:
+   - Enriched `AssetInspector` Sources tab with a **Data Provenance & Quality Banner** displaying classification badge, legal license citation, quality score, and direct button `[ 🌿 Inspect Full Data Lineage ]`.
+   - Modal action button `#openDataOpsBtn` in `#headerMoreMenu` with label `Data Ops (Q)`.
+   - Keyboard hotkey <kbd>Q</kbd> (**Q**uality) toggles the modal; <kbd>Esc</kbd> cleanly dismisses it.
+
+### Verification & Validation Suite
+- **ETL Pipeline Automation Suite (`scripts/test_etl_pipeline.py`)**: 21 passed, 0 failed (100%):
+  - UTM Zone 43N transformation to WGS 84 verified.
+  - Inverted lat/lon flip detection verified.
+  - Valid GeoJSON and CSV with coordinates ingestion verified.
+  - Geometry auto-closing of unclosed polygon rings verified.
+  - Conflicting record detection and non-destructive preservation verified.
+  - Out-of-bounds coordinate rejection verified.
+  - License deficiency flagging verified.
+  - Snapshot backup and rollback mechanics verified.
+- **Dedicated Client-Side CDP Suite (`scripts/test_geospatial_data_ops.js`)**: 17 passed, 0 failed (100%):
+  - Public `GeospatialDataOps` API and lifecycle verified.
+  - Modal mounting and tab navigation across all 5 panes verified.
+  - Overview KPI cards and 13-layer health ledger verified.
+  - Lineage flowchart and technical specifications verified.
+  - Anomaly cards and Kadana Dam conflict preservation verified.
+  - Controlled review form, audit trail table, and export buttons verified.
+  - Pre-flight sandbox report card generation verified.
+  - Keyboard shortcuts <kbd>Q</kbd> and <kbd>Esc</kbd> verified.
+- **Production Deployment Suite (`scripts/verify_deployment.py`)**: 100% Passed across 13 GeoJSON layers (3,327 features), 20 static resources, and 17 JavaScript modules.
+- **Full Regression Suite**: `scripts/test_3d_terrain_mode.js` (24/24 passed), `scripts/test_infrastructure_intelligence.js` (100% passed).
+
+

@@ -1,0 +1,4 @@
+id,name,latitude,longitude,district,capacity_mw,fuel_type,source_org,license
+GJ-PWR-SOL-001,Charanka Solar Park,23.9052,71.2014,Patan,790.0,Solar PV,Gujarat Power Corporation Limited (GPCL),Open Government Data (OGD) India
+GJ-PWR-SOL-002,Dholera Solar Park Phase 1,22.2581,72.2284,Ahmedabad,300.0,Solar PV,Gujarat Urja Vikas Nigam Limited (GUVNL),Open Government Data (OGD) India
+GJ-PWR-WND-001,Jakhau Wind Farm,23.2389,68.6942,Kachchh,100.0,Wind,Suzlon Energy / GETCO,Open Government Data (OGD) India

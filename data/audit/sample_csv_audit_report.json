@@ -1,0 +1,24 @@
+{
+  "dataset_name": "sample_csv",
+  "execution_timestamp": "2026-10-12T05:41:11.257528+00:00",
+  "elapsed_seconds": 0.001,
+  "pipeline_version": "5.5.0",
+  "stats": {
+    "total_records": 3,
+    "successful_imports": 3,
+    "rejected_records": 0,
+    "repaired_geometries": 0,
+    "duplicates_detected": 0,
+    "conflicts_detected": 0,
+    "transformed_coordinates": 0,
+    "normalized_properties": 3,
+    "missing_important_props": 0,
+    "quality_score_avg": 100.0
+  },
+  "rejections_count": 0,
+  "rejection_sample": [],
+  "conflicts_count": 0,
+  "conflict_register": [],
+  "duplicates_count": 0,
+  "duplicate_register": []
+}

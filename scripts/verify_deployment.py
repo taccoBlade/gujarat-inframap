@@ -122,6 +122,7 @@ def test_javascript_syntax():
         "js/geospatial_analysis_toolkit.js",
         "js/infrastructure_intelligence.js",
         "js/terrain_3d_mode.js",
+        "js/geospatial_data_ops.js",
         "js/app.js",
         "sw.js"
     ]

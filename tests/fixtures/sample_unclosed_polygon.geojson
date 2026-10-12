@@ -1,0 +1,26 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "GJ-POLY-001",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [72.5000, 23.0000],
+            [72.6000, 23.0000],
+            [72.5500, 23.1000]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "GJ-POLY-001",
+        "name": "Sabarmati Irrigation Basin Test Polygon",
+        "district": "Ahmedabad",
+        "source_org": "Gujarat Water Resources Dept",
+        "license": "Open Government Data (OGD) India"
+      }
+    }
+  ]
+}

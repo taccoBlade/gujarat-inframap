@@ -1,0 +1,20 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "GJ-UNLIC-001",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [72.5714, 23.0225]
+      },
+      "properties": {
+        "id": "GJ-UNLIC-001",
+        "name": "Unverified Commercial Substation",
+        "district": "Ahmedabad",
+        "source_org": "Unknown Third-Party Web Scraper",
+        "license": "Unspecified / Proprietary"
+      }
+    }
+  ]
+}
