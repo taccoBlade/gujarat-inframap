@@ -111,12 +111,19 @@ async function run() {
   await client.send('DOM.enable');
 
   console.log('Waiting for application initialization and GeoJSON streaming...');
-  for (let i = 0; i < 30; i++) {
+  let ready = false;
+  for (let i = 0; i < 50; i++) {
     try {
-      const ready = await client.eval('typeof window.selectUrbanAssetByName === "function"');
-      if (ready) break;
+      ready = await client.eval('typeof window.selectUrbanAssetByName === "function"');
+      if (ready) {
+        console.log(`[INIT] window.selectUrbanAssetByName ready in ${i * 250}ms`);
+        break;
+      }
     } catch (e) {}
-    await sleep(300);
+    await sleep(250);
+  }
+  if (!ready) {
+    throw new Error('Application initialization timed out waiting for window.selectUrbanAssetByName');
   }
 
   console.log('\n========================================');

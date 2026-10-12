@@ -126,7 +126,8 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
           <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
         </svg>
-        <span>Dams & Reservoirs</span>
+        <span class="btn-label-full">Dams & Reservoirs</span>
+        <span class="btn-label-short">Dams</span>
       </button>
 
       <button id="openWaterScenariosBtn" class="action-btn action-btn-scenarios" title="Open Educational Water Scenarios Lab (S)" aria-label="Water Scenarios Lab">
@@ -135,7 +136,8 @@
           <path d="M8 14h8"></path>
           <path d="M12 11v6"></path>
         </svg>
-        <span>Water Scenarios (S)</span>
+        <span class="btn-label-full">Water Scenarios (S)</span>
+        <span class="btn-label-short">Water Lab (S)</span>
       </button>
 
       <button id="openGeoenvironmentalBtn" class="action-btn action-btn-geoenv" title="Open Gujarat Geoenvironmental Intelligence Suite (G)" aria-label="Geoenvironmental Intelligence Suite">
@@ -144,7 +146,8 @@
           <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
           <path d="M2 12h20"></path>
         </svg>
-        <span>Geoenvironmental (G)</span>
+        <span class="btn-label-full">Geoenvironmental (G)</span>
+        <span class="btn-label-short">Geoenv (G)</span>
       </button>
 
       <!-- Secondary Tools Dropdown (More Tools Menu Architecture) -->
@@ -158,140 +161,159 @@
           <span>More Tools ▾</span>
         </button>
         <div id="headerMoreMenu" class="header-more-dropdown hidden">
-          <button id="openDamScienceLabBtn" class="action-btn action-btn-science" title="Open Dam Science Lab (Interactive Civil & Hydraulic Simulator)" aria-label="Dam Science Lab">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-            <span>Science Lab</span>
-          </button>
-          <button id="openWaterNetworkBtn" class="action-btn action-btn-network" title="Open Gujarat Water Systems Network (Topological Basins & Traversal) (N)" aria-label="Water Systems Network">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <circle cx="6" cy="18" r="3"></circle>
-              <circle cx="18" cy="6" r="3"></circle>
-              <circle cx="18" cy="18" r="3"></circle>
-              <path d="M8.5 16.5l7-7"></path>
-              <path d="M8.5 18h7"></path>
-            </svg>
-            <span>Water Network</span>
-          </button>
-          <button id="openEnergyExplorerBtn" class="action-btn action-btn-energy" title="Open Hydropower & Gujarat Energy Infrastructure Explorer (H)" aria-label="Energy & Hydropower Explorer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-            </svg>
-            <span>Energy & Hydro</span>
-          </button>
-          <button id="openTemporalExplorerBtn" class="action-btn action-btn-temporal" title="Open Gujarat Temporal Explorer (Historical Records & Timeline) (Y)" aria-label="Temporal Explorer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
-            <span>Temporal (Y)</span>
-          </button>
-          <button id="toggleTemporalHudBtn" class="action-btn action-btn-secondary" title="Toggle Map Timeline Scrubber HUD" aria-label="Timeline Scrubber HUD">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
-              <line x1="8" y1="12" x2="16" y2="12"></line>
-              <circle cx="12" cy="12" r="2"></circle>
-            </svg>
-            <span>Timeline HUD</span>
-          </button>
-          <button id="openTransportExplorerBtn" class="action-btn action-btn-transport" title="Open Transportation & Civil Structures Explorer (T)" aria-label="Transportation & Civil Structures Explorer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-              <path d="M6 18v2"></path>
-              <path d="M18 18v2"></path>
-              <path d="M2 12h20"></path>
-            </svg>
-            <span>Transport & Bridges</span>
-          </button>
-          <button id="openSpatialToolkitBtn" class="action-btn action-btn-secondary" title="Open Geospatial Analysis Workbench (A)" aria-label="Geospatial Analysis Toolkit">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-              <polyline points="2 17 12 22 22 17"></polyline>
-              <polyline points="2 12 12 17 22 12"></polyline>
-            </svg>
-            <span>GIS Toolkit (A)</span>
-          </button>
-          <button id="openInfraIntelBtn" class="action-btn action-btn-intelligence" title="Open Gujarat Infrastructure Intelligence Dashboard (I)" aria-label="Infrastructure Intelligence Dashboard">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-              <circle cx="12" cy="12" r="4"></circle>
-            </svg>
-            <span>Infra Intelligence (I)</span>
-          </button>
-          <button id="openDataOpsBtn" class="action-btn action-btn-dataops" title="Open Geospatial Data Operations & Quality Dashboard (Q)" aria-label="Geospatial Data Operations & Quality">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-              <line x1="12" y1="22.08" x2="12" y2="12"></line>
-            </svg>
-            <span>Data Ops (Q)</span>
-          </button>
-          <button id="openReportBuilderBtn" class="action-btn action-btn-report" title="Open Gujarat Digital Twin Report Builder (B)" aria-label="Digital Twin Report Builder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
-            <span>Report Builder (B)</span>
-          </button>
-          <button id="open3DModeBtn" class="action-btn action-btn-secondary" title="Switch to 3D Terrain & Infrastructure Mode (V)" aria-label="3D Terrain & Infrastructure Mode">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-            <span>3D Terrain (V)</span>
-          </button>
-          <button id="measureToolBtn" class="action-btn action-btn-secondary" title="Measure Distance on Map (M)" aria-label="Distance Measurement Tool">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <path d="M2 12h20"></path>
-              <path d="M6 9v6"></path>
-              <path d="M10 10v4"></path>
-              <path d="M14 9v6"></path>
-              <path d="M18 10v4"></path>
-              <path d="M22 9v6"></path>
-              <path d="M2 9v6"></path>
-            </svg>
-            <span>Measure</span>
-          </button>
-          <button id="proximityToolBtn" class="action-btn action-btn-secondary" title="Site Proximity & Multi-Modal Audit Tool (P)" aria-label="Infrastructure Proximity Analyzer">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <circle cx="12" cy="12" r="10"></circle>
-              <circle cx="12" cy="12" r="4"></circle>
-              <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
-              <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
-              <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line>
-              <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
-            </svg>
-            <span>Proximity</span>
-          </button>
-          <button id="exportMapBtn" class="action-btn action-btn-secondary" title="Export Current View as PNG (E)" aria-label="Export Map View as PNG">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-              <circle cx="12" cy="13" r="4"></circle>
-            </svg>
-            <span>Export</span>
-          </button>
-          <button id="resetViewBtn" class="action-btn" title="Reset View to Full Gujarat (R)" aria-label="Reset View to Full Gujarat">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="22" y1="12" x2="18" y2="12"></line>
-              <line x1="6" y1="12" x2="2" y2="12"></line>
-              <line x1="12" y1="6" x2="12" y2="2"></line>
-              <line x1="12" y1="22" x2="12" y2="18"></line>
-            </svg>
-            <span>Reset</span>
-          </button>
-          <button id="aboutBtn" class="action-btn action-btn-secondary" title="System Specifications & Metadata" aria-label="System Specifications & Metadata">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
-            <span>Specs</span>
-          </button>
+          <div class="header-more-header">
+            <span class="header-more-title">ANALYTICAL MODULES &amp; TOOLS</span>
+            <span class="header-more-shortcut-hint"><kbd>Esc</kbd> to close</span>
+          </div>
+          <div class="header-more-grid">
+            <button id="openDamScienceLabBtn" class="action-btn action-btn-science" title="Open Dam Science Lab (Interactive Civil & Hydraulic Simulator)" aria-label="Dam Science Lab">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <circle cx="12" cy="3" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span>Science Lab</span>
+            </button>
+            <button id="openWaterNetworkBtn" class="action-btn action-btn-network" title="Open Gujarat Water Systems Network (Topological Basins & Traversal) (N)" aria-label="Water Systems Network">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="6" r="3"></circle>
+                <circle cx="18" cy="18" r="3"></circle>
+                <path d="M8.5 16.5l7-7"></path>
+                <path d="M8.5 18h7"></path>
+              </svg>
+              <span>Water Network</span>
+              <kbd class="dropdown-kbd">N</kbd>
+            </button>
+            <button id="openEnergyExplorerBtn" class="action-btn action-btn-energy" title="Open Hydropower & Gujarat Energy Infrastructure Explorer (H)" aria-label="Energy & Hydropower Explorer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>Energy & Hydro</span>
+              <kbd class="dropdown-kbd">H</kbd>
+            </button>
+            <button id="openTemporalExplorerBtn" class="action-btn action-btn-temporal" title="Open Gujarat Temporal Explorer (Historical Records & Timeline) (Y)" aria-label="Temporal Explorer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <span>Temporal</span>
+              <kbd class="dropdown-kbd">Y</kbd>
+            </button>
+            <button id="toggleTemporalHudBtn" class="action-btn action-btn-secondary" title="Toggle Map Timeline Scrubber HUD" aria-label="Timeline Scrubber HUD">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+                <circle cx="12" cy="12" r="2"></circle>
+              </svg>
+              <span>Timeline HUD</span>
+            </button>
+            <button id="openTransportExplorerBtn" class="action-btn action-btn-transport" title="Open Transportation & Civil Structures Explorer (T)" aria-label="Transportation & Civil Structures Explorer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                <path d="M6 18v2"></path>
+                <path d="M18 18v2"></path>
+                <path d="M2 12h20"></path>
+              </svg>
+              <span>Transport</span>
+              <kbd class="dropdown-kbd">T</kbd>
+            </button>
+            <button id="openSpatialToolkitBtn" class="action-btn action-btn-secondary" title="Open Geospatial Analysis Workbench (A)" aria-label="Geospatial Analysis Toolkit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              <span>GIS Toolkit</span>
+              <kbd class="dropdown-kbd">A</kbd>
+            </button>
+            <button id="openInfraIntelBtn" class="action-btn action-btn-intelligence" title="Open Gujarat Infrastructure Intelligence Dashboard (I)" aria-label="Infrastructure Intelligence Dashboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                <circle cx="12" cy="12" r="4"></circle>
+              </svg>
+              <span>Intelligence</span>
+              <kbd class="dropdown-kbd">I</kbd>
+            </button>
+            <button id="openDataOpsBtn" class="action-btn action-btn-dataops" title="Open Geospatial Data Operations & Quality Dashboard (Q)" aria-label="Geospatial Data Operations & Quality">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+              <span>Data Ops</span>
+              <kbd class="dropdown-kbd">Q</kbd>
+            </button>
+            <button id="openReportBuilderBtn" class="action-btn action-btn-report" title="Open Gujarat Digital Twin Report Builder (B)" aria-label="Digital Twin Report Builder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>Report Builder</span>
+              <kbd class="dropdown-kbd">B</kbd>
+            </button>
+            <button id="open3DModeBtn" class="action-btn action-btn-secondary" title="Switch to 3D Terrain & Infrastructure Mode (V)" aria-label="3D Terrain & Infrastructure Mode">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+              </svg>
+              <span>3D Terrain</span>
+              <kbd class="dropdown-kbd">V</kbd>
+            </button>
+            <button id="measureToolBtn" class="action-btn action-btn-secondary" title="Measure Distance on Map (M)" aria-label="Distance Measurement Tool">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <path d="M2 12h20"></path>
+                <path d="M6 9v6"></path>
+                <path d="M10 10v4"></path>
+                <path d="M14 9v6"></path>
+                <path d="M18 10v4"></path>
+                <path d="M22 9v6"></path>
+                <path d="M2 9v6"></path>
+              </svg>
+              <span>Measure</span>
+              <kbd class="dropdown-kbd">M</kbd>
+            </button>
+            <button id="proximityToolBtn" class="action-btn action-btn-secondary" title="Site Proximity & Multi-Modal Audit Tool (P)" aria-label="Infrastructure Proximity Analyzer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="4"></circle>
+                <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
+                <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
+                <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line>
+                <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
+              </svg>
+              <span>Proximity</span>
+              <kbd class="dropdown-kbd">P</kbd>
+            </button>
+            <button id="exportMapBtn" class="action-btn action-btn-secondary" title="Export Current View as PNG (E)" aria-label="Export Map View as PNG">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              <span>Export PNG</span>
+              <kbd class="dropdown-kbd">E</kbd>
+            </button>
+            <button id="resetViewBtn" class="action-btn" title="Reset View to Full Gujarat (R)" aria-label="Reset View to Full Gujarat">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="22" y1="12" x2="18" y2="12"></line>
+                <line x1="6" y1="12" x2="2" y2="12"></line>
+                <line x1="12" y1="6" x2="12" y2="2"></line>
+                <line x1="12" y1="22" x2="12" y2="18"></line>
+              </svg>
+              <span>Reset State</span>
+              <kbd class="dropdown-kbd">R</kbd>
+            </button>
+            <button id="aboutBtn" class="action-btn action-btn-secondary" title="System Specifications & Metadata" aria-label="System Specifications & Metadata">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span>Specs & Meta</span>
+            </button>
+          </div>
         </div>
       </div>
 
