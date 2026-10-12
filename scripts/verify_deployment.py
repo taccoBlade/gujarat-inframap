@@ -121,6 +121,7 @@ def test_javascript_syntax():
         "js/temporal_explorer.js",
         "js/geospatial_analysis_toolkit.js",
         "js/infrastructure_intelligence.js",
+        "js/terrain_3d_mode.js",
         "js/app.js",
         "sw.js"
     ]

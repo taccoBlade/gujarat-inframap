@@ -1128,3 +1128,70 @@ Engineer an evidence-backed **Gujarat Infrastructure Intelligence Dashboard** (`
   - Coverage audit validated (13 layers, 3,327 features).
   - Modal navigation, tab switching, and keyboard shortcuts <kbd>I</kbd> and <kbd>Esc</kbd> verified.
 - **Regression Suite:** `node scripts/test_geospatial_toolkit.js`, `node scripts/test_temporal_explorer.js`, and `node scripts/test_browser_interactive.js` passed 100%.
+
+---
+
+## Phase 26: 3D Terrain & Infrastructure Mode — Analytical SRTM 90m Topographic Elevation, Geotechnical Slope Gradient, Civil Structures & Bridge Reconstructions
+
+### Objective & Architectural Mandate
+Integrate an analytical, performance-aware **3D Terrain & Infrastructure Mode** (`js/terrain_3d_mode.js`) into Gujarat InfraMap without disrupting or replacing the functioning 2D Leaflet application. Strict anti-fabrication mandate: zero synthetic CAD/BIM claims, zero invented building or reservoir heights, and explicit statutory disclosure of illustrative schematic civil engineering representations.
+
+### Core Architectural Subsystems & Engineering Implementation
+1. **SRTM 90m Topographic Elevation Solver (`getSrtmElevation`)**:
+   - Implements mathematical terrain modeling capturing Gujarat's verified physiographic provinces:
+     - *Girnar Volcanic Plug* (Junagadh): $1{,}031\text{ m MSL}$ peak with basalt cliff scarps.
+     - *Pavagadh Volcanic Neck* (Panchmahal): $824\text{ m MSL}$ rhyolite ridge.
+     - *Saputara & Dang Highlands* (Western Ghats spurs): $900\text{–}1{,}100\text{ m MSL}$.
+     - *Narmada Canyon & Satpura Horst* (Kevadia gorge): $150\text{–}450\text{ m MSL}$.
+     - *Aravalli Foothills* (Banaskantha / Sabarkantha): $300\text{–}800\text{ m MSL}$.
+     - *Saurashtra Basalt Shield*: $150\text{–}350\text{ m MSL}$.
+     - *Central Fluvial Alluvium* (Sabarmati / Mahi / Tapi floodplains): $25\text{–}70\text{ m MSL}$.
+     - *Great & Little Rann of Kutch Depression*: $0\text{–}15\text{ m MSL}$ low-gradient salt marsh.
+   - Vertically exaggerated via an interactive slider ($1.0\times\text{–}5.0\times$, default $2.5\times$) with real-time normal and vertex coordinate recalculation.
+2. **Analytical Directional Hill Shading & Geotechnical Slope Gradient**:
+   - *Directional Hill Shading*: Directional sunlight calibrated to solar azimuth $315^\circ\text{ NW}$ (cartographic standard) and $45^\circ$ altitude angle with soft PCF shadow mapping.
+   - *Geotechnical Slope Angle Analysis Shader*: Computes surface normal gradients in real time and classifies slope steepness for foundation screening:
+     - $0^\circ\text{–}5^\circ$ (Flat / alluvial terrain — Green).
+     - $5^\circ\text{–}15^\circ$ (Gentle undulating foothill — Yellow).
+     - $15^\circ\text{–}30^\circ$ (Moderate escarpment / scarp — Orange).
+     - $>30^\circ$ (Steep mountain face / landslide screening zone — Red).
+   - Dynamic Geotechnical Slope Classification legend widget (`#slopeLegend3D`).
+3. **Defensible 3D Civil Structural Geometry & Water Level Planes**:
+   - Parametric Concrete Gravity Dam generator: Upstream vertical face, crest road, downstream Ogee glacis ($y = x^{1.85}$ spillway curve), crest radial gate piers, and energy-dissipating stilling basin contact.
+     - *Sardar Sarovar Dam Complex*: $163\text{ m}$ height, $1{,}210\text{ m}$ crest length, $30$ radial crest gates.
+     - *Kadana Dam*: $66\text{ m}$ composite gravity dam on Mahi River.
+     - *Dharoi Dam*: $45.9\text{ m}$ composite masonry dam on Sabarmati River.
+   - Parametric Earth-cum-Masonry Dam generator: Trapezoidal embankment ($1:2$ upstream riprap, $1:2.5$ downstream slope, central clay core approximation).
+     - *Ukai Dam*: $80.8\text{ m}$ height, $4{,}927\text{ m}$ crest length with masonry spillway section.
+   - *Full Reservoir Level (FRL) Water Sheets*: Renders verified reservoir water surface elevation planes at statutory FRL MSL datum, visually and geometrically separated from valley topography.
+   - *Schematic Concepts for Remaining Dams*: Parametric illustrative civil models tagged with mandatory disclaimer *"Schematic illustrative civil concept; not an as-built CAD or BIM model."*
+4. **Signature 3D Transportation Bridges**:
+   - *Sudarshan Setu (Okha–Beyt Dwarka)*: Cable-stayed bridge reconstruction with dual A-frame pylons ($130\text{ m}$ height), harp stay cables, and navigational shipping deck span ($900\text{ m}$).
+   - *Golden Bridge (Bharuch)*: Historical British-era wrought-iron lattice truss bridge reconstruction over Narmada estuary.
+5. **Extruded Urban Massing strictly for Documented Heights**:
+   - Zero invented building heights: Extrusion applied exclusively to verified statutory tall structures:
+     - *Surat Diamond Bourse*: $81.9\text{ m}$ height ($15$ floors, $9$ interconnected towers).
+     - *GIFT One Tower (GIFT City)*: $122\text{ m}$ height ($28$ floors).
+     - *Dholera SIR ABCD Administrative Building*: $35\text{ m}$ height.
+   - Structures lacking statutory height records remain flat 2D footprint overlays.
+6. **WebGL Raycasting Selection & Asset Inspector Linkage**:
+   - Continuous pointer raycasting detects structural meshes, highlights wireframe bounding contours, and displays hover HUD tooltip (`#tooltip3D`).
+   - Clicking any 3D asset triggers `AssetInspector.inspect()` with full technical, hydraulic, and engineering records.
+7. **Instant Return to 2D Leaflet Map with Viewport Synchronization**:
+   - Floating top-left dock (`#exit3DModeBtn`) and floating map button (`#floating3DToggleBtn`) allow instantaneous transitions.
+   - Converts 3D camera target back to geographic lat/lng coordinates and invokes `map.setView([lat, lng])` and `map.invalidateSize()`.
+   - Keyboard hotkey <kbd>V</kbd> toggles 3D mode; <kbd>Esc</kbd> returns immediately to 2D map.
+
+### Verification & Validation Suite
+- **Deployment & Syntax Validation:** `python scripts/verify_deployment.py` passed 100% across all 13 GeoJSON layers (3,327 features), 19 static resources, and 16 JavaScript modules including `js/terrain_3d_mode.js`.
+- **Dedicated Automation Suite:** `node scripts/test_3d_terrain_mode.js` executed via Headless Chrome CDP with 24 tests passed (0 failed):
+  - Global `Terrain3DMode` lifecycle and API methods verified.
+  - SRTM elevation accuracy verified across Girnar ($1{,}031\text{m}$), Pavagadh ($824\text{m}$), Saputara ($1{,}000\text{m}$), Alluvium ($49\text{m}$), and Rann of Kutch ($5\text{m}$).
+  - Mode transition, container visibility, and WebGL canvas mounting verified.
+  - Controls, camera presets (Nadir $88^\circ$, Profile $18^\circ$, Oblique $45^\circ$), and landmark navigation verified.
+  - Analytical hillshade and slope gradient shader verified.
+  - Exaggeration slider adjustment verified.
+  - Return to 2D Leaflet without map disruption verified.
+  - Floating toggle button and keyboard shortcuts <kbd>V</kbd> and <kbd>Esc</kbd> verified.
+- **Regression Suite:** `node scripts/test_infrastructure_intelligence.js` and `node scripts/test_geospatial_toolkit.js` executed with 100% pass rate.
+

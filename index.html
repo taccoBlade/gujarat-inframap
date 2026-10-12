@@ -220,6 +220,12 @@
             </svg>
             <span>Infra Intelligence (I)</span>
           </button>
+          <button id="open3DModeBtn" class="action-btn action-btn-secondary" title="Switch to 3D Terrain & Infrastructure Mode (V)" aria-label="3D Terrain & Infrastructure Mode">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            <span>3D Terrain (V)</span>
+          </button>
           <button id="measureToolBtn" class="action-btn action-btn-secondary" title="Measure Distance on Map (M)" aria-label="Distance Measurement Tool">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
               <path d="M2 12h20"></path>
@@ -285,6 +291,12 @@
   <main class="app-viewport">
     <!-- Map Container -->
     <div id="map"></div>
+
+    <!-- Floating 3D Mode Toggle on 2D Map -->
+    <button id="floating3DToggleBtn" class="floating-3d-toggle-btn" title="Toggle 3D Terrain & Infrastructure Mode (V)">
+      <span class="pulse-dot"></span>
+      <span>3D Terrain Mode</span>
+    </button>
 
     <!-- Real-Time Active-Layer Legend Widget (Scale-Aware) -->
     <div id="activeLayerLegend" class="active-layer-legend" role="region" aria-label="Active Map Layers Legend"></div>
@@ -2937,6 +2949,12 @@
 
   <!-- Gujarat Infrastructure Intelligence Engine Component -->
   <script src="js/infrastructure_intelligence.js?v=5.3.0"></script>
+
+  <!-- Three.js WebGL 3D Graphics Engine -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+
+  <!-- Gujarat 3D Terrain & Infrastructure Mode Engine Component -->
+  <script src="js/terrain_3d_mode.js?v=5.4.0"></script>
 
   <!-- Application Logic -->
   <script src="js/app.js?v=4.0.0"></script>

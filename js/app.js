@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     zoomControl: false // custom position
   });
   map.fitBounds([[20.10, 68.10], [24.75, 74.50]], { padding: [30, 30], animate: false });
+  window.map = map;
 
   // Position zoom controls at bottom right
   L.control.zoom({ position: "bottomright" }).addTo(map);
@@ -6944,6 +6945,11 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (window.InfrastructureIntelligence) {
         window.InfrastructureIntelligence.openModal();
       }
+    } else if ((e.key === "v" || e.key === "V") && !isTyping) {
+      e.preventDefault();
+      if (window.Terrain3DMode) {
+        window.Terrain3DMode.toggle();
+      }
     } else if ((e.key === "r" || e.key === "R") && !isTyping) {
       e.preventDefault();
       resetToStateView();
@@ -6966,6 +6972,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const pKey = presetMap[e.key];
       if (pKey) applyPreset(pKey);
     } else if (e.key === "Escape") {
+      if (window.Terrain3DMode && window.Terrain3DMode.isActive()) {
+        window.Terrain3DMode.exit();
+        return;
+      }
       const intelModal = document.getElementById("infraIntelModal");
       if (intelModal && intelModal.open) {
         intelModal.close();
@@ -7152,6 +7162,46 @@ document.addEventListener("DOMContentLoaded", () => {
     openInfraIntelBtn.addEventListener("click", () => {
       if (window.InfrastructureIntelligence) {
         window.InfrastructureIntelligence.openModal();
+      }
+    });
+  }
+
+  // Initialize Gujarat 3D Terrain & Infrastructure Mode Engine
+  if (window.Terrain3DMode && typeof window.Terrain3DMode.init === "function") {
+    Promise.all([
+      fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
+      fetchCachedGeoJson("data/gujarat_power.geojson"),
+      fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
+      fetchCachedGeoJson("data/gujarat_urban_industry.geojson"),
+      fetchCachedGeoJson("data/gujarat_districts.geojson")
+    ]).then(([watData, powData, structData, urbData, distData]) => {
+      window.Terrain3DMode.init(map, {
+        waterData: watData,
+        powerData: powData,
+        structData: structData,
+        urbanData: urbData,
+        districtsData: distData
+      });
+    }).catch(err => {
+      console.warn("[Terrain3DMode] Data load notice:", err);
+      window.Terrain3DMode.init(map, {});
+    });
+  }
+
+  const open3DModeBtn = document.getElementById("open3DModeBtn");
+  if (open3DModeBtn) {
+    open3DModeBtn.addEventListener("click", () => {
+      if (window.Terrain3DMode) {
+        window.Terrain3DMode.enter();
+      }
+    });
+  }
+
+  const floating3DToggleBtn = document.getElementById("floating3DToggleBtn");
+  if (floating3DToggleBtn) {
+    floating3DToggleBtn.addEventListener("click", () => {
+      if (window.Terrain3DMode) {
+        window.Terrain3DMode.toggle();
       }
     });
   }

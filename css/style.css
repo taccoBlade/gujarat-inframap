@@ -13952,3 +13952,368 @@ dialog.system-modal::backdrop {
   .distinctive-grid { grid-template-columns: 1fr; }
   .nexus-kpi-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* =========================================================================
+   21. 3D TERRAIN & INFRASTRUCTURE MODE (PHASE 26)
+   ========================================================================= */
+
+.map-3d-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 700;
+  background: #090d16;
+  overflow: hidden;
+  user-select: none;
+}
+
+.map-3d-container.hidden {
+  display: none !important;
+}
+
+.three-3d-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  outline: none;
+  cursor: grab;
+}
+.three-3d-canvas:active {
+  cursor: grabbing;
+}
+
+/* Floating Dock Top-Left */
+.dock-3d-topleft {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 710;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.btn-exit-3d {
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  transition: all 0.15s;
+}
+.btn-exit-3d:hover {
+  background: #38bdf8;
+  color: #090d16;
+  border-color: #38bdf8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+}
+
+.select-3d-landmark {
+  background: rgba(15, 23, 42, 0.92);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
+  outline: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.select-3d-landmark:focus {
+  border-color: #38bdf8;
+}
+
+.btn-group-3d-views {
+  display: flex;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+.btn-3d-preset {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 6px 9px;
+  cursor: pointer;
+  transition: all 0.12s;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+.btn-3d-preset:last-child {
+  border-right: none;
+}
+.btn-3d-preset:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+/* Floating Dock Top-Right */
+.dock-3d-topright {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 710;
+  width: 240px;
+}
+
+.panel-3d-controls {
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.ctrl-row-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.4rem;
+}
+
+.ctrl-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+.slider-label-row strong {
+  color: #38bdf8;
+  font-family: var(--font-mono);
+}
+.slider-3d {
+  width: 100%;
+  accent-color: #38bdf8;
+  cursor: pointer;
+  height: 4px;
+}
+
+.ctrl-toggle-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem;
+}
+.btn-3d-toggle {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 5px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.12s;
+  text-align: center;
+}
+.btn-3d-toggle:hover {
+  border-color: #38bdf8;
+  color: #f1f5f9;
+}
+.btn-3d-toggle.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+/* Slope Legend */
+.slope-legend-box {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.slope-legend-title {
+  font-size: 0.62rem;
+  color: #94a3b8;
+}
+.slope-bar-gradient {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #10b981 0%, #facc15 35%, #f97316 65%, #ef4444 100%);
+}
+.slope-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.58rem;
+  color: #64748b;
+  font-family: var(--font-mono);
+}
+
+/* Floating Dock Bottom */
+.dock-3d-bottom {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 710;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  width: min(840px, calc(100vw - 32px));
+}
+
+.hud-3d-stats {
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 4px 14px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+.hud-3d-stats strong {
+  color: #f1f5f9;
+  font-family: var(--font-mono);
+}
+.hud-stat-divider {
+  color: #475569;
+}
+
+.disclaimer-3d-banner {
+  background: rgba(3, 7, 18, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 0.62rem;
+  color: #64748b;
+  text-align: center;
+}
+.disclaimer-3d-banner strong {
+  color: #94a3b8;
+}
+
+/* 3D Tooltip */
+.tooltip-3d {
+  position: absolute;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 720;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid #38bdf8;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  min-width: 260px;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px rgba(56, 189, 248, 0.3);
+  pointer-events: none;
+}
+.tooltip-3d.hidden {
+  display: none;
+}
+.tip-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.05em;
+}
+.tip-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+.tip-detail {
+  font-size: 0.7rem;
+  color: #cbd5e1;
+  line-height: 1.35;
+}
+.tip-action {
+  font-size: 0.62rem;
+  color: #10b981;
+  font-style: italic;
+  margin-top: 0.2rem;
+}
+
+/* Floating 3D Mode Button on 2D Leaflet canvas */
+.floating-3d-toggle-btn {
+  position: absolute;
+  top: 76px;
+  right: 14px;
+  z-index: 500;
+  background: linear-gradient(135deg, #0f172a, #0369a1);
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.floating-3d-toggle-btn:hover {
+  background: linear-gradient(135deg, #0284c7, #0284c7);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.6);
+  transform: translateY(-1px);
+}
+.floating-3d-toggle-btn .pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: pulse-3d 2s infinite;
+}
+
+@keyframes pulse-3d {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+@media (max-width: 768px) {
+  .dock-3d-topright {
+    top: auto;
+    bottom: 84px;
+    right: 12px;
+    width: 200px;
+  }
+  .dock-3d-bottom {
+    bottom: 8px;
+  }
+  .hud-3d-stats {
+    font-size: 0.62rem;
+    padding: 3px 10px;
+  }
+  .disclaimer-3d-banner {
+    display: none;
+  }
+}
