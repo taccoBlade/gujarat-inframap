@@ -6953,6 +6953,14 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (window.GeospatialDataOps) {
         window.GeospatialDataOps.openModal();
       }
+    } else if ((e.key === "b" || e.key === "B") && !isTyping) {
+      e.preventDefault();
+      const repModal = document.getElementById("reportBuilderModal");
+      if (repModal && repModal.open) {
+        repModal.close();
+      } else if (window.DigitalTwinReportBuilder) {
+        window.DigitalTwinReportBuilder.openModal();
+      }
     } else if ((e.key === "v" || e.key === "V") && !isTyping) {
       e.preventDefault();
       if (window.Terrain3DMode) {
@@ -7250,6 +7258,51 @@ document.addEventListener("DOMContentLoaded", () => {
     openDataOpsBtn.addEventListener("click", () => {
       if (window.GeospatialDataOps) {
         window.GeospatialDataOps.openModal();
+      }
+    });
+  }
+
+  // Initialize Gujarat Digital Twin Report Builder Component
+  if (window.DigitalTwinReportBuilder && typeof window.DigitalTwinReportBuilder.init === "function") {
+    Promise.all([
+      fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
+      fetchCachedGeoJson("data/gujarat_power.geojson"),
+      fetchCachedGeoJson("data/gujarat_transmission.geojson"),
+      fetchCachedGeoJson("data/gujarat_roads.geojson"),
+      fetchCachedGeoJson("data/gujarat_stations.geojson"),
+      fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
+      fetchCachedGeoJson("data/gujarat_urban_industry.geojson"),
+      fetchCachedGeoJson("data/gujarat_groundwater_geology.geojson"),
+      fetchCachedGeoJson("data/gujarat_geoenvironmental.geojson"),
+      fetchCachedGeoJson("data/gujarat_environment_disaster.geojson"),
+      fetchCachedGeoJson("data/gujarat_districts.geojson"),
+      fetchCachedGeoJson("data/gujarat_district_hq.geojson")
+    ]).then(([watData, powData, transData, roadsData, statData, structData, urbData, gwData, geoData, disData, distData, hqData]) => {
+      window.DigitalTwinReportBuilder.init(map, {
+        waterData: watData,
+        powerData: powData,
+        transData: transData,
+        roadsData: roadsData,
+        statData: statData,
+        structData: structData,
+        urbanData: urbData,
+        groundwaterData: gwData,
+        geoenvironmentalData: geoData,
+        disasterData: disData,
+        districtsData: distData,
+        districtHqData: hqData
+      });
+    }).catch(err => {
+      console.warn("[DigitalTwinReportBuilder] Data load notice:", err);
+      window.DigitalTwinReportBuilder.init(map, {});
+    });
+  }
+
+  const openReportBuilderBtn = document.getElementById("openReportBuilderBtn");
+  if (openReportBuilderBtn) {
+    openReportBuilderBtn.addEventListener("click", () => {
+      if (window.DigitalTwinReportBuilder) {
+        window.DigitalTwinReportBuilder.openModal();
       }
     });
   }

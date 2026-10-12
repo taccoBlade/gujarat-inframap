@@ -1258,4 +1258,30 @@ Engineer an authoritative **Geospatial Data Operations & Quality** module (`scri
 - **Production Deployment Suite (`scripts/verify_deployment.py`)**: 100% Passed across 13 GeoJSON layers (3,327 features), 20 static resources, and 17 JavaScript modules.
 - **Full Regression Suite**: `scripts/test_3d_terrain_mode.js` (24/24 passed), `scripts/test_infrastructure_intelligence.js` (100% passed).
 
+---
+
+## Phase 28: Gujarat Digital Twin Report Builder & Multi-Format Exporter
+- **Date:** 2026-10-12
+- **Status:** **COMPLETE & VERIFIED (Production Ready)**
+- **What Worked:**
+  - Implemented client-side **Digital Twin Report Builder** (`js/digital_twin_report_builder.js`), converting spatial and civil infrastructure data into defensive engineering reports across 6 scopes:
+    1. **Scope A — Single Asset Monograph**: Authoritative civil dossier with high-DPI cartographic SVG map preview, metric scale bar, true north arrow, coordinate graticule, engineering specifications matrix with epistemic tiers, regional geotechnical context (BIS IS 1893:2016 zonation, CGWB aquifer status, projected UTM Zone 43N coordinates), connected topology, historical multi-year reservoir observations (2018–2024), and civil engineering audit sign-off.
+    2. **Scope B — Multi-Asset Comparative Benchmarking**: Side-by-side technical ledger comparing 2 to 5 selected assets with standardized units (MCM, MW, m MSL). Missing or unrecorded fields explicitly labeled `N/A / Unreported` (never 0 or blank).
+    3. **Scope C — Administrative District Audit**: Territorial civil infrastructure ledger for any of the 33 Gujarat districts, aggregating mapped dams, power generation assets, rail stations, bridges, and seismic risk while noting digital twin coverage caveats.
+    4. **Scope D — Hydrological River Basin Watershed Cascade**: Comprehensive drainage basin report (Narmada, Tapi, Sabarmati, Mahi, Damanganga, Bhadar, Banas, Shetrunji) aggregating gross/live storage and installed hydropower.
+    5. **Scope E — Strategic Corridor Alignment Buffer Screening**: Linear civil screening for Western Dedicated Freight Corridor (WDFC), Ahmedabad-Dholera Expressway, Narmada Main Canal, and NH-48 with user-selected buffer widths (±5 km, ±10 km, ±25 km).
+    6. **Scope F — User-Drawn Boundary Screening**: Spatial screening for user-drawn polygons or custom bounding boxes, computing geodesic area via Gauss spherical excess ($km^2$) and contained assets.
+  - Built 3 multi-format exporters:
+    - **Printable HTML / PDF (`exportPdf()`)**: Styled with clean `@media print` rules, white paper backgrounds, crisp dark text, proper page breaks (`page-break-inside: avoid`), engineering borders, and native print dialog.
+    - **RFC-4180 CSV (`exportCsv()`)**: Standardized comma-separated values prefixed with UTF-8 BOM (`\uFEFF`) for seamless Microsoft Excel compatibility.
+    - **RFC-7946 GeoJSON (`exportGeoJson()`)**: Standard FeatureCollection format with CRS `urn:ogc:def:crs:OGC:1.3:CRS84` and report metadata.
+  - Strict Epistemological Classification Tiers applied to every engineering parameter: `[ MEASURED ]`, `[ SOURCED ]`, `[ CALCULATED ]`, `[ ILLUSTRATIVE ]`.
+  - Seamless UI integration: `#openReportBuilderBtn` in header more-menu, `#inspGenerateReportBtn` (`📄 Report`) in `AssetInspector`, keyboard shortcut <kbd>B</kbd> / <kbd>b</kbd> to toggle, and <kbd>Esc</kbd> to close.
+  - Service Worker cache bumped to `gujarat-inframap-v5.6.0` with `js/digital_twin_report_builder.js` precached.
+- **Verification & Testing Results**:
+  - `scripts/verify_deployment.py`: 100% Passed across 13 layers (3,327 features), 21 local resources, and 18 JavaScript modules.
+  - `scripts/test_report_builder.js`: 30 passed, 0 failed (100% CDP verification across all 6 scopes, exporters, and keyboard hotkeys).
+  - Regression suites passed 100%: `scripts/test_geospatial_data_ops.js` (17/17), `scripts/test_3d_terrain_mode.js` (24/24), `scripts/test_infrastructure_intelligence.js` (100%), `scripts/test_geospatial_toolkit.js` (100%), and `scripts/test_temporal_explorer.js` (100%).
+
+
 
