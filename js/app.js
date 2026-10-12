@@ -6352,6 +6352,15 @@ document.addEventListener("DOMContentLoaded", () => {
           command: "khavda"
         },
         {
+          title: "Studio: /dholera",
+          subtitle: "DMIC & Dholera SIR Twin — 920 km² Smart City & WDFC Freight Spine (J)",
+          category: "WORKSPACE",
+          icon: "🏭",
+          badgeClass: "tag-transport",
+          isSlashCommand: true,
+          command: "dholera"
+        },
+        {
           title: "Studio: /water",
           subtitle: "Hydrology & Scenarios Studio — Water Lab Simulator (S)",
           category: "WORKSPACE",
@@ -7275,6 +7284,12 @@ document.addEventListener("DOMContentLoaded", () => {
         else khavdaModal.close();
         return;
       }
+      const dmicModal = document.getElementById("dmicTwinModal");
+      if (dmicModal && dmicModal.open) {
+        if (window.DmicDholeraTwin) window.DmicDholeraTwin.closeModal();
+        else dmicModal.close();
+        return;
+      }
       const compareBox = document.getElementById("proximityCompareBox");
       if (compareBox && !compareBox.classList.contains("hidden")) {
         compareBox.classList.add("hidden");
@@ -7567,6 +7582,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Initialize DMIC & Dholera SIR Smart Industrial Corridors Twin Component
+  if (window.DmicDholeraTwin && typeof window.DmicDholeraTwin.init === "function") {
+    window.DmicDholeraTwin.init(map);
+  }
+  const openDmicTwinBtn = document.getElementById("openDmicTwinBtn");
+  if (openDmicTwinBtn) {
+    openDmicTwinBtn.addEventListener("click", () => {
+      if (window.DmicDholeraTwin) {
+        window.DmicDholeraTwin.openModal();
+      }
+    });
+  }
+
   // ==========================================================================
   // 19. Studio Workspaces & URL Hash Routing Engine (/#/dams, /#/water, /#/energy, etc.)
   // ==========================================================================
@@ -7636,6 +7664,14 @@ document.addEventListener("DOMContentLoaded", () => {
         preset: "transport",
         view: { center: [22.40, 72.40], zoom: 7.5 },
         description: "National highways, expressways, WDFC freight corridors, commercial ports & airports."
+      },
+      dholera: {
+        id: "dholera",
+        name: "DMIC & Dholera SIR Corridor Twin",
+        icon: "🏭",
+        preset: "dholera",
+        view: { center: [22.25, 72.22], zoom: 8.5 },
+        description: "920 km² Dholera Smart City, Tata Fab Hub, WDFC Double-Stack Rail & Port Intermodal Matrix."
       },
       analytics: {
         id: "analytics",
@@ -7740,6 +7776,11 @@ document.addEventListener("DOMContentLoaded", () => {
         showToast("⚡ Energy & Hydropower Studio Active — Generation & GETCO Grid");
       } else if (cfg.id === "transport") {
         showToast("🛣️ Multi-Modal Transport Studio Active — Corridors, Ports & Rail");
+      } else if (cfg.id === "dholera") {
+        showToast("🏭 Dholera SIR & WDFC Freight Twin Active — Press J for Corridors Model");
+        if (window.DmicDholeraTwin && typeof window.DmicDholeraTwin.openModal === "function") {
+          window.DmicDholeraTwin.openModal();
+        }
       } else if (cfg.id === "analytics") {
         showToast("📊 Statewide Intelligence Studio Active — Press I for Insights, B for Reports");
         if (window.InfrastructureIntelligence && typeof window.InfrastructureIntelligence.openModal === "function") {
@@ -7766,6 +7807,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let studioKey = segments[0] ? segments[0].toLowerCase() : "overview";
       if (studioKey === "coastal") studioKey = "cyclone";
       if (studioKey === "re-corridor" || studioKey === "khavda-corridor" || studioKey === "green-energy") studioKey = "khavda";
+      if (studioKey === "dmic" || studioKey === "dsir" || studioKey === "wdfc") studioKey = "dholera";
 
       if (this.studios[studioKey]) {
         this.activateStudio(studioKey, false);
@@ -7782,6 +7824,10 @@ document.addEventListener("DOMContentLoaded", () => {
           const params = new URLSearchParams(queryStr || "");
           const blockParam = params.get("block") || segments[1] || "agel_block";
           window.KhavdaGreenEnergyTwin.openModal(blockParam);
+        } else if (studioKey === "dholera" && window.DmicDholeraTwin) {
+          const params = new URLSearchParams(queryStr || "");
+          const zoneParam = params.get("zone") || segments[1] || "activation_area";
+          window.DmicDholeraTwin.openModal(zoneParam);
         }
 
         let targetId = segments[1];

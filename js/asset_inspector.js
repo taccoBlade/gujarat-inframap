@@ -1454,6 +1454,15 @@
           <h4>🏗️ Industrial Engine & Global Export Hub</h4>
           <p><strong>${p.name}</strong> is designed to attract multi-billion dollar foreign direct investments and drive high-tech manufacturing in chemicals, automobiles, renewable hardware, and semiconductors.</p>
         </div>
+        <div class="insp-lab-launcher-card" style="border-left: 3px solid #f59e0b; margin-top: 10px;">
+          <div class="launcher-text">
+            <span class="launcher-title">🏭 DMIC &amp; Dholera SIR Smart Corridors Twin</span>
+            <span class="launcher-desc">Inspect 920 km² Dholera Master Plan, Tata Semiconductor Fab, WDFC double-stack train dynamics, and port dwell times (J).</span>
+          </div>
+          <button class="insp-open-lab-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; font-weight: 700;" onclick="window.DmicDholeraTwin && window.DmicDholeraTwin.openModal('${p.id && p.id.includes('002') ? 'activation_area' : 'activation_area'}')">
+            Launch Dholera Twin 🏭
+          </button>
+        </div>
       `,
       scienceStop: (p) => `
         <div class="insp-science-box">

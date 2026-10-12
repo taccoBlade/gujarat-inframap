@@ -127,6 +127,7 @@ def test_javascript_syntax():
         "js/sauni_basin_transfer_explorer.js",
         "js/cyclone_coastal_surge_twin.js",
         "js/khavda_green_energy_twin.js",
+        "js/dmic_dholera_corridor_twin.js",
         "js/app.js",
         "sw.js"
     ]
