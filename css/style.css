@@ -1,29 +1,29 @@
 /* Gujarat InfraMap — Precision Geospatial Engineering Theme */
 
 :root {
-  --bg-primary: #090d16;
-  --bg-surface: rgba(15, 23, 42, 0.88);
-  --bg-surface-hover: rgba(30, 41, 59, 0.95);
-  --bg-card: #0f172a;
+  --bg-primary: #07090e;
+  --bg-surface: rgba(13, 17, 23, 0.90);
+  --bg-surface-hover: rgba(22, 27, 34, 0.96);
+  --bg-card: #0d1117;
   
   --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-focus: #38bdf8;
+  --border-focus: #0284c7;
   
-  --text-main: #f8fafc;
+  --text-main: #f1f5f9;
   --text-muted: #94a3b8;
   --text-dim: #64748b;
   
-  --accent-cyan: #06b6d4;
-  --accent-blue: #3b82f6;
-  --accent-amber: #f59e0b;
-  --accent-orange: #f97316;
-  --accent-emerald: #10b981;
+  --accent-cyan: #0284c7;
+  --accent-blue: #2563eb;
+  --accent-amber: #d97706;
+  --accent-orange: #ea580c;
+  --accent-emerald: #059669;
   
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   
-  --shadow-drawer: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.08);
-  --shadow-popup: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+  --shadow-drawer: 0 16px 36px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --shadow-popup: 0 12px 28px -8px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
 
   /* Layer Stacking Z-Index Hierarchy */
   --z-map-base: 1;
@@ -101,7 +101,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 15px rgba(2, 132, 199, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .brand-icon-svg {
@@ -119,7 +119,7 @@ body {
   background-color: #10b981;
   border-radius: 50%;
   border: 1.5px solid var(--bg-primary);
-  box-shadow: 0 0 8px #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
 }
 
 .brand-title-wrap {
@@ -541,28 +541,28 @@ body {
 }
 
 .header-more-btn {
-  background: rgba(30, 41, 59, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  color: #38bdf8;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
   display: inline-flex !important;
 }
 
 .header-more-btn:hover {
-  background: rgba(56, 189, 248, 0.15);
-  border-color: #38bdf8;
-  color: #ffffff;
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #f1f5f9;
 }
 
 .header-more-dropdown {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: rgba(13, 20, 36, 0.96);
+  background: rgba(13, 17, 23, 0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(56, 189, 248, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(56, 189, 248, 0.15);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
   padding: 0.75rem;
   display: none;
   flex-direction: column;
@@ -907,8 +907,178 @@ body {
 
 .floating-drawer-toggle:hover {
   background: rgba(30, 41, 59, 0.98);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+  border-color: rgba(2, 132, 199, 0.6);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   STUDIO COCKPIT BAR & ZEN WORKSPACES (/#/dams, /#/water, /#/energy, etc.)
+   ========================================================================== */
+
+.studio-cockpit-bar {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-hud, 600);
+  pointer-events: auto;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.studio-cockpit-inner {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(13, 17, 23, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 3px 6px;
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.studio-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #94a3b8;
+  text-decoration: none;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.studio-pill:hover {
+  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.studio-pill.active {
+  color: #f8fafc;
+  background: rgba(2, 132, 199, 0.20);
+  border-color: rgba(2, 132, 199, 0.45);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.studio-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #64748b;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.studio-pill.active .studio-dot {
+  background: #0284c7;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.3);
+}
+
+.studio-icon {
+  font-size: 0.82rem;
+  line-height: 1;
+}
+
+.studio-zen-pill {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  margin-left: 2px;
+  padding-left: 10px;
+}
+
+.studio-kbd {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  margin-left: 2px;
+}
+
+/* Zen View Edge-to-Edge Styles */
+body.zen-mode-active .app-header {
+  display: none !important;
+}
+
+body.zen-mode-active .app-viewport {
+  height: 100vh !important;
+  max-height: 100vh !important;
+}
+
+body.zen-mode-active .studio-cockpit-bar {
+  top: 10px;
+  opacity: 0.35;
+}
+
+body.zen-mode-active .studio-cockpit-bar:hover {
+  opacity: 1;
+}
+
+body.zen-mode-active .layer-drawer,
+body.zen-mode-active .floating-drawer-toggle,
+body.zen-mode-active .spatial-analysis-dock,
+body.zen-mode-active .active-layer-legend,
+body.zen-mode-active .floating-3d-toggle-btn {
+  display: none !important;
+}
+
+.zen-exit-pill {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-hud, 600);
+  background: rgba(13, 17, 23, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 8px 16px;
+  color: #f1f5f9;
+  font-size: 0.78rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  transition: all 0.2s ease;
+}
+
+.zen-exit-pill:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.zen-exit-pill.hidden {
+  display: none !important;
+}
+
+.zen-exit-pill kbd {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+}
+
+@media (max-width: 900px) {
+  .studio-pill .studio-name {
+    display: none;
+  }
+  .studio-pill {
+    padding: 5px 8px;
+  }
 }
 
 .control-group {
@@ -4613,16 +4783,16 @@ body.inspector-resizing .inspector-resize-handle::after {
    Gujarat Dams & Reservoirs Explorer Component Styles
    ========================================================================== */
 .action-btn-water {
-  background: rgba(2, 132, 199, 0.22);
-  border-color: rgba(56, 189, 248, 0.45);
+  background: rgba(2, 132, 199, 0.12);
+  border: 1px solid rgba(2, 132, 199, 0.32);
   color: #38bdf8;
 }
 
 .action-btn-water:hover {
-  background: rgba(2, 132, 199, 0.38);
-  border-color: #38bdf8;
+  background: rgba(2, 132, 199, 0.24);
+  border-color: rgba(56, 189, 248, 0.6);
   color: #ffffff;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .water-explorer-hero-card {
@@ -9379,18 +9549,18 @@ dialog.system-modal::backdrop {
 
 /* Header Action Button */
 .action-btn-geoenv {
-  background: rgba(16, 185, 129, 0.12) !important;
-  border: 1px solid rgba(16, 185, 129, 0.45) !important;
+  background: rgba(16, 185, 129, 0.08) !important;
+  border: 1px solid rgba(16, 185, 129, 0.32) !important;
   color: #34d399 !important;
   font-weight: 600;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .action-btn-geoenv:hover {
-  background: rgba(16, 185, 129, 0.25) !important;
-  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.18) !important;
+  border-color: rgba(52, 211, 153, 0.6) !important;
   color: #ffffff !important;
-  box-shadow: 0 0 14px rgba(16, 185, 129, 0.45);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   transform: translateY(-1px);
 }
 
@@ -10322,15 +10492,15 @@ dialog.system-modal::backdrop {
    ========================================================================== */
 
 .action-btn-scenarios {
-  background: linear-gradient(135deg, rgba(2, 132, 199, 0.25), rgba(14, 165, 233, 0.15)) !important;
-  border-color: rgba(56, 189, 248, 0.45) !important;
+  background: rgba(2, 132, 199, 0.10) !important;
+  border: 1px solid rgba(2, 132, 199, 0.32) !important;
   color: #38bdf8 !important;
 }
 
 .action-btn-scenarios:hover {
-  background: linear-gradient(135deg, rgba(2, 132, 199, 0.45), rgba(14, 165, 233, 0.3)) !important;
-  border-color: #38bdf8 !important;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+  background: rgba(2, 132, 199, 0.22) !important;
+  border-color: rgba(56, 189, 248, 0.6) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   color: #ffffff !important;
 }
 

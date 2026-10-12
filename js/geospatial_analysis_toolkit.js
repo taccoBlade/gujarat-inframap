@@ -255,10 +255,10 @@
       <div class="sad-header">
         <span class="sad-pulse-indicator"></span>
         <span class="sad-header-title">Spatial Tools</span>
-        <button id="sadToggleBtn" class="sad-collapse-btn" title="Toggle Spatial Tools Toolbar">▾</button>
+        <button id="sadToggleBtn" class="sad-collapse-btn" title="Toggle Spatial Tools Toolbar">▸</button>
       </div>
 
-      <div class="sad-tools-grid" id="sadToolsGrid">
+      <div class="sad-tools-grid collapsed" id="sadToolsGrid">
         <button class="sad-tool-btn ${activeTool === 'distance' ? 'active' : ''}" data-tool="distance" title="Measure Line Distance (WGS 84 Geodesic)">
           <span class="sad-icon">📏</span>
           <span class="sad-label">Distance</span>

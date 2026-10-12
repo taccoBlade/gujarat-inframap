@@ -332,6 +332,53 @@
     <!-- Map Container -->
     <div id="map"></div>
 
+    <!-- Floating Studio Cockpit Switcher Bar (Studio Workspaces & Deep Routing) -->
+    <nav class="studio-cockpit-bar" id="studioCockpitBar" aria-label="Studio Workspaces Navigation">
+      <div class="studio-cockpit-inner">
+        <a href="#/overview" class="studio-pill active" data-studio="overview" title="Statewide Baseline Overview (Clean Map)">
+          <span class="studio-dot"></span>
+          <span class="studio-icon">🗺️</span>
+          <span class="studio-name">Overview</span>
+        </a>
+        <a href="#/dams" class="studio-pill" data-studio="dams" title="Dams & Reservoirs Studio (#/dams) — Hydrology, Cascades & Barrages">
+          <span class="studio-dot"></span>
+          <span class="studio-icon">💧</span>
+          <span class="studio-name">Dams</span>
+        </a>
+        <a href="#/water" class="studio-pill" data-studio="water" title="Hydrology & Scenarios Studio (#/water) — Simulation Lab & Catchments">
+          <span class="studio-dot"></span>
+          <span class="studio-icon">🌊</span>
+          <span class="studio-name">Water Lab</span>
+        </a>
+        <a href="#/energy" class="studio-pill" data-studio="energy" title="Energy & Hydropower Studio (#/energy) — Generation, Renewables & EHV Grid">
+          <span class="studio-dot"></span>
+          <span class="studio-icon">⚡</span>
+          <span class="studio-name">Energy</span>
+        </a>
+        <a href="#/transport" class="studio-pill" data-studio="transport" title="Multi-Modal Transport Studio (#/transport) — Corridors, Ports & Freight">
+          <span class="studio-dot"></span>
+          <span class="studio-icon">🛣️</span>
+          <span class="studio-name">Transport</span>
+        </a>
+        <a href="#/analytics" class="studio-pill" data-studio="analytics" title="Statewide Intelligence Studio (#/analytics) — District Comparison & NEXUS">
+          <span class="studio-dot"></span>
+          <span class="studio-icon">📊</span>
+          <span class="studio-name">Intelligence</span>
+        </a>
+        <button id="zenModeToggleBtn" class="studio-pill studio-zen-pill" title="Toggle Zen View — Full-Screen Zero-Chrome Map Canvas (Z)">
+          <span class="studio-icon">⛶</span>
+          <span class="studio-name">Zen View</span>
+          <kbd class="studio-kbd">Z</kbd>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Zen Mode Floating Exit Pill -->
+    <button id="zenExitFloatingBtn" class="zen-exit-pill hidden" title="Exit Zen View (Esc or Z)">
+      <span>✕ Exit Zen View</span>
+      <kbd>Esc</kbd>
+    </button>
+
     <!-- Floating 3D Mode Toggle on 2D Map -->
     <button id="floating3DToggleBtn" class="floating-3d-toggle-btn" title="Toggle 3D Terrain & Infrastructure Mode (V)">
       <span class="pulse-dot"></span>
@@ -339,7 +386,7 @@
     </button>
 
     <!-- Real-Time Active-Layer Legend Widget (Scale-Aware) -->
-    <div id="activeLayerLegend" class="active-layer-legend" role="region" aria-label="Active Map Layers Legend"></div>
+    <div id="activeLayerLegend" class="active-layer-legend collapsed" role="region" aria-label="Active Map Layers Legend"></div>
 
     <!-- Interactive Geodesic Measurement HUD (Week 9 Stretch Tool) -->
     <div id="measureHud" class="measure-hud hidden" role="region" aria-label="Geodesic Distance Measurement Tool">
@@ -475,7 +522,7 @@
     <div id="appToast" class="app-toast hidden" role="status" aria-live="polite"></div>
 
     <!-- Floating Quick-Open Button (visible when drawer is collapsed) -->
-    <button id="floatingDrawerBtn" class="floating-drawer-toggle" title="Open Layer Controls" aria-label="Open Layer Controls">
+    <button id="floatingDrawerBtn" class="floating-drawer-toggle visible" title="Open Layer Controls" aria-label="Open Layer Controls">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
         <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
         <polyline points="2 17 12 22 22 17"></polyline>
@@ -485,7 +532,7 @@
     </button>
 
     <!-- Floating Layer & Control Drawer -->
-    <aside class="layer-drawer" id="layerDrawer">
+    <aside class="layer-drawer drawer-collapsed" id="layerDrawer">
       <div class="drawer-touch-handle" aria-hidden="true"></div>
       <div class="drawer-header">
         <div class="drawer-title-row">

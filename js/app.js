@@ -6047,6 +6047,23 @@ document.addEventListener("DOMContentLoaded", () => {
   function executeSpatialNavigation(item) {
     if (!item) return;
 
+    // 0. Handle slash command studio workspaces and modes
+    if (item.isSlashCommand) {
+      if (item.command === "zen") {
+        if (window.StudioManager) window.StudioManager.toggleZenMode();
+      } else if (item.command === "clean") {
+        if (window.StudioManager) window.StudioManager.stowClutter();
+        showToast("🧹 Map Clutter Stowed — 95%+ Viewport Visible");
+      } else if (window.StudioManager && window.StudioManager.studios[item.command]) {
+        window.StudioManager.activateStudio(item.command, true);
+      }
+      if (searchInput) searchInput.value = "";
+      if (searchResults) searchResults.classList.add("hidden");
+      currentSearchMatches = [];
+      activeSearchSelectionIdx = -1;
+      return;
+    }
+
     // 1. Guaranteed Underlying Layer Activation
     if (item.layerKey) {
       if (window.LayerManager && typeof window.LayerManager.setLayerActive === "function") {
@@ -6227,6 +6244,88 @@ document.addEventListener("DOMContentLoaded", () => {
     const raw = (query || "").trim();
     if (clearSearchBtn) {
       clearSearchBtn.classList.toggle("hidden", raw.length === 0);
+    }
+
+    if (raw.startsWith("/")) {
+      const queryCmd = raw.slice(1).toLowerCase();
+      const slashCatalog = [
+        {
+          title: "Studio: /dams",
+          subtitle: "Dams & Reservoirs Studio — 68 Mapped Hydraulic Assets & Cascades",
+          category: "WORKSPACE",
+          icon: "💧",
+          badgeClass: "tag-water",
+          isSlashCommand: true,
+          command: "dams"
+        },
+        {
+          title: "Studio: /water",
+          subtitle: "Hydrology & Scenarios Studio — Water Lab Simulator (S)",
+          category: "WORKSPACE",
+          icon: "🌊",
+          badgeClass: "tag-water",
+          isSlashCommand: true,
+          command: "water"
+        },
+        {
+          title: "Studio: /energy",
+          subtitle: "Energy & Hydropower Studio — Solar Parks & 400kV GETCO Grid (H)",
+          category: "WORKSPACE",
+          icon: "⚡",
+          badgeClass: "tag-energy",
+          isSlashCommand: true,
+          command: "energy"
+        },
+        {
+          title: "Studio: /transport",
+          subtitle: "Multi-Modal Transport Studio — Expressways, Ports & WDFC Rail (T)",
+          category: "WORKSPACE",
+          icon: "🛣️",
+          badgeClass: "tag-transport",
+          isSlashCommand: true,
+          command: "transport"
+        },
+        {
+          title: "Studio: /analytics",
+          subtitle: "Statewide Intelligence Studio — District Indicators & Reports (I / B)",
+          category: "WORKSPACE",
+          icon: "📊",
+          badgeClass: "tag-analytics",
+          isSlashCommand: true,
+          command: "analytics"
+        },
+        {
+          title: "Studio: /overview",
+          subtitle: "Statewide Overview — Clean Baseline Map Canvas",
+          category: "WORKSPACE",
+          icon: "🗺️",
+          badgeClass: "tag-overview",
+          isSlashCommand: true,
+          command: "overview"
+        },
+        {
+          title: "Mode: /zen",
+          subtitle: "Zen View — Edge-to-Edge Full-Bleed Map (Press Z)",
+          category: "MODE",
+          icon: "⛶",
+          badgeClass: "tag-zen",
+          isSlashCommand: true,
+          command: "zen"
+        },
+        {
+          title: "Action: /clean",
+          subtitle: "Stow Clutter — Collapse Drawers, Docks & HUDs",
+          category: "ACTION",
+          icon: "🧹",
+          badgeClass: "tag-clean",
+          isSlashCommand: true,
+          command: "clean"
+        }
+      ];
+
+      const matches = slashCatalog.filter(c => !queryCmd || c.command.includes(queryCmd));
+      renderSearchResults(matches, raw, [raw]);
+      return;
     }
 
     if (raw.length < 2) {
@@ -6973,6 +7072,11 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const modal = document.getElementById("aboutModal");
       if (modal && !modal.open) modal.showModal();
+    } else if ((e.key === "z" || e.key === "Z") && !isTyping) {
+      e.preventDefault();
+      if (window.StudioManager) {
+        window.StudioManager.toggleZenMode();
+      }
     } else if (["1", "2", "3", "4", "5", "6", "7", "8"].includes(e.key) && !isTyping) {
       e.preventDefault();
       const presetMap = {
@@ -6988,6 +7092,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const pKey = presetMap[e.key];
       if (pKey) applyPreset(pKey);
     } else if (e.key === "Escape") {
+      if (document.body.classList.contains("zen-mode-active")) {
+        if (window.StudioManager) window.StudioManager.setZenMode(false);
+        return;
+      }
       if (window.Terrain3DMode && window.Terrain3DMode.isActive()) {
         window.Terrain3DMode.exit();
         return;
@@ -7313,7 +7421,224 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================================================
-  // 19. Progressive Web App (PWA) Offline Engine Synchronization
+  // 19. Studio Workspaces & URL Hash Routing Engine (/#/dams, /#/water, /#/energy, etc.)
+  // ==========================================================================
+  const StudioManager = {
+    currentStudio: "overview",
+    studios: {
+      overview: {
+        id: "overview",
+        name: "Statewide Overview",
+        icon: "🗺️",
+        preset: "overview",
+        view: { center: [22.44, 71.30], zoom: 7.0 },
+        description: "Statewide baseline digital twin with clean 95%+ visible map canvas."
+      },
+      dams: {
+        id: "dams",
+        name: "Dams & Reservoirs Studio",
+        icon: "💧",
+        preset: "dams",
+        view: { center: [22.10, 72.85], zoom: 7.6 },
+        description: "Authoritative ledger of 68 major dams, live storage telemetry & Narmada water spine."
+      },
+      water: {
+        id: "water",
+        name: "Hydrology & Scenarios Studio",
+        icon: "🌊",
+        preset: "water",
+        view: { center: [21.90, 72.50], zoom: 7.5 },
+        description: "Hydrology, catchment basins, rainfall stations & Water Scenarios Simulator."
+      },
+      energy: {
+        id: "energy",
+        name: "Energy & Hydropower Studio",
+        icon: "⚡",
+        preset: "energy",
+        view: { center: [22.80, 71.20], zoom: 7.4 },
+        description: "Renewable solar parks, thermal units, substations & 400/765 kV transmission corridors."
+      },
+      transport: {
+        id: "transport",
+        name: "Multi-Modal Transport Studio",
+        icon: "🛣️",
+        preset: "transport",
+        view: { center: [22.40, 72.40], zoom: 7.5 },
+        description: "National highways, expressways, WDFC freight corridors, commercial ports & airports."
+      },
+      analytics: {
+        id: "analytics",
+        name: "Statewide Intelligence Studio",
+        icon: "📊",
+        preset: "overview",
+        view: { center: [22.44, 71.30], zoom: 7.0 },
+        description: "Comparative district indicators, NEXUS correlation & Digital Twin Report Builder."
+      }
+    },
+
+    init() {
+      // 1. Bind studio cockpit tabs
+      document.querySelectorAll(".studio-pill[data-studio]").forEach(pill => {
+        pill.addEventListener("click", (e) => {
+          e.preventDefault();
+          const sKey = pill.getAttribute("data-studio");
+          this.activateStudio(sKey, true);
+        });
+      });
+
+      // 2. Zen Mode buttons
+      const zenBtn = document.getElementById("zenModeToggleBtn");
+      if (zenBtn) {
+        zenBtn.addEventListener("click", () => this.toggleZenMode());
+      }
+      const zenExitBtn = document.getElementById("zenExitFloatingBtn");
+      if (zenExitBtn) {
+        zenExitBtn.addEventListener("click", () => this.setZenMode(false));
+      }
+
+      // 3. Listen to URL hash change
+      window.addEventListener("hashchange", () => {
+        this.handleRouteFromHash();
+      });
+
+      // 4. Initial route resolution
+      if (window.location.hash && window.location.hash.length > 2) {
+        this.handleRouteFromHash();
+      } else {
+        this.stowClutter();
+      }
+    },
+
+    stowClutter() {
+      if (typeof setDrawerCollapsed === "function") {
+        setDrawerCollapsed(true);
+      }
+      const grid = document.getElementById("sadToolsGrid");
+      const toggle = document.getElementById("sadToggleBtn");
+      if (grid && !grid.classList.contains("collapsed")) {
+        grid.classList.add("collapsed");
+        if (toggle) toggle.textContent = "▸";
+      }
+      const leg = document.getElementById("activeLayerLegend");
+      if (leg && !leg.classList.contains("collapsed")) {
+        leg.classList.add("collapsed");
+        const lToggle = document.getElementById("legendCollapseToggleBtn");
+        if (lToggle) lToggle.textContent = "+";
+      }
+      const hud = document.getElementById("temporalMapHud");
+      if (hud && !hud.classList.contains("hidden")) {
+        hud.classList.add("hidden");
+      }
+    },
+
+    activateStudio(studioKey, updateHash = true) {
+      const cfg = this.studios[studioKey] || this.studios.overview;
+      this.currentStudio = cfg.id;
+
+      this.stowClutter();
+
+      document.querySelectorAll(".studio-pill[data-studio]").forEach(pill => {
+        const isMatch = pill.getAttribute("data-studio") === cfg.id;
+        pill.classList.toggle("active", isMatch);
+        pill.setAttribute("aria-selected", isMatch ? "true" : "false");
+      });
+
+      if (cfg.preset && typeof applyPreset === "function") {
+        applyPreset(cfg.preset);
+      }
+
+      if (map && cfg.view) {
+        map.flyTo(cfg.view.center, cfg.view.zoom, { duration: 1.2 });
+      }
+
+      if (cfg.id === "dams") {
+        showToast("💧 Dams & Reservoirs Studio Active — 68 Mapped Hydraulic Assets");
+      } else if (cfg.id === "water") {
+        showToast("🌊 Hydrology & Scenarios Studio Active — Press S for Water Lab");
+      } else if (cfg.id === "energy") {
+        showToast("⚡ Energy & Hydropower Studio Active — Generation & GETCO Grid");
+      } else if (cfg.id === "transport") {
+        showToast("🛣️ Multi-Modal Transport Studio Active — Corridors, Ports & Rail");
+      } else if (cfg.id === "analytics") {
+        showToast("📊 Statewide Intelligence Studio Active — Press I for Insights, B for Reports");
+        if (window.InfrastructureIntelligence && typeof window.InfrastructureIntelligence.openModal === "function") {
+          window.InfrastructureIntelligence.openModal();
+        }
+      } else if (cfg.id === "overview") {
+        showToast("🗺️ Statewide Overview — 95%+ Clean Map Canvas Active");
+      }
+
+      if (updateHash) {
+        const targetHash = `#/${cfg.id}`;
+        if (window.location.hash !== targetHash) {
+          history.pushState(null, "", targetHash);
+        }
+      }
+    },
+
+    handleRouteFromHash() {
+      const rawHash = (window.location.hash || "").replace(/^#\/?/, "");
+      if (!rawHash) return;
+
+      const [path, queryStr] = rawHash.split("?");
+      const segments = path.split("/").filter(Boolean);
+      const studioKey = segments[0] ? segments[0].toLowerCase() : "overview";
+
+      if (this.studios[studioKey]) {
+        this.activateStudio(studioKey, false);
+
+        let targetId = segments[1];
+        if (!targetId && queryStr) {
+          const params = new URLSearchParams(queryStr);
+          targetId = params.get("id");
+        }
+        if (targetId && typeof selectWaterAssetById === "function") {
+          setTimeout(() => {
+            selectWaterAssetById(targetId, true);
+          }, 600);
+        }
+      }
+    },
+
+    toggleZenMode() {
+      const isZen = document.body.classList.toggle("zen-mode-active");
+      this.updateZenState(isZen);
+    },
+
+    setZenMode(active) {
+      if (active) {
+        document.body.classList.add("zen-mode-active");
+      } else {
+        document.body.classList.remove("zen-mode-active");
+      }
+      this.updateZenState(active);
+    },
+
+    updateZenState(isZen) {
+      const zenExitBtn = document.getElementById("zenExitFloatingBtn");
+      if (zenExitBtn) {
+        zenExitBtn.classList.toggle("hidden", !isZen);
+      }
+      const zenPill = document.getElementById("zenModeToggleBtn");
+      if (zenPill) {
+        zenPill.classList.toggle("active", isZen);
+      }
+      if (isZen) {
+        showToast("⛶ Zen View Active: Full-bleed map canvas. Press Esc or Z to exit.");
+      } else {
+        showToast("Standard Studio View Restored.");
+      }
+      setTimeout(() => {
+        if (map) map.invalidateSize();
+      }, 300);
+    }
+  };
+
+  StudioManager.init();
+  window.StudioManager = StudioManager;
+
+  // ==========================================================================
+  // 20. Progressive Web App (PWA) Offline Engine Synchronization
   // ==========================================================================
   const pwaStatusBadge = document.getElementById("pwaStatusBadge");
   const pwaStatusLabel = document.getElementById("pwaStatusLabel");
