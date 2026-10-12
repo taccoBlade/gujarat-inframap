@@ -34,7 +34,7 @@ jobs:
       - name: Set up Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Validate GeoJSON Syntax and FeatureCollection Schemas
         run: |
@@ -62,7 +62,7 @@ jobs:
         run: |
           python scripts/verify_deployment.py
 
-  # Deployment Job: Publishes static site to GitHub Pages
+  # Deployment Job: Publishes static site to GitHub Pages (when enabled in repo settings)
   deploy:
     name: Deploy to GitHub Pages CDN
     needs: quality_gate
@@ -75,13 +75,17 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure GitHub Pages
+        id: pages
         uses: actions/configure-pages@v5
+        continue-on-error: true
 
       - name: Upload Pages Artifact
+        if: steps.pages.outcome == 'success'
         uses: actions/upload-pages-artifact@v3
         with:
           path: "."
 
       - name: Deploy to GitHub Pages
+        if: steps.pages.outcome == 'success'
         id: deployment
         uses: actions/deploy-pages@v4
