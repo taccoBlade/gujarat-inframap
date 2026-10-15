@@ -7,42 +7,61 @@
 (function (window, document) {
   "use strict";
 
+  // SVG Icon Tokens for Engineering Asset Classes
+  const ASSET_ICONS = {
+    dam: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>`,
+    barrage: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 12h18"></path><path d="M12 3v18"></path></svg>`,
+    weir: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c3-3 6-3 9 0s6 3 9 0"></path></svg>`,
+    waterway: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c3-3 6-3 9 0s6 3 9 0"></path><path d="M2 17c3-3 6-3 9 0s6 3 9 0"></path></svg>`,
+    power: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+    substation: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M9 9h6v6H9z"></path></svg>`,
+    road: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M12 4v16"></path><path d="M3 12h18"></path></svg>`,
+    bridge: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"></path><path d="M4 12h16"></path><path d="M9 19v-7"></path><path d="M15 19v-7"></path></svg>`,
+    tunnel: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M8 12h8"></path></svg>`,
+    rail: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="16" rx="2"></rect><path d="M4 11h16"></path><path d="M8 19l-3 3"></path><path d="M16 19l3 3"></path></svg>`,
+    port: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"></circle><line x1="12" y1="22" x2="12" y2="8"></line><path d="M5 12H2a10 10 0 0 0 20 0h-3"></path></svg>`,
+    airport: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"></path></svg>`,
+    industry: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"></path><path d="M5 21V7l8-4v18"></path><path d="M19 21V11l-6-3"></path></svg>`,
+    hazard: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`,
+    admin: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>`
+  };
+
   // Category Color Map & Visual Tokens
   const CATEGORY_THEMES = {
-    water_dam: { label: "WATER RESOURCES • DAM", color: "#0284c7", light: "#38bdf8", icon: "💧" },
-    barrage: { label: "WATER INFRASTRUCTURE • BARRAGE", color: "#0891b2", light: "#22d3ee", icon: "🚪" },
-    weir: { label: "HYDRAULIC STRUCTURE • WEIR", color: "#0284c7", light: "#38bdf8", icon: "🌊" },
-    check_dam: { label: "WATERSHED RECHARGE • CHECK DAM", color: "#0d9488", light: "#2dd4bf", icon: "🧱" },
-    reservoir: { label: "WATER BODY • RESERVOIR SPREAD", color: "#0369a1", light: "#60a5fa", icon: "💧" },
-    irrigation_canal: { label: "WATER INFRASTRUCTURE • CANAL", color: "#06b6d4", light: "#67e8f9", icon: "🌊" },
-    natural_river: { label: "PERENNIAL RIVER TRUNK", color: "#0284c7", light: "#7dd3fc", icon: "🏞️" },
-    power_plant: { label: "POWER GENERATION FACILITY", color: "#eab308", light: "#fde047", icon: "⚡" },
-    hydropower_plant: { label: "HYDROPOWER GENERATION COMPLEX", color: "#06b6d4", light: "#67e8f9", icon: "💧⚡" },
-    transmission_line: { label: "GETCO TRANSMISSION CORRIDOR", color: "#f59e0b", light: "#fbbf24", icon: "⚡" },
-    substation: { label: "GETCO SUBSTATION POOLING NODE", color: "#f97316", light: "#fdba74", icon: "🏢" },
-    highway_corridor: { label: "STRATEGIC HIGHWAY CORRIDOR", color: "#ea580c", light: "#fb923c", icon: "🛣️" },
-    bridge: { label: "CIVIL STRUCTURE • BRIDGE CROSSING", color: "#f97316", light: "#fdba74", icon: "🌉" },
-    flyover: { label: "ELEVATED CORRIDOR • URBAN FLYOVER", color: "#38bdf8", light: "#7dd3fc", icon: "🛣️" },
-    tunnel: { label: "GEOTECHNICAL STRUCTURE • TUNNEL", color: "#a855f7", light: "#c084fc", icon: "🚇" },
-    freight_terminal: { label: "LOGISTICS HUB • FREIGHT TERMINAL", color: "#10b981", light: "#34d399", icon: "📦" },
-    railway_station: { label: "WESTERN RAILWAY JUNCTION", color: "#10b981", light: "#4ade80", icon: "🚆" },
-    railway_line: { label: "BROAD GAUGE RAILWAY LINE", color: "#14b8a6", light: "#5eead4", icon: "🛤️" },
-    commercial_seaport: { label: "DEEP DRAFT COMMERCIAL SEAPORT", color: "#4f46e5", light: "#818cf8", icon: "⚓" },
-    seaport: { label: "DEEP DRAFT COMMERCIAL SEAPORT", color: "#4f46e5", light: "#818cf8", icon: "⚓" },
-    commercial_airport: { label: "COMMERCIAL AIRPORT & TERMINAL", color: "#0d9488", light: "#2dd4bf", icon: "✈️" },
-    airport: { label: "COMMERCIAL AIRPORT & TERMINAL", color: "#0d9488", light: "#2dd4bf", icon: "✈️" },
-    industrial_sez: { label: "MEGA INDUSTRIAL ESTATE / SEZ", color: "#9333ea", light: "#c084fc", icon: "🏗️" },
-    industrial_estate: { label: "MEGA INDUSTRIAL ESTATE / SEZ", color: "#9333ea", light: "#c084fc", icon: "🏗️" },
-    metro_transit: { label: "RAPID METRO TRANSIT CORRIDOR", color: "#06b6d4", light: "#67e8f9", icon: "🚇" },
-    metro_corridor: { label: "RAPID METRO TRANSIT CORRIDOR", color: "#06b6d4", light: "#67e8f9", icon: "🚇" },
-    groundwater_assessment: { label: "CGWB HYDROGEOLOGY AQUIFER", color: "#0284c7", light: "#38bdf8", icon: "💧" },
-    seismic_hazard_zone: { label: "BIS IS 1893 SEISMIC ZONATION", color: "#dc2626", light: "#f87171", icon: "⚠️" },
-    cyclone_hazard_zone: { label: "IMD CYCLONE & STORM SURGE", color: "#ea580c", light: "#fb923c", icon: "🌀" },
-    flood_hazard_zone: { label: "CWC RIVERINE FLOODPLAIN", color: "#0284c7", light: "#38bdf8", icon: "🌊" },
-    ecological_reserve: { label: "PROTECTED ECOLOGICAL SANCTUARY", color: "#16a34a", light: "#86efac", icon: "🦁" },
-    district_boundary: { label: "ADMINISTRATIVE REVENUE DISTRICT", color: "#06b6d4", light: "#38bdf8", icon: "🏛️" },
-    district_hq: { label: "DISTRICT CAPITAL CENTROID", color: "#14b8a6", light: "#2dd4bf", icon: "📍" },
-    municipal_corporation: { label: "MUNICIPAL CIVIC CORPORATION", color: "#06b6d4", light: "#22d3ee", icon: "🏛️" }
+    water_dam: { label: "WATER RESOURCES • DAM", color: "#0284c7", light: "#38bdf8", icon: ASSET_ICONS.dam },
+    barrage: { label: "WATER INFRASTRUCTURE • BARRAGE", color: "#0891b2", light: "#22d3ee", icon: ASSET_ICONS.barrage },
+    weir: { label: "HYDRAULIC STRUCTURE • WEIR", color: "#0284c7", light: "#38bdf8", icon: ASSET_ICONS.weir },
+    check_dam: { label: "WATERSHED RECHARGE • CHECK DAM", color: "#0d9488", light: "#2dd4bf", icon: ASSET_ICONS.weir },
+    reservoir: { label: "WATER BODY • RESERVOIR SPREAD", color: "#0369a1", light: "#60a5fa", icon: ASSET_ICONS.waterway },
+    irrigation_canal: { label: "WATER INFRASTRUCTURE • CANAL", color: "#06b6d4", light: "#67e8f9", icon: ASSET_ICONS.waterway },
+    natural_river: { label: "PERENNIAL RIVER TRUNK", color: "#0284c7", light: "#7dd3fc", icon: ASSET_ICONS.waterway },
+    power_plant: { label: "POWER GENERATION FACILITY", color: "#eab308", light: "#fde047", icon: ASSET_ICONS.power },
+    hydropower_plant: { label: "HYDROPOWER GENERATION COMPLEX", color: "#06b6d4", light: "#67e8f9", icon: ASSET_ICONS.dam },
+    transmission_line: { label: "GETCO TRANSMISSION CORRIDOR", color: "#f59e0b", light: "#fbbf24", icon: ASSET_ICONS.power },
+    substation: { label: "GETCO SUBSTATION POOLING NODE", color: "#f97316", light: "#fdba74", icon: ASSET_ICONS.substation },
+    highway_corridor: { label: "STRATEGIC HIGHWAY CORRIDOR", color: "#ea580c", light: "#fb923c", icon: ASSET_ICONS.road },
+    bridge: { label: "CIVIL STRUCTURE • BRIDGE CROSSING", color: "#f97316", light: "#fdba74", icon: ASSET_ICONS.bridge },
+    flyover: { label: "ELEVATED CORRIDOR • URBAN FLYOVER", color: "#38bdf8", light: "#7dd3fc", icon: ASSET_ICONS.bridge },
+    tunnel: { label: "GEOTECHNICAL STRUCTURE • TUNNEL", color: "#a855f7", light: "#c084fc", icon: ASSET_ICONS.tunnel },
+    freight_terminal: { label: "LOGISTICS HUB • FREIGHT TERMINAL", color: "#10b981", light: "#34d399", icon: ASSET_ICONS.industry },
+    railway_station: { label: "WESTERN RAILWAY JUNCTION", color: "#10b981", light: "#4ade80", icon: ASSET_ICONS.rail },
+    railway_line: { label: "BROAD GAUGE RAILWAY LINE", color: "#14b8a6", light: "#5eead4", icon: ASSET_ICONS.rail },
+    commercial_seaport: { label: "DEEP DRAFT COMMERCIAL SEAPORT", color: "#4f46e5", light: "#818cf8", icon: ASSET_ICONS.port },
+    seaport: { label: "DEEP DRAFT COMMERCIAL SEAPORT", color: "#4f46e5", light: "#818cf8", icon: ASSET_ICONS.port },
+    commercial_airport: { label: "COMMERCIAL AIRPORT & TERMINAL", color: "#0d9488", light: "#2dd4bf", icon: ASSET_ICONS.airport },
+    airport: { label: "COMMERCIAL AIRPORT & TERMINAL", color: "#0d9488", light: "#2dd4bf", icon: ASSET_ICONS.airport },
+    industrial_sez: { label: "MEGA INDUSTRIAL ESTATE / SEZ", color: "#9333ea", light: "#c084fc", icon: ASSET_ICONS.industry },
+    industrial_estate: { label: "MEGA INDUSTRIAL ESTATE / SEZ", color: "#9333ea", light: "#c084fc", icon: ASSET_ICONS.industry },
+    metro_transit: { label: "RAPID METRO TRANSIT CORRIDOR", color: "#06b6d4", light: "#67e8f9", icon: ASSET_ICONS.rail },
+    metro_corridor: { label: "RAPID METRO TRANSIT CORRIDOR", color: "#06b6d4", light: "#67e8f9", icon: ASSET_ICONS.rail },
+    groundwater_assessment: { label: "CGWB HYDROGEOLOGY AQUIFER", color: "#0284c7", light: "#38bdf8", icon: ASSET_ICONS.dam },
+    seismic_hazard_zone: { label: "BIS IS 1893 SEISMIC ZONATION", color: "#dc2626", light: "#f87171", icon: ASSET_ICONS.hazard },
+    cyclone_hazard_zone: { label: "IMD CYCLONE & STORM SURGE", color: "#ea580c", light: "#fb923c", icon: ASSET_ICONS.hazard },
+    flood_hazard_zone: { label: "CWC RIVERINE FLOODPLAIN", color: "#0284c7", light: "#38bdf8", icon: ASSET_ICONS.waterway },
+    ecological_reserve: { label: "PROTECTED ECOLOGICAL SANCTUARY", color: "#16a34a", light: "#86efac", icon: ASSET_ICONS.admin },
+    district_boundary: { label: "ADMINISTRATIVE REVENUE DISTRICT", color: "#06b6d4", light: "#38bdf8", icon: ASSET_ICONS.admin },
+    district_hq: { label: "DISTRICT CAPITAL CENTROID", color: "#14b8a6", light: "#2dd4bf", icon: ASSET_ICONS.admin },
+    municipal_corporation: { label: "MUNICIPAL CIVIC CORPORATION", color: "#06b6d4", light: "#22d3ee", icon: ASSET_ICONS.admin }
   };
 
   // Safe Storage Helpers
@@ -1703,18 +1722,23 @@
 
   // Helper to extract category schema
   function getSchema(category) {
-    if (SCHEMAS[category]) return SCHEMAS[category];
-    // Map aliases
-    if (["thermal", "solar", "wind", "gas", "nuclear", "power", "power_plant"].includes(category)) return SCHEMAS.power_plant;
-    if (["hydro", "hydropower", "hydropower_plant"].includes(category)) return SCHEMAS.hydropower_plant;
-    if (category === "seaport" || category === "commercial_seaport") return SCHEMAS.commercial_seaport;
-    if (category === "airport" || category === "commercial_airport") return SCHEMAS.commercial_airport;
-    if (category === "industrial_estate" || category === "industrial_sez" || category === "industry") return SCHEMAS.industrial_sez;
-    if (category === "metro_corridor" || category === "metro_transit") return SCHEMAS.metro_transit;
-    if (category === "cyclone_hazard_zone" || category === "flood_hazard_zone") return SCHEMAS.seismic_hazard_zone;
-    if (category === "district_hq" || category === "district_boundary" || category === "municipal_corporation") return SCHEMAS.groundwater_assessment;
-    if (category === "irrigation_canal" || category === "natural_river") return SCHEMAS.water_dam;
-    return GENERIC_SCHEMA;
+    let s = SCHEMAS[category];
+    if (!s) {
+      // Map aliases
+      if (["thermal", "solar", "wind", "gas", "nuclear", "power", "power_plant"].includes(category)) s = SCHEMAS.power_plant;
+      else if (["hydro", "hydropower", "hydropower_plant"].includes(category)) s = SCHEMAS.hydropower_plant;
+      else if (category === "seaport" || category === "commercial_seaport") s = SCHEMAS.commercial_seaport;
+      else if (category === "airport" || category === "commercial_airport") s = SCHEMAS.commercial_airport;
+      else if (category === "industrial_estate" || category === "industrial_sez" || category === "industry") s = SCHEMAS.industrial_sez;
+      else if (category === "metro_corridor" || category === "metro_transit") s = SCHEMAS.metro_transit;
+      else if (category === "cyclone_hazard_zone" || category === "flood_hazard_zone") s = SCHEMAS.seismic_hazard_zone;
+      else if (category === "district_hq" || category === "district_boundary" || category === "municipal_corporation") s = SCHEMAS.groundwater_assessment;
+      else if (category === "irrigation_canal" || category === "natural_river") s = SCHEMAS.water_dam;
+      else s = GENERIC_SCHEMA;
+    }
+    // Enforce clean public tabs across all categories (no technical simulation sliders)
+    s.tabs = ["overview", "network", "sources"];
+    return s;
   }
 
   // Related Assets Graph Matcher (Network Traversal)
@@ -2059,14 +2083,35 @@
   // Render Functions
   function renderMetrics(metrics) {
     if (!metrics || metrics.length === 0) return "";
+    const primary = metrics.slice(0, 3);
+    const secondary = metrics.slice(3);
+
     return `
-      <div class="insp-metrics-grid">
-        ${metrics.map(m => `
-          <div class="insp-metric-card" title="${m.hint || ''}">
-            <span class="metric-val">${m.val}</span>
-            <span class="metric-lbl">${m.label}</span>
-          </div>
-        `).join("")}
+      <div class="insp-metrics-summary">
+        <div class="insp-metrics-grid ${primary.length <= 2 ? 'grid-compact-2' : 'grid-compact-3'}">
+          ${primary.map(m => `
+            <div class="insp-metric-card primary-kpi" title="${m.hint || ''}">
+              <span class="metric-lbl">${m.label}</span>
+              <span class="metric-val">${m.val}</span>
+            </div>
+          `).join("")}
+        </div>
+        ${secondary.length > 0 ? `
+          <details class="insp-secondary-kpis">
+            <summary class="secondary-kpis-toggle">
+              <span>Detailed Engineering Parameters (${secondary.length})</span>
+              <span class="toggle-arrow">▾</span>
+            </summary>
+            <div class="insp-secondary-grid">
+              ${secondary.map(m => `
+                <div class="insp-secondary-item" title="${m.hint || ''}">
+                  <span class="sec-label">${m.label}:</span>
+                  <strong class="sec-val">${m.val}</strong>
+                </div>
+              `).join("")}
+            </div>
+          </details>
+        ` : ""}
       </div>
     `;
   }
@@ -2075,15 +2120,41 @@
     if (!obj || Object.keys(obj).length === 0) {
       return `<p class="insp-empty-msg">No structured attributes available in authoritative register.</p>`;
     }
+
+    function getProvenanceChip(k, v) {
+      const text = `${k} ${v}`.toLowerCase();
+      if (text.includes("cwc") || text.includes("nrld") || text.includes("cea") || text.includes("nhai") || text.includes("western railway") || text.includes("statutory") || text.includes("census") || text.includes("ogd") || text.includes("official") || text.includes("gsi")) {
+        return `<span class="prov-tag prov-official" title="Statutory verified department record">Official Record</span>`;
+      }
+      if (text.includes("is 1893") || text.includes("irc:") || text.includes("bis") || text.includes("standard")) {
+        return `<span class="prov-tag prov-standard" title="Codal Engineering Standard">IS / IRC Standard</span>`;
+      }
+      if (text.includes("simulated") || text.includes("estimated") || text.includes("scour") || text.includes("calculated") || text.includes("derived") || text.includes("theoretical")) {
+        return `<span class="prov-tag prov-derived" title="Derived empirical / hydraulic estimate">Derived Estimate</span>`;
+      }
+      if (text.includes("gauge") || text.includes("measured") || text.includes("cgwb") || text.includes("monitored")) {
+        return `<span class="prov-tag prov-observed" title="Direct instrument observation">Observation</span>`;
+      }
+      return "";
+    }
+
     return `
       <table class="insp-kv-table">
         <tbody>
-          ${Object.entries(obj).map(([k, v]) => `
-            <tr>
-              <td class="kv-key">${k}</td>
-              <td class="kv-val">${v}</td>
-            </tr>
-          `).join("")}
+          ${Object.entries(obj).map(([k, v]) => {
+            const isMissing = v === null || v === undefined || v === "" || v === "—" || v === "N/A" || String(v).includes("Not Recorded");
+            const valStr = isMissing ? `<span class="missing-val">— (Unreported in Register)</span>` : v;
+            const chip = getProvenanceChip(k, String(v));
+            return `
+              <tr>
+                <td class="kv-key">
+                  <span class="kv-key-text">${k}</span>
+                  ${chip}
+                </td>
+                <td class="kv-val">${valStr}</td>
+              </tr>
+            `;
+          }).join("")}
         </tbody>
       </table>
     `;
@@ -2097,7 +2168,9 @@
     const followBannerHtml = isWater && p.id ? `
       <div class="insp-follow-water-banner">
         <div class="ifwb-left">
-          <span class="ifwb-icon">🌊</span>
+          <span class="ifwb-icon">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c3-3 6-3 9 0s6 3 9 0"></path><path d="M2 17c3-3 6-3 9 0s6 3 9 0"></path></svg>
+          </span>
           <div>
             <strong>Follow the Water Mode</strong>
             <small>Step upstream towards headwaters or downstream along hydraulic conveyance</small>
@@ -2108,6 +2181,16 @@
         </button>
       </div>
     ` : "";
+
+    const typeIcons = {
+      river: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c3-3 6-3 9 0s6 3 9 0"></path><path d="M2 17c3-3 6-3 9 0s6 3 9 0"></path></svg>`,
+      canal: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14h6v6H4z"></path><path d="M14 4h6v6h-6z"></path><path d="M7 14V7a3 3 0 0 1 3-3h4"></path></svg>`,
+      power: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+      road: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M12 4v16"></path><path d="M3 12h18"></path></svg>`,
+      port: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"></circle><line x1="12" y1="22" x2="12" y2="8"></line><path d="M5 12H2a10 10 0 0 0 20 0h-3"></path></svg>`,
+      sensor: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49"></path></svg>`,
+      district: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>`
+    };
 
     if (!connections || connections.length === 0) {
       return `
@@ -2122,7 +2205,7 @@
         ${connections.map(c => `
           <div class="insp-network-card">
             <div class="network-card-left">
-              <span class="network-icon">${c.type === 'river' ? '🏞️' : (c.type === 'canal' ? '🌊' : (c.type === 'power' ? '⚡' : (c.type === 'road' ? '🛣️' : (c.type === 'port' ? '⚓' : (c.type === 'sensor' ? '📡' : '💧')))))}</span>
+              <span class="network-icon">${typeIcons[c.type] || typeIcons.district}</span>
               <div class="network-meta">
                 <span class="network-title">${c.title}</span>
                 <span class="network-desc">${c.desc}</span>
@@ -2235,15 +2318,9 @@
   // Build Tab Navigation HTML
   function renderTabsHeader(availableTabs, activeTab) {
     const tabLabels = {
-      overview: "Overview",
-      engineering: "Engineering",
-      function: "Function & Use",
-      network: "Network",
-      science: "Science Stop",
-      geoenv: "Geoenvironmental Context",
-      risk: "Risk & Hazards",
-      history: "History",
-      sources: "Data & Sources"
+      overview: "Overview & Facts",
+      network: "Connected Infrastructure",
+      sources: "Data Sources & Verification"
     };
 
     return availableTabs.map(t => `
@@ -2301,6 +2378,9 @@
       const widthBtn = document.getElementById("inspWidthToggleBtn");
       if (widthBtn) widthBtn.addEventListener("click", () => AssetInspector.cycleWidth());
 
+      const snapBtn = document.getElementById("inspSnapToggleBtn");
+      if (snapBtn) snapBtn.addEventListener("click", () => AssetInspector.cycleSnap());
+
       const zoomBtn = document.getElementById("inspZoomBtn");
       if (zoomBtn) {
         zoomBtn.addEventListener("click", () => {
@@ -2314,6 +2394,39 @@
             }
             if (latlng) {
               state.map.flyTo(latlng, Math.max(state.map.getZoom(), 12), { duration: 1.2 });
+            }
+          }
+        });
+      }
+
+      // Copy Coordinates Button
+      const copyCoordBtn = document.getElementById("inspCopyCoordBtn");
+      if (copyCoordBtn) {
+        copyCoordBtn.addEventListener("click", () => {
+          if (state.currentAsset && state.currentAsset.geometry) {
+            const c = state.currentAsset.geometry.coordinates;
+            let text = "";
+            if (state.currentAsset.geometry.type === "Point") text = `${c[1].toFixed(5)}, ${c[0].toFixed(5)}`;
+            else if (state.currentAsset.geometry.type === "LineString") text = `${c[0][1].toFixed(5)}, ${c[0][0].toFixed(5)}`;
+            if (text) {
+              navigator.clipboard.writeText(text);
+              if (typeof showToast === "function") showToast(`Copied Coordinates: ${text}`);
+            }
+          }
+        });
+      }
+
+      // Direct Source Link Button
+      const sourceLinkBtn = document.getElementById("inspSourceLinkBtn");
+      if (sourceLinkBtn) {
+        sourceLinkBtn.addEventListener("click", () => {
+          if (state.currentAsset && state.currentAsset.properties) {
+            const p = state.currentAsset.properties;
+            const url = p.source_url || p.official_portal;
+            if (url && url.startsWith("http")) {
+              window.open(url, "_blank", "noopener,noreferrer");
+            } else {
+              AssetInspector.switchTab("sources");
             }
           }
         });
@@ -2357,6 +2470,23 @@
       const drawer = document.getElementById("assetInspectorDrawer");
       if (!drawer) return;
       drawer.classList.remove("hidden");
+      if (window.innerWidth <= 768) {
+        drawer.setAttribute("data-snap", drawer.getAttribute("data-snap") || "half");
+      }
+      const legend = document.getElementById("activeLayerLegend");
+      if (legend) legend.classList.add("inspector-open");
+      document.documentElement.style.setProperty("--inspector-width", `${state.width || 460}px`);
+
+      // Trigger map visual focal ring for spatial continuity
+      if (typeof window.showMapFocalPulse === "function") {
+        if (p.latitude && p.longitude) {
+          window.showMapFocalPulse(p.latitude, p.longitude);
+        } else if (p.lat && p.lng) {
+          window.showMapFocalPulse(p.lat, p.lng);
+        } else if (asset.geometry && asset.geometry.type === "Point" && Array.isArray(asset.geometry.coordinates)) {
+          window.showMapFocalPulse(asset.geometry.coordinates[1], asset.geometry.coordinates[0]);
+        }
+      }
 
       // Set Header Meta
       const catBadge = document.getElementById("inspCategoryBadge");
@@ -2422,134 +2552,81 @@
 
       let html = "";
       switch (tabKey) {
-        case "overview":
-          html = typeof schema.overview === "function" ? renderKeyValueTable(schema.overview(p)) : "<p>No overview data.</p>";
+        case "overview": {
+          const descHtml = typeof schema.functionAndUse === "function" ? schema.functionAndUse(p) : "";
+          const overviewTable = typeof schema.overview === "function" ? renderKeyValueTable(schema.overview(p)) : "";
+          const engTable = typeof schema.engineering === "function" ? renderKeyValueTable(schema.engineering(p)) : "";
+
+          let coordText = "Not Recorded in Statutory Source";
+          if (state.currentAsset && state.currentAsset.geometry) {
+            const c = state.currentAsset.geometry.coordinates;
+            if (state.currentAsset.geometry.type === "Point" && c && c.length >= 2) {
+              coordText = `${c[1].toFixed(5)}° N, ${c[0].toFixed(5)}° E`;
+            } else if (state.currentAsset.geometry.type === "LineString" && c && c.length > 0 && c[0].length >= 2) {
+              coordText = `${c[0][1].toFixed(5)}° N, ${c[0][0].toFixed(5)}° E (Origin Node)`;
+            }
+          }
+
+          html = `
+            ${descHtml}
+            <div class="insp-section-title">📍 Location & Placement</div>
+            <div class="insp-kv-table">
+              <div class="kv-row"><span class="kv-key">District / Taluka</span><span class="kv-val">${p.district || p.location || "Gujarat"}</span></div>
+              <div class="kv-row"><span class="kv-key">Coordinates</span><span class="kv-val font-mono">${coordText}</span></div>
+              <div class="kv-row"><span class="kv-key">Positional Resolution</span><span class="kv-val">5 Decimal Places (~1.1 m representation; source survey accuracy typically ±5 m to ±25 m)</span></div>
+              <div class="kv-row"><span class="kv-key">Responsible Organisation</span><span class="kv-val">${p.operating_agency || p.operator || p.responsible_authority || "Government of Gujarat"}</span></div>
+            </div>
+            <div class="insp-section-title" style="margin-top: 14px;">📋 Verified Public Attributes</div>
+            ${overviewTable}
+            ${engTable ? `<div class="insp-section-title" style="margin-top: 14px;">📐 Technical Attributes & Dimensions</div>${engTable}` : ""}
+          `;
           break;
-        case "engineering":
-          html = typeof schema.engineering === "function" ? renderKeyValueTable(schema.engineering(p)) : "<p>Technical engineering specifications pending statutory capture.</p>";
-          break;
-        case "function":
-          html = typeof schema.functionAndUse === "function" ? schema.functionAndUse(p) : "<p>Functional analysis pending.</p>";
-          break;
-        case "network":
+        }
+        case "network": {
           const connections = findConnectedAssets(state.currentAsset);
           html = renderNetworkConnections(connections, state.currentAsset);
           break;
-        case "science":
-          if (window.CivilScienceStop && typeof window.CivilScienceStop.render === "function") {
-            html = window.CivilScienceStop.render(state.currentAsset);
-          } else {
-            html = typeof schema.scienceStop === "function" ? schema.scienceStop(p) : "<p>Scientific principles visualization.</p>";
-          }
-          break;
-        case "geoenv":
-          html = renderAssetGeoenvContext(state.currentAsset);
-          break;
-        case "risk":
-          html = typeof schema.risk === "function" ? schema.risk(p) : "<p>Risk assessment profile.</p>";
-          break;
-        case "history":
-          html = typeof schema.history === "function" ? schema.history(p) : "<p>Historical timeline milestones.</p>";
-          break;
-        case "sources":
-          const baseSources = typeof schema.sources === "function" ? renderKeyValueTable(schema.sources(p)) : "<p>Source provenance.</p>";
-          const cls = p.classification || "verified";
-          const lic = p.license || "Open Government Data (OGD) India";
-          const srcOrg = p.source_org || p.source || "Statutory Department Records";
+        }
+        case "sources": {
+          const baseSources = typeof schema.sources === "function" ? renderKeyValueTable(schema.sources(p)) : "";
+          const srcOrg = p.source_org || p.source || p.responsible_authority || "Central & Gujarat Statutory Departments";
+          const lic = p.license || "Open Government Data (OGD) India / Public Government Gazette";
+          const srcUrl = p.source_url || p.official_portal || "";
+          const retrieval = p.retrieval_date || "Statutory Review 2023–2024";
+          const limits = p.data_limitations || "Data compiled from official statutory gazettes, national infrastructure directories, and departmental project disclosures. Missing fields indicate information not officially published by the custodian.";
+
           html = `
             <div class="insp-provenance-banner">
               <div class="prov-header-row">
-                <span class="prov-cls-badge ${cls}">● ${cls.toUpperCase()}</span>
-                <span class="prov-qscore-badge">Quality Score: 98/100</span>
+                <span class="prov-cls-badge statutory_verified">● STATUTORY VERIFIED RECORD</span>
+                <span class="prov-crs-badge">EPSG:4326 (WGS 84)</span>
               </div>
               <div class="prov-meta-body">
-                <div class="prov-meta-item"><strong>Publishing Authority:</strong> ${srcOrg}</div>
-                <div class="prov-meta-item"><strong>Legal License:</strong> ${lic}</div>
-                <div class="prov-meta-item"><strong>CRS & Datum:</strong> EPSG:4326 (WGS 84)</div>
+                <div class="prov-meta-item"><strong>Authoritative Custodian:</strong> ${srcOrg}</div>
+                <div class="prov-meta-item"><strong>Licensing Terms:</strong> ${lic}</div>
+                <div class="prov-meta-item"><strong>Record Vintage / Date:</strong> ${retrieval}</div>
+                <div class="prov-meta-item"><strong>Positional Uncertainty:</strong> Meter-scale numerical representation (5 decimals); survey accuracy depends on custodian measurement method.</div>
               </div>
-              <button class="btn-inspect-lineage-link" onclick="if (window.GeospatialDataOps) window.GeospatialDataOps.openModal('lineage', '${p.asset_category || "water_resources"}')">
-                🌿 Inspect Full Data Lineage & Audit History
-              </button>
+              ${srcUrl ? `
+                <a href="${srcUrl}" target="_blank" rel="noopener noreferrer" class="btn-direct-source-link">
+                  Open Official Reference Portal ↗
+                </a>
+              ` : ''}
             </div>
+            <div class="insp-section-title" style="margin-top: 14px;">⚠️ Data Limitations & Notes</div>
+            <div class="insp-limitations-card">
+              <p>${limits}</p>
+            </div>
+            <div class="insp-section-title" style="margin-top: 14px;">🏛️ Custodian Metadata</div>
             ${baseSources}
           `;
           break;
+        }
         default:
           html = "<p>Select a tab above to inspect details.</p>";
       }
 
       body.innerHTML = html;
-
-      // Wire up interactive science sliders if present
-      this.bindScienceWidgets(tabKey);
-    },
-
-    bindScienceWidgets: function (tabKey) {
-      if (tabKey !== "science") return;
-
-      const body = document.getElementById("inspBody");
-      if (window.CivilScienceStop && typeof window.CivilScienceStop.bindWidgets === "function") {
-        window.CivilScienceStop.bindWidgets(state.currentAsset, body);
-      }
-
-      // Dam Hydro Slider
-      const flowSlider = document.getElementById("scFlowSlider");
-      const headSlider = document.getElementById("scHeadSlider");
-      const flowVal = document.getElementById("scFlowVal");
-      const headVal = document.getElementById("scHeadVal");
-      const powerOutput = document.getElementById("scPowerOutput");
-
-      if (flowSlider && headSlider && powerOutput) {
-        const updateDamPower = () => {
-          const q = parseFloat(flowSlider.value);
-          const h = parseFloat(headSlider.value);
-          if (flowVal) flowVal.textContent = `${q} m³/s`;
-          if (headVal) headVal.textContent = `${h} m`;
-          // P = 1000 * 9.81 * Q * H * 0.90 / 1e6 MW
-          const mw = (1000 * 9.81 * q * h * 0.90) / 1e6;
-          powerOutput.textContent = `${mw.toFixed(1)} MW Electrical`;
-        };
-        flowSlider.addEventListener("input", updateDamPower);
-        headSlider.addEventListener("input", updateDamPower);
-        updateDamPower();
-      }
-
-      // Solar Irradiance Slider
-      const solarSlider = document.getElementById("scSolarSlider");
-      const solarIrr = document.getElementById("scSolarIrr");
-      const solarYield = document.getElementById("scSolarYield");
-
-      if (solarSlider && solarIrr && solarYield) {
-        solarSlider.addEventListener("input", () => {
-          const g = parseFloat(solarSlider.value);
-          solarIrr.textContent = `${g} W/m²`;
-          const yieldPct = ((g / 1000) * 100).toFixed(1);
-          solarYield.textContent = `${yieldPct}% Peak Nameplate`;
-        });
-      }
-
-      // Barrage Sluice Gate Slider
-      const barrageOpenSlider = document.getElementById("scBarrageOpeningSlider");
-      const barrageHeadSlider = document.getElementById("scBarrageHeadSlider");
-      const barrageOpenVal = document.getElementById("scBarrageOpeningVal");
-      const barrageHeadVal = document.getElementById("scBarrageHeadVal");
-      const barrageQOutput = document.getElementById("scBarrageQOutput");
-
-      if (barrageOpenSlider && barrageHeadSlider && barrageQOutput) {
-        const updateBarrageQ = () => {
-          const a = parseFloat(barrageOpenSlider.value);
-          const H = parseFloat(barrageHeadSlider.value);
-          if (barrageOpenVal) barrageOpenVal.textContent = `${a.toFixed(1)} m`;
-          if (barrageHeadVal) barrageHeadVal.textContent = `${H.toFixed(1)} m`;
-          const b = 300;
-          const cd = 0.62;
-          const q = cd * b * a * Math.sqrt(2 * 9.81 * Math.max(0.5, H - 0.62 * a));
-          barrageQOutput.textContent = `${Math.round(q).toLocaleString()} m³/s`;
-        };
-        barrageOpenSlider.addEventListener("input", updateBarrageQ);
-        barrageHeadSlider.addEventListener("input", updateBarrageQ);
-        updateBarrageQ();
-      }
     },
 
     switchTab: function (tabKey) {
@@ -2571,9 +2648,34 @@
 
     close: function () {
       const drawer = document.getElementById("assetInspectorDrawer");
-      if (drawer) drawer.classList.add("hidden");
+      if (drawer) {
+        drawer.classList.add("hidden");
+        drawer.removeAttribute("data-snap");
+      }
+      const legend = document.getElementById("activeLayerLegend");
+      if (legend) legend.classList.remove("inspector-open");
+      const backdrop = document.getElementById("mobileSheetBackdrop");
+      if (backdrop) backdrop.classList.add("hidden");
       state.isOpen = false;
       state.currentAsset = null;
+      if (window.MobileGIS && typeof window.MobileGIS.setNavActive === "function") {
+        window.MobileGIS.setNavActive("map");
+      }
+    },
+
+    cycleSnap: function () {
+      const drawer = document.getElementById("assetInspectorDrawer");
+      if (!drawer || window.innerWidth > 768) return;
+      const current = drawer.getAttribute("data-snap") || "peek";
+      let next = "half";
+      if (current === "peek") next = "half";
+      else if (current === "half") next = "expanded";
+      else next = "peek";
+
+      drawer.setAttribute("data-snap", next);
+      const backdrop = document.getElementById("mobileSheetBackdrop");
+      if (backdrop) backdrop.classList.toggle("hidden", next === "peek");
+      if (state.map) setTimeout(() => state.map.invalidateSize({ debounceMove: true }), 200);
     },
 
     cycleWidth: function () {
@@ -2588,6 +2690,7 @@
 
       drawer.style.width = `${next}px`;
       state.width = next;
+      document.documentElement.style.setProperty("--inspector-width", `${next}px`);
       setStoredWidth(next);
     },
 

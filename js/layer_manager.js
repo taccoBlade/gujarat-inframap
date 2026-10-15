@@ -32,91 +32,70 @@
   // 1. LAYER & CATEGORY REGISTRY CONFIGURATION
   // =========================================================================
 
+  const CATEGORY_SVGS = {
+    admin: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>`,
+    roads: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M12 4v16"></path><path d="M3 12h18"></path></svg>`,
+    rail: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="16" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path><path d="M8 19l-3 3"></path><path d="M16 19l3 3"></path></svg>`,
+    dams: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>`,
+    rivers: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c3-3 6-3 9 0s6 3 9 0"></path><path d="M2 17c3-3 6-3 9 0s6 3 9 0"></path></svg>`,
+    hydro: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`,
+    energy: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`,
+    urban: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"></path><path d="M5 21V7l8-4v18"></path><path d="M19 21V11l-6-3"></path></svg>`,
+    geology: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>`,
+    hazard: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`,
+    basemaps: `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>`
+  };
+
   const CATEGORIES = [
     {
-      id: "admin",
-      title: "Administrative Boundaries",
-      icon: "🏛️",
-      description: "Statutory boundaries, headquarters & revenue districts",
+      id: "transport",
+      title: "Transport Infrastructure",
+      icon: CATEGORY_SVGS.roads,
+      description: "Expressways, National Highways, Western Railway, stations, bridges & ports",
       expanded: true
     },
     {
-      id: "roads",
-      title: "Roads & Highways",
-      icon: "🛣️",
-      description: "Expressways, National Highways & civil structures",
+      id: "water",
+      title: "Water Infrastructure",
+      icon: CATEGORY_SVGS.dams,
+      description: "Major dams, reservoirs, perennial rivers, canals & aquifer assessments",
       expanded: true
-    },
-    {
-      id: "rail",
-      title: "Railways & Stations",
-      icon: "🚆",
-      description: "Western Railway corridors, junctions & halts",
-      expanded: false
-    },
-    {
-      id: "dams",
-      title: "Dams & Reservoirs",
-      icon: "💧",
-      description: "Large dams, barrages, weirs & water-spread footprints",
-      expanded: true
-    },
-    {
-      id: "rivers",
-      title: "Rivers & Canals",
-      icon: "🌊",
-      description: "Major river trunks & Narmada canal distribution networks",
-      expanded: false
-    },
-    {
-      id: "hydro",
-      title: "Hydrology & Groundwater",
-      icon: "🚰",
-      description: "CGWB aquifer extraction, monitoring wells & command areas",
-      expanded: false
     },
     {
       id: "energy",
-      title: "Power & Energy",
-      icon: "⚡",
-      description: "Generation plants, 765/400kV transmission & substations",
+      title: "Energy & Power Grid",
+      icon: CATEGORY_SVGS.energy,
+      description: "Power generation stations, 765/400 kV transmission corridors & pooling substations",
       expanded: true
     },
     {
       id: "urban",
-      title: "Urban & Industrial Infrastructure",
-      icon: "🏗️",
-      description: "Smart cities, metro corridors, seaports, airports & SEZs",
+      title: "Urban & Industrial Development",
+      icon: CATEGORY_SVGS.urban,
+      description: "Special Investment Regions, SEZs, smart cities, commercial ports & metro lines",
       expanded: false
     },
     {
-      id: "geology",
-      title: "Geology & Terrain",
-      icon: "🌍",
-      description: "Bedrock formations, seismogenic faults, soils & SRTM terrain",
-      expanded: false
-    },
-    {
-      id: "hazard",
-      title: "Environment & Hazards",
-      icon: "⚠️",
-      description: "BIS seismic zones, cyclone/flood risk & Ramsar reserves",
+      id: "public",
+      title: "Public Infrastructure & Regional Context",
+      icon: CATEGORY_SVGS.admin,
+      description: "District revenue boundaries, headquarters, ecological reserves & natural baselines",
       expanded: false
     },
     {
       id: "basemaps",
       title: "Imagery & Basemaps",
-      icon: "🗺️",
-      description: "High-resolution satellite imagery, dark GIS & terrain basemaps",
+      icon: CATEGORY_SVGS.basemaps,
+      description: "Clean OpenStreetMap, detailed terrain, satellite & dark slate",
       expanded: true
     }
   ];
 
   const LAYERS = [
-    // --- 1. Administrative Boundaries ---
+    // --- 1. Public Infrastructure & Regional Context ---
     {
       key: "districts",
-      category: "admin",
+      category: "public",
       name: "District Boundaries",
       type: "polygon",
       count: "33 districts",
@@ -129,7 +108,7 @@
     },
     {
       key: "hq",
-      category: "admin",
+      category: "public",
       name: "District Headquarters",
       type: "point",
       count: "33 HQs",
@@ -141,10 +120,10 @@
       searchTerms: "district headquarters capital city civic collectorate"
     },
 
-    // --- 2. Roads & Highways ---
+    // --- 2. Transport Infrastructure ---
     {
       key: "roads",
-      category: "roads",
+      category: "transport",
       name: "National Highways & Expressways",
       type: "line",
       count: "43 corridors (8,940 km)",
@@ -157,10 +136,10 @@
     },
     {
       key: "structures",
-      category: "roads",
-      name: "Signature Bridges & Flyovers",
+      category: "transport",
+      name: "Signature Civil Structures (31)",
       type: "point",
-      count: "31 civil structures",
+      count: "31 structures (18 bridges, 5 flyovers, 2 tunnels, 6 terminals)",
       minZoom: 7.5,
       maxZoom: 19,
       defaultOn: false,
@@ -168,11 +147,9 @@
       panes: ["roadsPane"],
       searchTerms: "bridge flyover tunnel viaduct overpass crossing sudarshan setu narmada cable stayed"
     },
-
-    // --- 3. Railways & Stations ---
     {
       key: "railways",
-      category: "rail",
+      category: "transport",
       name: "Western Railway Tracks",
       type: "line",
       count: "2,264 tracks",
@@ -185,7 +162,7 @@
     },
     {
       key: "stations",
-      category: "rail",
+      category: "transport",
       name: "Passenger Railway Stations",
       type: "point",
       count: "623 stations",
@@ -197,10 +174,10 @@
       searchTerms: "station junction terminal passenger halt railway code wr adi brc st"
     },
 
-    // --- 4. Dams & Reservoirs ---
+    // --- 3. Water Infrastructure ---
     {
       key: "waterDams",
-      category: "dams",
+      category: "water",
       name: "Major Dams, Barrages & Weirs",
       type: "point",
       count: "34 structures (23.6 BCM)",
@@ -213,7 +190,7 @@
     },
     {
       key: "reservoirs",
-      category: "dams",
+      category: "water",
       name: "Reservoir Water-Spread Footprints",
       type: "polygon",
       count: "6 major reservoirs",
@@ -224,11 +201,9 @@
       panes: ["reservoirsPane"],
       searchTerms: "reservoir water spread lake bathymetry submergence frl vallabh sagar"
     },
-
-    // --- 5. Rivers & Canals ---
     {
       key: "rivers",
-      category: "rivers",
+      category: "water",
       name: "Major River Trunks",
       type: "line",
       count: "10 river basins",
@@ -241,7 +216,7 @@
     },
     {
       key: "canals",
-      category: "rivers",
+      category: "water",
       name: "Narmada & Irrigation Canals",
       type: "line",
       count: "10 canal networks (1,100 km)",
@@ -252,11 +227,9 @@
       panes: ["waterwaysPane"],
       searchTerms: "canal nmc narmada main canal branch sauni irrigation distributary water supply"
     },
-
-    // --- 6. Hydrology & Groundwater ---
     {
       key: "groundwater",
-      category: "hydro",
+      category: "water",
       name: "CGWB District Aquifer Status",
       type: "polygon",
       count: "33 district assessments",
@@ -269,7 +242,7 @@
     },
     {
       key: "gwStations",
-      category: "hydro",
+      category: "water",
       name: "Groundwater Monitoring Stations",
       type: "point",
       count: "10 hydrograph stations",
@@ -282,7 +255,7 @@
     },
     {
       key: "commandAreas",
-      category: "hydro",
+      category: "water",
       name: "Irrigation Command Areas",
       type: "polygon",
       count: "6 command footprints (2.5M ha)",
@@ -294,7 +267,7 @@
       searchTerms: "command area culturable agriculture irrigation command ssp ukai kadana"
     },
 
-    // --- 7. Power & Energy ---
+    // --- 4. Energy & Power Grid ---
     {
       key: "power",
       category: "energy",
@@ -335,7 +308,7 @@
       searchTerms: "substation pooling switchyard getco transformer ehv busbar"
     },
 
-    // --- 8. Urban & Industrial Infrastructure ---
+    // --- 5. Urban & Industrial Development ---
     {
       key: "urbanMetro",
       category: "urban",
@@ -376,10 +349,10 @@
       searchTerms: "gidc sez industrial estate dholera dahej pcpir sanand gift city investment"
     },
 
-    // --- 9. Geology & Terrain ---
+    // --- 6. Public Infrastructure & Regional Context ---
     {
       key: "geology",
-      category: "geology",
+      category: "public",
       name: "Bedrock Formations (GSI Bhukosh)",
       type: "polygon",
       count: "7 lithological formations",
@@ -392,7 +365,7 @@
     },
     {
       key: "faults",
-      category: "geology",
+      category: "public",
       name: "Active Seismogenic Fault Lines",
       type: "line",
       count: "5 active faults (KMF, KBF)",
@@ -405,7 +378,7 @@
     },
     {
       key: "soils",
-      category: "geology",
+      category: "public",
       name: "Soil Series & Expansive Vertisols",
       type: "polygon",
       count: "5 soil engineering units",
@@ -418,7 +391,7 @@
     },
     {
       key: "terrain",
-      category: "geology",
+      category: "public",
       name: "SRTM Terrain & Elevation Regimes",
       type: "polygon",
       count: "5 geomorphological regimes",
@@ -429,11 +402,9 @@
       panes: ["terrainPane"],
       searchTerms: "terrain elevation slope srtm dem relief girnar aravalli coastal plain"
     },
-
-    // --- 10. Environment & Hazards ---
     {
       key: "seismic",
-      category: "hazard",
+      category: "public",
       name: "BIS IS 1893 Seismic Zones",
       type: "polygon",
       count: "Zone V / IV / III",
@@ -446,7 +417,7 @@
     },
     {
       key: "cycloneFlood",
-      category: "hazard",
+      category: "public",
       name: "Cyclone Winds & Floodplains",
       type: "polygon",
       count: "IMD 50 m/s • 4 Floodplains",
@@ -459,7 +430,7 @@
     },
     {
       key: "coastal",
-      category: "hazard",
+      category: "public",
       name: "Coastal Inundation & Salinity",
       type: "polygon",
       count: "3 coastal hazard sectors",
@@ -472,7 +443,7 @@
     },
     {
       key: "sanctuaries",
-      category: "hazard",
+      category: "public",
       name: "Wildlife Sanctuaries & Ramsar",
       type: "polygon",
       count: "12 Protected Areas (Gir, Nalsarovar)",
@@ -1073,7 +1044,9 @@
     legendContainer.innerHTML = `
       <div class="legend-header">
         <div class="legend-header-title">
-          <span class="legend-title-icon">🗺️</span>
+          <span class="legend-title-icon">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          </span>
           <h4>Active Legend</h4>
           <span class="legend-count-pill" id="legendCountPill">${activeLayers.length} Active</span>
         </div>

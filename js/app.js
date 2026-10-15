@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Search index repository
   const searchIndex = [];
+  window.searchIndex = searchIndex;
   const districtBounds = {};
   let activeDistrictHighlight = null;
 
@@ -54,9 +55,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Automatically collapse layerDrawer on smaller desktop displays when inspector opens
+  // Automatically collapse layerDrawer when inspector opens to prevent right-dock collisions
   window.addEventListener("assetInspectorOpened", () => {
-    if (typeof setDrawerCollapsed === "function" && window.innerWidth <= 1280) {
+    if (typeof setDrawerCollapsed === "function") {
       setDrawerCollapsed(true);
     }
   });
@@ -92,6 +93,41 @@ document.addEventListener("DOMContentLoaded", () => {
   map.createPane("selectionPane").style.zIndex = 650;         // Non-intrusive Selected Asset Halo
   map.getPane("selectionPane").style.pointerEvents = "none";
   map.createPane("proximityPane").style.zIndex = 700;         // Proximity Audit Crosshair & Vectors
+
+  // Phase 3 Motion Design: Ephemeral Visual Focal Ring on Asset / Destination Selection
+  window.showMapFocalPulse = function (lat, lng) {
+    if (!window.map || !lat || !lng) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+    try {
+      const focalIcon = L.divIcon({
+        className: "map-focal-pulse-wrapper",
+        html: `<div class="map-focal-pulse" aria-hidden="true">
+                 <svg viewBox="0 0 44 44" class="focal-pulse-svg">
+                   <circle cx="22" cy="22" r="16" class="focal-pulse-circle" />
+                   <circle cx="22" cy="22" r="4" class="focal-pulse-dot" />
+                 </svg>
+               </div>`,
+        iconSize: [44, 44],
+        iconAnchor: [22, 22]
+      });
+
+      const pulseMarker = L.marker([lat, lng], {
+        icon: focalIcon,
+        interactive: false,
+        pane: "selectionPane"
+      }).addTo(window.map);
+
+      setTimeout(() => {
+        if (window.map && window.map.hasLayer(pulseMarker)) {
+          window.map.removeLayer(pulseMarker);
+        }
+      }, 1500);
+    } catch (e) {
+      // Non-blocking fallback
+    }
+  };
 
   // 3. Basemap Providers (100% Free & Open-Source — Zero Watermarks, Zero API Keys)
   // 3. Basemap Providers (CARTO Dark Matter Default: Muted charcoal GIS canvas, zero noise)
@@ -141,20 +177,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const basemapLayers = createBasemaps();
   basemapLayers.dark.addTo(map);
 
-  // Basemap switcher listener
-  document.querySelectorAll(".segment-btn").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      document.querySelectorAll(".segment-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      const chosen = btn.getAttribute("data-basemap");
+  // Basemap switcher listener (delegated for dynamic LayerManager basemaps)
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".segment-btn[data-basemap]");
+    if (!btn) return;
+    document.querySelectorAll(".segment-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const chosen = btn.getAttribute("data-basemap");
 
-      Object.values(basemapLayers).forEach(l => {
-        if (map.hasLayer(l)) map.removeLayer(l);
-      });
-      if (basemapLayers[chosen]) {
-        basemapLayers[chosen].addTo(map);
-      }
+    Object.values(basemapLayers).forEach(l => {
+      if (map.hasLayer(l)) map.removeLayer(l);
     });
+    if (basemapLayers[chosen]) {
+      basemapLayers[chosen].addTo(map);
+    }
   });
 
   // 4. Infrastructure Layer Groups (Overview Preset Default: Districts, Roads, Power, WaterDams, Reservoirs)
@@ -5241,8 +5277,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (hazardDistName) hazardDistName.textContent = `${districtName} District`;
     if (hazardSummary) hazardSummary.textContent = profile.summary;
     if (hazardCompositeBadge) {
-      hazardCompositeBadge.textContent = `Score: ${profile.score}/100`;
-      hazardCompositeBadge.style.background = profile.score >= 80 ? "#dc2626" : (profile.score >= 70 ? "#ea580c" : "#0284c7");
+      hazardCompositeBadge.textContent = "Statutory Benchmarks";
+      hazardCompositeBadge.style.background = "#0284c7";
     }
     if (chipSeismic) {
       chipSeismic.innerHTML = `<strong>SEISMIC HAZARD</strong><span>${profile.seismic}</span>`;
@@ -5257,8 +5293,8 @@ document.addEventListener("DOMContentLoaded", () => {
       chipGroundwater.innerHTML = `<strong>CGWB GROUNDWATER</strong><span>${profile.gwCat} (${profile.gwPct}% Extraction)</span>`;
     }
     if (hazardScoreVal) {
-      hazardScoreVal.textContent = `${profile.score} / 100 (${profile.rating})`;
-      hazardScoreVal.className = `composite-badge ${profile.score >= 80 ? 'high' : 'medium'}`;
+      hazardScoreVal.textContent = "BIS IS 1893 & IMD Classified";
+      hazardScoreVal.className = "composite-badge";
     }
     if (hazardSelect && hazardSelect.value !== districtName) {
       hazardSelect.value = districtName;
@@ -6095,6 +6131,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if ((raw.includes("groundwater") || raw.includes("aquifer") || raw.includes("cgwb") || raw.includes("water table")) && item.type === "groundwater") {
         score += 1500;
       }
+      if ((raw.includes("tourism") || raw.includes("travel") || raw.includes("place") || raw.includes("visit") || raw.includes("temple") || raw.includes("beach") || raw.includes("vav") || raw.includes("sanctuary")) && item.type === "tourism") {
+        score += 1500;
+      }
 
       // 6. Add Base Infrastructure Priority (Mega-plants, Expressways, Terminals ranked higher)
       score += (item.priority || 50);
@@ -6189,6 +6228,13 @@ document.addEventListener("DOMContentLoaded", () => {
           type: "railway_line"
         });
       }
+    } else if (item.destinationId || item.type === "tourism") {
+      if (window.PublicViews) window.PublicViews.switchDestination("explore", true);
+      if (window.TourismDiscovery) {
+        window.TourismDiscovery.flyToDestination(item.destinationId);
+      } else if (item.lat && item.lng) {
+        map.flyTo([item.lat, item.lng], 13.5, { duration: 1.2 });
+      }
     } else if (item.bounds) {
       map.fitBounds(item.bounds, { padding: [55, 55], maxZoom: 12, duration: 1.2 });
       if (item.layer && item.layer.openPopup) {
@@ -6202,9 +6248,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     } else if (item.latlng) {
-      map.flyTo(item.latlng, 13.5, { duration: 1.2 });
+      const isReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (isReduced) {
+        map.setView(item.latlng, 13.5, { animate: false });
+      } else {
+        map.flyTo(item.latlng, 13.5, { duration: 1.1 });
+      }
+      if (typeof window.showMapFocalPulse === "function" && item.latlng) {
+        window.showMapFocalPulse(item.latlng.lat, item.latlng.lng);
+      }
       if (item.layer && item.layer.openPopup) {
-        setTimeout(() => item.layer.openPopup(), 450);
+        setTimeout(() => item.layer.openPopup(), isReduced ? 50 : 450);
       }
       if (item.layer && item.layer.feature) {
         inspectAsset({
@@ -6511,7 +6565,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 9. Reset View Action
-  document.getElementById("resetViewBtn").addEventListener("click", resetToStateView);
+  const resetViewBtn = document.getElementById("resetViewBtn");
+  if (resetViewBtn) {
+    resetViewBtn.addEventListener("click", resetToStateView);
+  }
+  const recenterMapBtn = document.getElementById("recenterMapBtn");
+  if (recenterMapBtn) {
+    recenterMapBtn.addEventListener("click", () => {
+      resetToStateView();
+      if (typeof showToast === "function") {
+        showToast("📍 Gujarat State Bounds Re-centered");
+      }
+    });
+  }
 
   // 10. Mouse Coordinates & HUD Tracking
   const hudCoords = document.getElementById("hudCoords");
@@ -6530,7 +6596,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   map.on("zoomend", () => {
-    hudZoom.textContent = map.getZoom().toFixed(1);
+    if (hudZoom) hudZoom.textContent = map.getZoom().toFixed(1);
     applyZoomDependentRendering(map.getZoom());
   });
 
@@ -6544,12 +6610,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 11. Technical Specifications Modal Dialog
   const modal = document.getElementById("aboutModal");
-  document.getElementById("aboutBtn").addEventListener("click", () => modal.showModal());
-  document.getElementById("closeModalBtn").addEventListener("click", () => modal.close());
-  document.getElementById("modalDismissBtn").addEventListener("click", () => modal.close());
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) modal.close();
-  });
+  const aboutBtn = document.getElementById("aboutBtn");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const modalDismissBtn = document.getElementById("modalDismissBtn");
+  if (aboutBtn && modal) {
+    aboutBtn.addEventListener("click", () => modal.showModal());
+  }
+  if (closeModalBtn && modal) {
+    closeModalBtn.addEventListener("click", () => modal.close());
+  }
+  if (modalDismissBtn && modal) {
+    modalDismissBtn.addEventListener("click", () => modal.close());
+  }
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) modal.close();
+    });
+  }
 
   // 12. Free API Key Storage & Live Reload
   const apiKeyInput = document.getElementById("customApiKeyInput");
@@ -6592,6 +6669,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (toggleDrawerBtn) toggleDrawerBtn.classList.remove("active");
       if (activeLegend) activeLegend.classList.remove("drawer-open");
     } else {
+      if (window.AssetInspector) window.AssetInspector.close();
       layerDrawer.classList.remove("drawer-collapsed");
       document.body.classList.add("drawer-open");
       if (floatingDrawerBtn) floatingDrawerBtn.classList.remove("visible");
@@ -6617,6 +6695,38 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (floatingDrawerBtn) {
     floatingDrawerBtn.addEventListener("click", () => setDrawerCollapsed(false));
+  }
+
+  // Theme Toggle Button
+  const themeToggleBtn = document.getElementById("themeToggleBtn");
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", () => {
+      const isLight = document.body.classList.contains("theme-light");
+      if (window.PublicViews) {
+        window.PublicViews.applyTheme(isLight ? "dark" : "light");
+      } else {
+        document.body.classList.toggle("theme-light", !isLight);
+        document.body.classList.toggle("theme-dark", isLight);
+      }
+    });
+  }
+
+  // Shortcuts & Navigation Help Modal
+  const shortcutsHelpBtn = document.getElementById("shortcutsHelpBtn");
+  const shortcutsHelpModal = document.getElementById("shortcutsHelpModal");
+  const closeShortcutsModalBtn = document.getElementById("closeShortcutsModalBtn");
+  const dismissShortcutsBtn = document.getElementById("dismissShortcutsBtn");
+
+  if (shortcutsHelpBtn && shortcutsHelpModal) {
+    shortcutsHelpBtn.addEventListener("click", () => {
+      if (!shortcutsHelpModal.open) shortcutsHelpModal.showModal();
+    });
+  }
+  if (closeShortcutsModalBtn && shortcutsHelpModal) {
+    closeShortcutsModalBtn.addEventListener("click", () => shortcutsHelpModal.close());
+  }
+  if (dismissShortcutsBtn && shortcutsHelpModal) {
+    dismissShortcutsBtn.addEventListener("click", () => shortcutsHelpModal.close());
   }
 
   // Initialize Active Legend drawer avoidance based on initial layout state
@@ -7172,28 +7282,26 @@ document.addEventListener("DOMContentLoaded", () => {
       resetToStateView();
     } else if (e.key === "?" && !isTyping) {
       e.preventDefault();
-      const modal = document.getElementById("aboutModal");
+      const modal = document.getElementById("shortcutsHelpModal") || document.getElementById("aboutModal");
       if (modal && !modal.open) modal.showModal();
-    } else if ((e.key === "z" || e.key === "Z") && !isTyping) {
+    } else if (["1", "2", "3", "4"].includes(e.key) && !isTyping) {
       e.preventDefault();
-      if (window.StudioManager) {
-        window.StudioManager.toggleZenMode();
-      }
-    } else if (["1", "2", "3", "4", "5", "6", "7", "8"].includes(e.key) && !isTyping) {
-      e.preventDefault();
-      const presetMap = {
-        "1": "overview",
-        "2": "water",
-        "3": "transport",
-        "4": "energy",
-        "5": "urban",
-        "6": "disaster",
-        "7": "admin",
-        "8": "full"
+      const navMap = {
+        "1": "explore",
+        "2": "directory",
+        "3": "projects",
+        "4": "about"
       };
-      const pKey = presetMap[e.key];
-      if (pKey) applyPreset(pKey);
+      const dest = navMap[e.key];
+      if (dest && window.PublicViews) {
+        window.PublicViews.switchDestination(dest, true);
+      }
     } else if (e.key === "Escape") {
+      const helpM = document.getElementById("shortcutsHelpModal");
+      if (helpM && helpM.open) {
+        helpM.close();
+        return;
+      }
       if (document.body.classList.contains("zen-mode-active")) {
         if (window.StudioManager) window.StudioManager.setZenMode(false);
         return;
@@ -7600,6 +7708,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================================================
   const StudioManager = {
     currentStudio: "overview",
+    getCurrentStudioId() {
+      return this.currentStudio;
+    },
     studios: {
       overview: {
         id: "overview",
@@ -7911,4 +8022,404 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+  // =========================================================================
+  // 14. Mobile Purpose-Built Field GIS Controller (Desktop + Tablet + Mobile)
+  // Bottom Navigation, Bottom Sheets with Snap Points, Touch Interactions
+  // =========================================================================
+  function escapeHtml(str) {
+    if (!str) return "";
+    return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]);
+  }
+
+  const MobileGIS = {
+    currentSnap: "half",
+    activeTab: "map",
+
+    init() {
+      // 1. Mobile Bottom Navigation Buttons (5 Consumer Destinations)
+      const navMap = document.getElementById("mobileNavMapBtn");
+      const navPlaces = document.getElementById("mobileNavPlacesBtn");
+      const navInfra = document.getElementById("mobileNavInfraBtn");
+      const navPlan = document.getElementById("mobileNavPlanBtn");
+      const navLayers = document.getElementById("mobileNavLayersBtn");
+      const backdrop = document.getElementById("mobileSheetBackdrop");
+
+      if (navMap) navMap.addEventListener("click", () => {
+        this.closeAllSheets();
+        if (window.PublicViews) window.PublicViews.switchDestination("explore");
+      });
+      if (navPlaces) navPlaces.addEventListener("click", () => {
+        this.closeAllSheets();
+        if (window.PublicViews) window.PublicViews.switchDestination("places");
+      });
+      if (navInfra) navInfra.addEventListener("click", () => {
+        this.closeAllSheets();
+        if (window.PublicViews) window.PublicViews.switchDestination("infrastructure");
+      });
+      if (navPlan) navPlan.addEventListener("click", () => {
+        this.closeAllSheets();
+        if (window.PublicViews) window.PublicViews.switchDestination("plan");
+      });
+      if (navLayers) navLayers.addEventListener("click", () => this.switchTab("layers"));
+      if (backdrop) backdrop.addEventListener("click", () => this.closeAllSheets());
+
+      // 2. Sheet Close Buttons
+      const closeSearch = document.getElementById("closeMobileSearchBtn");
+      const closeStudios = document.getElementById("closeMobileStudiosBtn");
+      if (closeSearch) closeSearch.addEventListener("click", () => this.switchTab("map"));
+      if (closeStudios) closeStudios.addEventListener("click", () => this.switchTab("map"));
+
+      // 3. Asset Inspector Mobile Drag Handle
+      const inspDragHandle = document.getElementById("inspDragHandle");
+      if (inspDragHandle) {
+        this.bindSheetDrag(inspDragHandle, document.getElementById("assetInspectorDrawer"));
+      }
+      const searchDragHandle = document.getElementById("mobileSearchDragHandle");
+      if (searchDragHandle) {
+        this.bindSheetDrag(searchDragHandle, document.getElementById("mobileSearchSheet"));
+      }
+      const studiosDragHandle = document.getElementById("mobileStudiosDragHandle");
+      if (studiosDragHandle) {
+        this.bindSheetDrag(studiosDragHandle, document.getElementById("mobileStudiosSheet"));
+      }
+
+      // 4. Wire Mobile Search
+      this.initMobileSearch();
+
+      // 5. Wire Mobile Studios & Spatial Tools
+      this.initMobileStudios();
+
+      // 6. Listen for asset selection to update mobile asset badge & snap state
+      window.addEventListener("assetInspectorOpened", (e) => {
+        this.onAssetInspected(e.detail);
+      });
+
+      // 7. Handle window resize / orientation changes
+      window.addEventListener("resize", () => {
+        this.handleResize();
+      });
+    },
+
+    setNavActive(tab) {
+      this.activeTab = tab;
+      document.querySelectorAll(".mobile-nav-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-nav") === tab);
+      });
+    },
+
+    closeAllSheets() {
+      const searchSheet = document.getElementById("mobileSearchSheet");
+      const studiosSheet = document.getElementById("mobileStudiosSheet");
+      const backdrop = document.getElementById("mobileSheetBackdrop");
+      if (searchSheet) searchSheet.classList.add("hidden");
+      if (studiosSheet) studiosSheet.classList.add("hidden");
+      if (backdrop) backdrop.classList.add("hidden");
+
+      if (typeof setDrawerCollapsed === "function") {
+        setDrawerCollapsed(true);
+      }
+
+      const inspDrawer = document.getElementById("assetInspectorDrawer");
+      if (inspDrawer && !inspDrawer.classList.contains("hidden")) {
+        if (window.innerWidth <= 768) {
+          inspDrawer.setAttribute("data-snap", "peek");
+        }
+      }
+
+      this.setNavActive("map");
+      setTimeout(() => {
+        if (map) map.invalidateSize({ debounceMove: true });
+      }, 200);
+    },
+
+    switchTab(tab) {
+      const searchSheet = document.getElementById("mobileSearchSheet");
+      const studiosSheet = document.getElementById("mobileStudiosSheet");
+      const inspDrawer = document.getElementById("assetInspectorDrawer");
+      const backdrop = document.getElementById("mobileSheetBackdrop");
+
+      if (tab === "map") {
+        this.closeAllSheets();
+        return;
+      }
+
+      this.setNavActive(tab);
+
+      if (tab === "layers") {
+        if (searchSheet) searchSheet.classList.add("hidden");
+        if (studiosSheet) studiosSheet.classList.add("hidden");
+        if (inspDrawer && window.innerWidth <= 768) inspDrawer.setAttribute("data-snap", "peek");
+        if (typeof setDrawerCollapsed === "function") {
+          const isCollapsed = layerDrawer && layerDrawer.classList.contains("drawer-collapsed");
+          setDrawerCollapsed(!isCollapsed ? true : false);
+        }
+        if (backdrop) backdrop.classList.remove("hidden");
+      } else if (tab === "search") {
+        if (studiosSheet) studiosSheet.classList.add("hidden");
+        if (typeof setDrawerCollapsed === "function") setDrawerCollapsed(true);
+        if (inspDrawer && window.innerWidth <= 768) inspDrawer.setAttribute("data-snap", "peek");
+        if (searchSheet) {
+          searchSheet.classList.remove("hidden");
+          const input = document.getElementById("mobileSearchInput");
+          if (input) {
+            setTimeout(() => input.focus(), 150);
+          }
+        }
+        if (backdrop) backdrop.classList.remove("hidden");
+      } else if (tab === "studios") {
+        if (searchSheet) searchSheet.classList.add("hidden");
+        if (typeof setDrawerCollapsed === "function") setDrawerCollapsed(true);
+        if (inspDrawer && window.innerWidth <= 768) inspDrawer.setAttribute("data-snap", "peek");
+        if (studiosSheet) studiosSheet.classList.remove("hidden");
+        if (backdrop) backdrop.classList.remove("hidden");
+      } else if (tab === "asset") {
+        if (searchSheet) searchSheet.classList.add("hidden");
+        if (studiosSheet) studiosSheet.classList.add("hidden");
+        if (typeof setDrawerCollapsed === "function") setDrawerCollapsed(true);
+        if (inspDrawer) {
+          if (inspDrawer.classList.contains("hidden")) {
+            this.switchTab("search");
+            showToast("ℹ️ Select any asset on the map or search to inspect");
+            return;
+          }
+          const currentSnap = inspDrawer.getAttribute("data-snap") || "peek";
+          const nextSnap = currentSnap === "peek" ? "half" : "peek";
+          inspDrawer.setAttribute("data-snap", nextSnap);
+          if (nextSnap === "half" && backdrop) {
+            backdrop.classList.remove("hidden");
+          } else if (backdrop) {
+            backdrop.classList.add("hidden");
+          }
+        }
+      }
+
+      setTimeout(() => {
+        if (map) map.invalidateSize({ debounceMove: true });
+      }, 200);
+    },
+
+    onAssetInspected(asset) {
+      const badge = document.getElementById("mobileAssetBadge");
+      if (badge) badge.classList.remove("hidden");
+
+      if (window.innerWidth <= 768) {
+        const drawer = document.getElementById("assetInspectorDrawer");
+        if (drawer) {
+          drawer.setAttribute("data-snap", "half");
+        }
+        this.setNavActive("asset");
+      }
+    },
+
+    bindSheetDrag(handleEl, sheetEl) {
+      if (!handleEl || !sheetEl) return;
+      let startY = 0;
+      let currentY = 0;
+      let isDragging = false;
+
+      handleEl.addEventListener("touchstart", (e) => {
+        startY = e.touches[0].clientY;
+        currentY = startY;
+        isDragging = true;
+      }, { passive: true });
+
+      handleEl.addEventListener("touchmove", (e) => {
+        if (!isDragging) return;
+        currentY = e.touches[0].clientY;
+      }, { passive: true });
+
+      handleEl.addEventListener("touchend", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        const delta = currentY - startY;
+        if (Math.abs(delta) < 25) return;
+
+        if (sheetEl.id === "assetInspectorDrawer") {
+          const currentSnap = sheetEl.getAttribute("data-snap") || "peek";
+          if (delta < -30) {
+            if (currentSnap === "peek") sheetEl.setAttribute("data-snap", "half");
+            else if (currentSnap === "half") sheetEl.setAttribute("data-snap", "expanded");
+          } else if (delta > 30) {
+            if (currentSnap === "expanded") sheetEl.setAttribute("data-snap", "half");
+            else if (currentSnap === "half") sheetEl.setAttribute("data-snap", "peek");
+            else if (currentSnap === "peek") window.AssetInspector.close();
+          }
+          const backdrop = document.getElementById("mobileSheetBackdrop");
+          if (backdrop) {
+            const nextSnap = sheetEl.getAttribute("data-snap");
+            backdrop.classList.toggle("hidden", nextSnap === "peek" || sheetEl.classList.contains("hidden"));
+          }
+        } else {
+          if (delta > 50) {
+            sheetEl.classList.add("hidden");
+            const backdrop = document.getElementById("mobileSheetBackdrop");
+            if (backdrop) backdrop.classList.add("hidden");
+            this.setNavActive("map");
+          }
+        }
+
+        setTimeout(() => {
+          if (map) map.invalidateSize({ debounceMove: true });
+        }, 200);
+      });
+    },
+
+    initMobileSearch() {
+      const input = document.getElementById("mobileSearchInput");
+      const clearBtn = document.getElementById("clearMobileSearchBtn");
+      const resultsContainer = document.getElementById("mobileSearchResultsList");
+      const chips = document.getElementById("mobileSearchChips");
+      let activeCategory = "all";
+
+      if (chips) {
+        chips.addEventListener("click", (e) => {
+          const btn = e.target.closest(".m-chip");
+          if (!btn) return;
+          chips.querySelectorAll(".m-chip").forEach(c => c.classList.remove("active"));
+          btn.classList.add("active");
+          activeCategory = btn.getAttribute("data-cat") || "all";
+          renderMobileSearchResults();
+        });
+      }
+
+      const renderMobileSearchResults = () => {
+        if (!input || !resultsContainer) return;
+        const query = input.value.trim();
+        if (clearBtn) clearBtn.classList.toggle("hidden", query.length === 0);
+
+        if (query.length < 2) {
+          resultsContainer.innerHTML = '<div class="m-search-hint">Type above to search across 3,337 verified infrastructure assets across Gujarat.</div>';
+          return;
+        }
+
+        let matches = searchInfrastructure(query);
+        if (activeCategory !== "all") {
+          matches = matches.filter(m => {
+            const cat = (m.category || m.type || "").toLowerCase();
+            if (activeCategory === "water") return cat.includes("water") || cat.includes("dam") || cat.includes("canal") || cat.includes("reservoir");
+            if (activeCategory === "power") return cat.includes("power") || cat.includes("solar") || cat.includes("wind") || cat.includes("transmission") || cat.includes("substation");
+            if (activeCategory === "transport") return cat.includes("highway") || cat.includes("road") || cat.includes("railway") || cat.includes("station") || cat.includes("port") || cat.includes("bridge");
+            if (activeCategory === "districts") return cat.includes("district");
+            return true;
+          });
+        }
+
+        if (matches.length === 0) {
+          resultsContainer.innerHTML = `<div class="m-search-hint">No infrastructure nodes found matching "<strong>${escapeHtml(query)}</strong>".</div>`;
+          return;
+        }
+
+        resultsContainer.innerHTML = matches.slice(0, 30).map((m, idx) => `
+          <div class="m-search-item" data-idx="${idx}">
+            <div class="m-item-left">
+              <span class="m-item-name">${escapeHtml(m.title)}</span>
+              <span class="m-item-sub">${escapeHtml(m.subtitle || m.district || m.category || "Gujarat")}</span>
+            </div>
+            <span class="m-item-cat">${escapeHtml((m.category || m.type || "INFRA").toUpperCase())}</span>
+          </div>
+        `).join("");
+
+        resultsContainer.querySelectorAll(".m-search-item").forEach(el => {
+          el.addEventListener("click", () => {
+            const idx = parseInt(el.getAttribute("data-idx"), 10);
+            const selected = matches[idx];
+            if (selected) {
+              const searchSheet = document.getElementById("mobileSearchSheet");
+              if (searchSheet) searchSheet.classList.add("hidden");
+              const backdrop = document.getElementById("mobileSheetBackdrop");
+              if (backdrop) backdrop.classList.add("hidden");
+              executeSpatialNavigation(selected);
+              this.setNavActive("asset");
+            }
+          });
+        });
+      };
+
+      if (input) {
+        input.addEventListener("input", debounce(renderMobileSearchResults, 150));
+      }
+      if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+          if (input) {
+            input.value = "";
+            renderMobileSearchResults();
+            input.focus();
+          }
+        });
+      }
+    },
+
+    initMobileStudios() {
+      const grid = document.getElementById("mobileStudiosGrid");
+      if (grid) {
+        grid.addEventListener("click", (e) => {
+          const card = e.target.closest(".m-studio-card");
+          if (!card) return;
+          const studio = card.getAttribute("data-studio");
+          if (studio && window.StudioManager) {
+            window.StudioManager.activateStudio(studio, true);
+            grid.querySelectorAll(".m-studio-card").forEach(c => c.classList.toggle("active", c === card));
+            this.switchTab("map");
+            showToast(`🗺️ Studio Activated: ${studio.toUpperCase()}`);
+          }
+        });
+      }
+
+      const bindTool = (btnId, handler) => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+          btn.addEventListener("click", () => {
+            this.switchTab("map");
+            handler();
+          });
+        }
+      };
+
+      bindTool("mToolMeasureBtn", () => {
+        if (typeof toggleMeasurement === "function") toggleMeasurement();
+      });
+      bindTool("mToolProximityBtn", () => {
+        if (typeof toggleProximityAudit === "function") toggleProximityAudit();
+      });
+      bindTool("mToolWaterLabBtn", () => {
+        const b = document.getElementById("openWaterScenariosBtn");
+        if (b) b.click();
+      });
+      bindTool("mToolGeoenvBtn", () => {
+        const b = document.getElementById("openGeoenvironmentalBtn");
+        if (b) b.click();
+      });
+      bindTool("mToolReportBtn", () => {
+        const b = document.getElementById("openReportBuilderBtn");
+        if (b) b.click();
+      });
+      bindTool("mToolDataOpsBtn", () => {
+        const b = document.getElementById("openDataOpsBtn");
+        if (b) b.click();
+      });
+      bindTool("mToolResetBtn", () => {
+        const b = document.getElementById("resetViewBtn");
+        if (b) b.click();
+      });
+    },
+
+    handleResize() {
+      if (window.innerWidth > 768) {
+        const searchSheet = document.getElementById("mobileSearchSheet");
+        const studiosSheet = document.getElementById("mobileStudiosSheet");
+        const backdrop = document.getElementById("mobileSheetBackdrop");
+        if (searchSheet) searchSheet.classList.add("hidden");
+        if (studiosSheet) studiosSheet.classList.add("hidden");
+        if (backdrop) backdrop.classList.add("hidden");
+        const inspDrawer = document.getElementById("assetInspectorDrawer");
+        if (inspDrawer) inspDrawer.removeAttribute("data-snap");
+      }
+      if (map) {
+        map.invalidateSize({ debounceMove: true });
+      }
+    }
+  };
+
+  MobileGIS.init();
+  window.MobileGIS = MobileGIS;
 });

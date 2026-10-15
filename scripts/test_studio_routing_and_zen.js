@@ -99,7 +99,7 @@ async function run() {
 
   const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
   const userDataDir = path.join(os.tmpdir(), 'chrome-studio-test-' + Date.now());
-  const port = 9250;
+  const port = Math.floor(9350 + Math.random() * 40);
 
   console.log(`[TEST] Starting headless Chrome on port ${port}...`);
   const chromeProc = spawn(chromePath, [
@@ -139,6 +139,7 @@ async function run() {
   const client = new CDPClient(pageTarget.webSocketDebuggerUrl);
   await client.connect();
   console.log('[TEST] Connected to Chrome DevTools Protocol page target.');
+  await sleep(2000);
 
   // Wait for digital twin and async spatial toolkit to load
   let ready = false;

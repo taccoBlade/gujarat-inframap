@@ -73,7 +73,7 @@ class CDPClient {
 async function run() {
   const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
   const userDataDir = path.join(os.tmpdir(), 'chrome-ui-rescue-' + Date.now());
-  const port = 9223;
+  const port = Math.floor(9260 + Math.random() * 30);
 
   console.log(`Starting headless Chrome on port ${port}...`);
   const chromeProc = spawn(chromePath, [
@@ -96,7 +96,7 @@ async function run() {
     } catch (e) {}
   }
 
-  const targets = await getJson(`http://127.0.0.1:${port}/json`);
+  const targets = await getJson(`http://127.0.0.1:${port}/json/list`);
   const pageTarget = targets.find(t => t.type === 'page' && t.url.includes('8080'));
   if (!pageTarget) {
     console.error('[FAIL] Page target 8080 not found.');
@@ -111,6 +111,7 @@ async function run() {
   await client.send('DOM.enable');
 
   console.log('Waiting for application initialization and GeoJSON streaming...');
+  await sleep(2000);
   let ready = false;
   for (let i = 0; i < 50; i++) {
     try {
@@ -123,6 +124,7 @@ async function run() {
     await sleep(250);
   }
   if (!ready) {
+    chromeProc.kill();
     throw new Error('Application initialization timed out waiting for window.selectUrbanAssetByName');
   }
 
