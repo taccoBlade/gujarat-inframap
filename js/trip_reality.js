@@ -56,7 +56,7 @@
       'dholavira-harappan-city': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80',
       'rani-ki-vav': 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=80',
       'gir-national-park': 'https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?auto=format&fit=crop&w=1200&q=80',
-      'white-rann-dhordo': 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1200&q=80',
+      'white-rann-dhordo': 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80',
       'marine-national-park': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80',
       'somnath-temple': 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80',
       'polo-forest': 'https://images.unsplash.com/photo-1511497584788-87676104235f?auto=format&fit=crop&w=1200&q=80',
@@ -124,11 +124,132 @@
       }
     },
 
+    DEST_HIGHLIGHTS: {
+      'adalaj-ni-vav': '5-Story Solanki stepwell with subterranean cooling & carved shafts.',
+      'sun-temple-modhera': '11th-century Sun Temple with 52 Kund step-pillars and solar alignment.',
+      'rani-ki-vav': 'UNESCO World Heritage inverted stepwell with over 500 Vishnu sculptures.',
+      'gir-national-park': 'Sole natural habitat of pure Asiatic Lions on Earth. Early safari required.',
+      'white-rann-dhordo': 'Endless crystalline white salt expanse under full moonlight.',
+      'lothal-archaeological-site': '4,400-year Harappan bronze-age maritime dockyard and bead workshop.',
+      'statue-of-unity': "World's tallest 182m statue, Narmada dam view, and valley of flowers.",
+      'dholavira-unesco': 'UNESCO Harappan metropolis accessed via the iconic Road to Heaven.',
+      'marine-national-park': 'Low-tide coral reef walk on Gulf of Kutch with live marine life.',
+      'somnath-temple': 'First sacred Jyotirlinga on Arabian Sea shore with sunset aarti.',
+      'polo-forest': '15th-century ruined temples engulfed in lush deciduous forest canopy.',
+      'lakhpat-fort': 'Historic ghost fortress overlooking Indus delta salt flats & Kori Creek.',
+      'saputara-hill-station': 'Hill resort perched at 1,000m in Sahyadris with mist & ropeway.',
+      'dumas-beach': 'Arabian Sea black sand beach with famous Surat tomato bhajiyas.'
+    },
+
+    DEST_CAT_LABELS: {
+      'adalaj-ni-vav': 'Stepwell Architecture',
+      'sun-temple-modhera': 'Solar Heritage',
+      'rani-ki-vav': 'UNESCO Stepwell',
+      'gir-national-park': 'Wildlife Safari',
+      'white-rann-dhordo': 'Salt Desert',
+      'lothal-archaeological-site': 'Harappan Port',
+      'statue-of-unity': 'Engineering & River',
+      'dholavira-unesco': 'UNESCO Harappan City',
+      'marine-national-park': 'Coral Reef',
+      'somnath-temple': 'Coastal Jyotirlinga',
+      'polo-forest': 'Forest Heritage',
+      'lakhpat-fort': 'Border Fortress',
+      'saputara-hill-station': 'Hill Station',
+      'dumas-beach': 'Coastal Shoreline'
+    },
+
+    quickPicksExpanded: false,
+
     init: async function () {
       console.log("[TripReality] Initializing Gujarat Trip Reality Engine...");
       await this.loadData();
       this.bindUI();
+      this.renderQuickPicks();
       this.initMapLayer();
+    },
+
+    renderQuickPicks: function () {
+      const container = document.getElementById("trQuickPicksGrid");
+      if (!container || !this.auditedDestinations || this.auditedDestinations.length === 0) return;
+
+      const primaryIds = [
+        "adalaj-ni-vav",
+        "sun-temple-modhera",
+        "rani-ki-vav",
+        "gir-national-park",
+        "white-rann-dhordo",
+        "lothal-archaeological-site"
+      ];
+
+      // Sort with primary first, then the rest
+      const sorted = [...this.auditedDestinations].sort((a, b) => {
+        const aIdx = primaryIds.indexOf(a.destinationId);
+        const bIdx = primaryIds.indexOf(b.destinationId);
+        if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+        if (aIdx !== -1) return -1;
+        if (bIdx !== -1) return 1;
+        return 0;
+      });
+
+      const activeId = this.activeDestination ? this.activeDestination.destinationId : "";
+
+      container.innerHTML = sorted.map((d, index) => {
+        const isExtra = index >= 6;
+        const isSelected = d.destinationId === activeId;
+        const photo = this.DEST_PHOTOS[d.destinationId] || "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=600&q=80";
+        const catLabel = this.DEST_CAT_LABELS[d.destinationId] || d.category || "Heritage";
+        const highlight = this.DEST_HIGHLIGHTS[d.destinationId] || `${d.district} District • ${d.region}`;
+        const hiddenClass = (isExtra && !this.quickPicksExpanded && !isSelected) ? "tr-extra-dest hidden" : (isExtra ? "tr-extra-dest" : "");
+
+        return `
+          <article class="tr-pick-card ${isSelected ? 'active selected' : ''} ${hiddenClass}" 
+                   role="button" 
+                   tabindex="0" 
+                   data-id="${d.destinationId}" 
+                   aria-pressed="${isSelected ? 'true' : 'false'}"
+                   aria-label="${this.escapeHtml(d.destinationName)}, ${d.district} District">
+            <div class="tr-pick-thumb-wrap">
+              <img src="${photo}" alt="${this.escapeHtml(d.destinationName)}" class="tr-pick-thumb" loading="lazy" />
+              <span class="tr-pick-cat-badge">${this.escapeHtml(catLabel)}</span>
+              <span class="tr-pick-check" aria-hidden="true">✓ Selected</span>
+            </div>
+            <div class="tr-pick-info">
+              <h5 class="tr-pick-name">${this.escapeHtml(d.destinationName)}</h5>
+              <span class="tr-pick-district">${d.district} District • ${d.region}</span>
+              <p class="tr-pick-desc">${this.escapeHtml(highlight)}</p>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      // Bind click and keyboard handlers
+      container.querySelectorAll(".tr-pick-card").forEach(card => {
+        const id = card.getAttribute("data-id");
+        card.addEventListener("click", () => {
+          this.selectDestination(id);
+        });
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            this.selectDestination(id);
+          }
+        });
+      });
+    },
+
+    toggleAllQuickPicks: function () {
+      this.quickPicksExpanded = !this.quickPicksExpanded;
+      const btn = document.getElementById("trToggleAllDestBtn");
+      if (btn) {
+        btn.setAttribute("aria-expanded", this.quickPicksExpanded ? "true" : "false");
+        btn.innerHTML = this.quickPicksExpanded ? 
+          `<span>Show curated selection (6) ↑</span>` : 
+          `<span>Explore all 14 audited places ↓</span>`;
+      }
+      const extras = document.querySelectorAll(".tr-extra-dest");
+      extras.forEach(card => {
+        card.classList.toggle("hidden", !this.quickPicksExpanded);
+      });
     },
 
     loadData: async function () {
@@ -177,13 +298,11 @@
         });
       }
 
-      // Mode toggles
-      document.querySelectorAll(".tr-mode-pill").forEach(pill => {
-        pill.addEventListener("click", () => {
-          document.querySelectorAll(".tr-mode-pill").forEach(p => p.classList.remove("active"));
-          pill.classList.add("active");
-          this.activeMode = pill.getAttribute("data-mode") || "public";
-          this.renderAssessment();
+      // Mode toggles (both segmented buttons and pills)
+      document.querySelectorAll(".tr-segmented-btn, .tr-mode-pill").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const mode = btn.getAttribute("data-mode") || "public";
+          this.setMode(mode);
         });
       });
 
@@ -196,7 +315,15 @@
         });
       }
 
-      // Quick destination pills
+      // Quick picks toggle all button
+      const toggleBtn = document.getElementById("trToggleAllDestBtn");
+      if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+          this.toggleAllQuickPicks();
+        });
+      }
+
+      // Quick destination pills (legacy & fallback)
       document.querySelectorAll(".tr-quick-dest-pill").forEach(pill => {
         pill.addEventListener("click", () => {
           const id = pill.getAttribute("data-id");
@@ -245,6 +372,10 @@
         document.querySelectorAll(".tr-quick-dest-pill").forEach(p => {
           p.classList.remove("active");
         });
+        document.querySelectorAll(".tr-pick-card").forEach(card => {
+          card.classList.remove("active", "selected");
+          card.setAttribute("aria-pressed", "false");
+        });
         this.renderAssessment();
         this.updateMapVisualization();
         return;
@@ -271,14 +402,29 @@
         p.classList.toggle("active", p.getAttribute("data-id") === (dest ? dest.destinationId : ""));
       });
 
+      // Update quick pick cards
+      document.querySelectorAll(".tr-pick-card").forEach(card => {
+        const isMatch = card.getAttribute("data-id") === (dest ? dest.destinationId : "");
+        card.classList.toggle("active", isMatch);
+        card.classList.toggle("selected", isMatch);
+        card.setAttribute("aria-pressed", isMatch ? "true" : "false");
+
+        // If matched card is an extra card and currently hidden, show it
+        if (isMatch && card.classList.contains("tr-extra-dest") && card.classList.contains("hidden")) {
+          card.classList.remove("hidden");
+        }
+      });
+
       this.renderAssessment();
       this.updateMapVisualization();
     },
 
     setMode: function (mode) {
       this.activeMode = mode || "public";
-      document.querySelectorAll(".tr-mode-pill").forEach(p => {
-        p.classList.toggle("active", p.getAttribute("data-mode") === this.activeMode);
+      document.querySelectorAll(".tr-segmented-btn, .tr-mode-pill").forEach(p => {
+        const isMatch = p.getAttribute("data-mode") === this.activeMode;
+        p.classList.toggle("active", isMatch);
+        p.setAttribute("aria-checked", isMatch ? "true" : "false");
       });
       this.renderAssessment();
     },

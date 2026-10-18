@@ -255,73 +255,106 @@
     <section id="planVisitView" class="public-view-container hidden" aria-label="Gujarat Trip Reality & Last-Mile Feasibility">
       <div class="public-view-inner">
         <div id="tripRealitySubView" class="places-subview">
-          <header class="public-view-header">
-            <div class="pview-title-group">
+          <!-- 1. Editorial Introduction Area -->
+          <header class="public-view-header tr-editorial-header">
+            <div class="tr-header-content">
               <span class="pview-eyebrow">
                 <span class="eyebrow-symbol">✦</span>
-                TRIP VIBE &amp; REALITY CHECK • પ્રવાસ આયોજન
+                BEFORE YOU GO • પ્રવાસ પૂર્વે
               </span>
-              <h2 class="pview-title">Plan your Gujarat journey with zero guesswork.</h2>
-              <p class="pview-desc">
-                Real-time road connectivity, last-mile ground truth, authentic Gujarati eats, and verified return viability — from Solanki stepwells to the endless salt horizon of Kutch.
+              <h2 class="pview-title tr-headline-lead">Worth the trip?</h2>
+              <p class="pview-desc tr-copy-lead">
+                Figure out the journey, the last mile, and what to check before you head out.
               </p>
+            </div>
+            <div class="tr-header-badge" aria-hidden="true">
+              <svg width="44" height="44" viewBox="0 0 40 40" fill="none">
+                <path d="M20 2L24 16L38 20L24 24L20 38L16 24L2 20L16 16L20 2Z" fill="#B84638" opacity="0.9"/>
+                <circle cx="20" cy="20" r="4.5" fill="#E2AE48"/>
+                <path d="M8 8L13 13M27 27L32 32M32 8L27 13M13 27L8 32" stroke="#D7C5AB" stroke-width="1.75" stroke-linecap="round"/>
+              </svg>
             </div>
           </header>
 
-          <!-- Interactive Control Deck -->
-          <div class="tr-control-deck" id="tripRealityControlDeck">
-            <!-- Row 1: Destination, Origin, Mode, Date -->
-            <div class="tr-control-row">
-              <div class="tr-control-group tr-group-dest">
-                <label for="trDestinationSelect" class="tr-control-label">Target Destination:</label>
-                <select id="trDestinationSelect" class="dir-select tr-select-dest" aria-label="Select destination for trip feasibility audit">
-                  <!-- Populated dynamically by TripReality.populateDestinationDropdown() -->
-                </select>
+          <!-- 2. Structured Journey Planner Form -->
+          <div class="tr-planner-deck" id="tripRealityControlDeck">
+            <div class="tr-planner-grid">
+              <!-- Field 1: Where are you going? -->
+              <div class="tr-field-group tr-field-dest">
+                <label for="trDestinationSelect" class="tr-field-label">
+                  <span class="tr-step-dot">1</span> Where are you going?
+                </label>
+                <div class="tr-select-wrapper">
+                  <select id="trDestinationSelect" class="dir-select tr-select-dest" aria-label="Where are you going? Select destination">
+                    <!-- Populated dynamically by TripReality.populateDestinationDropdown() -->
+                  </select>
+                </div>
               </div>
 
-              <div class="tr-control-group tr-group-origin">
-                <label for="trOriginSelect" class="tr-control-label">Starting Origin:</label>
-                <select id="trOriginSelect" class="dir-select tr-select-origin" aria-label="Select departure city">
-                  <!-- Populated dynamically by TripReality.populateOriginDropdown() -->
-                </select>
+              <!-- Field 2: Starting from -->
+              <div class="tr-field-group tr-field-origin">
+                <label for="trOriginSelect" class="tr-field-label">
+                  <span class="tr-step-dot">2</span> Starting from
+                </label>
+                <div class="tr-select-wrapper">
+                  <select id="trOriginSelect" class="dir-select tr-select-origin" aria-label="Starting from. Select departure origin">
+                    <!-- Populated dynamically by TripReality.populateOriginDropdown() -->
+                  </select>
+                </div>
               </div>
 
-              <div class="tr-control-group tr-group-mode">
-                <label class="tr-control-label">Transport Mode:</label>
-                <div class="tr-mode-pills" role="radiogroup" aria-label="Transport preference">
-                  <button type="button" class="tr-mode-pill active" data-mode="public" role="radio" aria-checked="true">
-                    <span>🚆🚌 Public Transit</span>
+              <!-- Field 3: How are you travelling? -->
+              <div class="tr-field-group tr-field-mode">
+                <label class="tr-field-label">
+                  <span class="tr-step-dot">3</span> How are you travelling?
+                </label>
+                <div class="tr-segmented-control" role="radiogroup" aria-label="How are you travelling?">
+                  <button type="button" class="tr-segmented-btn active" data-mode="public" role="radio" aria-checked="true">
+                    <svg class="tr-seg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="4" y="3" width="16" height="16" rx="2"/>
+                      <path d="M4 11h16M8 3v8M16 3v8M8 15h.01M16 15h.01M6 19l-2 2M18 19l2 2"/>
+                    </svg>
+                    <span>Public Transport</span>
                   </button>
-                  <button type="button" class="tr-mode-pill" data-mode="private" role="radio" aria-checked="false">
-                    <span>🚗 Private / Taxi</span>
+                  <button type="button" class="tr-segmented-btn" data-mode="private" role="radio" aria-checked="false">
+                    <svg class="tr-seg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 17h14M6 9l2-4h8l2 4M4 17V9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8M7 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM17 17a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+                    </svg>
+                    <span>Private / Taxi</span>
                   </button>
                 </div>
               </div>
 
-              <div class="tr-control-group tr-group-date">
-                <label for="trTravelDateInput" class="tr-control-label">Travel Date (Optional):</label>
-                <input type="date" id="trTravelDateInput" class="tr-date-input" aria-label="Planned travel date for seasonal feasibility checks" />
+              <!-- Field 4: When? (Optional) -->
+              <div class="tr-field-group tr-field-date">
+                <div class="tr-label-flex">
+                  <label for="trTravelDateInput" class="tr-field-label">
+                    <span class="tr-step-dot">4</span> When?
+                  </label>
+                  <span class="tr-optional-pill">Optional</span>
+                </div>
+                <div class="tr-date-wrapper">
+                  <input type="date" id="trTravelDateInput" class="tr-date-input" aria-label="Travel date for seasonal advisory checks" />
+                </div>
+                <span class="tr-field-caption">Checks heat &amp; sanctuary dates</span>
               </div>
             </div>
 
-            <!-- Row 2: Pilot Destinations Quick Switcher -->
-            <div class="tr-quick-pills-row">
-              <span class="tr-quick-label">Audited Benchmark Destinations:</span>
-              <div class="tr-quick-pills" role="tablist" aria-label="Audited Pilot Destinations">
-                <button type="button" class="tr-quick-dest-pill" data-id="adalaj-ni-vav">Adalaj ni Vav</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="sun-temple-modhera">Modhera Sun Temple</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="statue-of-unity">Sardar Sarovar / Ekta Nagar</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="lothal-archaeological-site">Lothal Dockyard</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="dholavira-unesco">Dholavira</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="rani-ki-vav">Rani ki Vav</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="gir-national-park">Gir National Park</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="white-rann-dhordo">White Rann</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="marine-national-park">Narara Marine Reef</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="somnath-temple">Somnath Temple</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="polo-forest">Polo Forest</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="lakhpat-fort">Lakhpat Fort</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="saputara-hill-station">Saputara</button>
-                <button type="button" class="tr-quick-dest-pill" data-id="dumas-beach">Dumas Beach</button>
+            <!-- 3. Curated Quick Picks: "Pick a place to start" -->
+            <div class="tr-quickpicks-section">
+              <div class="tr-quickpicks-header">
+                <div>
+                  <h4 class="tr-quickpicks-title">Pick a place to start</h4>
+                  <p class="tr-quickpicks-sub">Curated destinations with validated last-mile ground truth and return viability audits.</p>
+                </div>
+                <button type="button" id="trToggleAllDestBtn" class="tr-toggle-all-btn" aria-expanded="false">
+                  <span>Explore all 14 audited places ↓</span>
+                </button>
+              </div>
+
+              <!-- Destination Cards Grid -->
+              <div class="tr-quickpicks-grid" id="trQuickPicksGrid" role="region" aria-label="Curated Gujarat Benchmark Destinations">
+                <!-- Populated dynamically by TripReality.renderQuickPicks() -->
               </div>
             </div>
           </div>
