@@ -113,6 +113,11 @@
   padding: 0;
 }
 
+/* Universal Visibility Utility */
+.hidden {
+  display: none !important;
+}
+
 html {
   width: 100%;
   max-width: 100vw;
@@ -19777,6 +19782,11 @@ body.theme-light .network-jump-btn:hover {
   z-index: 550;
   padding: 1.5rem 2rem 4rem 2rem;
   box-sizing: border-box;
+}
+
+.public-view-container.hidden,
+.places-subview.hidden {
+  display: none !important;
 }
 
 body.theme-light .public-view-container {

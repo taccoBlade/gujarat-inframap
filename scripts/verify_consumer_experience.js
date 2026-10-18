@@ -264,14 +264,25 @@ async function run() {
     console.log('\n--- CHECK 3: Destination 1 — Explore (Interactive Map) ---');
     const exploreState = await client.eval(`(() => {
       const map = document.getElementById('map');
-      const placesHidden = document.getElementById('placesView').classList.contains('hidden');
-      const planHidden = document.getElementById('planVisitView').classList.contains('hidden');
-      const dirHidden = document.getElementById('directoryView').classList.contains('hidden');
-      const aboutHidden = document.getElementById('aboutView').classList.contains('hidden');
-      return { mapVisible: !!map, placesHidden, planHidden, dirHidden, aboutHidden };
+      const getDisplay = (id) => {
+        const el = document.getElementById(id);
+        return el ? window.getComputedStyle(el).display : 'none';
+      };
+      const mapDisplay = map ? window.getComputedStyle(map).display : 'none';
+      const placesDisplay = getDisplay('placesView');
+      const planDisplay = getDisplay('planVisitView');
+      const dirDisplay = getDisplay('directoryView');
+      const aboutDisplay = getDisplay('aboutView');
+      return { mapDisplay, placesDisplay, planDisplay, dirDisplay, aboutDisplay };
     })()`);
-    assert(exploreState.mapVisible && exploreState.placesHidden && exploreState.planHidden && exploreState.dirHidden && exploreState.aboutHidden,
-      'Default view is interactive map with all secondary overlays hidden');
+    assert(
+      exploreState.mapDisplay !== 'none' &&
+      exploreState.placesDisplay === 'none' &&
+      exploreState.planDisplay === 'none' &&
+      exploreState.dirDisplay === 'none' &&
+      exploreState.aboutDisplay === 'none',
+      'Default view is interactive map with all secondary overlays computed as display: none'
+    );
 
     // 4. DESTINATION 2: PLACES TO EXPLORE
     console.log('\n--- CHECK 4: Destination 2 — Places to Explore ---');
@@ -280,12 +291,12 @@ async function run() {
 
     const placesState = await client.eval(`(() => {
       const placesView = document.getElementById('placesView');
-      const isVisible = placesView && !placesView.classList.contains('hidden');
+      const isVisible = placesView && !placesView.classList.contains('hidden') && window.getComputedStyle(placesView).display !== 'none';
       const cardsCount = document.querySelectorAll('.destination-card').length;
       const countText = document.getElementById('tourismResultsCount')?.innerText;
       return { isVisible, cardsCount, countText };
     })()`);
-    assert(placesState.isVisible, 'Places to Explore view (#placesView) is visible upon click');
+    assert(placesState.isVisible, 'Places to Explore view (#placesView) is visible (display != none) upon click');
     assert(placesState.cardsCount === 37, `Catalogue renders all 37 verified destinations (got: ${placesState.cardsCount})`);
 
     // 5. DESTINATION 3: PLAN A VISIT (TRIP REALITY)
@@ -295,7 +306,7 @@ async function run() {
 
     const planState = await client.eval(`(() => {
       const planView = document.getElementById('planVisitView');
-      const isVisible = planView && !planView.classList.contains('hidden');
+      const isVisible = planView && !planView.classList.contains('hidden') && window.getComputedStyle(planView).display !== 'none';
       const destSelect = document.getElementById('trDestinationSelect');
       const originSelect = document.getElementById('trOriginSelect');
       const content = document.getElementById('tripRealityContent');
@@ -309,7 +320,7 @@ async function run() {
         currentHash
       };
     })()`);
-    assert(planState.isVisible, 'Plan a Visit view (#planVisitView) is visible upon click');
+    assert(planState.isVisible, 'Plan a Visit view (#planVisitView) is visible (display != none) upon click');
     assert(planState.currentHash === '#/plan', `URL hash updated to #/plan (got: "${planState.currentHash}")`);
     assert(planState.destOptions >= 12, `Destination dropdown populated with verified places (got: ${planState.destOptions})`);
     assert(planState.originOptions >= 8, `Origin dropdown populated with major cities (got: ${planState.originOptions})`);
@@ -322,13 +333,13 @@ async function run() {
 
     const infraState = await client.eval(`(() => {
       const dirView = document.getElementById('directoryView');
-      const isVisible = dirView && !dirView.classList.contains('hidden');
+      const isVisible = dirView && !dirView.classList.contains('hidden') && window.getComputedStyle(dirView).display !== 'none';
       const cardsCount = document.querySelectorAll('.dir-card').length;
       const countText = document.getElementById('dirResultsCount')?.innerText;
       const currentHash = window.location.hash;
       return { isVisible, cardsCount, countText, currentHash };
     })()`);
-    assert(infraState.isVisible, 'Infrastructure Directory view (#directoryView) is visible upon click');
+    assert(infraState.isVisible, 'Infrastructure Directory view (#directoryView) is visible (display != none) upon click');
     assert(infraState.currentHash === '#/infrastructure', `URL hash updated to #/infrastructure (got: "${infraState.currentHash}")`);
     assert(infraState.cardsCount > 0, `Directory displays verified public assets (got: ${infraState.cardsCount} cards rendered)`);
 
@@ -339,13 +350,13 @@ async function run() {
 
     const aboutState = await client.eval(`(() => {
       const aboutView = document.getElementById('aboutView');
-      const isVisible = aboutView && !aboutView.classList.contains('hidden');
+      const isVisible = aboutView && !aboutView.classList.contains('hidden') && window.getComputedStyle(aboutView).display !== 'none';
       const downloads = document.querySelectorAll('.about-download-btn').length;
       const table = !!(document.querySelector('.spec-table') || document.querySelector('.data-table'));
       const currentHash = window.location.hash;
       return { isVisible, downloads, table, currentHash };
     })()`);
-    assert(aboutState.isVisible, 'About & Sources view (#aboutView) is visible upon click');
+    assert(aboutState.isVisible, 'About & Sources view (#aboutView) is visible (display != none) upon click');
     assert(aboutState.currentHash === '#/about', `URL hash updated to #/about (got: "${aboutState.currentHash}")`);
     assert(aboutState.downloads >= 4, `Authoritative GeoJSON download buttons present (got: ${aboutState.downloads})`);
     assert(aboutState.table, 'Dataset provenance & statutory source inventory table is present');
@@ -356,15 +367,24 @@ async function run() {
     await sleep(400);
 
     const returnExplore = await client.eval(`(() => {
-      const placesHidden = document.getElementById('placesView').classList.contains('hidden');
-      const planHidden = document.getElementById('planVisitView').classList.contains('hidden');
-      const dirHidden = document.getElementById('directoryView').classList.contains('hidden');
-      const aboutHidden = document.getElementById('aboutView').classList.contains('hidden');
+      const getDisplay = (id) => {
+        const el = document.getElementById(id);
+        return el ? window.getComputedStyle(el).display : 'none';
+      };
+      const placesDisplay = getDisplay('placesView');
+      const planDisplay = getDisplay('planVisitView');
+      const dirDisplay = getDisplay('directoryView');
+      const aboutDisplay = getDisplay('aboutView');
       const currentHash = window.location.hash;
-      return { placesHidden, planHidden, dirHidden, aboutHidden, currentHash };
+      return { placesDisplay, planDisplay, dirDisplay, aboutDisplay, currentHash };
     })()`);
-    assert(returnExplore.placesHidden && returnExplore.planHidden && returnExplore.dirHidden && returnExplore.aboutHidden,
-      'Returning to Explore hides all views and displays interactive map canvas');
+    assert(
+      returnExplore.placesDisplay === 'none' &&
+      returnExplore.planDisplay === 'none' &&
+      returnExplore.dirDisplay === 'none' &&
+      returnExplore.aboutDisplay === 'none',
+      'Returning to Explore hides all views (computed display: none) and displays interactive map canvas'
+    );
     assert(returnExplore.currentHash === '#/explore', `URL hash updated to #/explore (got: "${returnExplore.currentHash}")`);
 
     // Toggle Layers Drawer
