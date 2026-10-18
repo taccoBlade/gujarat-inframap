@@ -223,6 +223,7 @@
             ${this.escapeHtml(d.destinationName)} (${d.district} District)
           </option>
         `).join("");
+      selectEl.value = this.activeDestination ? this.activeDestination.destinationId : "";
     },
 
     populateOriginDropdown: function (selectEl) {
@@ -235,6 +236,20 @@
     },
 
     selectDestination: function (destinationId) {
+      const destSelect = document.getElementById("trDestinationSelect");
+      if (!destinationId) {
+        this.activeDestination = null;
+        if (destSelect) {
+          destSelect.value = "";
+        }
+        document.querySelectorAll(".tr-quick-dest-pill").forEach(p => {
+          p.classList.remove("active");
+        });
+        this.renderAssessment();
+        this.updateMapVisualization();
+        return;
+      }
+
       let dest = this.destinationsMap[destinationId];
       if (!dest && window.TourismDiscovery && window.TourismDiscovery.destinations) {
         // Fallback for catalog destinations not yet in the deep-audit list
@@ -244,12 +259,11 @@
         }
       }
 
-      this.activeDestination = dest || this.auditedDestinations[0] || null;
+      this.activeDestination = dest || null;
 
       // Update dropdown selection if needed
-      const destSelect = document.getElementById("trDestinationSelect");
-      if (destSelect && dest) {
-        destSelect.value = dest.destinationId;
+      if (destSelect) {
+        destSelect.value = dest ? dest.destinationId : "";
       }
 
       // Update quick pills
@@ -446,12 +460,37 @@
       if (!container) return;
 
       if (!this.activeDestination) {
-        if (this.auditedDestinations.length > 0) {
-          this.activeDestination = this.auditedDestinations[0];
-        } else {
-          container.innerHTML = `<div class="tr-loading">Loading trip reality audit data...</div>`;
-          return;
-        }
+        container.innerHTML = `
+          <article class="tr-empty-state-card" role="region" aria-label="No destination selected">
+            <div class="tr-empty-stepwell-icon" aria-hidden="true">
+              <svg width="56" height="56" viewBox="0 0 48 48" fill="none" stroke="currentColor">
+                <path d="M4 12h40M8 20h32M12 28h24M16 36h16M20 44h8" stroke="#B84638" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="24" cy="6" r="3" fill="#E2AE48"/>
+              </svg>
+            </div>
+            <div class="tr-empty-eyebrow">
+              <span class="eyebrow-symbol">✦</span>
+              DESTINATION FEASIBILITY AUDIT • પ્રવાસ ક્ષમતા તપાસ
+            </div>
+            <h3 class="tr-empty-title">Select a destination to evaluate trip feasibility</h3>
+            <p class="tr-empty-lead">
+              Gujarat's geography spans subterranean Solanki stepwells, desert border posts, mangrove coastlines, and industrial corridors. 
+              Choose a destination from the selector above or pick an audited benchmark below to inspect verified road distances, last-mile transit options, return journey viability, permit requirements, and seasonal climate advisories.
+            </p>
+            <div class="tr-empty-benchmarks">
+              <div class="tr-empty-benchmarks-title">Audited Benchmark Destinations:</div>
+              <div class="tr-empty-benchmarks-grid">
+                ${this.auditedDestinations.slice(0, 6).map(d => `
+                  <button type="button" class="tr-empty-chip" onclick="window.TripReality.selectDestination('${d.destinationId}')">
+                    <span class="chip-name">${this.escapeHtml(d.destinationName)}</span>
+                    <span class="chip-region">${d.district} District • ${d.region}</span>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          </article>
+        `;
+        return;
       }
 
       const d = this.activeDestination;
@@ -864,8 +903,9 @@
     },
 
     updateMapVisualization: function () {
-      if (!this.mapLayerGroup || !window.map || !this.activeDestination) return;
+      if (!this.mapLayerGroup || !window.map) return;
       this.mapLayerGroup.clearLayers();
+      if (!this.activeDestination) return;
 
       const d = this.activeDestination;
       const origin = this.ORIGIN_HUBS[this.activeOrigin] || this.ORIGIN_HUBS["Ahmedabad"];

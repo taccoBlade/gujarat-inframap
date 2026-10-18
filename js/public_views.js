@@ -403,8 +403,12 @@
     document.body.classList.toggle("non-explore-active", !isExplore);
     const mapHud = document.querySelector(".map-hud");
     const activeLegend = document.getElementById("activeLayerLegend");
+    const recenterBtn = document.getElementById("recenterMapBtn") || document.querySelector(".floating-recenter-btn");
+    const layerDrawer = document.querySelector(".layer-drawer");
     if (mapHud) mapHud.classList.toggle("hidden", !isExplore);
     if (activeLegend) activeLegend.classList.toggle("hidden", !isExplore);
+    if (recenterBtn) recenterBtn.classList.toggle("hidden", !isExplore);
+    if (layerDrawer && !isExplore) layerDrawer.classList.remove("open");
 
     // Hide all secondary views first
     if (placesView) placesView.classList.add("hidden");
