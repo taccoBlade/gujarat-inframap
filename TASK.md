@@ -1,0 +1,31 @@
+# Task Tracker: Gujarat InfraMap Refactor
+
+- [x] **Phase 1: Codebase Forensics & Dependency Mapping**
+  - [x] Inspect `package.json`, framework setup (Node v26.5.0, Leaflet 1.9.4 runtime with TypeScript definitions in `src/`), and styling setup.
+  - [x] Inventory all routes, components, stores, and raw datasets (`data/*.geojson`, `data/gujarat_trip_reality.json`).
+  - [x] Map every import of specialist engineering modules (`WaterLab`, `CycloneSurge`, `BridgeScour`, `Superelevation`, `SpatialTools`, `Terrain3D`, `Geoenv`, `Intelligence`, `SCADA`).
+- [x] **Phase 2: Git Checkpoint**
+  - [x] Verify clean working tree, create tag `pre-refactor-checkpoint` and branch `refactor/gujarat-public-discovery`.
+- [x] **Phase 3: Surgical Removal of Old Engineering Dashboard**
+  - [x] Unmount and delete engineering calculators, simulation workbenches, 3D terrain toggles, and redundant technical drawers (12 obsolete JS files deleted from `js/`, obsolete test files removed).
+  - [x] Extract and preserve raw geographic/asset datasets (`dams`, `sauni`, `khavda`, `dholera`, `transport`, `water`, `districts` all intact: 14 GeoJSON layers, 3,374 features).
+- [x] **Phase 4: 5-Destination Information Architecture**
+  - [x] Build unified responsive Header & Mobile Navigation (`Explore`, `Places to Explore`, `Infrastructure`, `Plan a Visit`, `About & Sources`).
+  - [x] Implement Universal Search indexing Places, Districts, Infrastructure Assets, and Major Projects.
+- [x] **Phase 5: Gujarati Heritage Design System**
+  - [x] Configure CSS design tokens (`#F7F2E8`, `#D8C3A5`, `#243B53`, `#A64036`, `#52664B`, `#C49A45`, `#282823`, `#777269`).
+  - [x] Load editorial serif (`Lora` / `DM Serif Display`), UI sans (`Manrope` / `Inter`), and `Noto Sans Gujarati`.
+  - [x] Build reusable SVG motif library (`StepwellCornerFrame`, `AjrakhSectionDivider`, `JharokhaPhotoFrame`).
+  - [x] Restyle map base layer and feature markers to match the warm cartographic aesthetic.
+- [x] **Phase 6: Advanced Motion & Signature Discovery Transition**
+  - [x] Create centralized motion tokens (`immediate`, `micro`, `panel`, `editorial`) with `prefers-reduced-motion` hooks (`src/lib/motion-tokens.ts`).
+  - [x] Implement the Signature Gujarati Discovery Transition between `Infrastructure` and `Places to Explore` (`DiscoveryModeSwitcher.tsx`).
+- [x] **Phase 7: Data Provenance & "Plan a Visit" Last-Mile MVP**
+  - [x] Implement strict TypeScript schemas for `DataProvenance` and `JourneyReadinessProfile` (`src/types/inframap.ts`).
+  - [x] Build deterministic readiness classifier (`well_documented`, `some_planning_required`, `important_details_unverified`) in `src/lib/readiness-evaluator.ts`.
+  - [x] Seed verified origin-to-destination journeys from **Ahmedabad** to 5 benchmark destinations (`Adalaj ni Vav`, `Sun Temple Modhera`, `Sardar Sarovar / Ekta Nagar`, `Lothal`, `Dholavira`) with explicit last-mile gap disclosures.
+- [x] **Phase 8: Responsive Validation & Codebase Cleanup**
+  - [x] Prune dead files, unused imports, and obsolete packages.
+  - [x] Run production build (`npm run build`) and fix all TypeScript/linting errors (0 errors).
+  - [x] Verified via headless Chrome automated test suite (`scripts/verify_consumer_experience.js`, 47 checks passed 100%).
+  - [x] Generate Part 11 Factual Implementation Report (`walkthrough.md`).

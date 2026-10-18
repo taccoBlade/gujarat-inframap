@@ -159,24 +159,6 @@
         return `
           <div class="insp-lab-launcher-card">
             <div class="launcher-info">
-              <span class="launcher-title">🔬 Dam Science Lab: Parametric Civil & Hydraulic Suite</span>
-              <span class="launcher-desc">Interactive structural anatomy schematic, hydrostatic pressure/thrust/hydropower calculators, storage elevation zones, and geotechnical safety analyses.</span>
-            </div>
-            <button class="insp-open-lab-btn" onclick="window.DamScienceLab && window.DamScienceLab.openCurrentAsset()">
-              Launch Full Lab ➔
-            </button>
-          </div>
-          <div class="insp-lab-launcher-card" style="margin-top: 8px;">
-            <div class="launcher-info">
-              <span class="launcher-title">🌊 Water Scenarios Lab: Storage Mass-Balance</span>
-              <span class="launcher-desc">Simulate hypothetical inflows, controlled canal outflows, and evaporation losses with live mass-balance verification (S).</span>
-            </div>
-            <button class="insp-open-lab-btn" style="background: linear-gradient(135deg, #0284c7, #0369a1);" onclick="window.WaterScenariosLab && window.WaterScenariosLab.open('scenarioA', '${p.id}')">
-              Simulate Scenarios ➔
-            </button>
-          </div>
-          <div class="insp-lab-launcher-card" style="margin-top: 8px;">
-            <div class="launcher-info">
               <span class="launcher-title">🚰 SAUNI Yojana &amp; Basin Water Transfer Explorer</span>
               <span class="launcher-desc">Simulate pressurized Narmada floodwater diversion, Dhanki lift pumping demand, and reservoir replenishment.</span>
             </div>
@@ -306,15 +288,6 @@
       scienceStop: (p) => {
         const hVal = p.frl_m ? Math.max(3, Math.min(12, Math.round(p.frl_m * 0.15))) : 5;
         return `
-          <div class="insp-lab-launcher-card">
-            <div class="launcher-info">
-              <span class="launcher-title">🔬 Dam Science Lab: Barrage & Sluice Hydraulics</span>
-              <span class="launcher-desc">Interactive under-sluice orifice flow simulation, upstream afflux calculations, and gated barrage cross-section schematic.</span>
-            </div>
-            <button class="insp-open-lab-btn" onclick="window.DamScienceLab && window.DamScienceLab.openCurrentAsset()">
-              Launch Full Lab ➔
-            </button>
-          </div>
           <div class="insp-science-box">
             <div class="science-header">
               <span class="science-badge">HYDRODYNAMICS</span>
@@ -411,15 +384,6 @@
         </div>
       `,
       scienceStop: (p) => `
-        <div class="insp-lab-launcher-card">
-          <div class="launcher-info">
-            <span class="launcher-title">🔬 Dam Science Lab: Weir Hydraulics</span>
-            <span class="launcher-desc">Broad-crested overflow discharge, critical flow depth analysis, and tidal weir cross-section schematic.</span>
-          </div>
-          <button class="insp-open-lab-btn" onclick="window.DamScienceLab && window.DamScienceLab.openCurrentAsset()">
-            Launch Full Lab ➔
-          </button>
-        </div>
         <div class="insp-science-box">
           <div class="science-header">
             <span class="science-badge">OPEN CHANNEL FLOW</span>
@@ -540,15 +504,6 @@
         </div>
       `,
       scienceStop: (p) => `
-        <div class="insp-lab-launcher-card">
-          <div class="launcher-info">
-            <span class="launcher-title">🔬 Dam Science Lab: Reservoir Science</span>
-            <span class="launcher-desc">Interactive hypsometric Elevation-Area-Capacity (EAC) bathymetric curve, storage zones allocation, and evaporation dynamics.</span>
-          </div>
-          <button class="insp-open-lab-btn" onclick="window.DamScienceLab && window.DamScienceLab.openCurrentAsset()">
-            Launch Full Lab ➔
-          </button>
-        </div>
         <div class="insp-science-box">
           <div class="science-header">
             <span class="science-badge">LIMNOLOGY & HYDROLOGY</span>
@@ -1338,15 +1293,6 @@
         </div>
       `,
       scienceStop: (p) => `
-        <div class="insp-lab-launcher-card" style="margin-top: 8px;">
-          <div class="launcher-info">
-            <span class="launcher-title">🌪️ Coastal Storm Surge &amp; Cyclone Tracking Twin</span>
-            <span class="launcher-desc">Simulate Arabian Sea cyclone tracks, SLOSH surge hydrodynamics, and port emergency danger signals (C).</span>
-          </div>
-          <button class="insp-open-lab-btn" style="background: linear-gradient(135deg, #ea580c, #c2410c);" onclick="window.CycloneCoastalSurgeTwin && window.CycloneCoastalSurgeTwin.openModal()">
-            Track Cyclone Surge ➔
-          </button>
-        </div>
         <div class="insp-science-box">
           <div class="science-header">
             <span class="science-badge">NAUTICAL HYDRODYNAMICS</span>
@@ -1597,17 +1543,6 @@
         "Soil Amplification Category": "Type I (Rock/Hard Soil), Type II (Medium), Type III (Soft Marine / Alluvium Amplification)"
       }),
       scienceStop: (p) => `
-        ${(p.asset_category === 'cyclone_hazard_zone' || p.asset_category === 'cyclone_track' || p.asset_category === 'coastal_defense_zone' || (p.name && p.name.toLowerCase().includes('cyclone'))) ? `
-          <div class="insp-lab-launcher-card" style="margin-top: 8px;">
-            <div class="launcher-info">
-              <span class="launcher-title">🌪️ Coastal Storm Surge &amp; Cyclone Tracking Twin</span>
-              <span class="launcher-desc">Simulate Arabian Sea cyclone tracks, SLOSH surge hydrodynamics, and port emergency danger signals (C).</span>
-            </div>
-            <button class="insp-open-lab-btn" style="background: linear-gradient(135deg, #ea580c, #c2410c);" onclick="window.CycloneCoastalSurgeTwin && window.CycloneCoastalSurgeTwin.openModal('${p.storm_name ? (p.storm_name.toLowerCase().includes('tauktae') ? 'tauktae' : 'biparjoy') : 'biparjoy'}')">
-              Track Cyclone Surge ➔
-            </button>
-          </div>
-        ` : ''}
         <div class="insp-science-box">
           <div class="science-header">
             <span class="science-badge">${(p.asset_category === 'cyclone_hazard_zone' || p.asset_category === 'cyclone_track' || p.asset_category === 'coastal_defense_zone') ? 'COASTAL HYDRODYNAMICS' : 'EARTHQUAKE ENGINEERING'}</span>
@@ -2416,6 +2351,15 @@
         });
       }
 
+      // Explore Nearby Assets Button
+      const exploreNearbyBtn = document.getElementById("inspExploreNearbyBtn");
+      if (exploreNearbyBtn) {
+        exploreNearbyBtn.addEventListener("click", () => {
+          AssetInspector.switchTab("network");
+          if (typeof showToast === "function") showToast("Exploring connected and nearby infrastructure assets");
+        });
+      }
+
       // Direct Source Link Button
       const sourceLinkBtn = document.getElementById("inspSourceLinkBtn");
       if (sourceLinkBtn) {
@@ -2514,13 +2458,6 @@
       if (subTitleEl) {
         const sub = [p.river, p.basin, p.district, p.location].filter(Boolean).join(" • ");
         subTitleEl.textContent = sub || "Gujarat Digital Infrastructure Registry";
-      }
-
-      // Toggle Dam Science Lab button in header for water structures
-      const labBtn = document.getElementById("inspOpenLabBtn");
-      if (labBtn) {
-        const isWater = ["water_dam", "barrage", "weir", "reservoir"].includes(cat);
-        labBtn.classList.toggle("hidden", !isWater);
       }
 
       // Render 5 to 7 Key Metrics

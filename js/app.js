@@ -2177,8 +2177,8 @@ document.addEventListener("DOMContentLoaded", () => {
                   <button class="popup-btn-zoom" onclick="window.selectDamByName('${name.replace(/'/g, "\\'")}', true)">
                     🔍 Zoom
                   </button>
-                  <button class="popup-btn-lab" onclick="window.openDamScienceLabById('${id}')">
-                    🔬 Science Lab
+                  <button class="popup-btn-zoom" onclick="window.selectWaterAssetById && window.selectWaterAssetById('${id}', true)">
+                    📋 Profile
                   </button>
                   <button class="popup-btn-lab popup-btn-flow" onclick="window.WaterSystemsNetwork && window.WaterSystemsNetwork.startFollowWater('${id}')">
                     🌊 Flow
@@ -2287,9 +2287,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="popup-action-row">
                   <button class="popup-btn-zoom" onclick="window.selectWaterAssetById('${id}', true)">
                     🔍 Inspect
-                  </button>
-                  <button class="popup-btn-lab" onclick="window.openDamScienceLabById('${p.parent_dam_id || id}')">
-                    🔬 Science Lab
                   </button>
                   <button class="popup-btn-lab popup-btn-flow" onclick="window.WaterSystemsNetwork && window.WaterSystemsNetwork.startFollowWater('${id}')">
                     🌊 Follow
@@ -4564,18 +4561,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (closeBtn) closeBtn.addEventListener("click", closeModal);
     if (closeBottomBtn) closeBottomBtn.addEventListener("click", closeModal);
 
-    const openLabBtn = document.getElementById("openDamScienceLabBtn");
-    const openLabTabBtn = document.getElementById("openDamScienceLabTabBtn");
-    if (openLabBtn) {
-      openLabBtn.addEventListener("click", () => {
-        if (window.DamScienceLab) window.DamScienceLab.openCurrentAsset();
-      });
-    }
-    if (openLabTabBtn) {
-      openLabTabBtn.addEventListener("click", () => {
-        if (window.DamScienceLab) window.DamScienceLab.openCurrentAsset();
-      });
-    }
 
     // Close on overlay backdrop click
     if (modal) {
@@ -5996,15 +5981,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal = document.getElementById("damsExplorerModal");
     if (modal && typeof modal.close === "function") modal.close();
   };
-  window.openDamScienceLabById = (id) => {
-    if (window.DamScienceLab) window.DamScienceLab.open(id);
-  };
-  window.openDamScienceLab = () => {
-    if (window.DamScienceLab) window.DamScienceLab.openCurrentAsset();
-  };
-  window.closeDamScienceLab = () => {
-    if (window.DamScienceLab) window.DamScienceLab.close();
-  };
 
   // 8. Universal Smart Search & Spatial Navigation Engine (Week 7 Production Architecture)
   const searchInput = document.getElementById("universalSearch");
@@ -7179,14 +7155,6 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (typeof window.openDamsExplorer === "function") {
         window.openDamsExplorer();
       }
-    } else if ((e.key === "l" || e.key === "L") && !isTyping) {
-      e.preventDefault();
-      const labModal = document.getElementById("damScienceLabModal");
-      if (labModal && labModal.open) {
-        labModal.close();
-      } else if (window.DamScienceLab) {
-        window.DamScienceLab.openCurrentAsset();
-      }
     } else if ((e.key === "n" || e.key === "N") && !isTyping) {
       e.preventDefault();
       const netModal = document.getElementById("waterNetworkModal");
@@ -7200,62 +7168,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (window.WaterSystemsNetwork) {
         window.WaterSystemsNetwork.startFollowWater("GJ-WR-DAM-001");
       }
-    } else if ((e.key === "h" || e.key === "H") && !isTyping) {
-      e.preventDefault();
-      const energyModal = document.getElementById("energyExplorerModal");
-      if (energyModal && energyModal.open) {
-        energyModal.close();
-      } else if (window.EnergyExplorer) {
-        window.EnergyExplorer.openModal("generators");
-      }
-    } else if ((e.key === "t" || e.key === "T") && !isTyping) {
-      e.preventDefault();
-      const transModal = document.getElementById("transportExplorerModal");
-      if (transModal && transModal.open) {
-        transModal.close();
-      } else if (window.TransportExplorer) {
-        window.TransportExplorer.open("inventory");
-      }
-    } else if ((e.key === "g" || e.key === "G") && !isTyping) {
-      e.preventDefault();
-      const geoModal = document.getElementById("geoenvironmentalModal");
-      if (geoModal && geoModal.open) {
-        geoModal.close();
-      } else if (window.GeoenvironmentalIntelligence) {
-        window.GeoenvironmentalIntelligence.open("provenance");
-      }
-    } else if ((e.key === "s" || e.key === "S") && !isTyping) {
-      e.preventDefault();
-      const scenModal = document.getElementById("waterScenariosLabModal");
-      if (scenModal && scenModal.open) {
-        scenModal.close();
-      } else if (window.WaterScenariosLab) {
-        window.WaterScenariosLab.open("scenarioA");
-      }
-    } else if ((e.key === "y" || e.key === "Y") && !isTyping) {
-      e.preventDefault();
-      const tempModal = document.getElementById("temporalExplorerModal");
-      if (tempModal && tempModal.open) {
-        tempModal.close();
-      } else if (window.TemporalExplorer) {
-        window.TemporalExplorer.openModal();
-      }
-    } else if ((e.key === "a" || e.key === "A") && !isTyping) {
-      e.preventDefault();
-      const satModal = document.getElementById("spatialAnalysisModal");
-      if (satModal && satModal.open) {
-        satModal.close();
-      } else if (window.GeospatialAnalysisToolkit) {
-        window.GeospatialAnalysisToolkit.openModal();
-      }
-    } else if ((e.key === "i" || e.key === "I") && !isTyping) {
-      e.preventDefault();
-      const intelModal = document.getElementById("infraIntelModal");
-      if (intelModal && intelModal.open) {
-        intelModal.close();
-      } else if (window.InfrastructureIntelligence) {
-        window.InfrastructureIntelligence.openModal();
-      }
     } else if ((e.key === "q" || e.key === "Q") && !isTyping) {
       e.preventDefault();
       const opsModal = document.getElementById("dataOpsModal");
@@ -7264,19 +7176,6 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (window.GeospatialDataOps) {
         window.GeospatialDataOps.openModal();
       }
-    } else if ((e.key === "b" || e.key === "B") && !isTyping) {
-      e.preventDefault();
-      const repModal = document.getElementById("reportBuilderModal");
-      if (repModal && repModal.open) {
-        repModal.close();
-      } else if (window.DigitalTwinReportBuilder) {
-        window.DigitalTwinReportBuilder.openModal();
-      }
-    } else if ((e.key === "v" || e.key === "V") && !isTyping) {
-      e.preventDefault();
-      if (window.Terrain3DMode) {
-        window.Terrain3DMode.toggle();
-      }
     } else if ((e.key === "r" || e.key === "R") && !isTyping) {
       e.preventDefault();
       resetToStateView();
@@ -7284,13 +7183,14 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const modal = document.getElementById("shortcutsHelpModal") || document.getElementById("aboutModal");
       if (modal && !modal.open) modal.showModal();
-    } else if (["1", "2", "3", "4"].includes(e.key) && !isTyping) {
+    } else if (["1", "2", "3", "4", "5"].includes(e.key) && !isTyping) {
       e.preventDefault();
       const navMap = {
         "1": "explore",
-        "2": "directory",
-        "3": "projects",
-        "4": "about"
+        "2": "places",
+        "3": "infrastructure",
+        "4": "plan",
+        "5": "about"
       };
       const dest = navMap[e.key];
       if (dest && window.PublicViews) {
@@ -7306,49 +7206,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (window.StudioManager) window.StudioManager.setZenMode(false);
         return;
       }
-      if (window.Terrain3DMode && window.Terrain3DMode.isActive()) {
-        window.Terrain3DMode.exit();
-        return;
-      }
-      const repModal = document.getElementById("reportBuilderModal");
-      if (repModal && repModal.open) {
-        repModal.close();
-        return;
-      }
       const opsModal = document.getElementById("dataOpsModal");
       if (opsModal && opsModal.open) {
         opsModal.close();
-        return;
-      }
-      const intelModal = document.getElementById("infraIntelModal");
-      if (intelModal && intelModal.open) {
-        intelModal.close();
-        return;
-      }
-      const satModal = document.getElementById("spatialAnalysisModal");
-      if (satModal && satModal.open) {
-        satModal.close();
-        return;
-      }
-      const tempModal = document.getElementById("temporalExplorerModal");
-      if (tempModal && tempModal.open) {
-        tempModal.close();
-        return;
-      }
-      const scenModal = document.getElementById("waterScenariosLabModal");
-      if (scenModal && scenModal.open) {
-        scenModal.close();
-        return;
-      }
-      const geoModal = document.getElementById("geoenvironmentalModal");
-      if (geoModal && geoModal.open) {
-        geoModal.close();
-        return;
-      }
-      const transModal = document.getElementById("transportExplorerModal");
-      if (transModal && transModal.open) {
-        transModal.close();
-        if (window.TransportExplorer) window.TransportExplorer.clearActiveHighlights();
         return;
       }
       const netModal = document.getElementById("waterNetworkModal");
@@ -7359,16 +7219,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (window.WaterSystemsNetwork) {
         window.WaterSystemsNetwork.exitFollowWater();
       }
-      const labModal = document.getElementById("damScienceLabModal");
-      if (labModal && labModal.open) {
-        labModal.close();
-        return;
-      }
-      const energyModal = document.getElementById("energyExplorerModal");
-      if (energyModal && energyModal.open) {
-        energyModal.close();
-        return;
-      }
       const damsModal = document.getElementById("damsExplorerModal");
       if (damsModal && damsModal.open) {
         damsModal.close();
@@ -7378,12 +7228,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (sauniModal && sauniModal.open) {
         if (window.SauniBasinTransferExplorer) window.SauniBasinTransferExplorer.closeModal();
         else sauniModal.close();
-        return;
-      }
-      const cycModal = document.getElementById("cycloneSurgeModal");
-      if (cycModal && cycModal.open) {
-        if (window.CycloneCoastalSurgeTwin) window.CycloneCoastalSurgeTwin.closeModal();
-        else cycModal.close();
         return;
       }
       const khavdaModal = document.getElementById("khavdaTwinModal");
@@ -7429,151 +7273,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Initialize Water Scenarios Lab Engine
-  if (window.WaterScenariosLab && typeof window.WaterScenariosLab.init === "function") {
-    window.WaterScenariosLab.init(map, []);
-  }
-
-  // Initialize Gujarat Temporal Explorer Engine
-  if (window.TemporalExplorer && typeof window.TemporalExplorer.init === "function") {
-    Promise.all([
-      fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
-      fetchCachedGeoJson("data/gujarat_power.geojson"),
-      fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
-      fetchCachedGeoJson("data/gujarat_urban_industry.geojson")
-    ]).then(([watData, powData, structData, urbData]) => {
-      window.TemporalExplorer.init(map, {
-        waterData: watData,
-        powerData: powData,
-        structData: structData,
-        urbanData: urbData
-      });
-    }).catch(err => {
-      console.warn("[TemporalExplorer] Data load notice:", err);
-      window.TemporalExplorer.init(map, {});
-    });
-  }
-
-  // Initialize Gujarat Geospatial Analysis Toolkit Engine
-  if (window.GeospatialAnalysisToolkit && typeof window.GeospatialAnalysisToolkit.init === "function") {
-    Promise.all([
-      fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
-      fetchCachedGeoJson("data/gujarat_power.geojson"),
-      fetchCachedGeoJson("data/gujarat_roads.geojson"),
-      fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
-      fetchCachedGeoJson("data/gujarat_urban_industry.geojson"),
-      fetchCachedGeoJson("data/gujarat_stations.geojson"),
-      fetchCachedGeoJson("data/gujarat_districts.geojson")
-    ]).then(([watData, powData, roadsData, structData, urbData, statData, distData]) => {
-      window.GeospatialAnalysisToolkit.init(map, {
-        waterData: watData,
-        powerData: powData,
-        roadsData: roadsData,
-        structData: structData,
-        urbanData: urbData,
-        stationsData: statData,
-        districtsData: distData
-      });
-    }).catch(err => {
-      console.warn("[GeospatialAnalysisToolkit] Data load notice:", err);
-      window.GeospatialAnalysisToolkit.init(map, {});
-    });
-  }
-
-  const openSpatialToolkitBtn = document.getElementById("openSpatialToolkitBtn");
-  if (openSpatialToolkitBtn) {
-    openSpatialToolkitBtn.addEventListener("click", () => {
-      if (window.GeospatialAnalysisToolkit) {
-        window.GeospatialAnalysisToolkit.openModal();
-      }
-    });
-  }
-
-  // Initialize Gujarat Infrastructure Intelligence Engine
-  if (window.InfrastructureIntelligence && typeof window.InfrastructureIntelligence.init === "function") {
-    Promise.all([
-      fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
-      fetchCachedGeoJson("data/gujarat_power.geojson"),
-      fetchCachedGeoJson("data/gujarat_transmission.geojson"),
-      fetchCachedGeoJson("data/gujarat_roads.geojson"),
-      fetchCachedGeoJson("data/gujarat_stations.geojson"),
-      fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
-      fetchCachedGeoJson("data/gujarat_urban_industry.geojson"),
-      fetchCachedGeoJson("data/gujarat_groundwater_geology.geojson"),
-      fetchCachedGeoJson("data/gujarat_geoenvironmental.geojson"),
-      fetchCachedGeoJson("data/gujarat_environment_disaster.geojson"),
-      fetchCachedGeoJson("data/gujarat_districts.geojson"),
-      fetchCachedGeoJson("data/gujarat_district_hq.geojson")
-    ]).then(([watData, powData, transData, roadsData, statData, structData, urbData, gwData, geoData, disData, distData, hqData]) => {
-      window.InfrastructureIntelligence.init(map, {
-        waterData: watData,
-        powerData: powData,
-        transData: transData,
-        roadsData: roadsData,
-        stationsData: statData,
-        structData: structData,
-        urbanData: urbData,
-        groundwaterData: gwData,
-        geoenvData: geoData,
-        disasterData: disData,
-        districtsData: distData,
-        districtHqData: hqData
-      });
-    }).catch(err => {
-      console.warn("[InfrastructureIntelligence] Data load notice:", err);
-      window.InfrastructureIntelligence.init(map, {});
-    });
-  }
-
-  const openInfraIntelBtn = document.getElementById("openInfraIntelBtn");
-  if (openInfraIntelBtn) {
-    openInfraIntelBtn.addEventListener("click", () => {
-      if (window.InfrastructureIntelligence) {
-        window.InfrastructureIntelligence.openModal();
-      }
-    });
-  }
-
-  // Initialize Gujarat 3D Terrain & Infrastructure Mode Engine
-  if (window.Terrain3DMode && typeof window.Terrain3DMode.init === "function") {
-    Promise.all([
-      fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
-      fetchCachedGeoJson("data/gujarat_power.geojson"),
-      fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
-      fetchCachedGeoJson("data/gujarat_urban_industry.geojson"),
-      fetchCachedGeoJson("data/gujarat_districts.geojson")
-    ]).then(([watData, powData, structData, urbData, distData]) => {
-      window.Terrain3DMode.init(map, {
-        waterData: watData,
-        powerData: powData,
-        structData: structData,
-        urbanData: urbData,
-        districtsData: distData
-      });
-    }).catch(err => {
-      console.warn("[Terrain3DMode] Data load notice:", err);
-      window.Terrain3DMode.init(map, {});
-    });
-  }
-
-  const open3DModeBtn = document.getElementById("open3DModeBtn");
-  if (open3DModeBtn) {
-    open3DModeBtn.addEventListener("click", () => {
-      if (window.Terrain3DMode) {
-        window.Terrain3DMode.enter();
-      }
-    });
-  }
-
-  const floating3DToggleBtn = document.getElementById("floating3DToggleBtn");
-  if (floating3DToggleBtn) {
-    floating3DToggleBtn.addEventListener("click", () => {
-      if (window.Terrain3DMode) {
-        window.Terrain3DMode.toggle();
-      }
-    });
-  }
-
   // Initialize Gujarat Geospatial Data Operations & Quality Engine
   if (window.GeospatialDataOps && typeof window.GeospatialDataOps.init === "function") {
     Promise.all([
@@ -7609,70 +7308,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Initialize Gujarat Digital Twin Report Builder Component
-  if (window.DigitalTwinReportBuilder && typeof window.DigitalTwinReportBuilder.init === "function") {
-    Promise.all([
-      fetchCachedGeoJson("data/gujarat_water_resources.geojson"),
-      fetchCachedGeoJson("data/gujarat_power.geojson"),
-      fetchCachedGeoJson("data/gujarat_transmission.geojson"),
-      fetchCachedGeoJson("data/gujarat_roads.geojson"),
-      fetchCachedGeoJson("data/gujarat_stations.geojson"),
-      fetchCachedGeoJson("data/gujarat_transport_structures.geojson"),
-      fetchCachedGeoJson("data/gujarat_urban_industry.geojson"),
-      fetchCachedGeoJson("data/gujarat_groundwater_geology.geojson"),
-      fetchCachedGeoJson("data/gujarat_geoenvironmental.geojson"),
-      fetchCachedGeoJson("data/gujarat_environment_disaster.geojson"),
-      fetchCachedGeoJson("data/gujarat_districts.geojson"),
-      fetchCachedGeoJson("data/gujarat_district_hq.geojson")
-    ]).then(([watData, powData, transData, roadsData, statData, structData, urbData, gwData, geoData, disData, distData, hqData]) => {
-      window.DigitalTwinReportBuilder.init(map, {
-        waterData: watData,
-        powerData: powData,
-        transData: transData,
-        roadsData: roadsData,
-        statData: statData,
-        structData: structData,
-        urbanData: urbData,
-        groundwaterData: gwData,
-        geoenvironmentalData: geoData,
-        disasterData: disData,
-        districtsData: distData,
-        districtHqData: hqData
-      });
-    }).catch(err => {
-      console.warn("[DigitalTwinReportBuilder] Data load notice:", err);
-      window.DigitalTwinReportBuilder.init(map, {});
-    });
-  }
-
-  const openReportBuilderBtn = document.getElementById("openReportBuilderBtn");
-  if (openReportBuilderBtn) {
-    openReportBuilderBtn.addEventListener("click", () => {
-      if (window.DigitalTwinReportBuilder) {
-        window.DigitalTwinReportBuilder.openModal();
-      }
-    });
-  }
-
   // Initialize SAUNI Yojana & Basin Water Transfer Explorer Component
   const openSauniExplorerBtn = document.getElementById("openSauniExplorerBtn");
   if (openSauniExplorerBtn) {
     openSauniExplorerBtn.addEventListener("click", () => {
       if (window.SauniBasinTransferExplorer) {
         window.SauniBasinTransferExplorer.openModal();
-      }
-    });
-  }
-
-  // Initialize Coastal Storm Surge & Cyclone Tracking Twin Component
-  if (window.CycloneCoastalSurgeTwin && typeof window.CycloneCoastalSurgeTwin.init === "function") {
-    window.CycloneCoastalSurgeTwin.init(map);
-  }
-  const openCycloneSurgeBtn = document.getElementById("openCycloneSurgeBtn");
-  if (openCycloneSurgeBtn) {
-    openCycloneSurgeBtn.addEventListener("click", () => {
-      if (window.CycloneCoastalSurgeTwin) {
-        window.CycloneCoastalSurgeTwin.openModal();
       }
     });
   }

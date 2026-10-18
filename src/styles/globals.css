@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600&display=swap');
+
+:root {
+  /* Core Gujarati Heritage Palette */
+  --color-ivory-paper: #F7F2E8;
+  --color-ivory-elevated: #FDFBF7;
+  --color-warm-sandstone: #D8C3A5;
+  --color-sandstone-muted: #E8DCCB;
+  --color-deep-indigo: #243B53;
+  --color-indigo-hover: #1B2D40;
+  --color-indigo-subtle: #EBF0F5;
+  --color-madder-red: #A64036;
+  --color-madder-subtle: #F9ECEA;
+  --color-neem-green: #52664B;
+  --color-neem-subtle: #EDF2EB;
+  --color-turmeric-gold: #C49A45;
+  --color-turmeric-subtle: #FAF3E3;
+  --color-ink-charcoal: #282823;
+  --color-muted-stone: #777269;
+
+  /* Semantic Surface & Border Assignments */
+  --bg-canvas: var(--color-ivory-paper);
+  --bg-surface: var(--color-ivory-elevated);
+  --bg-subtle: var(--color-sandstone-muted);
+  --border-hairline: #DFD3C3;
+  --border-architectural: var(--color-warm-sandstone);
+  --border-focus: var(--color-deep-indigo);
+
+  /* Semantic Map Category Colours */
+  --map-water-dams: #243B53;        /* Deep Indigo */
+  --map-water-transfer: #3B6978;    /* Stepwell Slate Blue */
+  --map-energy-re: #C49A45;         /* Turmeric Gold */
+  --map-transport-road: #A64036;    /* Madder Red */
+  --map-transport-rail: #5C4D42;    /* Earth Timber */
+  --map-nature-ecology: #52664B;    /* Neem Green */
+  --map-heritage-places: #8C3B32;   /* Terracotta Madder */
+
+  /* Typography Families */
+  --font-serif: 'Lora', 'DM Serif Display', Georgia, serif;
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-gujarati: 'Noto Sans Gujarati', sans-serif;
+
+  /* Motion Timing Tokens */
+  --duration-immediate: 130ms;
+  --duration-micro: 200ms;
+  --duration-panel: 280ms;
+  --duration-editorial: 450ms;
+  --ease-architectural: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--color-ink-charcoal);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+h1, h2, .font-editorial {
+  font-family: var(--font-serif);
+  letter-spacing: -0.015em;
+}
+
+.lang-gu {
+  font-family: var(--font-gujarati);
+}

@@ -77,10 +77,66 @@ class CDPClient {
   }
 }
 
+function startStaticServer(port = 8080) {
+  const mimeTypes = {
+    '.html': 'text/html; charset=utf-8',
+    '.js': 'application/javascript; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.json': 'application/json; charset=utf-8',
+    '.geojson': 'application/geo+json; charset=utf-8',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.svg': 'image/svg+xml; charset=utf-8',
+    '.ico': 'image/x-icon'
+  };
+
+  return new Promise((resolve) => {
+    const server = http.createServer((req, res) => {
+      let reqPath = decodeURI(req.url.split('?')[0]);
+      if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
+      const filePath = path.join(process.cwd(), reqPath.replace(/^\//, ''));
+      const ext = path.extname(filePath).toLowerCase();
+      const contentType = mimeTypes[ext] || 'application/octet-stream';
+
+      fs.readFile(filePath, (err, content) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.end('Not Found');
+          } else {
+            res.writeHead(500);
+            res.end(`Server Error: ${err.code}`);
+          }
+        } else {
+          res.writeHead(200, { 'Content-Type': contentType });
+          res.end(content);
+        }
+      });
+    });
+
+    server.once('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.log(`[INFO] Port ${port} is already active; connecting to existing server.`);
+        resolve(null);
+      } else {
+        console.warn(`[WARN] Server error on port ${port}:`, err);
+        resolve(null);
+      }
+    });
+
+    server.listen(port, '127.0.0.1', () => {
+      console.log(`[INFO] Internal test server started on http://127.0.0.1:${port}/`);
+      resolve(server);
+    });
+  });
+}
+
 async function run() {
   console.log('======================================================================');
   console.log('GUJARAT INFRAMAP — CONSUMER REFACTOR DEFINITIVE VERIFICATION SUITE');
   console.log('======================================================================');
+
+  const server = await startStaticServer(8080);
 
   const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
   const userDataDir = path.join(os.tmpdir(), 'chrome-consumer-verify-' + Date.now());
@@ -334,8 +390,9 @@ async function run() {
     console.error('[FATAL ERROR]:', err);
     failed++;
   } finally {
-    client.close();
-    chromeProc.kill();
+    if (client) client.close();
+    if (chromeProc) chromeProc.kill();
+    if (server) server.close();
   }
 
   console.log('\n======================================================================');
