@@ -6,31 +6,35 @@
    ========================================================================== */
 
 :root {
-  /* 1. Authentic Cultural Colour Tokens */
-  --color-ivory: #F7F2E8;         /* Ivory paper: primary page & canvas background */
-  --color-ivory-warm: #FAF6EE;    /* Lighter paper surface */
-  --color-ivory-light: #FDFBF7;   /* Crisp parchment highlight */
-  --color-sandstone: #D8C3A5;     /* Warm sandstone: architectural framing & borders */
-  --color-sandstone-light: #EFE6D8;/* Subtle secondary sandstone surface */
-  --color-sandstone-dark: #B59B79;/* Deep carved stone border & emphasis */
-  --color-indigo: #243B53;        /* Deep indigo: primary brand colour & active controls */
-  --color-indigo-dark: #102A43;   /* Deepest midnight indigo */
-  --color-indigo-light: #334E68;  /* Secondary slate indigo */
-  --color-madder: #A64036;        /* Madder red: Ajrakh & Patola cultural accents */
-  --color-madder-light: #F9ECEB;  /* Madder wash / critical alert background */
-  --color-madder-dark: #7F231C;   /* Deep terracotta madder */
-  --color-neem: #52664B;          /* Neem green: forests, nature, verified statutory records */
-  --color-neem-light: #EEF3ED;    /* Soft neem wash */
-  --color-neem-dark: #374632;     /* Deep forest neem */
-  --color-turmeric: #C49A45;      /* Turmeric gold: star rosettes, brass hardware, highlights */
-  --color-turmeric-light: #FBF5E8;/* Soft turmeric wash */
-  --color-turmeric-dark: #8F6B22; /* Antique brass / bronze */
-  --color-ink: #282823;           /* Ink charcoal: primary high-contrast typography */
-  --color-stone: #777269;         /* Muted stone: secondary labels, captions, metadata */
-  --color-stone-light: #DDD7CE;   /* Subtle divider stone */
+  /* 1. Authentic Cultural Colour Tokens (Gujarati Heritage Palette) */
+  --color-paper-ivory: #F6F0E5;       /* Paper ivory: primary page canvas & parchment background */
+  --color-ivory: #F6F0E5;
+  --color-ivory-warm: #FAF6EE;        /* Elevated card & paper surface */
+  --color-ivory-light: #FDFBF7;       /* Parchment highlight */
+  --color-deep-indigo: #243B53;       /* Deep indigo: primary brand colour, ink & active controls */
+  --color-indigo: #243B53;
+  --color-indigo-dark: #102A43;       /* Deepest midnight indigo */
+  --color-indigo-light: #334E68;      /* Secondary slate indigo */
+  --color-cobalt: #315BD6;            /* Cobalt blue: active interactive focus & primary emphasis */
+  --color-madder-red: #B84638;        /* Madder red: Ajrakh & Patola cultural accents & highlights */
+  --color-madder: #B84638;
+  --color-madder-dark: #7F231C;       /* Terracotta madder */
+  --color-madder-light: #F9ECEB;      /* Madder wash / alert background */
+  --color-turmeric: #E2AE48;          /* Turmeric gold: star rosettes, brass hardware, highlights */
+  --color-turmeric-light: #FDF7EA;    /* Soft turmeric wash */
+  --color-turmeric-dark: #8F6B22;     /* Bronze turmeric */
+  --color-neem: #53694B;              /* Neem green: nature, verified statutory records, forests */
+  --color-neem-light: #EEF3ED;        /* Soft neem wash */
+  --color-neem-dark: #374632;         /* Deep forest neem */
+  --color-sandstone: #D7C5AB;         /* Warm sandstone: architectural framing & stepwell borders */
+  --color-sandstone-light: #EFE6D8;   /* Subtle secondary sandstone surface */
+  --color-sandstone-dark: #B59B79;    /* Deep carved stone border & emphasis */
+  --color-ink: #282823;               /* Ink charcoal: primary high-contrast typography */
+  --color-stone: #777269;             /* Muted stone: secondary labels, captions, metadata */
+  --color-stone-light: #DDD7CE;       /* Subtle divider stone */
 
-  /* 2. Semantic Surface & Canvas Tokens (Default: Warm Ivory Heritage) */
-  --bg-primary: var(--color-ivory);
+  /* 2. Semantic Surface & Canvas Tokens (Warm Ivory Heritage Mode) */
+  --bg-primary: var(--color-paper-ivory);
   --bg-surface: #FFFFFF;
   --bg-surface-hover: var(--color-ivory-warm);
   --bg-surface-elevated: #FFFFFF;
@@ -40,21 +44,21 @@
   --border-subtle: #E8DFD3;
   --border-default: var(--color-sandstone);
   --border-strong: var(--color-sandstone-dark);
-  --border-focus: var(--color-indigo);
+  --border-focus: var(--color-cobalt);
 
   --text-main: var(--color-ink);
   --text-muted: var(--color-stone);
   --text-dim: #8F897F;
-  --text-accent: var(--color-madder);
+  --text-accent: var(--color-madder-red);
 
-  --accent-cyan: var(--color-indigo);
+  --accent-cyan: var(--color-deep-indigo);
   --accent-cyan-hover: var(--color-indigo-dark);
   --accent-cyan-light: #486581;
-  --accent-blue: var(--color-indigo);
+  --accent-blue: var(--color-cobalt);
   --accent-amber: var(--color-turmeric);
-  --accent-orange: #C05621;
+  --accent-orange: var(--color-madder-red);
   --accent-emerald: var(--color-neem);
-  --accent-red: var(--color-madder);
+  --accent-red: var(--color-madder-red);
 
   /* 3. Heritage Architectural Typography Hierarchy */
   --font-serif-display: 'DM Serif Display', Georgia, serif;
@@ -19314,25 +19318,25 @@ dialog.system-modal::backdrop {
 
 /* Light Theme Variables & Overrides (Default Heritage Editorial Mode) */
 body.theme-light {
-  --bg-primary: var(--color-ivory, #F7F2E8);
+  --bg-primary: var(--color-paper-ivory, #F6F0E5);
   --bg-surface: #FFFFFF;
   --bg-surface-hover: var(--color-ivory-warm, #FAF6EE);
   --bg-surface-elevated: #FFFFFF;
   --bg-card: #FFFFFF;
   --bg-card-warm: var(--color-ivory-warm, #FAF6EE);
   --border-subtle: #E8DFD3;
-  --border-default: var(--color-sandstone, #D8C3A5);
+  --border-default: var(--color-sandstone, #D7C5AB);
   --border-strong: var(--color-sandstone-dark, #B59B79);
-  --border-focus: var(--color-indigo, #243B53);
+  --border-focus: var(--color-cobalt, #315BD6);
   --text-main: var(--color-ink, #282823);
   --text-muted: var(--color-stone, #777269);
   --text-dim: #8F897F;
-  --shadow-drawer: 0 16px 36px -10px rgba(36, 59, 83, 0.16), 0 0 0 1px #D8C3A5;
-  --shadow-popup: 0 10px 25px -5px rgba(36, 59, 83, 0.14), 0 0 0 1px #D8C3A5;
+  --shadow-drawer: 0 16px 36px -10px rgba(36, 59, 83, 0.16), 0 0 0 1px #D7C5AB;
+  --shadow-popup: 0 10px 25px -5px rgba(36, 59, 83, 0.14), 0 0 0 1px #D7C5AB;
 }
 
 body.theme-light .app-header {
-  background: rgba(250, 246, 238, 0.97);
+  background: rgba(246, 240, 229, 0.97);
   border-bottom: 1px solid var(--color-sandstone);
   color: var(--color-ink);
   box-shadow: 0 2px 8px rgba(40, 40, 35, 0.04);
@@ -19382,14 +19386,52 @@ body.theme-light .breadcrumb-item {
 
 body.theme-light .search-container {
   background: #FFFFFF;
-  border-color: var(--color-sandstone);
+  border: 1px solid var(--color-sandstone);
+  border-radius: 8px;
 }
 
 body.theme-light .search-container input {
-  color: var(--color-ink);
+  background: transparent !important;
+  color: var(--color-ink) !important;
+  border: none !important;
 }
 
 body.theme-light .search-container input::placeholder {
+  color: var(--color-stone);
+}
+
+body.theme-light .search-container:focus-within {
+  border-color: var(--color-cobalt);
+  box-shadow: 0 0 0 3px rgba(49, 91, 214, 0.12);
+}
+
+body.theme-light .search-kbd-hint {
+  background: var(--color-sandstone-light);
+  border-color: var(--color-sandstone);
+  color: var(--color-stone);
+}
+
+body.theme-light .search-results-dropdown {
+  background: #FFFFFF;
+  border: 1px solid var(--color-sandstone);
+  box-shadow: 0 16px 36px rgba(36, 59, 83, 0.14);
+}
+
+body.theme-light .search-result-item {
+  border-bottom: 1px solid var(--color-sandstone-light);
+}
+
+body.theme-light .search-result-item:hover,
+body.theme-light .search-result-item.active-selection {
+  background: var(--color-ivory-warm);
+  border-left: 3px solid var(--color-madder-red);
+}
+
+body.theme-light .result-title {
+  color: var(--color-deep-indigo);
+}
+
+body.theme-light .result-subtitle {
   color: var(--color-stone);
 }
 
@@ -19419,6 +19461,33 @@ body.theme-light .layer-drawer {
 
 body.theme-light .drawer-header {
   border-bottom: 1px solid var(--color-sandstone);
+}
+
+body.theme-light .drawer-header h2 {
+  color: var(--color-deep-indigo);
+  font-family: var(--font-serif-display);
+}
+
+body.theme-light .layer-item-wrapper {
+  background: #FFFFFF;
+  border: 1px solid var(--color-sandstone);
+}
+
+body.theme-light .segmented-control {
+  background: var(--color-sandstone-light);
+  border: 1px solid var(--color-sandstone);
+}
+
+body.theme-light .segment-btn.active {
+  background: var(--color-deep-indigo);
+  color: #FFFFFF;
+}
+
+body.theme-light .floating-drawer-toggle {
+  background: var(--color-ivory-warm);
+  border-color: var(--color-sandstone);
+  color: var(--color-deep-indigo);
+  box-shadow: 0 6px 18px rgba(36, 59, 83, 0.14);
 }
 
 body.theme-light .asset-inspector-drawer {
@@ -22843,5 +22912,600 @@ body.theme-light .focal-pulse-circle {
     transition: none !important;
   }
 }
+
+/* =========================================================================
+   GUJARATI HERITAGE × CONTEMPORARY EDITORIAL DESIGN SYSTEM
+   Palette: Paper Ivory (#F6F0E5), Deep Indigo (#243B53), Madder Red (#B84638),
+            Turmeric Gold (#E2AE48), Neem Green (#53694B), Sandstone (#D7C5AB)
+   Architectural Geometry: Stepwell Chevrons, Jharokha Framing, Ajrakh Stars
+   ========================================================================= */
+
+/* 1. Context-Aware Map Overlap Prevention */
+body.non-explore-active .map-hud,
+body.non-explore-active .active-layer-legend,
+body.non-explore-active #activeLayerLegend {
+  display: none !important;
+}
+
+/* 2. Expressive Editorial Typography Hierarchy */
+.brand-title,
+.pview-title,
+.dest-card-title,
+.project-title,
+.tr-hero-title,
+.tr-title,
+.tr-section-title,
+.tmp-title,
+.drawer-header h2 {
+  font-family: var(--font-serif-display) !important;
+  letter-spacing: -0.015em;
+}
+
+.brand-gujarati-script,
+.dest-card-gujarati,
+.gujarati-text {
+  font-family: var(--font-gujarati) !important;
+}
+
+body,
+.pview-desc,
+.dest-card-summary,
+.project-summary-text,
+.tr-node-desc,
+.tr-card-body,
+.nav-tab,
+.action-btn,
+.dest-btn-map,
+.dest-btn-feasibility,
+.dest-btn-details,
+.tourism-cat-pill,
+.tr-mode-pill,
+.tr-quick-dest-pill {
+  font-family: var(--font-sans) !important;
+}
+
+/* 3. Architectural Jharokha Framing for Destination & Project Cards */
+.destination-card,
+.project-editorial-card {
+  border-radius: var(--radius-jharokha, 14px 14px 4px 4px) !important;
+  overflow: hidden !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--color-sandstone) !important;
+  box-shadow: 0 4px 14px -3px rgba(36, 59, 83, 0.08) !important;
+  transition: transform var(--dur-subtle) var(--ease-subtle),
+              box-shadow var(--dur-subtle) var(--ease-subtle),
+              border-color var(--dur-subtle) var(--ease-subtle) !important;
+}
+
+.destination-card:hover,
+.project-editorial-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: var(--color-deep-indigo) !important;
+  box-shadow: 0 12px 28px -4px rgba(36, 59, 83, 0.14) !important;
+}
+
+.dest-card-image-wrap {
+  position: relative;
+  height: 190px !important;
+  overflow: hidden;
+  background: var(--color-sandstone-light);
+  border-bottom: 1px solid var(--color-sandstone);
+}
+
+.dest-card-img,
+.project-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s var(--ease-panel) !important;
+}
+
+.destination-card:hover .dest-card-img,
+.project-editorial-card:hover .project-card-img {
+  transform: scale(1.04);
+}
+
+/* Category & Off-Trail Badges on Cards */
+.dest-card-floating-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(36, 59, 83, 0.90) !important;
+  color: var(--color-paper-ivory) !important;
+  padding: 0.25rem 0.6rem !important;
+  border-radius: var(--radius-xs) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase;
+  border: 1px solid rgba(215, 197, 171, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.dest-badge-lesser-known {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--color-neem) !important;
+  color: #FFFFFF !important;
+  padding: 0.25rem 0.6rem !important;
+  border-radius: var(--radius-xs) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+/* Card Body & Editorial Typography */
+.dest-card-body {
+  padding: 1.15rem 1.25rem !important;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dest-card-location-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.45rem;
+  font-size: 0.75rem;
+  color: var(--color-stone);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dest-card-title {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: var(--color-deep-indigo) !important;
+  margin: 0 0 0.5rem 0 !important;
+  line-height: 1.3 !important;
+}
+
+.dest-card-summary {
+  font-size: 0.86rem !important;
+  line-height: 1.6 !important;
+  color: var(--color-stone) !important;
+  margin: 0 0 0.85rem 0 !important;
+}
+
+.dest-card-infra-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--color-turmeric-light) !important;
+  border: 1px solid var(--color-sandstone) !important;
+  border-radius: var(--radius-xs) !important;
+  padding: 0.4rem 0.7rem !important;
+  margin-bottom: 1rem !important;
+  font-size: 0.76rem !important;
+  color: var(--color-turmeric-dark) !important;
+  font-weight: 600 !important;
+}
+
+.dest-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  border-top: 1px solid var(--color-sandstone-light);
+  padding-top: 0.85rem;
+}
+
+.dest-btn-map,
+.dest-btn-feasibility,
+.dest-btn-details {
+  border-radius: var(--radius-xs) !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  padding: 0.45rem 0.75rem !important;
+  cursor: pointer;
+  transition: all var(--dur-instant) var(--ease-subtle) !important;
+}
+
+.dest-btn-map {
+  background: var(--color-sandstone-light) !important;
+  color: var(--color-ink) !important;
+  border: 1px solid var(--color-sandstone) !important;
+}
+
+.dest-btn-map:hover {
+  background: var(--color-sandstone) !important;
+  color: var(--color-deep-indigo) !important;
+}
+
+.dest-btn-feasibility {
+  background: var(--color-neem-light) !important;
+  color: var(--color-neem-dark) !important;
+  border: 1px solid var(--color-neem) !important;
+}
+
+.dest-btn-feasibility:hover {
+  background: var(--color-neem) !important;
+  color: #FFFFFF !important;
+}
+
+.dest-btn-details {
+  background: var(--color-deep-indigo) !important;
+  color: var(--color-paper-ivory) !important;
+  border: 1px solid var(--color-deep-indigo) !important;
+}
+
+.dest-btn-details:hover {
+  background: var(--color-indigo-dark) !important;
+}
+
+/* 4. Full-Bleed Destination Hero Banner in Trip Reality */
+.tr-hero-banner {
+  position: relative;
+  width: 100%;
+  height: 290px;
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--radius-jharokha, 16px 16px 4px 4px) !important;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--color-sandstone);
+  box-shadow: 0 16px 36px -10px rgba(36, 59, 83, 0.16) !important;
+  display: flex;
+  align-items: flex-end;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.tr-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(16, 42, 67, 0.95) 0%, rgba(36, 59, 83, 0.6) 60%, rgba(36, 59, 83, 0.2) 100%) !important;
+  pointer-events: none;
+}
+
+.tr-hero-content {
+  position: relative;
+  z-index: 2;
+  color: #FFFFFF;
+  width: 100%;
+}
+
+.tr-hero-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.tr-hero-badge {
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-xs) !important;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tr-hero-badge.tr-tag-cat {
+  background: var(--color-madder-red) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 6px rgba(184, 70, 56, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tr-hero-title {
+  font-size: 2.2rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 0.6rem 0;
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  font-family: var(--font-serif-display) !important;
+}
+
+.tr-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--color-sandstone-light);
+  font-weight: 500;
+}
+
+.tr-meta-dot {
+  color: var(--color-turmeric);
+  font-weight: 700;
+}
+
+/* 5. Authentic Gujarat Cultural Flavours & Food Section */
+.tr-culture-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-sandstone);
+}
+
+.tr-culture-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.tr-culture-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: var(--color-turmeric-light) !important;
+  border: 1px solid var(--color-sandstone) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  transition: all var(--dur-subtle) var(--ease-subtle);
+}
+
+.tr-culture-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-turmeric);
+  box-shadow: 0 8px 20px rgba(226, 174, 72, 0.14);
+}
+
+.trc-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.trc-body strong {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-turmeric-dark) !important;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-sans);
+}
+
+.trc-body p {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--color-ink);
+}
+
+.tr-vibe-pill {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  background: var(--color-deep-indigo) !important;
+  color: var(--color-paper-ivory) !important;
+  border-radius: var(--radius-xs) !important;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+/* 6. Plan a Visit Control Deck: Authentic Sandstone & Paper Aesthetics */
+.tr-control-deck {
+  background: #FFFFFF !important;
+  border: 1px solid var(--color-sandstone) !important;
+  border-radius: var(--radius-jharokha, 12px 12px 4px 4px) !important;
+  padding: 1.5rem !important;
+  margin-bottom: 2rem !important;
+  box-shadow: 0 4px 14px -3px rgba(36, 59, 83, 0.08) !important;
+}
+
+.tr-control-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1.1fr 1.1fr 1fr;
+  gap: 1.25rem;
+  align-items: flex-end;
+}
+
+@media (max-width: 1100px) {
+  .tr-control-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .tr-control-row {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+}
+
+.tr-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tr-control-group select,
+.tr-control-group input[type="date"] {
+  height: 40px;
+  width: 100%;
+  padding: 0 0.85rem;
+  background: var(--color-ivory-warm, #FAF6EE) !important;
+  border: 1px solid var(--color-sandstone) !important;
+  border-radius: var(--radius-xs) !important;
+  color: var(--color-ink) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 0.84rem !important;
+  font-weight: 500;
+  outline: none;
+  transition: all var(--dur-instant) var(--ease-subtle);
+  box-sizing: border-box;
+}
+
+.tr-control-group select:focus,
+.tr-control-group input[type="date"]:focus {
+  border-color: var(--color-cobalt) !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 0 0 3px rgba(49, 91, 214, 0.12) !important;
+}
+
+.tr-control-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-deep-indigo) !important;
+  margin-bottom: 0.2rem;
+  display: block;
+}
+
+.tr-mode-pills {
+  display: inline-flex;
+  background: var(--color-sandstone-light) !important;
+  border: 1px solid var(--color-sandstone) !important;
+  padding: 3px !important;
+  border-radius: var(--radius-xs) !important;
+  gap: 3px;
+  height: 40px;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.tr-mode-pill {
+  padding: 0.45rem 0.9rem !important;
+  border-radius: var(--radius-xs) !important;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-stone) !important;
+  cursor: pointer;
+  transition: all var(--dur-instant) var(--ease-subtle);
+}
+
+.tr-mode-pill:hover {
+  color: var(--color-ink) !important;
+}
+
+.tr-mode-pill.active {
+  background: var(--color-deep-indigo) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 6px rgba(36, 59, 83, 0.25) !important;
+}
+
+.tr-quick-pills-row {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-sandstone-light);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tr-quick-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-stone);
+}
+
+.tr-quick-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tr-quick-dest-pill {
+  padding: 0.35rem 0.75rem !important;
+  border-radius: var(--radius-xs) !important;
+  border: 1px solid var(--color-sandstone) !important;
+  background: var(--color-sandstone-light) !important;
+  font-family: var(--font-sans);
+  font-size: 0.78rem !important;
+  font-weight: 600;
+  color: var(--color-ink) !important;
+  cursor: pointer;
+  transition: all var(--dur-instant) var(--ease-subtle);
+  white-space: nowrap;
+}
+
+.tr-quick-dest-pill:hover {
+  background: var(--color-sandstone) !important;
+  color: var(--color-deep-indigo) !important;
+}
+
+.tr-quick-dest-pill.active {
+  background: var(--color-madder-red) !important;
+  border-color: var(--color-madder-red) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 6px rgba(184, 70, 56, 0.25) !important;
+}
+
+/* 7. Strategic Project Cards */
+.project-card-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: var(--color-sandstone-light);
+  border-bottom: 1px solid var(--color-sandstone);
+}
+
+.project-card-floating-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 2;
+}
+
+.project-cat-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--color-deep-indigo);
+  color: #FFFFFF;
+}
+
+.project-status-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-ink);
+  backdrop-filter: blur(4px);
+}
+
+/* 8. Locked Leaflet Tooltips & Heritage Cartographic Popups */
+.leaflet-popup-content-wrapper {
+  background: var(--color-ivory-warm, #FAF6EE) !important;
+  border: 1px solid var(--color-sandstone) !important;
+  border-radius: var(--radius-sm, 6px) !important;
+  box-shadow: 0 14px 32px rgba(36, 59, 83, 0.16) !important;
+  color: var(--color-ink) !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--color-ivory-warm, #FAF6EE) !important;
+  border: 1px solid var(--color-sandstone) !important;
+}
+
+.leaflet-tooltip {
+  background: var(--color-deep-indigo, #243B53) !important;
+  border: 1px solid var(--color-sandstone) !important;
+  border-radius: var(--radius-xs, 3px) !important;
+  box-shadow: 0 4px 12px rgba(36, 59, 83, 0.25) !important;
+  color: var(--color-paper-ivory, #F6F0E5) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 0.78rem !important;
+  padding: 5px 10px !important;
+}
+
 
 

@@ -47,6 +47,83 @@
       "Anand": { name: "Anand", coordinates: [72.9515, 22.5645], region: "Central Gujarat", type: "dairy_hub" }
     },
 
+    DEST_PHOTOS: {
+      'adalaj-ni-vav': 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=80',
+      'sun-temple-modhera': 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80',
+      'statue-of-unity': 'https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=1200&q=80',
+      'lothal-archaeological-site': 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80',
+      'dholavira-unesco': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80',
+      'dholavira-harappan-city': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80',
+      'rani-ki-vav': 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=80',
+      'gir-national-park': 'https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?auto=format&fit=crop&w=1200&q=80',
+      'white-rann-dhordo': 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1200&q=80',
+      'marine-national-park': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80',
+      'somnath-temple': 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80',
+      'polo-forest': 'https://images.unsplash.com/photo-1511497584788-87676104235f?auto=format&fit=crop&w=1200&q=80',
+      'lakhpat-fort': 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80',
+      'saputara-hill-station': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+      'dumas-beach': 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'
+    },
+
+    DEST_CULTURAL_TIPS: {
+      'adalaj-ni-vav': {
+        food: 'Authentic Gujarati Thali & fresh spiced buttermilk (Chhaas) at Sarkhej highway joints; hot Fafda-Jalebi at Gandhinagar circle.',
+        vibe: '5-story subterranean Solanki stepwell built in 1498 by Queen Rudabai. Best visited in morning light when sunbeams filter down the carved shaft.'
+      },
+      'sun-temple-modhera': {
+        food: 'Mehsana special buffalo milk Mawa and hot Khaman Dhokla along the Patan-Mehsana highway corridor.',
+        vibe: '11th-century Solanki architectural marvel designed so equinox sunbeams hit the sanctum. Golden hour at sunset highlights the 52 Kund step-pillars.'
+      },
+      'statue-of-unity': {
+        food: 'Ekta Food Court offering Gujarati Thali, Kathiyawadi dining, and Narmada tribal multi-cuisine outlets.',
+        vibe: 'Evening projection laser mapping begins at 7:00 PM. Book viewing gallery slot 2 weeks in advance on official portal.'
+      },
+      'lothal-archaeological-site': {
+        food: 'Carry hydration and light snacks; local roadside dhabas near Dholka serve piping hot Sev Tameta and Bajra Rotla.',
+        vibe: '4,400-year-old Harappan bronze-age tidal dockyard and bead-making factory. Best explored between 9 AM and 11 AM.'
+      },
+      'dholavira-unesco': {
+        food: 'Traditional Kutchi Bajra no Rotlo with garlic chutney (Lasan ni Chatni), fresh white Makhan (butter), and Khichdi at Khadir Bet homestays.',
+        vibe: 'Traverse the iconic 30 km "Road to Heaven" cutting straight through the sparkling salt desert. Ancient Harappan water harvesting reservoirs.'
+      },
+      'rani-ki-vav': {
+        food: 'Patan famous Devaraji Ghughra and sweet Patan Patola pedas; authentic Kathiyawadi lunch stops.',
+        vibe: 'UNESCO World Heritage inverted stepwell temple dedicated to Lord Vishnu with over 500 principal sculptures.'
+      },
+      'gir-national-park': {
+        food: 'Authentic spicy Kathiyawadi Sev Usal, Ringan no Oro (roasted eggplant mash) with jaggery and butter at Sasan village dhabas.',
+        vibe: 'The sole habitat of the pure Asiatic Lion on Earth. Book morning 6:00 AM safari slots for optimum wildlife sightings.'
+      },
+      'white-rann-dhordo': {
+        food: 'Hot Kutchi Dabeli, Gulab Pak, and steaming Rabdi along the Bhuj-Khavda highway route.',
+        vibe: 'Endless white salt expanse illuminated under moonlight. Sunset between 5:45 PM and 6:30 PM is unmissable.'
+      },
+      'marine-national-park': {
+        food: 'Jamnagar famous Dry Fruit Kachori, Ghughra, and hot Katka bread along Bedi port road.',
+        vibe: 'Walk barefoot during low tide on exposed coral reefs with statutory marine guides. Spot live puffers and octopuses.'
+      },
+      'somnath-temple': {
+        food: 'Kathiyawadi Thali, Surti Locho, and refreshing green coconut water straight from seaside orchards.',
+        vibe: 'First of the 12 sacred Jyotirlingas directly on the Arabian Sea edge. Evening Sound & Light show at 8:00 PM.'
+      },
+      'polo-forest': {
+        food: 'Fresh roasted corn cobs (Makai) by the Harnav river; local Sabarkantha tribal dhabas serving hot Dal-Baati.',
+        vibe: '15th-century ruined Jain and Hindu temples engulfed by lush Aravalli deciduous forest canopy.'
+      },
+      'lakhpat-fort': {
+        food: 'Gurudwara community langar offering simple warm meals; carry personal drinking water as local facilities are sparse.',
+        vibe: 'Eerie, evocative ghost fortress town overlooking the Indus delta salt flats and Kori Creek border.'
+      },
+      'saputara-hill-station': {
+        food: 'Tribal roasted corn, wild forest honey, and hot bamboo shoot snacks; pleasant hillside cafes.',
+        vibe: 'Gujarat’s sole hill resort perched at 1,000m altitude in the Sahyadri mountains with misty viewpoints and ropeway.'
+      },
+      'dumas-beach': {
+        food: 'World-famous Surat Tomato Bhajiya and Lashkari spiced potato bhajiyas served fresh with mint-chilli chutney.',
+        vibe: 'Atmospheric black sand shoreline with cool Arabian Sea evening breezes. Popular sunset hangout.'
+      }
+    },
+
     init: async function () {
       console.log("[TripReality] Initializing Gujarat Trip Reality Engine...");
       await this.loadData();
@@ -413,30 +490,38 @@
       const visiting = d.visitingConditions || {};
       const facilities = visiting.facilities || {};
 
+      const heroImg = d.image || this.DEST_PHOTOS[d.destinationId] || this.DEST_PHOTOS[d.id] || "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=80";
+      const culturalTip = this.DEST_CULTURAL_TIPS[d.destinationId] || this.DEST_CULTURAL_TIPS[d.id] || null;
+
       container.innerHTML = `
         <article class="tr-assessment-card">
-          <!-- Top Classification Bar -->
-          <header class="tr-card-header">
-            <div class="tr-header-top">
-              <div class="tr-title-group">
-                <span class="tr-eyebrow">DESTINATION FEASIBILITY AUDIT</span>
-                <h3 class="tr-dest-title">${this.escapeHtml(d.destinationName)}</h3>
-                <div class="tr-location-meta">
-                  <span>📍 ${this.escapeHtml(d.district)} District, ${this.escapeHtml(d.region || 'Gujarat')}</span>
-                  <span>•</span>
-                  <span>Evaluated from: <strong>${this.escapeHtml(originInfo.name)}</strong></span>
-                </div>
-              </div>
-              <div class="tr-status-badge-wrap">
+          <!-- Full-Bleed High-Res Destination Hero Banner -->
+          <div class="tr-hero-banner" style="background-image: url('${heroImg}');">
+            <div class="tr-hero-overlay"></div>
+            <div class="tr-hero-content">
+              <div class="tr-hero-badges">
+                <span class="tr-hero-badge tr-tag-cat">✨ ${this.escapeHtml(d.category || 'DESTINATION')}</span>
                 <div class="tr-status-pill ${status.badgeClass}">
                   <span class="tr-status-icon">${status.icon}</span>
                   <span class="tr-status-text">${status.label}</span>
                 </div>
               </div>
+              <h2 class="tr-hero-title">${this.escapeHtml(d.destinationName)}</h2>
+              <div class="tr-hero-meta">
+                <span>📍 ${this.escapeHtml(d.district)} District, ${this.escapeHtml(d.region || 'Gujarat')}</span>
+                <span class="tr-meta-dot">•</span>
+                <span>🚀 Trip from: <strong>${this.escapeHtml(originInfo.name)}</strong> (${roadKm} km • ${timeEst.formatted})</span>
+                <span class="tr-meta-dot">•</span>
+                <span>⏱️ Recommended: ${d.recommendedMinHours || 2.5} hrs</span>
+              </div>
             </div>
+          </div>
 
+          <!-- Top Classification Bar -->
+          <header class="tr-card-header">
             <div class="tr-status-reason-box">
-              <strong>Audit Finding:</strong> ${this.escapeHtml(d.statusReason)}
+              <span class="tr-vibe-pill">GROUND TRUTH</span>
+              <p><strong>Travel Assessment:</strong> ${this.escapeHtml(d.statusReason)}</p>
             </div>
           </header>
 
@@ -673,6 +758,32 @@
               </div>
             ` : ''}
           </section>
+
+          <!-- Section 3.5: Authentic Gujarati Culture & Regional Flavours -->
+          ${culturalTip ? `
+            <section class="tr-section tr-culture-section">
+              <h4 class="tr-section-title">
+                <span class="tr-section-num">✦</span>
+                <span>Authentic Gujarat Experience &amp; Regional Flavours</span>
+              </h4>
+              <div class="tr-culture-grid">
+                <div class="tr-culture-card">
+                  <div class="trc-icon">🍲</div>
+                  <div class="trc-body">
+                    <strong>Local Bites &amp; Highway Food Secrets:</strong>
+                    <p>${this.escapeHtml(culturalTip.food)}</p>
+                  </div>
+                </div>
+                <div class="tr-culture-card">
+                  <div class="trc-icon">📸</div>
+                  <div class="trc-body">
+                    <strong>Heritage &amp; Photography Vibe:</strong>
+                    <p>${this.escapeHtml(culturalTip.vibe)}</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          ` : ''}
 
           <!-- Section 4: Granular Fact Provenance & Freshness Table -->
           <section class="tr-section">

@@ -972,7 +972,7 @@
 
         this.dholeraPolygonLayer.bindTooltip(
           "<strong>Dholera Special Investment Region (DSIR)</strong><br>920 km² Greenfield Smart City Master Plan",
-          { sticky: true, className: "dmic-tooltip" }
+          { sticky: false, className: "dmic-tooltip" }
         );
       }
 
@@ -993,7 +993,7 @@
 
         this.activationPolygonLayer.bindTooltip(
           "<strong>Dholera Activation Area (TP2A)</strong><br>22.5 km² Operational Plug-and-Play Hub (Tata Semiconductor Fab)",
-          { sticky: true, className: "dmic-tooltip" }
+          { sticky: false, className: "dmic-tooltip" }
         );
       }
 
@@ -1016,7 +1016,7 @@
           opacity: 0.9,
           dashArray: "14, 8"
         });
-        polyline.bindTooltip("Western Dedicated Freight Corridor (WDFC Double-Stack Container Spine)", { sticky: true });
+        polyline.bindTooltip("Western Dedicated Freight Corridor (WDFC Double-Stack Container Spine)", { sticky: false });
         this.corridorsLayerGroup.addLayer(polyline);
 
         // Ahmedabad-Dholera Expressway Polyline Vector
@@ -1031,7 +1031,7 @@
           weight: 3.5,
           opacity: 0.85
         });
-        expPolyline.bindTooltip("Ahmedabad — Dholera Expressway (NH-64 Greenfield 4-Lane)", { sticky: true });
+        expPolyline.bindTooltip("Ahmedabad — Dholera Expressway (NH-64 Greenfield 4-Lane)", { sticky: false });
         this.corridorsLayerGroup.addLayer(expPolyline);
       }
 

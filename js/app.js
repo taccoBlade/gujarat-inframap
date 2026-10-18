@@ -14,6 +14,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const districtBounds = {};
   let activeDistrictHighlight = null;
 
+  // Lock popups and tooltips rigidly (no erratic cursor-following or map jitter)
+  if (typeof L !== "undefined") {
+    if (L.Popup && L.Popup.prototype && L.Popup.prototype.options) {
+      L.Popup.prototype.options.autoPan = false;
+      L.Popup.prototype.options.closeButton = true;
+    }
+    if (L.Tooltip && L.Tooltip.prototype && L.Tooltip.prototype.options) {
+      L.Tooltip.prototype.options.sticky = false;
+    }
+  }
+
   // Initialize Leaflet Map (Framed upfront to eliminate redundant tile fetch passes)
   const map = L.map("map", {
     minZoom: 6,
@@ -908,7 +919,7 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (cat === "feeder_highway") catBadgeClass = "cat-feeder";
 
         layer.bindTooltip(`<strong>🛣️ ${title}</strong><br><small style="color: #38bdf8;">${totalKm} km Statewide Alignment • ${speed} km/h • ${operator}</small>`, {
-          sticky: true,
+          sticky: false,
           opacity: 0.95
         });
         layer.bindPopup(`
@@ -1061,7 +1072,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           layer.bindTooltip(`<strong>🚆 ${name}</strong><br><small>${gauge} | ${electrified}</small>`, {
-            sticky: true,
+            sticky: false,
             opacity: 0.95
           });
           layer.bindPopup(`
@@ -1561,7 +1572,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             layer.bindTooltip(`<strong>⚡ ${name}</strong><br><small style="color: #38bdf8;">${len} | ${circuits}</small>`, {
-              sticky: true,
+              sticky: false,
               opacity: 0.95
             });
             layer.bindPopup(`
@@ -1782,7 +1793,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
 
           marker.bindTooltip(`<strong>${p.name}</strong><br><small style="color: #38bdf8;">${p.supporting_corridor} • Crosses: ${p.waterway_crossed}</small>`, {
-            sticky: true,
+            sticky: false,
             opacity: 0.95
           });
 
@@ -2262,7 +2273,7 @@ document.addEventListener("DOMContentLoaded", () => {
             allWaterAssetsList.push(assetRecord);
 
             poly.bindTooltip(`<strong>💧 Reservoir Spread: ${name}</strong><br><small style="color: #60a5fa;">${p.surface_area_ha ? p.surface_area_ha.toLocaleString() + ' ha' : ''} at FRL ${frl}m</small>`, {
-              sticky: true,
+              sticky: false,
               opacity: 0.95
             });
 
@@ -2361,7 +2372,7 @@ document.addEventListener("DOMContentLoaded", () => {
             allWaterAssetsList.push(assetRecord);
 
             poly.bindTooltip(`<strong>🌾 Command: ${name}</strong><br><small style="color: #a3e635;">${p.culturable_command_ha ? p.culturable_command_ha.toLocaleString() + ' ha CADA footprint' : ''}</small>`, {
-              sticky: true,
+              sticky: false,
               opacity: 0.95
             });
 
@@ -2459,7 +2470,7 @@ document.addEventListener("DOMContentLoaded", () => {
             allWaterAssetsList.push(assetRecord);
 
             poly.bindTooltip(`<strong>🗺️ Basin: ${name}</strong><br><small style="color: #a5b4fc;">${p.drainage_area_sqkm ? p.drainage_area_sqkm.toLocaleString() + ' km² drainage area' : ''}</small>`, {
-              sticky: true,
+              sticky: false,
               opacity: 0.95
             });
 
@@ -2534,7 +2545,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }).addTo(isCanal ? (layerGroups.canals || layerGroups.waterways) : (layerGroups.rivers || layerGroups.waterways));
 
           line.bindTooltip(`<strong>${isCanal ? '🌊 Canal' : '🏞️ River'}: ${name}</strong><br><small style="color: #38bdf8;">${lengthKm} km • ${discharge} ${isCanal ? 'cusecs' : 'MCM yield'}</small>`, {
-            sticky: true,
+            sticky: false,
             opacity: 0.95
           });
 
@@ -2938,7 +2949,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }).addTo(layerGroups.urbanMetro);
 
           line.bindTooltip(`<strong>🚇 Metro: ${name}</strong><br><small style="color: #f472b6;">${p.length_km} km • ${p.stations_count} Stations • ${p.operator}</small>`, {
-            sticky: true,
+            sticky: false,
             opacity: 0.95
           });
 
@@ -3148,7 +3159,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }).addTo(layerGroups.cycloneFlood);
 
           line.bindTooltip(`<strong>${isTrack ? '🌀' : '🛡️'} ${name}</strong><br><small style="color: ${strokeColor};">${p.status || typeLabel}</small>`, {
-            sticky: true,
+            sticky: false,
             opacity: 0.95
           });
 
@@ -3296,7 +3307,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }).addTo(layerGroups.faults);
 
             line.bindTooltip(`<strong>⚡ Active Fault: ${name}</strong><br><small style="color: #f87171;">${p.seismic_capability || 'Seismogenic'} • ${p.length_km ? p.length_km + ' km' : ''}</small>`, {
-              sticky: true,
+              sticky: false,
               opacity: 0.95
             });
 

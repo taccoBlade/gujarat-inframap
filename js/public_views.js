@@ -398,6 +398,14 @@
     const aboutView = document.getElementById("aboutView");
     const mapEl = document.getElementById("map");
 
+    // Manage Map HUD elements visibility
+    const isExplore = destKey === "explore";
+    document.body.classList.toggle("non-explore-active", !isExplore);
+    const mapHud = document.querySelector(".map-hud");
+    const activeLegend = document.getElementById("activeLayerLegend");
+    if (mapHud) mapHud.classList.toggle("hidden", !isExplore);
+    if (activeLegend) activeLegend.classList.toggle("hidden", !isExplore);
+
     // Hide all secondary views first
     if (placesView) placesView.classList.add("hidden");
     if (planVisitView) planVisitView.classList.add("hidden");
@@ -735,49 +743,71 @@
     const filter = state.projectsFilterCat;
     const filtered = STRATEGIC_PROJECTS.filter(p => filter === "all" || p.category === filter);
 
-    container.innerHTML = filtered.map(p => `
+    const PROJECT_IMAGES = {
+      "dholera-sir": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+      "khavda-re-park": "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=1200&q=80",
+      "sauni-yojana": "https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=1200&q=80",
+      "western-dfc": "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=1200&q=80",
+      "mahsr-bullet-train": "https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?auto=format&fit=crop&w=1200&q=80",
+      "sardar-sarovar-project": "https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=1200&q=80",
+      "gift-city": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+      "surat-diamond-bourse": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80",
+      "sudarshan-setu": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
+      "ahmedabad-metro": "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1200&q=80"
+    };
+
+    container.innerHTML = filtered.map(p => {
+      const imgUrl = PROJECT_IMAGES[p.id] || "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80";
+      return `
       <article class="project-editorial-card" id="proj-${p.id}">
-        <div class="project-card-top">
-          <div class="project-meta-badges">
+        <div class="project-card-image-wrap">
+          <img src="${imgUrl}" alt="${escapeHtml(p.name)}" class="project-card-img" loading="lazy">
+          <div class="project-card-floating-badge">
             <span class="project-cat-badge badge-${p.category}">${escapeHtml(p.categoryLabel)}</span>
             <span class="project-status-badge">${escapeHtml(p.status)}</span>
           </div>
-          <span class="project-district-tag">📍 ${escapeHtml(p.district)} • ${escapeHtml(p.location)}</span>
         </div>
 
-        <h2 class="project-title">${escapeHtml(p.name)}</h2>
-        <div class="project-agency-row">
-          <span class="agency-label">Responsible Agency:</span>
-          <span class="agency-name">${escapeHtml(p.agency)}</span>
-        </div>
-
-        <p class="project-summary-text">${escapeHtml(p.summary)}</p>
-
-        <div class="project-facts-grid">
-          ${p.facts.map(f => `
-            <div class="project-fact-cell">
-              <span class="fact-label">${escapeHtml(f.label)}</span>
-              <strong class="fact-value">${escapeHtml(f.value)}</strong>
-            </div>
-          `).join("")}
-        </div>
-
-        <div class="project-card-footer">
-          <div class="project-source-info">
-            <span class="source-caption">Primary Statutory Source:</span>
-            <span class="source-ref">${escapeHtml(p.sourceTitle)}</span>
+        <div class="project-card-body">
+          <div class="project-card-top">
+            <span class="project-district-tag">📍 ${escapeHtml(p.district)} • ${escapeHtml(p.location)}</span>
           </div>
-          <div class="project-actions">
-            <button class="project-explore-btn" onclick="window.PublicViews.exploreProject('${p.id}')">
-              <span>🗺️ Explore on Map</span>
-            </button>
-            <a href="${p.sourceUrl}" target="_blank" rel="noopener noreferrer" class="project-source-link">
-              <span>Official Reference ↗</span>
-            </a>
+
+          <h2 class="project-title">${escapeHtml(p.name)}</h2>
+          <div class="project-agency-row">
+            <span class="agency-label">Responsible Agency:</span>
+            <span class="agency-name">${escapeHtml(p.agency)}</span>
+          </div>
+
+          <p class="project-summary-text">${escapeHtml(p.summary)}</p>
+
+          <div class="project-facts-grid">
+            ${p.facts.map(f => `
+              <div class="project-fact-cell">
+                <span class="fact-label">${escapeHtml(f.label)}</span>
+                <strong class="fact-value">${escapeHtml(f.value)}</strong>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="project-card-footer">
+            <div class="project-source-info">
+              <span class="source-caption">Primary Statutory Source:</span>
+              <span class="source-ref">${escapeHtml(p.sourceTitle)}</span>
+            </div>
+            <div class="project-actions">
+              <button class="project-explore-btn" onclick="window.PublicViews.exploreProject('${p.id}')">
+                <span>🗺️ Explore on Map</span>
+              </button>
+              <a href="${p.sourceUrl}" target="_blank" rel="noopener noreferrer" class="project-source-link">
+                <span>Official Reference ↗</span>
+              </a>
+            </div>
           </div>
         </div>
       </article>
-    `).join("");
+      `;
+    }).join("");
   }
 
   function exploreProject(projectId) {

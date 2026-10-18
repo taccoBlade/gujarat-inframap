@@ -858,7 +858,7 @@
         }).addTo(state.map);
 
         pulseMarker.bindTooltip(`<strong>${d.name}</strong><br><small style="color:#38bdf8;">Recipient Dam • Gross: ${d.grossStorageMcm} MCM</small>`, {
-          sticky: true,
+          sticky: false,
           direction: "top"
         });
 

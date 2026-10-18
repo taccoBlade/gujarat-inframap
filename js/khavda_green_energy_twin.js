@@ -1276,7 +1276,7 @@
 
         this.parkFootprintLayer.bindTooltip(
           "<strong>30 GW Khavda Renewable Mega-Park</strong><br>726 km² World's Largest Green Energy Installation",
-          { sticky: true, className: "khavda-tooltip" }
+          { sticky: false, className: "khavda-tooltip" }
         );
       }
 
@@ -1335,7 +1335,7 @@
           opacity: 0.85,
           dashArray: "12, 8"
         });
-        polyline.bindTooltip("765 kV Green Energy Corridor (Khavda - Lakadia - Vadodara UHV)", { sticky: true });
+        polyline.bindTooltip("765 kV Green Energy Corridor (Khavda - Lakadia - Vadodara UHV)", { sticky: false });
         this.corridorLayerGroup.addLayer(polyline);
       }
     }
