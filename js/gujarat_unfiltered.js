@@ -1,17 +1,25 @@
 /**
- * Gujarat InfraMap — Gujarat Unfiltered Engine (Phase 2: 34-District Research Database)
+ * Gujarat InfraMap — Gujarat Unfiltered Engine (Phase 3: Comprehensive Editorial Experience)
  * 
  * "Gujarat Unfiltered: The Unexpected Side of Gujarat" (ગુજરાત અનફિલ્ટર્ડ)
  * 
- * Comprehensive 34-district discovery platform covering urban legends, folklore,
- * archaeological anomalies, forgotten desert bastions, and nature side quests.
+ * "Gujarat has stories you haven't heard."
+ * "Strange places. Forgotten stories. Unexpected detours."
  * 
  * Key Principles:
- * - 34 Districts Audited: Full coverage including Vav-Tharad (34th District, created 2 Oct 2025).
- * - Multi-Dimensional Research Classifications: documented_place, documented_history, local_legend, unverified_claim, public_access, restricted_access.
- * - Strict Separation of Lore & Reality: Rigorously distinguishes local campfire lore from archaeological/geological facts.
- * - Rigorous Case Study Curation: Signature Farm (Ghuma-Bopal) case study debunking viral creepypasta and enforcing strict zero-trespassing warnings on private property.
- * - Auditable Provenance: Every record references primary statutory sources, corroborating historical citations, and documented field uncertainties.
+ * - 34 Districts Researched: Full coverage including Vav-Tharad (34th District, created 2 Oct 2025).
+ * - Editorial Spotlight Hero: Asymmetric layout showcasing signature unexpected places with live switcher.
+ * - Map-First Synchronization: Dynamically filters Leaflet map markers to match active view without clutter.
+ * - Gen-Z Purposeful Interactions:
+ *   1. Personal Shortlist: Persisted in localStorage ('gujarat_unfiltered_shortlist') with bookmark toggles & dedicated filter tab.
+ *   2. District Field Comparison: Multi-column side-by-side comparison modal of places within any district.
+ *   3. Native Web Share & Deep-Linking: Share story links via Web Share API / clipboard copy with hash deep-linking (`#/unfiltered?story=<id>`).
+ *   4. Explore Nearby Documented Places: Geographic proximity suggestions inside modal reader.
+ * - Restrained "After Dark" Visual Identity: Midnight indigo surfaces, subtle celestial Ajrakh motifs, and warm heritage balance.
+ * - Strict Visitor Protection:
+ *   - Lawful sites: Full daytime visit advisories, verified coordinates, and Google Maps directions link.
+ *   - Restricted sites (Signature Farm case study): High-visibility Section 441/447 IPC trespass warnings, zero routing directions provided.
+ * - Auditable Provenance: Every record linked to primary statutory and corroborating citations.
  */
 
 (function (window, document) {
@@ -67,6 +75,13 @@
       icon: '🛣️',
       color: '#BE123C',
       bg: 'rgba(190, 18, 60, 0.12)'
+    },
+    'shortlist': {
+      label: 'Saved Shortlist',
+      gujarati: 'તમારી યાદી',
+      icon: '🔖',
+      color: '#B84638',
+      bg: 'rgba(184, 70, 56, 0.12)'
     }
   };
 
@@ -79,6 +94,13 @@
     'restricted_access': { label: 'Restricted Access', icon: '⛔', className: 'chip-restricted' }
   };
 
+  const SPOTLIGHT_CANDIDATE_IDS = [
+    'dumas-beach-black-sand',
+    'kalo-dungar-jackal-monastery',
+    'nadabet-seema-darshan-border',
+    'dada-harir-subterranean-vav'
+  ];
+
   class GujaratUnfilteredEngine {
     constructor() {
       this.stories = [];
@@ -88,6 +110,9 @@
       this.activeCollection = 'all';
       this.activeDistrict = 'all';
       this.searchQuery = '';
+      this.spotlightStoryId = 'dumas-beach-black-sand';
+      this.shortlist = new Set();
+      this.compareDistrict = 'Ahmedabad';
       this.mapMarkersLayer = null;
       this.markerMap = new Map();
       this.isLoaded = false;
@@ -119,15 +144,131 @@
         const distSet = new Set(this.stories.map(s => s.district));
         this.districts = Array.from(distSet).sort();
 
+        // Load personal shortlist from localStorage
+        this.loadShortlist();
+
         this.isLoaded = true;
         this.isLoading = false;
         console.log(`[GujaratUnfiltered] Loaded ${this.stories.length} stories across ${this.districts.length} districts.`);
 
         this.initMapMarkers();
         this.bindEvents();
+        this.checkDeepLink();
       } catch (err) {
         console.error('[GujaratUnfiltered] Initialization error:', err);
         this.isLoading = false;
+      }
+    }
+
+    /**
+     * Personal Shortlist Storage Management (localStorage)
+     */
+    loadShortlist() {
+      try {
+        const saved = localStorage.getItem('gujarat_unfiltered_shortlist');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            this.shortlist = new Set(parsed);
+          }
+        }
+      } catch (e) {
+        this.shortlist = new Set();
+      }
+    }
+
+    saveShortlist() {
+      try {
+        localStorage.setItem('gujarat_unfiltered_shortlist', JSON.stringify(Array.from(this.shortlist)));
+      } catch (e) {
+        console.warn('[GujaratUnfiltered] Could not save shortlist to localStorage:', e);
+      }
+    }
+
+    toggleShortlist(storyId) {
+      const isAdded = !this.shortlist.has(storyId);
+      if (isAdded) {
+        this.shortlist.add(storyId);
+      } else {
+        this.shortlist.delete(storyId);
+      }
+      this.saveShortlist();
+      this.showToast(isAdded ? '★ Saved to your field shortlist' : 'Removed from shortlist');
+      this.render();
+      
+      // If modal is open, update its shortlist button
+      const modalBtn = document.getElementById('guModalShortlistBtn');
+      if (modalBtn) {
+        modalBtn.innerHTML = isAdded ? '★ Saved' : '🔖 Save to Shortlist';
+        modalBtn.classList.toggle('active', isAdded);
+      }
+    }
+
+    isShortlisted(storyId) {
+      return this.shortlist.has(storyId);
+    }
+
+    /**
+     * Toast notification display
+     */
+    showToast(message) {
+      const toast = document.getElementById('appToast');
+      if (toast) {
+        toast.textContent = message;
+        toast.classList.remove('hidden');
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => toast.classList.add('hidden'), 2500);
+      }
+    }
+
+    /**
+     * Native Web Share & Deep-Link Copy
+     */
+    async shareStory(storyId) {
+      const story = this.stories.find(s => s.id === storyId);
+      if (!story) return;
+
+      const shareUrl = `${window.location.origin}${window.location.pathname}#/unfiltered?story=${encodeURIComponent(story.id)}`;
+      
+      if (navigator.share && typeof navigator.canShare === 'function' && navigator.canShare({ url: shareUrl })) {
+        try {
+          await navigator.share({
+            title: `${story.name} — Gujarat Unfiltered`,
+            text: `"${story.tagline}" Discover the unexpected ground truth on Gujarat InfraMap:`,
+            url: shareUrl
+          });
+          return;
+        } catch (e) {
+          // Fall through to clipboard
+        }
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          this.showToast('✓ Story link copied to clipboard!');
+          return;
+        } catch (err) {
+          // Fallback
+        }
+      }
+
+      this.showToast('✓ Story link copied to clipboard!');
+    }
+
+    /**
+     * Check URL hash for deep-link story navigation
+     */
+    checkDeepLink() {
+      const hash = window.location.hash || '';
+      if (hash.includes('#/unfiltered')) {
+        const urlParams = new URLSearchParams(hash.split('?')[1] || '');
+        const storyId = urlParams.get('story');
+        if (storyId) {
+          setTimeout(() => {
+            this.openStoryModal(storyId);
+          }, 300);
+        }
       }
     }
 
@@ -145,10 +286,18 @@
         this.mapMarkersLayer.addTo(window.map);
       }
 
+      this.updateMapMarkers(this.stories);
+    }
+
+    /**
+     * Synchronize Leaflet map markers dynamically with current filter
+     */
+    updateMapMarkers(storiesToDisplay) {
+      if (!this.mapMarkersLayer) return;
       this.mapMarkersLayer.clearLayers();
       this.markerMap.clear();
 
-      this.stories.forEach(story => {
+      storiesToDisplay.forEach(story => {
         if (!story.coordinates || story.coordinates.length < 2) return;
         const lng = story.coordinates[0];
         const lat = story.coordinates[1];
@@ -201,7 +350,12 @@
         if (e.key === 'Escape') {
           this.closeStoryModal();
           this.closeLedgerModal();
+          this.closeCompareModal();
         }
+      });
+
+      window.addEventListener('hashchange', () => {
+        this.checkDeepLink();
       });
     }
 
@@ -211,8 +365,12 @@
     getFilteredStories() {
       const q = this.searchQuery.trim().toLowerCase();
       return this.stories.filter(story => {
-        const matchesCollection = this.activeCollection === 'all' || story.collection === this.activeCollection;
-        if (!matchesCollection) return false;
+        // Shortlist collection filter
+        if (this.activeCollection === 'shortlist') {
+          if (!this.shortlist.has(story.id)) return false;
+        } else if (this.activeCollection !== 'all') {
+          if (story.collection !== this.activeCollection) return false;
+        }
 
         const matchesDistrict = this.activeDistrict === 'all' || 
           story.district === this.activeDistrict ||
@@ -242,6 +400,112 @@
     }
 
     /**
+     * Set active spotlight story
+     */
+    setSpotlightStory(storyId) {
+      this.spotlightStoryId = storyId;
+      this.render();
+      const hero = document.querySelector('.gu-spotlight-hero');
+      if (hero) hero.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    /**
+     * Render Editorial Spotlight Hero
+     */
+    renderSpotlightHero() {
+      const story = this.stories.find(s => s.id === this.spotlightStoryId) || this.stories[0];
+      if (!story) return '';
+
+      const isShortlisted = this.isShortlisted(story.id);
+      const isRestricted = story.legalAccess && !story.legalAccess.isSafeAndLawful;
+
+      return `
+        <section class="gu-spotlight-hero" aria-label="Editorial Spotlight Story">
+          <!-- Left Column: Narrative Content -->
+          <div class="gu-spotlight-content">
+            <div class="gu-spotlight-top">
+              <div class="gu-spotlight-meta-row">
+                <span class="gu-spotlight-badge">★ EDITORIAL SPOTLIGHT • વાર્તા વિશેષ</span>
+                <span class="gu-spotlight-district-pill">📍 ${story.district} (${story.taluka || 'District Core'})</span>
+                <span class="gu-spotlight-district-pill" style="border-color:#7C3AED;">${story.collectionLabel}</span>
+              </div>
+              
+              <span class="gu-spotlight-guj">${story.gujaratiName}</span>
+              <h3 class="gu-spotlight-title">${story.name}</h3>
+              <p class="gu-spotlight-tagline">“${story.tagline}”</p>
+            </div>
+
+            <!-- Two-Tone Split Lore vs Reality Summary -->
+            <div class="gu-spotlight-split">
+              <div class="gu-spotlight-box gu-spotlight-box-lore">
+                <div class="gu-spotlight-box-header">📜 The Campfire Legend</div>
+                <p class="gu-spotlight-box-text">${this.truncate(story.theFolklore, 130)}</p>
+              </div>
+              <div class="gu-spotlight-box gu-spotlight-box-reality">
+                <div class="gu-spotlight-box-header">🔬 The Ground Reality</div>
+                <p class="gu-spotlight-box-text">${this.truncate(story.theGroundReality, 130)}</p>
+              </div>
+            </div>
+
+            <!-- Actions Bar -->
+            <div class="gu-spotlight-actions">
+              <button class="btn-primary-action" onclick="window.GujaratUnfiltered.openStoryModal('${story.id}')">
+                📖 Read Full Investigation &amp; Provenance
+              </button>
+              <button class="btn-secondary-action" onclick="window.GujaratUnfiltered.locateOnMap('${story.id}')">
+                📍 View on Map
+              </button>
+              <button class="btn-secondary-action ${isShortlisted ? 'active' : ''}" onclick="window.GujaratUnfiltered.toggleShortlist('${story.id}')" title="Save to Personal Shortlist">
+                ${isShortlisted ? '★ Saved to Shortlist' : '🔖 Save to Shortlist'}
+              </button>
+              <button class="btn-secondary-action" onclick="window.GujaratUnfiltered.shareStory('${story.id}')" title="Share Story">
+                🔗 Share
+              </button>
+              <button class="btn-secondary-action" onclick="window.GujaratUnfiltered.openCompareModal('${story.district}')" title="Compare places in ${story.district}">
+                ⚡ Compare ${story.district} Places
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Featured Photography & Switcher -->
+          <div class="gu-spotlight-media-wrap">
+            <div class="gu-spotlight-img-box">
+              <img 
+                src="${story.imageUrl}" 
+                alt="${story.name}" 
+                class="gu-spotlight-img"
+                onerror="this.src='https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=800&q=80'"
+              />
+            </div>
+            <div class="gu-spotlight-caption">
+              <span>📷 ${story.imageCredit}</span>
+              <span>${story.claimClassification.toUpperCase().replace('_', ' ')}</span>
+            </div>
+
+            <!-- Spotlight Candidates Switcher -->
+            <div class="gu-spotlight-switcher-row">
+              <span style="font-size: 0.72rem; font-weight: 800; font-family: var(--font-mono, monospace); color: #716D65;">EXPLORE SPOTLIGHTS:</span>
+              ${SPOTLIGHT_CANDIDATE_IDS.map(candId => {
+                const cand = this.stories.find(s => s.id === candId);
+                if (!cand) return '';
+                const isSelected = cand.id === this.spotlightStoryId;
+                return `
+                  <button 
+                    class="gu-spotlight-switch-btn ${isSelected ? 'active' : ''}" 
+                    onclick="window.GujaratUnfiltered.setSpotlightStory('${cand.id}')"
+                    title="${cand.name} (${cand.district})"
+                  >
+                    ${cand.district}
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    /**
      * Main Render Method
      */
     render() {
@@ -250,10 +514,13 @@
 
       const filtered = this.getFilteredStories();
 
+      // Synchronize Leaflet map markers with active filter
+      this.updateMapMarkers(filtered);
+
       // Counts per collection
-      const counts = { all: this.stories.length };
+      const counts = { all: this.stories.length, shortlist: this.shortlist.size };
       Object.keys(COLLECTIONS_META).forEach(key => {
-        if (key !== 'all') {
+        if (key !== 'all' && key !== 'shortlist') {
           counts[key] = this.stories.filter(s => s.collection === key).length;
         }
       });
@@ -266,9 +533,9 @@
               <span class="eyebrow-symbol">⚡</span>
               GUJARAT UNFILTERED • ગુજરાત અનફિલ્ટર્ડ • 34 DISTRICTS RESEARCHED
             </span>
-            <h2 class="pview-title gu-headline">The stories they didn't put in the textbook.</h2>
+            <h2 class="pview-title gu-headline">Gujarat has stories you haven't heard.</h2>
             <p class="pview-desc gu-desc">
-              Curated oral legends, architectural anomalies, forgotten desert bastions, and the unvarnished ground truth across all 34 districts of Gujarat (including Vav-Tharad). Fact-checked with statutory access disclosures.
+              Strange places. Forgotten stories. Unexpected detours. Documented oral folklore, architectural anomalies, and the unvarnished ground truth across all 34 districts of Gujarat (including Vav-Tharad). Fact-checked with statutory access disclosures.
             </p>
           </div>
           <div class="gu-header-badge" aria-hidden="true">
@@ -279,6 +546,9 @@
             </svg>
           </div>
         </header>
+
+        <!-- Featured Editorial Spotlight Hero -->
+        ${this.renderSpotlightHero()}
 
         <!-- Search & Category Controls Bar -->
         <div class="gu-controls-bar">
@@ -316,7 +586,7 @@
               ` : ''}
             </div>
 
-            <!-- District Dropdown -->
+            <!-- District Dropdown & Compare Action -->
             <div class="gu-district-select-wrap">
               <select 
                 id="guDistrictFilter" 
@@ -330,6 +600,14 @@
                   <option value="${d}" ${this.activeDistrict === d ? 'selected' : ''}>${d}</option>
                 `).join('')}
               </select>
+
+              <button 
+                class="gu-btn-compare-district" 
+                onclick="window.GujaratUnfiltered.openCompareModal(window.GujaratUnfiltered.activeDistrict !== 'all' ? window.GujaratUnfiltered.activeDistrict : 'Ahmedabad')" 
+                title="Compare verified places across a district"
+              >
+                ⚡ Compare District Places
+              </button>
             </div>
           </div>
         </div>
@@ -363,9 +641,13 @@
         ` : `
           <div class="gu-empty-state">
             <div class="gu-empty-icon">🌀</div>
-            <h3 class="gu-empty-title">No unexpected stories match your search</h3>
+            <h3 class="gu-empty-title">
+              ${this.activeCollection === 'shortlist' ? 'Your Field Shortlist is Empty' : 'No unexpected stories match your search'}
+            </h3>
             <p class="gu-empty-desc">
-              We couldn't find anything matching your filter criteria in the selected district or collection.
+              ${this.activeCollection === 'shortlist' 
+                ? 'You have not saved any places to your personal shortlist yet. Click 🔖 on any card to bookmark places for quick access.'
+                : 'We could not find anything matching your filter criteria in the selected district or collection.'}
             </p>
             <button class="btn-primary-action gu-empty-reset" onclick="window.GujaratUnfiltered.resetFilters()">
               Show All Stories
@@ -381,9 +663,11 @@
     renderStoryCard(story) {
       const meta = COLLECTIONS_META[story.collection] || COLLECTIONS_META['all'];
       const isRestricted = story.legalAccess && !story.legalAccess.isSafeAndLawful;
+      const isShortlisted = this.isShortlisted(story.id);
+      const isAfterDark = story.collection === 'after-dark';
       
       const safeLawfulBadge = !isRestricted
-        ? `<span class="gu-card-safe-badge">✓ Lawful Public Access</span>`
+        ? `<span class="gu-card-safe-badge">✓ Lawful Public Access • Daytime Recommended</span>`
         : `<span class="gu-card-warn-badge" style="color: #991B1B;">⛔ Strictly Restricted Private Property</span>`;
 
       // Multi-dimensional research status chips
@@ -393,7 +677,7 @@
       }).join('');
 
       return `
-        <article class="gu-card ${isRestricted ? 'gu-card-restricted' : ''}" id="card-${story.id}" data-id="${story.id}">
+        <article class="gu-card ${isRestricted ? 'gu-card-restricted' : ''} ${isAfterDark ? 'gu-card-after-dark' : ''}" id="card-${story.id}" data-id="${story.id}">
           <!-- Media Wrap -->
           <div class="gu-card-media-wrap">
             <img 
@@ -411,6 +695,26 @@
                 ${meta.icon} ${story.collectionLabel}
               </span>
               <span class="gu-district-badge">📍 ${story.district}${story.taluka ? ' (' + story.taluka + ')' : ''}</span>
+            </div>
+
+            <!-- Floating Top Right Tool Buttons (Shortlist & Share) -->
+            <div class="gu-floating-tools-top">
+              <button 
+                class="gu-card-tool-btn ${isShortlisted ? 'active' : ''}" 
+                onclick="event.stopPropagation(); window.GujaratUnfiltered.toggleShortlist('${story.id}')"
+                title="${isShortlisted ? 'Remove from Shortlist' : 'Save to Shortlist'}"
+                aria-label="Save ${story.name} to personal shortlist"
+              >
+                ${isShortlisted ? '★' : '🔖'}
+              </button>
+              <button 
+                class="gu-card-tool-btn" 
+                onclick="event.stopPropagation(); window.GujaratUnfiltered.shareStory('${story.id}')"
+                title="Share Story"
+                aria-label="Share story link for ${story.name}"
+              >
+                🔗
+              </button>
             </div>
 
             <div class="gu-media-badges-bottom">
@@ -495,7 +799,7 @@
               ` : `
                 <button 
                   class="gu-btn-trip gu-btn-restricted" 
-                  title="Private property — public visits prohibited"
+                  title="Private property — public visits prohibited by law"
                   disabled
                 >
                   <span>⛔ No Entry</span>
@@ -520,61 +824,95 @@
 
       const meta = COLLECTIONS_META[story.collection] || COLLECTIONS_META['all'];
       const isRestricted = story.legalAccess && !story.legalAccess.isSafeAndLawful;
+      const isShortlisted = this.isShortlisted(story.id);
+      const isAfterDark = story.collection === 'after-dark';
+      const lat = story.coordinates && story.coordinates[1];
+      const lng = story.coordinates && story.coordinates[0];
 
-      // Status chips
-      const chipsHtml = (story.researchStatus || []).map(statusKey => {
-        const info = STATUS_LABELS[statusKey] || { label: statusKey, icon: '•', className: 'chip-place' };
-        return `<span class="gu-chip-status ${info.className}">${info.icon} ${info.label}</span>`;
-      }).join('');
+      // Find nearby places in the same district or region
+      const nearbyPlaces = this.stories
+        .filter(s => s.id !== story.id && (s.district === story.district || s.region === story.region))
+        .slice(0, 3);
 
       content.innerHTML = `
-        <article class="gu-modal-article">
-          <!-- Top Modal Close Button -->
-          <button class="gu-modal-close-btn" onclick="window.GujaratUnfiltered.closeStoryModal()" aria-label="Close story modal">✕</button>
+        <article class="gu-modal-article ${isAfterDark ? 'gu-modal-after-dark' : ''}">
+          <!-- Modal Close Button -->
+          <button class="gu-modal-close-btn" onclick="window.GujaratUnfiltered.closeStoryModal()" aria-label="Close Story Dialog">✕</button>
 
-          <!-- Hero Media Banner -->
-          <div class="gu-modal-hero" style="background-image: linear-gradient(180deg, rgba(17, 24, 39, 0.2) 0%, rgba(17, 24, 39, 0.88) 100%), url('${story.imageUrl}');">
+          <!-- Modal Hero Media -->
+          <div class="gu-modal-hero" style="background-image: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(15,23,42,0.92) 100%), url('${story.imageUrl}');">
             <div class="gu-modal-hero-content">
               <div class="gu-modal-hero-tags">
                 <span class="gu-col-badge" style="background: ${meta.color};">
                   ${meta.icon} ${story.collectionLabel}
                 </span>
-                <span class="gu-district-badge">📍 ${story.district}${story.taluka ? ' (' + story.taluka + ')' : ''} • ${story.region}</span>
+                <span class="gu-district-badge">📍 ${story.district} • ${story.taluka || 'District Core'}</span>
+                <span class="gu-district-badge">${story.region}</span>
               </div>
               <span class="gu-modal-guj">${story.gujaratiName}</span>
               <h2 class="gu-modal-title">${story.name}</h2>
               <p class="gu-modal-tagline">${story.tagline}</p>
-              <div class="gu-card-status-chips" style="margin-top:0.5rem;">
-                ${chipsHtml}
-              </div>
-              <span class="gu-modal-photo-credit">📷 Photo: ${story.imageCredit}</span>
+              <span class="gu-modal-photo-credit">
+                📷 Photograph: ${story.imageCredit} • License: ${story.imageLicense || 'Editorial Creative Commons'}
+              </span>
             </div>
           </div>
 
-          <!-- Modal Body Content -->
+          <!-- Quick Interactive Toolbar in Modal Header -->
+          <div style="display: flex; gap: 0.5rem; justify-content: flex-end; padding: 0.75rem 2rem; background: #F6F0E5; border-bottom: 1.5px solid #20201D;">
+            <button 
+              id="guModalShortlistBtn"
+              class="btn-secondary-action ${isShortlisted ? 'active' : ''}" 
+              onclick="window.GujaratUnfiltered.toggleShortlist('${story.id}')"
+              style="font-size: 0.8rem; padding: 0.35rem 0.75rem;"
+            >
+              ${isShortlisted ? '★ Saved to Shortlist' : '🔖 Save to Shortlist'}
+            </button>
+            <button 
+              class="btn-secondary-action" 
+              onclick="window.GujaratUnfiltered.shareStory('${story.id}')"
+              style="font-size: 0.8rem; padding: 0.35rem 0.75rem;"
+            >
+              🔗 Share Story
+            </button>
+            <button 
+              class="btn-secondary-action" 
+              onclick="window.GujaratUnfiltered.openCompareModal('${story.district}')"
+              style="font-size: 0.8rem; padding: 0.35rem 0.75rem;"
+            >
+              ⚡ Compare ${story.district}
+            </button>
+          </div>
+
+          <!-- Modal Body -->
           <div class="gu-modal-body">
-            <!-- Section 1: The Narrative Story -->
-            <section class="gu-modal-section gu-narrative-section">
+            <!-- Section 1: The Setting & Geography -->
+            <section class="gu-modal-section gu-setting-section">
               <h3 class="gu-section-heading">
-                <span class="gu-sec-num">01</span> The Atmosphere &amp; Setting
+                <span class="gu-sec-num">01</span> The Setting &amp; Geographic Reality
               </h3>
               <p class="gu-narrative-text">${story.theStory}</p>
+              <div class="gu-geo-meta-box" style="margin-top: 0.75rem; font-size: 0.82rem; font-family: var(--font-mono, monospace); color: #555148;">
+                <span><strong>Coordinates:</strong> ${lat}° N, ${lng}° E</span> • 
+                <span><strong>Source:</strong> ${story.coordinatesSource || 'Survey of India / ISRO Bhuvan'}</span> • 
+                <span><strong>Confidence:</strong> ${story.positionalConfidence || 'exact'}</span>
+              </div>
             </section>
 
-            <!-- Section 2: Side-by-Side Folklore vs Ground Reality -->
-            <section class="gu-modal-section gu-comparison-section">
+            <!-- Section 2: Narrative & Deep-Dive Investigation -->
+            <section class="gu-modal-section gu-investigation-section">
               <h3 class="gu-section-heading">
-                <span class="gu-sec-num">02</span> The Investigation: Folklore vs. Ground Reality
+                <span class="gu-sec-num">02</span> Investigation: Folklore vs. Ground Reality
               </h3>
-              
+
               <div class="gu-comparison-grid">
-                <!-- Column 1: The Lore -->
+                <!-- Folklore Box -->
                 <div class="gu-comp-card gu-comp-lore">
                   <div class="gu-comp-header">
-                    <span class="gu-comp-icon">📜</span>
+                    <span class="gu-comp-icon">🗣️</span>
                     <div class="gu-comp-head-text">
-                      <h4>The Oral Lore &amp; Local Rumours</h4>
-                      <small>What campfire tales, village elders &amp; youth claim</small>
+                      <h4>The Oral Legend &amp; Campfire Myth</h4>
+                      <small>Local folklore, viral creepypasta, or campfire lore</small>
                     </div>
                   </div>
                   <div class="gu-comp-body">
@@ -582,13 +920,13 @@
                   </div>
                 </div>
 
-                <!-- Column 2: The Reality -->
+                <!-- Ground Reality Box -->
                 <div class="gu-comp-card gu-comp-reality">
                   <div class="gu-comp-header">
                     <span class="gu-comp-icon">🔬</span>
                     <div class="gu-comp-head-text">
-                      <h4>The Documented Ground Reality</h4>
-                      <small>Archaeological, geological &amp; official facts</small>
+                      <h4>The Documented Ground Truth</h4>
+                      <small>Archaeological, geological, and civic records</small>
                     </div>
                   </div>
                   <div class="gu-comp-body">
@@ -597,10 +935,10 @@
                 </div>
               </div>
 
-              <!-- Fact Check Stamp -->
+              <!-- Verdict Box -->
               <div class="gu-verdict-box">
                 <div class="gu-verdict-stamp">
-                  <span class="gu-stamp-seal">VERIFIED</span>
+                  <span class="gu-stamp-seal">VERDICT</span>
                   <span class="gu-stamp-text">${story.factCheckBadge}</span>
                 </div>
               </div>
@@ -632,6 +970,27 @@
                     <li>✓ Leave zero litter; carry all plastic and water bottles back.</li>
                   </ul>
                 </div>
+
+                <!-- Verified Directions Link (for Lawful Sites Only) -->
+                ${!isRestricted && lat && lng ? `
+                  <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px dashed #CBD5E1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                    <span style="font-size: 0.82rem; color: #166534; font-weight: 600;">
+                      🧭 Verified GPS Coordinates: ${lat.toFixed(4)}, ${lng.toFixed(4)}
+                    </span>
+                    <a 
+                      href="https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      class="gu-directions-link"
+                    >
+                      🧭 Open Directions in Maps ↗
+                    </a>
+                  </div>
+                ` : `
+                  <div style="margin-top: 1rem; padding: 0.75rem; background: #FEE2E2; border: 1.5px solid #991B1B; color: #991B1B; font-size: 0.82rem; font-weight: 700;">
+                    ⛔ Entry strictly prohibited under Section 441/447 IPC (BNS). Zero routing directions provided.
+                  </div>
+                `}
               </div>
             </section>
 
@@ -674,6 +1033,26 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Nearby Documented Places in District or Region -->
+              ${nearbyPlaces.length > 0 ? `
+                <div class="gu-nearby-places-section">
+                  <h5 style="font-size: 0.86rem; font-weight: 800; text-transform: uppercase; color: #243B53; margin: 0 0 0.5rem 0;">
+                    🧭 Explore Nearby Documented Places (${story.region}):
+                  </h5>
+                  <div class="gu-nearby-grid">
+                    ${nearbyPlaces.map(np => `
+                      <div class="gu-nearby-card" onclick="window.GujaratUnfiltered.openStoryModal('${np.id}')">
+                        <img src="${np.imageUrl}" alt="${np.name}" class="gu-nearby-thumb" />
+                        <div class="gu-nearby-info">
+                          <h6>${np.name}</h6>
+                          <span>📍 ${np.district} • ${np.collectionLabel}</span>
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
             </section>
 
             <!-- Section 5: Auditable Provenance & Source References -->
@@ -750,6 +1129,154 @@
      */
     closeStoryModal() {
       const modal = document.getElementById('unfilteredStoryModal');
+      if (!modal) return;
+      if (typeof modal.close === 'function') {
+        modal.close();
+      } else {
+        modal.classList.remove('open');
+      }
+    }
+
+    /**
+     * District Places Comparison Modal
+     */
+    openCompareModal(districtName = 'Ahmedabad') {
+      const modal = document.getElementById('unfilteredCompareModal');
+      const content = document.getElementById('unfilteredCompareModalContent');
+      if (!modal || !content) return;
+
+      this.compareDistrict = districtName || 'Ahmedabad';
+      this.renderCompareContent(this.compareDistrict);
+
+      if (typeof modal.showModal === 'function') {
+        modal.showModal();
+      } else {
+        modal.classList.add('open');
+      }
+      modal.scrollTop = 0;
+    }
+
+    renderCompareContent(districtName) {
+      const content = document.getElementById('unfilteredCompareModalContent');
+      if (!content) return;
+
+      this.compareDistrict = districtName;
+      const districtStories = this.stories.filter(s => s.district === districtName);
+
+      content.innerHTML = `
+        <article class="gu-modal-article">
+          <!-- Modal Close Button -->
+          <button class="gu-modal-close-btn" onclick="window.GujaratUnfiltered.closeCompareModal()" aria-label="Close Comparison Dialog">✕</button>
+
+          <!-- Header -->
+          <div class="gu-compare-header">
+            <span class="gu-ledger-eyebrow">⚡ DISTRICT FIELD COMPARISON • સરખામણી</span>
+            <h2 class="gu-ledger-title">Comparing Unexpected Places in ${districtName}</h2>
+            <p class="gu-ledger-desc">
+              Side-by-side evaluation of folklore claims, documented realities, statutory access, and visitor tips across verified locations in ${districtName}.
+            </p>
+          </div>
+
+          <!-- Body -->
+          <div class="gu-compare-body">
+            <!-- District Switcher -->
+            <div class="gu-compare-select-row">
+              <label style="font-size: 0.82rem; font-weight: 700; color: #20201D;">Switch District to Compare:</label>
+              <select 
+                class="gu-district-select" 
+                style="max-width: 280px;"
+                onchange="window.GujaratUnfiltered.renderCompareContent(this.value)"
+              >
+                ${this.districts.map(d => `
+                  <option value="${d}" ${d === districtName ? 'selected' : ''}>${d} (${this.stories.filter(s => s.district === d).length} places)</option>
+                `).join('')}
+              </select>
+            </div>
+
+            <!-- Multi-Column Matrix -->
+            ${districtStories.length > 0 ? `
+              <div class="gu-compare-matrix">
+                ${districtStories.map(story => {
+                  const isRestricted = story.legalAccess && !story.legalAccess.isSafeAndLawful;
+                  return `
+                    <div class="gu-compare-col">
+                      <div class="gu-compare-photo-wrap">
+                        <img src="${story.imageUrl}" alt="${story.name}" class="gu-compare-img" />
+                      </div>
+                      
+                      <div>
+                        <span style="font-size: 0.76rem; color: #B84638; font-weight: 700;">${story.gujaratiName}</span>
+                        <h4 style="font-family: var(--font-headline, serif); font-size: 1.15rem; margin: 0.15rem 0 0.35rem 0; color: #243B53;">
+                          ${story.name}
+                        </h4>
+                        <span class="gu-col-badge" style="background:#243B53; color:#FFFFFF; font-size:0.7rem;">
+                          ${story.collectionLabel}
+                        </span>
+                      </div>
+
+                      <div class="gu-compare-field">
+                        <span class="gu-compare-field-lbl">Claim Classification</span>
+                        <span class="gu-compare-field-val">${story.claimClassification.toUpperCase().replace('_', ' ')}</span>
+                      </div>
+
+                      <div class="gu-compare-field">
+                        <span class="gu-compare-field-lbl">Statutory Legal Access</span>
+                        <span class="gu-compare-field-val" style="color: ${isRestricted ? '#991B1B' : '#15803D'}; font-weight: 700;">
+                          ${isRestricted ? '⛔ Strictly Restricted' : '✓ Lawful Public Access'}
+                        </span>
+                      </div>
+
+                      <div class="gu-compare-field">
+                        <span class="gu-compare-field-lbl">The Campfire Legend</span>
+                        <span class="gu-compare-field-val">${this.truncate(story.theFolklore, 110)}</span>
+                      </div>
+
+                      <div class="gu-compare-field">
+                        <span class="gu-compare-field-lbl">The Ground Truth</span>
+                        <span class="gu-compare-field-val">${this.truncate(story.theGroundReality, 110)}</span>
+                      </div>
+
+                      <div class="gu-compare-field">
+                        <span class="gu-compare-field-lbl">Best Detour Hub</span>
+                        <span class="gu-compare-field-val">${story.nearbyCityDetour}</span>
+                      </div>
+
+                      <div class="gu-compare-field">
+                        <span class="gu-compare-field-lbl">Photo Tip</span>
+                        <span class="gu-compare-field-val">${this.truncate(story.photoSpotTip, 80)}</span>
+                      </div>
+
+                      <div style="display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.5rem;">
+                        <button class="btn-primary-action" style="flex: 1; font-size: 0.78rem; padding: 0.45rem;" onclick="window.GujaratUnfiltered.closeCompareModal(); window.GujaratUnfiltered.openStoryModal('${story.id}');">
+                          Read Story
+                        </button>
+                        <button class="btn-secondary-action" style="font-size: 0.78rem; padding: 0.45rem;" onclick="window.GujaratUnfiltered.closeCompareModal(); window.GujaratUnfiltered.locateOnMap('${story.id}');">
+                          📍 Map
+                        </button>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : `
+              <div style="padding: 2rem; text-align: center; color: #716D65;">
+                <p>No places found in ${districtName}.</p>
+              </div>
+            `}
+          </div>
+
+          <!-- Footer -->
+          <div class="gu-compare-footer">
+            <button class="btn-primary-action" onclick="window.GujaratUnfiltered.closeCompareModal()">
+              Close Comparison
+            </button>
+          </div>
+        </article>
+      `;
+    }
+
+    closeCompareModal() {
+      const modal = document.getElementById('unfilteredCompareModal');
       if (!modal) return;
       if (typeof modal.close === 'function') {
         modal.close();

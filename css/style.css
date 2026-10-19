@@ -29057,3 +29057,472 @@ body.theme-light .segment-btn.active {
   background: #1E293B;
   border-color: #64748B;
 }
+
+/* ======================================================================
+   GUJARAT UNFILTERED — PHASE 3 EDITORIAL EXPERIENCE ENHANCEMENTS
+   ====================================================================== */
+
+/* 1. EDITORIAL SPOTLIGHT HERO */
+.gu-spotlight-hero {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.75rem;
+  background: #FDFBF7;
+  border: 2.5px solid #20201D;
+  box-shadow: 6px 6px 0px #20201D;
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.gu-spotlight-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #B84638, #E2AE48, #243B53);
+}
+
+.gu-spotlight-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.gu-spotlight-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.gu-spotlight-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.gu-spotlight-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #E2AE48;
+  color: #20201D;
+  padding: 3px 8px;
+  border: 1.5px solid #20201D;
+  box-shadow: 2px 2px 0px #20201D;
+}
+
+.gu-spotlight-district-pill {
+  font-size: 0.76rem;
+  font-weight: 700;
+  background: #F6F0E5;
+  color: #243B53;
+  padding: 3px 8px;
+  border: 1px solid #20201D;
+  border-radius: 3px;
+}
+
+.gu-spotlight-guj {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #B84638;
+}
+
+.gu-spotlight-title {
+  font-family: var(--font-headline, "Playfair Display", Georgia, serif);
+  font-size: 1.95rem;
+  font-weight: 800;
+  line-height: 1.18;
+  color: #243B53;
+  margin: 0;
+}
+
+.gu-spotlight-tagline {
+  font-size: 0.96rem;
+  line-height: 1.5;
+  color: #555148;
+  margin: 0;
+  font-style: italic;
+}
+
+.gu-spotlight-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin: 0.25rem 0;
+}
+
+.gu-spotlight-box {
+  padding: 0.75rem 0.9rem;
+  border: 1.5px solid #20201D;
+  box-shadow: 2px 2px 0px #20201D;
+  background: #FFFFFF;
+}
+
+.gu-spotlight-box-lore {
+  border-left: 4px solid #7C3AED;
+}
+
+.gu-spotlight-box-reality {
+  border-left: 4px solid #15803D;
+}
+
+.gu-spotlight-box-header {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+  color: #716D65;
+}
+
+.gu-spotlight-box-text {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #20201D;
+  margin: 0;
+}
+
+.gu-spotlight-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.gu-spotlight-media-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.gu-spotlight-img-box {
+  position: relative;
+  width: 100%;
+  height: 270px;
+  border: 2px solid #20201D;
+  box-shadow: 4px 4px 0px #20201D;
+  overflow: hidden;
+  background: #EAE0D0;
+}
+
+.gu-spotlight-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gu-spotlight-caption {
+  font-size: 0.74rem;
+  color: #716D65;
+  font-style: italic;
+  display: flex;
+  justify-content: space-between;
+}
+
+.gu-spotlight-switcher-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.gu-spotlight-switch-btn {
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  background: #FFFFFF;
+  border: 1.5px solid #20201D;
+  box-shadow: 2px 2px 0px #20201D;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gu-spotlight-switch-btn.active,
+.gu-spotlight-switch-btn:hover {
+  background: #E2AE48;
+  transform: translate(-1px, -1px);
+}
+
+/* 2. AFTER DARK RESTRAINED VISUAL LANGUAGE */
+.gu-card-after-dark {
+  background: #1E293B !important;
+  color: #F8FAFC !important;
+  border-color: #0F172A !important;
+  box-shadow: 4px 4px 0px #0F172A !important;
+}
+
+.gu-card-after-dark .gu-card-titles .gu-gujarati-name {
+  color: #E2AE48 !important;
+}
+
+.gu-card-after-dark .gu-card-name {
+  color: #F8FAFC !important;
+}
+
+.gu-card-after-dark .gu-card-tagline {
+  color: #CBD5E1 !important;
+}
+
+.gu-card-after-dark .gu-teaser-box {
+  background: #0F172A !important;
+  border-color: #334155 !important;
+}
+
+.gu-card-after-dark .gu-teaser-snippet {
+  color: #E2E8F0 !important;
+}
+
+.gu-card-after-dark .gu-teaser-tag {
+  color: #FCD34D !important;
+}
+
+.gu-card-after-dark .gu-legal-banner {
+  background: #0F172A !important;
+  border-color: #334155 !important;
+}
+
+.gu-card-after-dark .gu-safety-rules {
+  color: #CBD5E1 !important;
+}
+
+.gu-card-after-dark .gu-card-body {
+  background: #1E293B !important;
+}
+
+/* 3. SHORTLIST & SHARE BUTTONS */
+.gu-card-tool-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1.5px solid #20201D;
+  box-shadow: 2px 2px 0px #20201D;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+  color: #20201D;
+}
+
+.gu-card-tool-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #20201D;
+}
+
+.gu-card-tool-btn.active {
+  background: #E2AE48;
+}
+
+.gu-floating-tools-top {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 4;
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* 4. DISTRICT COMPARISON MODAL */
+.gu-compare-modal-inner {
+  max-width: 1060px;
+  background: #F6F0E5;
+  border: 2.5px solid #20201D;
+  box-shadow: 6px 6px 0px #20201D;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.gu-compare-header {
+  padding: 1.5rem 1.75rem 1.25rem;
+  background: #243B53;
+  color: #F8FAFC;
+  border-bottom: 2.5px solid #20201D;
+}
+
+.gu-compare-body {
+  padding: 1.5rem 1.75rem;
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
+.gu-compare-select-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.gu-compare-matrix {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.gu-compare-col {
+  background: #FFFFFF;
+  border: 2px solid #20201D;
+  box-shadow: 3px 3px 0px #20201D;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.gu-compare-photo-wrap {
+  height: 160px;
+  border: 1.5px solid #20201D;
+  overflow: hidden;
+  position: relative;
+}
+
+.gu-compare-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gu-compare-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.84rem;
+  border-bottom: 1px dashed #EAE0D0;
+  padding-bottom: 0.5rem;
+}
+
+.gu-compare-field-lbl {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #716D65;
+}
+
+.gu-compare-field-val {
+  color: #20201D;
+  line-height: 1.35;
+}
+
+.gu-compare-footer {
+  padding: 1rem 1.75rem;
+  background: #EAE0D0;
+  border-top: 2.5px solid #20201D;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 5. EXPLORE NEARBY PLACES IN MODAL */
+.gu-nearby-places-section {
+  border-top: 1.5px solid #EAE0D0;
+  padding-top: 1.25rem;
+  margin-top: 1rem;
+}
+
+.gu-nearby-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+.gu-nearby-card {
+  display: flex;
+  gap: 0.65rem;
+  background: #FAF8F5;
+  border: 1.5px solid #20201D;
+  box-shadow: 2px 2px 0px #20201D;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  align-items: center;
+}
+
+.gu-nearby-card:hover {
+  background: #FFFFFF;
+  transform: translate(-1px, -1px);
+}
+
+.gu-nearby-thumb {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border: 1px solid #20201D;
+  flex-shrink: 0;
+}
+
+.gu-nearby-info h6 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin: 0 0 0.15rem 0;
+  color: #243B53;
+  line-height: 1.2;
+}
+
+.gu-nearby-info span {
+  font-size: 0.7rem;
+  color: #716D65;
+}
+
+/* 6. DIRECTIONS & VISITOR PROTECTION BUTTONS */
+.gu-directions-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.15rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  background: #15803D;
+  color: #FFFFFF;
+  border: 2px solid #20201D;
+  box-shadow: 2px 2px 0px #20201D;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gu-directions-link:hover {
+  background: #166534;
+  transform: translate(-1px, -1px);
+  color: #FFFFFF;
+}
+
+.gu-btn-compare-district {
+  cursor: pointer;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #FFFFFF;
+  border: 2px solid #20201D;
+  box-shadow: 2px 2px 0px #20201D;
+  transition: all 0.15s ease;
+}
+
+.gu-btn-compare-district:hover {
+  background: #E2AE48;
+  transform: translate(-1px, -1px);
+}
+
+@media (max-width: 900px) {
+  .gu-spotlight-hero {
+    grid-template-columns: 1fr;
+  }
+  .gu-spotlight-split {
+    grid-template-columns: 1fr;
+  }
+}
+
