@@ -109,6 +109,13 @@
   --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.45, 0.64, 1);
   --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Phase 5 Calibrated Motion Tokens */
+  --dur-press: 120ms;
+  --dur-control: 200ms;
+  --ease-press: cubic-bezier(0.2, 0, 0, 1);
+  --ease-stepwell: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring-subtle: cubic-bezier(0.34, 1.25, 0.64, 1);
 }
 
 * {
@@ -25535,5 +25542,349 @@ input[type="date"].tr-date-input::-webkit-calendar-picker-indicator,
   }
   .tr-snap-metric:last-child {
     border-bottom: none;
+  }
+}
+
+/* ==========================================================================
+   GUJARAT INFRAMAP — PHASE 5: PREMIUM MOTION & INTERACTION DESIGN
+   Architectural, Editorial, and Responsive Interactions
+   ========================================================================== */
+
+/* 1. Subtle Tactile Button & Control Press Feedback (100–160 ms) */
+.btn-primary-action,
+.btn-secondary-action,
+.btn-outline-action,
+.tr-action-btn,
+.tr-segmented-btn,
+.tr-empty-chip,
+.tr-toggle-all-btn,
+.dest-card-btn,
+.nav-tab,
+.dest-btn-map,
+.dest-btn-feasibility,
+.dest-btn-details,
+.pview-back-btn,
+.theme-toggle-btn,
+.layers-btn {
+  transition: transform var(--dur-press) var(--ease-press),
+              box-shadow var(--dur-press) var(--ease-press),
+              background var(--dur-control) ease,
+              border-color var(--dur-control) ease,
+              color var(--dur-control) ease !important;
+}
+
+.btn-primary-action:active,
+.btn-secondary-action:active,
+.btn-outline-action:active,
+.tr-action-btn:active,
+.tr-segmented-btn:active,
+.tr-empty-chip:active,
+.tr-toggle-all-btn:active,
+.dest-card-btn:active,
+.dest-btn-map:active,
+.dest-btn-feasibility:active,
+.dest-btn-details:active,
+.pview-back-btn:active,
+.nav-tab:active {
+  transform: scale(0.975) translateY(1px) !important;
+}
+
+/* 2. Fluid Destination-Card Selection & Elevation (160–240 ms) */
+.tr-pick-card {
+  transition: transform var(--dur-control) var(--ease-editorial),
+              border-color var(--dur-control) ease,
+              box-shadow var(--dur-control) var(--ease-editorial),
+              background var(--dur-control) ease !important;
+}
+
+.tr-pick-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: var(--color-madder-red, #B84638) !important;
+  box-shadow: 0 8px 22px rgba(24, 45, 70, 0.1) !important;
+}
+
+.tr-pick-card:active {
+  transform: scale(0.985) translateY(0) !important;
+}
+
+.tr-pick-card.active,
+.tr-pick-card.selected {
+  border-color: var(--color-madder-red, #B84638) !important;
+  box-shadow: 0 10px 24px -4px rgba(184, 70, 56, 0.22), 0 0 0 1.5px var(--color-madder-red, #B84638) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Selected Badge Spring Pop Animation */
+.tr-pick-card.active .tr-pick-check,
+.tr-pick-card.selected .tr-pick-check {
+  display: inline-flex !important;
+  animation: trBadgePop var(--dur-control) var(--ease-spring-subtle) forwards;
+}
+
+@keyframes trBadgePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.65) translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* 3. Responsive Panel Opening & Staggered Quick Picks Expansion (220–360 ms) */
+.tr-quickpicks-grid.expanding .tr-extra-dest {
+  animation: trExtraCardIn var(--dur-panel) var(--ease-editorial) backwards;
+}
+
+@keyframes trExtraCardIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tr-toggle-all-btn span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: transform var(--dur-control) var(--ease-editorial);
+}
+
+/* Report Outdated Info Dialog Reveal */
+dialog.tr-report-modal-dialog[open] {
+  animation: trModalScaleIn var(--dur-panel) var(--ease-editorial) forwards;
+}
+
+dialog.tr-report-modal-dialog[open]::backdrop {
+  animation: trBackdropFade var(--dur-panel) ease forwards;
+}
+
+@keyframes trModalScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes trBackdropFade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* 4. Signature Effect: Stepwell Geometric Reveal & Coordinated Trip Snapshot Transition */
+.tr-assessment-results.tr-signature-revealing .tr-snapshot-section {
+  animation: trStepwellReveal var(--dur-editorial) var(--ease-stepwell) forwards;
+  will-change: clip-path, transform, opacity;
+}
+
+@keyframes trStepwellReveal {
+  0% {
+    opacity: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    transform: translateY(14px);
+  }
+  38% {
+    opacity: 0.88;
+    clip-path: polygon(0 0, 100% 0, 100% 68%, 0 68%);
+  }
+  100% {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    transform: translateY(0);
+  }
+}
+
+/* Architectural Hairline Scan Sweep across Top Cantilever */
+.tr-assessment-results.tr-signature-revealing .tr-snapshot-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--color-turmeric, #E2AE48) 50%, transparent 100%);
+  animation: trArchitecturalScan var(--dur-editorial) var(--ease-stepwell) forwards;
+  pointer-events: none;
+  z-index: 4;
+}
+
+@keyframes trArchitecturalScan {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Jharokha Image Subtle Focal Settle */
+.tr-assessment-results.tr-signature-revealing .tr-jharokha-img {
+  animation: trJharokhaSettle var(--dur-editorial) var(--ease-editorial) forwards;
+}
+
+@keyframes trJharokhaSettle {
+  0% {
+    transform: scale(1.04);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Metric Deck Staggered Rise */
+.tr-assessment-results.tr-signature-revealing .tr-snap-metric {
+  animation: trMetricSlideIn 320ms var(--ease-editorial) backwards;
+}
+
+.tr-assessment-results.tr-signature-revealing .tr-snap-metric:nth-child(1) { animation-delay: 50ms; }
+.tr-assessment-results.tr-signature-revealing .tr-snap-metric:nth-child(2) { animation-delay: 95ms; }
+.tr-assessment-results.tr-signature-revealing .tr-snap-metric:nth-child(3) { animation-delay: 140ms; }
+.tr-assessment-results.tr-signature-revealing .tr-snap-metric:nth-child(4) { animation-delay: 185ms; }
+
+@keyframes trMetricSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 4 Journey Stages Cascading Entrance */
+.tr-assessment-results.tr-signature-revealing .tr-stage-card {
+  animation: trStageCascade 340ms var(--ease-editorial) backwards;
+}
+
+.tr-assessment-results.tr-signature-revealing .tr-stage-card:nth-child(1) { animation-delay: 80ms; }
+.tr-assessment-results.tr-signature-revealing .tr-stage-card:nth-child(2) { animation-delay: 130ms; }
+.tr-assessment-results.tr-signature-revealing .tr-stage-card:nth-child(3) { animation-delay: 180ms; }
+.tr-assessment-results.tr-signature-revealing .tr-stage-card:nth-child(4) { animation-delay: 230ms; }
+
+@keyframes trStageCascade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Bandhani Dotted Timeline Track Sweep */
+.tr-assessment-results.tr-signature-revealing .tr-stages-grid::before {
+  animation: trBandhaniTrackIn 400ms var(--ease-editorial) backwards;
+  animation-delay: 140ms;
+}
+
+@keyframes trBandhaniTrackIn {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.7);
+    transform-origin: left center;
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+
+/* 5. Clear Visual Feedback on Input & Mode Changes */
+.tr-snap-metric.tr-metric-updated {
+  animation: trMetricPulse 320ms var(--ease-editorial);
+}
+
+@keyframes trMetricPulse {
+  0% {
+    background-color: transparent;
+  }
+  30% {
+    background-color: rgba(49, 91, 214, 0.08);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.tr-stage-card.tr-stage-updated {
+  animation: trStagePulse 320ms var(--ease-editorial);
+}
+
+@keyframes trStagePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(49, 91, 214, 0.3);
+  }
+  40% {
+    box-shadow: 0 0 0 3px rgba(49, 91, 214, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(49, 91, 214, 0);
+  }
+}
+
+.tr-date-alerts-section.tr-alert-updated {
+  animation: trAlertPulse 320ms var(--ease-editorial);
+}
+
+@keyframes trAlertPulse {
+  0% { transform: translateY(0); }
+  35% { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
+}
+
+/* 6. Comprehensive Accessibility & Reduced Motion Handling */
+@media (prefers-reduced-motion: reduce) {
+  .tr-assessment-results.tr-signature-revealing .tr-snapshot-section,
+  .tr-assessment-results.tr-signature-revealing .tr-jharokha-img,
+  .tr-assessment-results.tr-signature-revealing .tr-snap-metric,
+  .tr-assessment-results.tr-signature-revealing .tr-stage-card,
+  .tr-assessment-results.tr-signature-revealing .tr-stages-grid::before,
+  .tr-pick-check,
+  .tr-quickpicks-grid.expanding .tr-extra-dest,
+  dialog.tr-report-modal-dialog[open],
+  .tr-snap-metric.tr-metric-updated,
+  .tr-stage-card.tr-stage-updated,
+  .tr-date-alerts-section.tr-alert-updated {
+    animation: none !important;
+    clip-path: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+
+  .tr-assessment-results.tr-signature-revealing .tr-snapshot-section::after {
+    display: none !important;
+  }
+
+  .btn-primary-action:active,
+  .btn-secondary-action:active,
+  .tr-action-btn:active,
+  .tr-segmented-btn:active,
+  .tr-empty-chip:active,
+  .tr-toggle-all-btn:active,
+  .dest-card-btn:active,
+  .nav-tab:active,
+  .tr-pick-card:hover,
+  .tr-pick-card:active {
+    transform: none !important;
   }
 }

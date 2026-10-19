@@ -240,15 +240,25 @@
     toggleAllQuickPicks: function () {
       this.quickPicksExpanded = !this.quickPicksExpanded;
       const btn = document.getElementById("trToggleAllDestBtn");
+      const grid = document.getElementById("trQuickPicksGrid");
       if (btn) {
         btn.setAttribute("aria-expanded", this.quickPicksExpanded ? "true" : "false");
         btn.innerHTML = this.quickPicksExpanded ? 
           `<span>Show curated selection (6) ↑</span>` : 
           `<span>Explore all 14 audited places ↓</span>`;
       }
+      if (grid) {
+        grid.classList.toggle("expanding", this.quickPicksExpanded);
+      }
       const extras = document.querySelectorAll(".tr-extra-dest");
-      extras.forEach(card => {
-        card.classList.toggle("hidden", !this.quickPicksExpanded);
+      extras.forEach((card, idx) => {
+        if (this.quickPicksExpanded) {
+          card.classList.remove("hidden");
+          card.style.animationDelay = `${idx * 28}ms`;
+        } else {
+          card.classList.add("hidden");
+          card.style.animationDelay = "";
+        }
       });
     },
 
@@ -295,6 +305,20 @@
         originSelect.addEventListener("change", (e) => {
           this.activeOrigin = e.target.value || "Ahmedabad";
           this.renderAssessment();
+
+          // Phase 5: Feedback on recalculated metrics
+          const metric1El = document.querySelector(".tr-snap-metric:nth-child(1)");
+          const metric2El = document.querySelector(".tr-snap-metric:nth-child(2)");
+          if (metric1El) {
+            metric1El.classList.remove("tr-metric-updated");
+            void metric1El.offsetWidth;
+            metric1El.classList.add("tr-metric-updated");
+          }
+          if (metric2El) {
+            metric2El.classList.remove("tr-metric-updated");
+            void metric2El.offsetWidth;
+            metric2El.classList.add("tr-metric-updated");
+          }
         });
       }
 
@@ -312,6 +336,12 @@
         dateInput.addEventListener("change", (e) => {
           this.activeDate = e.target.value ? new Date(e.target.value) : null;
           this.renderAssessment();
+          const alertsEl = document.querySelector(".tr-date-alerts-section");
+          if (alertsEl) {
+            alertsEl.classList.remove("tr-alert-updated");
+            void alertsEl.offsetWidth;
+            alertsEl.classList.add("tr-alert-updated");
+          }
         });
       }
 
@@ -417,9 +447,34 @@
 
       this.renderAssessment();
       this.updateMapVisualization();
+
+      // Phase 5 Signature Effect: Restrained geometric reveal & coordinated transition
+      if (dest) {
+        const resultsEl = document.querySelector(".tr-assessment-results");
+        if (resultsEl) {
+          resultsEl.classList.remove("tr-signature-revealing");
+          void resultsEl.offsetWidth; // Force reflow for repeatable transitions
+          resultsEl.classList.add("tr-signature-revealing");
+
+          // Coordinated smooth viewport transition into snapshot without jarring jumps
+          const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (!prefersReduced) {
+            const snapshotEl = resultsEl.querySelector(".tr-snapshot-section");
+            const container = document.getElementById("planVisitView");
+            if (snapshotEl && container) {
+              const rect = snapshotEl.getBoundingClientRect();
+              if (rect.top > window.innerHeight * 0.75 || rect.top < 70) {
+                const targetScroll = container.scrollTop + rect.top - 24;
+                container.scrollTo({ top: targetScroll, behavior: "smooth" });
+              }
+            }
+          }
+        }
+      }
     },
 
     setMode: function (mode) {
+      if (this.activeMode === mode) return;
       this.activeMode = mode || "public";
       document.querySelectorAll(".tr-segmented-btn, .tr-mode-pill").forEach(p => {
         const isMatch = p.getAttribute("data-mode") === this.activeMode;
@@ -427,6 +482,20 @@
         p.setAttribute("aria-checked", isMatch ? "true" : "false");
       });
       this.renderAssessment();
+
+      // Phase 5: Clear visual feedback when changing transport mode
+      const timeMetricEl = document.querySelector(".tr-snap-metric:nth-child(2)");
+      const stage1El = document.querySelector(".tr-stage-1");
+      if (timeMetricEl) {
+        timeMetricEl.classList.remove("tr-metric-updated");
+        void timeMetricEl.offsetWidth;
+        timeMetricEl.classList.add("tr-metric-updated");
+      }
+      if (stage1El) {
+        stage1El.classList.remove("tr-stage-updated");
+        void stage1El.offsetWidth;
+        stage1El.classList.add("tr-stage-updated");
+      }
     },
 
     createCatalogFallbackRecord: function (raw) {
@@ -776,7 +845,7 @@
       }
 
       container.innerHTML = `
-        <div class="tr-assessment-results" role="region" aria-label="Trip assessment results">
+        <div class="tr-assessment-results tr-signature-revealing" role="region" aria-label="Trip assessment results">
           <!-- 1. Compact Trip Snapshot with Jharokha Architectural Frame -->
           <section class="tr-snapshot-section" aria-label="Your trip snapshot">
             <div class="tr-snapshot-header">
