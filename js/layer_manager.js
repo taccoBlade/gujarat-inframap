@@ -1003,6 +1003,15 @@
       document.body.appendChild(legendContainer);
     }
 
+    // Never render or display legend in consumer views outside Explore map
+    const hash = window.location.hash || "";
+    const isNonExplore = document.body.classList.contains("non-explore-active") || 
+                         (hash !== "" && hash !== "#" && !hash.startsWith("#/explore") && !hash.startsWith("#explore"));
+    if (isNonExplore) {
+      legendContainer.classList.add("hidden");
+      legendContainer.style.display = "none";
+    }
+
     const activeLayers = LAYERS.filter(l => layerActiveState[l.key]);
     const z = currentZoom;
 

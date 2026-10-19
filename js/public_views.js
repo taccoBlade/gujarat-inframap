@@ -406,7 +406,10 @@
     const recenterBtn = document.getElementById("recenterMapBtn") || document.querySelector(".floating-recenter-btn");
     const layerDrawer = document.querySelector(".layer-drawer");
     if (mapHud) mapHud.classList.toggle("hidden", !isExplore);
-    if (activeLegend) activeLegend.classList.toggle("hidden", !isExplore);
+    if (activeLegend) {
+      activeLegend.classList.toggle("hidden", !isExplore);
+      activeLegend.style.display = isExplore ? "" : "none";
+    }
     if (recenterBtn) recenterBtn.classList.toggle("hidden", !isExplore);
     if (layerDrawer && !isExplore) layerDrawer.classList.remove("open");
 
