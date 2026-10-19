@@ -2494,6 +2494,21 @@
           const overviewTable = typeof schema.overview === "function" ? renderKeyValueTable(schema.overview(p)) : "";
           const engTable = typeof schema.engineering === "function" ? renderKeyValueTable(schema.engineering(p)) : "";
 
+          let assetPhotoHtml = "";
+          if (window.ImageManifest && window.ImageManifest.getAssetImage) {
+            const assetImg = window.ImageManifest.getAssetImage(p.name || p.id || "");
+            if (assetImg && assetImg.url) {
+              assetPhotoHtml = `
+                <div class="insp-asset-photo-hero" style="margin-bottom: 12px; border-radius: 8px; overflow: hidden; position: relative; border: 1px solid var(--border-color, rgba(255,255,255,0.1)); min-height: 160px; height: 160px; background: #1e293b;">
+                  <img src="${assetImg.url}" alt="${assetImg.alt || p.name || 'Gujarat Asset'}" style="width: 100%; height: 160px; object-fit: cover; display: block;" loading="eager" onerror="this.onerror=null; this.parentElement.style.display='none';" />
+                  <div style="position: absolute; bottom: 6px; right: 8px; background: rgba(15,23,42,0.85); backdrop-filter: blur(4px); color: #FAF6EE; font-size: 0.68rem; padding: 2px 7px; border-radius: 4px; pointer-events: none; border: 1px solid rgba(255,255,255,0.12);">
+                    <span style="color: #E2AE48;">●</span> ${assetImg.credit || "Verified Public Record"}
+                  </div>
+                </div>
+              `;
+            }
+          }
+
           let coordText = "Not Recorded in Statutory Source";
           if (state.currentAsset && state.currentAsset.geometry) {
             const c = state.currentAsset.geometry.coordinates;
@@ -2505,6 +2520,7 @@
           }
 
           html = `
+            ${assetPhotoHtml}
             ${descHtml}
             <div class="insp-section-title">📍 Location & Placement</div>
             <div class="insp-kv-table">

@@ -405,13 +405,18 @@
       container.innerHTML = filtered.map(d => {
         const iconSymbol = this.getCategoryIcon(d.category);
         const iconColor = this.getCategoryColor(d.category);
-        const hasPhoto = d.image && d.image.startsWith("http");
+        const manifestImg = (window.ImageManifest && window.ImageManifest.getDestinationImage) ? window.ImageManifest.getDestinationImage(d.id) : null;
+        const photoUrl = (manifestImg && manifestImg.url) ? manifestImg.url : (d.image && d.image.startsWith("http") ? d.image : "");
+        const altText = (manifestImg && manifestImg.alt) ? manifestImg.alt : d.name;
+        const credit = (manifestImg && manifestImg.credit) ? manifestImg.credit : "";
+        const license = (manifestImg && manifestImg.license) ? manifestImg.license : "";
+        const hasPhoto = Boolean(photoUrl);
 
         return `
           <article class="destination-card" id="dest-card-${d.id}">
             <div class="dest-card-image-wrap">
               ${hasPhoto ? `
-                <img src="${this.escapeHtml(d.image)}" alt="${this.escapeHtml(d.name)}" class="dest-card-img" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'dest-img-placeholder\\' style=\\'background: linear-gradient(135deg, ${iconColor}22, #f1f5f9); height: 160px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;\\'>${iconSymbol}</div>';">
+                <img src="${this.escapeHtml(photoUrl)}" alt="${this.escapeHtml(altText)}" class="dest-card-img" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'dest-img-placeholder\\' style=\\'background: linear-gradient(135deg, ${iconColor}22, #f1f5f9); height: 160px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;\\'>${iconSymbol}</div>';">
               ` : `
                 <div class="dest-img-placeholder" style="background: linear-gradient(135deg, ${iconColor}22, #f1f5f9); height: 160px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">
                   ${iconSymbol}
@@ -420,6 +425,11 @@
               <div class="dest-card-floating-badge" style="background: rgba(15, 23, 42, 0.85); color: #fff; backdrop-filter: blur(4px);">
                 <span>${iconSymbol} ${this.escapeHtml(d.categoryLabel)}</span>
               </div>
+              ${credit ? `
+                <div class="dest-card-credit-pill" title="${this.escapeHtml(credit)} • ${this.escapeHtml(license)}">
+                  <span class="attribution-dot">●</span> ${this.escapeHtml(credit)}
+                </div>
+              ` : ''}
               ${d.isLesserKnown ? `
                 <span class="dest-badge-lesser-known" title="Curated off-the-familiar-trail destination">
                   🌿 Off-Trail
@@ -511,14 +521,24 @@
       const [lng, lat] = dest.coordinates;
       const iconSymbol = this.getCategoryIcon(dest.category);
       const iconColor = this.getCategoryColor(dest.category);
-      const hasPhoto = dest.image && dest.image.startsWith("http");
+      const manifestImg = (window.ImageManifest && window.ImageManifest.getDestinationImage) ? window.ImageManifest.getDestinationImage(dest.id) : null;
+      const photoUrl = (manifestImg && manifestImg.url) ? manifestImg.url : (dest.image && dest.image.startsWith("http") ? dest.image : "");
+      const altText = (manifestImg && manifestImg.alt) ? manifestImg.alt : dest.name;
+      const credit = (manifestImg && manifestImg.credit) ? manifestImg.credit : "";
+      const license = (manifestImg && manifestImg.license) ? manifestImg.license : "";
+      const hasPhoto = Boolean(photoUrl);
 
       content.innerHTML = `
         <article class="dp-article">
           <!-- Header Banner -->
           <div class="dp-header-banner" style="position: relative; background: #0f172a; color: #fff; border-radius: 8px; overflow: hidden; margin-bottom: 1.5rem;">
             ${hasPhoto ? `
-              <img src="${this.escapeHtml(dest.image)}" alt="${this.escapeHtml(dest.name)}" style="width: 100%; height: 260px; object-fit: cover; opacity: 0.85;">
+              <img src="${this.escapeHtml(photoUrl)}" alt="${this.escapeHtml(altText)}" style="width: 100%; height: 260px; object-fit: cover; opacity: 0.88;">
+              ${credit ? `
+                <div class="dest-profile-credit-pill" style="position: absolute; top: 12px; right: 12px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); color: #FAF6EE; font-size: 0.72rem; padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(255, 255, 255, 0.15);" title="${this.escapeHtml(credit)} • ${this.escapeHtml(license)}">
+                  <span style="color: #E2AE48;">●</span> ${this.escapeHtml(credit)}
+                </div>
+              ` : ''}
             ` : `
               <div style="height: 180px; background: linear-gradient(135deg, ${iconColor}, #0f172a); display: flex; align-items: center; justify-content: center; font-size: 3.5rem;">
                 ${iconSymbol}

@@ -750,28 +750,25 @@
     const filter = state.projectsFilterCat;
     const filtered = STRATEGIC_PROJECTS.filter(p => filter === "all" || p.category === filter);
 
-    const PROJECT_IMAGES = {
-      "dholera-sir": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
-      "khavda-re-park": "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=1200&q=80",
-      "sauni-yojana": "https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=1200&q=80",
-      "western-dfc": "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=1200&q=80",
-      "mahsr-bullet-train": "https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?auto=format&fit=crop&w=1200&q=80",
-      "sardar-sarovar-project": "https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=1200&q=80",
-      "gift-city": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
-      "surat-diamond-bourse": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80",
-      "sudarshan-setu": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
-      "ahmedabad-metro": "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1200&q=80"
-    };
-
     container.innerHTML = filtered.map(p => {
-      const imgUrl = PROJECT_IMAGES[p.id] || "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80";
+      const manifestImg = (window.ImageManifest && window.ImageManifest.getProjectImage) ? window.ImageManifest.getProjectImage(p.id) : null;
+      const imgUrl = manifestImg ? manifestImg.url : "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80";
+      const altText = manifestImg ? manifestImg.alt : p.name;
+      const credit = manifestImg ? manifestImg.credit : "";
+      const isRender = manifestImg && manifestImg.type === "rendering";
+      const mediaTag = isRender ? "📐 Master Plan Render" : "📷 Site Photograph";
+
       return `
       <article class="project-editorial-card" id="proj-${p.id}">
         <div class="project-card-image-wrap">
-          <img src="${imgUrl}" alt="${escapeHtml(p.name)}" class="project-card-img" loading="lazy">
+          <img src="${imgUrl}" alt="${escapeHtml(altText)}" class="project-card-img" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'img-fallback-box\\' style=\\'aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: #FAF6EE;\\'><span style=\\'font-size: 2.5rem;\\'>🏗️</span></div>';">
           <div class="project-card-floating-badge">
             <span class="project-cat-badge badge-${p.category}">${escapeHtml(p.categoryLabel)}</span>
             <span class="project-status-badge">${escapeHtml(p.status)}</span>
+          </div>
+          <div class="project-card-media-meta">
+            <span class="project-media-type-pill ${isRender ? 'pill-render' : 'pill-photo'}">${mediaTag}</span>
+            ${credit ? `<span class="project-credit-pill" title="${escapeHtml(credit)} • ${escapeHtml(manifestImg.license || 'Verified')}"><span class="attribution-dot">●</span> ${escapeHtml(credit)}</span>` : ''}
           </div>
         </div>
 

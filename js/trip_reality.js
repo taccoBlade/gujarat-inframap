@@ -48,19 +48,20 @@
     },
 
     DEST_PHOTOS: {
-      'adalaj-ni-vav': 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=1200&q=80',
-      'sun-temple-modhera': 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=1200&q=80',
-      'statue-of-unity': 'https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=1200&q=80',
-      'lothal-archaeological-site': 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80',
-      'dholavira-unesco': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80',
-      'dholavira-harappan-city': 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80',
-      'rani-ki-vav': 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=80',
-      'gir-national-park': 'https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?auto=format&fit=crop&w=1200&q=80',
-      'white-rann-dhordo': 'https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=1200&q=80',
+      'adalaj-ni-vav': 'https://upload.wikimedia.org/wikipedia/commons/6/69/Adalaj_stepwell.jpg',
+      'sun-temple-modhera': 'https://upload.wikimedia.org/wikipedia/commons/7/7d/Sun_Temple%2C_Modhera.jpg',
+      'statue-of-unity': 'https://upload.wikimedia.org/wikipedia/commons/0/07/Statue_of_Unity.jpg',
+      'lothal-archaeological-site': 'https://upload.wikimedia.org/wikipedia/commons/7/7f/Ancient_site_at_Lothal_11.jpg',
+      'dholavira-unesco': 'https://upload.wikimedia.org/wikipedia/commons/8/80/Dholavira_gujarat.jpg',
+      'dholavira-harappan-city': 'https://upload.wikimedia.org/wikipedia/commons/8/80/Dholavira_gujarat.jpg',
+      'rani-ki-vav': 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Rani_ki_vav_02.jpg',
+      'gir-national-park': 'https://upload.wikimedia.org/wikipedia/commons/b/b8/Asiatic_lion_03.jpg',
+      'white-rann-dhordo': 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Rann_of_Kutch_-_White_Desert_2.jpg',
       'marine-national-park': 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80',
-      'somnath-temple': 'https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?auto=format&fit=crop&w=1200&q=80',
+      'somnath-temple': 'https://upload.wikimedia.org/wikipedia/commons/7/7b/%22Aerial_view_of_Somnath_temple_01%2C_Prabhas_Patan_Gujarat.jpg',
       'polo-forest': 'https://images.unsplash.com/photo-1511497584788-87676104235f?auto=format&fit=crop&w=1200&q=80',
-      'lakhpat-fort': 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80',
+      'lakhpat-fort': 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Distant_view_of_Lakhpat_Fort.jpg',
+      'lakhpat-fort-town': 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Distant_view_of_Lakhpat_Fort.jpg',
       'saputara-hill-station': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
       'dumas-beach': 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80'
     },
@@ -196,7 +197,9 @@
       container.innerHTML = sorted.map((d, index) => {
         const isExtra = index >= 6;
         const isSelected = d.destinationId === activeId;
-        const photo = this.DEST_PHOTOS[d.destinationId] || "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=600&q=80";
+        const manifestImg = (window.ImageManifest && window.ImageManifest.getDestinationImage) ? window.ImageManifest.getDestinationImage(d.destinationId) : null;
+        const photo = (manifestImg && manifestImg.url) ? manifestImg.url : (this.DEST_PHOTOS[d.destinationId] || "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=600&q=80");
+        const altText = (manifestImg && manifestImg.alt) ? manifestImg.alt : d.destinationName;
         const catLabel = this.DEST_CAT_LABELS[d.destinationId] || d.category || "Heritage";
         const highlight = this.DEST_HIGHLIGHTS[d.destinationId] || `${d.district} District • ${d.region}`;
         const hiddenClass = (isExtra && !this.quickPicksExpanded && !isSelected) ? "tr-extra-dest hidden" : (isExtra ? "tr-extra-dest" : "");
@@ -209,7 +212,7 @@
                    aria-pressed="${isSelected ? 'true' : 'false'}"
                    aria-label="${this.escapeHtml(d.destinationName)}, ${d.district} District">
             <div class="tr-pick-thumb-wrap">
-              <img src="${photo}" alt="${this.escapeHtml(d.destinationName)}" class="tr-pick-thumb" loading="lazy" />
+              <img src="${photo}" alt="${this.escapeHtml(altText)}" class="tr-pick-thumb" loading="lazy" />
               <span class="tr-pick-cat-badge">${this.escapeHtml(catLabel)}</span>
               <span class="tr-pick-check" aria-hidden="true">✓ Selected</span>
             </div>
@@ -753,7 +756,11 @@
       const facilities = visiting.facilities || {};
       const culturalTip = this.DEST_CULTURAL_TIPS[d.destinationId] || this.DEST_CULTURAL_TIPS[d.id] || null;
       const catLabel = this.DEST_CAT_LABELS[d.destinationId] || d.category || "Heritage";
-      const heroImg = this.DEST_PHOTOS[d.destinationId] || this.DEST_PHOTOS[d.id] || "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=80";
+      const manifestImg = (window.ImageManifest && window.ImageManifest.getDestinationImage) ? window.ImageManifest.getDestinationImage(d.destinationId || d.id) : null;
+      const heroImg = (manifestImg && manifestImg.url) ? manifestImg.url : (this.DEST_PHOTOS[d.destinationId] || this.DEST_PHOTOS[d.id] || "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=80");
+      const heroAlt = (manifestImg && manifestImg.alt) ? manifestImg.alt : d.destinationName;
+      const heroCredit = (manifestImg && manifestImg.credit) ? manifestImg.credit : "";
+      const heroLicense = (manifestImg && manifestImg.license) ? manifestImg.license : "";
 
       const checklistItems = (d.beforeYouGoChecklist && d.beforeYouGoChecklist.length > 0) ? d.beforeYouGoChecklist : [
         "Confirm monument or park opening times on the official statutory department portal before travelling.",
@@ -868,11 +875,16 @@
               <!-- Asymmetrical Visual Column: Jharokha Sandstone Portal Frame -->
               <div class="tr-snapshot-visual-col">
                 <div class="tr-jharokha-frame">
-                  <img src="${heroImg}" alt="${this.escapeHtml(d.destinationName)}" class="tr-jharokha-img" loading="lazy" />
+                  <img src="${heroImg}" alt="${this.escapeHtml(heroAlt)}" class="tr-jharokha-img" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=80';" />
                   <div class="tr-jharokha-overlay"></div>
                   <div class="tr-jharokha-badge">
                     <span>✦ ${this.escapeHtml(catLabel)}</span>
                   </div>
+                  ${heroCredit ? `
+                    <div class="tr-jharokha-credit-tag" title="${this.escapeHtml(heroCredit)} • ${this.escapeHtml(heroLicense || 'Verified')}">
+                      <span class="attribution-dot">●</span> ${this.escapeHtml(heroCredit)}
+                    </div>
+                  ` : ''}
                   <div class="tr-jharokha-caption">
                     <span class="tr-jhc-coords">📍 ${d.coordinates[1].toFixed(3)}°N, ${d.coordinates[0].toFixed(3)}°E</span>
                     <span class="tr-jhc-district">${this.escapeHtml(d.district)} District</span>

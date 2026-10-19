@@ -25888,3 +25888,131 @@ dialog.tr-report-modal-dialog[open]::backdrop {
     transform: none !important;
   }
 }
+
+/* ==========================================================================
+   AUTHENTIC GUJARAT PHOTOGRAPHY & EDITORIAL IMAGE INTEGRATION
+   ========================================================================== */
+
+/* Universal Editorial Image Figure with Layout Stability */
+.editorial-img-figure {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  border-radius: var(--radius-jharokha, 8px);
+  background: var(--color-paper-ivory, #F6F0E5);
+}
+
+.editorial-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 380ms var(--ease-editorial, cubic-bezier(0.2, 0.8, 0.2, 1)), opacity 240ms ease;
+}
+
+/* Non-Intrusive Attribution Pills */
+.img-attribution-tag,
+.dest-card-credit-pill,
+.project-credit-pill,
+.tr-jharokha-credit-tag,
+.dest-profile-credit-pill {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(24, 45, 70, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #FFFCF7;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  padding: 2.5px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 252, 247, 0.16);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attribution-dot {
+  color: var(--color-turmeric, #E2AE48);
+  font-size: 0.62rem;
+  line-height: 1;
+}
+
+/* Media Classification Badge (Master Plan vs Field Photograph) */
+.project-card-media-meta {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.project-card-media-meta .project-credit-pill {
+  position: static;
+  margin-left: auto;
+}
+
+.project-media-type-pill {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.project-media-type-pill.pill-photo {
+  background: rgba(30, 48, 36, 0.85);
+  color: #A3E635;
+  border: 1px solid rgba(163, 230, 53, 0.3);
+}
+
+.project-media-type-pill.pill-render {
+  background: rgba(30, 41, 59, 0.88);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+/* Graceful Fallback Containers */
+.img-fallback-box {
+  background: var(--color-paper-ivory, #F6F0E5);
+  border: 1px dashed var(--color-warm-stone, #D7C5AB);
+  color: var(--color-ink-muted, #716D65);
+}
+
+/* Jharokha Snapshot Hover & Focal Enhancement */
+.tr-jharokha-frame {
+  position: relative;
+  overflow: hidden;
+}
+
+.tr-jharokha-credit-tag {
+  bottom: 34px; /* Stack neatly above coords caption bar */
+  right: 8px;
+}
+
+/* Asset Inspector Photo Hero */
+.insp-asset-photo-hero {
+  position: relative;
+  border-radius: var(--radius-jharokha, 8px);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
