@@ -646,22 +646,30 @@
       const timeEst = this.estimateTravelTimes(roadKm, this.activeMode);
       const dateAlerts = this.checkDateAlerts(d, this.activeDate);
 
-      // Status Badge Config
+      // Travel date formatting
+      const formattedDate = this.activeDate ? 
+        this.activeDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : 
+        "Flexible / Not specified";
+
+      // Deliberate status configuration with the 3 specified labels
       const statusConfig = {
         well_documented: {
-          label: "Well Documented",
+          key: "well_documented",
+          label: "Well documented.",
           badgeClass: "tr-status-well-documented",
           icon: "✓",
           summary: "Essential journey, last-mile connection, return transit, and visitor entry rules are verified from reliable statutory sources."
         },
         some_planning_required: {
-          label: "Some Planning Required",
+          key: "some_planning_required",
+          label: "Some planning required.",
           badgeClass: "tr-status-planning-required",
           icon: "!",
           summary: "Key journey segments (such as last-mile transport, mandatory advance entry permits, or return connectivity) require advance arrangements."
         },
         important_details_unverified: {
-          label: "Important Details Unverified",
+          key: "important_details_unverified",
+          label: "Important details unverified.",
           badgeClass: "tr-status-unverified",
           icon: "?",
           summary: "Essential transit, last-mile frequency, or return connectivity is missing, infrequent, or outdated. Do not assume public transit availability."
@@ -674,41 +682,188 @@
       const returnJ = d.returnJourney || {};
       const visiting = d.visitingConditions || {};
       const facilities = visiting.facilities || {};
-
-      const heroImg = d.image || this.DEST_PHOTOS[d.destinationId] || this.DEST_PHOTOS[d.id] || "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=80";
       const culturalTip = this.DEST_CULTURAL_TIPS[d.destinationId] || this.DEST_CULTURAL_TIPS[d.id] || null;
+      const catLabel = this.DEST_CAT_LABELS[d.destinationId] || d.category || "Heritage";
+      const heroImg = this.DEST_PHOTOS[d.destinationId] || this.DEST_PHOTOS[d.id] || "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&w=1200&q=80";
+
+      const checklistItems = (d.beforeYouGoChecklist && d.beforeYouGoChecklist.length > 0) ? d.beforeYouGoChecklist : [
+        "Confirm monument or park opening times on the official statutory department portal before travelling.",
+        "Verify local auto-rickshaw or taxi availability and fares upon arrival at the nearest transport hub.",
+        "Carry personal drinking water, sun protection, and a valid government photo ID for entry security verification."
+      ];
+
+      // Stage 1: Get to the transport hub
+      let stage1TrustClass = "tr-tb-confirmed";
+      let stage1TrustLabel = "✓ Confirmed connection";
+      let stage1HubName = "";
+      let stage1Details = "";
+
+      if (this.activeMode === 'public') {
+        if (hubs.railway) {
+          stage1HubName = hubs.railway.name;
+          const isProximity = hubs.railway.connectionType === 'unverified_proximity' || (hubs.railway.verification && hubs.railway.verification.status === 'unverified');
+          if (isProximity) {
+            stage1TrustClass = "tr-tb-estimate";
+            stage1TrustLabel = "~ Proximity estimate";
+            stage1Details = `${hubs.railway.name} is situated ${hubs.railway.roadDistanceKm} km from destination. Railhead proximity is mapped, but connecting bus frequencies should be confirmed locally.`;
+          } else {
+            stage1TrustClass = "tr-tb-confirmed";
+            stage1TrustLabel = "✓ Confirmed railhead";
+            stage1Details = `Western Railway broad-gauge services connect to ${hubs.railway.name} (${hubs.railway.roadDistanceKm} km from site). ${hubs.railway.frequencyNote || ''}`;
+          }
+        } else if (hubs.busTerminal) {
+          stage1HubName = hubs.busTerminal.name;
+          stage1TrustClass = "tr-tb-confirmed";
+          stage1TrustLabel = "✓ Confirmed bus terminal";
+          stage1Details = `GSRTC regional buses connect from ${originInfo.name} to ${hubs.busTerminal.name} (${hubs.busTerminal.roadDistanceKm} km away). ${hubs.busTerminal.frequencyNote || ''}`;
+        } else {
+          stage1HubName = "Regional Transport Node";
+          stage1TrustClass = "tr-tb-unverified";
+          stage1TrustLabel = "! Unverified schedule";
+          stage1Details = `Direct transit routes from ${originInfo.name} require local operator confirmation upon arrival.`;
+        }
+      } else {
+        stage1TrustClass = "tr-tb-confirmed";
+        stage1TrustLabel = "✓ Confirmed highway route";
+        stage1HubName = hubs.highway ? hubs.highway.name : 'State Highway Corridor';
+        stage1Details = hubs.highway ? 
+          `${hubs.highway.roadType}. ${hubs.highway.conditionNote || 'Vehicular highway corridor.'}` :
+          `Direct highway corridor connecting ${originInfo.name} toward ${d.district} District.`;
+      }
+
+      // Stage 2: Complete the last mile
+      let stage2TrustClass = "tr-tb-estimate";
+      let stage2TrustLabel = `~ ${lastMile.gapDistanceKm || 5} km road estimate`;
+      if (lastMile.documentationStatus === "officially_verified" || lastMile.documentationStatus === "field_surveyed") {
+        stage2TrustClass = "tr-tb-confirmed";
+        stage2TrustLabel = "✓ Audited feeder";
+      } else if (lastMile.documentationStatus === "unverified_transit_schedules") {
+        stage2TrustClass = "tr-tb-unverified";
+        stage2TrustLabel = "! Unverified schedules";
+      }
+
+      // Stage 3: Check visit requirements
+      let stage3TrustClass = "tr-tb-confirmed";
+      let stage3TrustLabel = "✓ Open entry";
+      if (visiting.entryPermits && visiting.entryPermits.required) {
+        stage3TrustClass = "tr-tb-caution";
+        stage3TrustLabel = "⚠ Mandatory permit";
+      } else if (visiting.hoursVerification && visiting.hoursVerification.status === "secondary_source") {
+        stage3TrustClass = "tr-tb-estimate";
+        stage3TrustLabel = "~ Secondary source";
+      }
+
+      // Stage 4: Understand the return journey
+      let stage4TrustClass = returnJ.sameDayFeasible ? "tr-tb-confirmed" : "tr-tb-caution";
+      let stage4TrustLabel = returnJ.sameDayFeasible ? "✓ Same-day return feasible" : "⚠ Overnight advised";
+
+      // Official source lookup
+      let officialSourceUrl = "";
+      let officialSourceLabel = "Official Destination Portal";
+      if (visiting.entryPermits && visiting.entryPermits.onlinePortal) {
+        officialSourceUrl = visiting.entryPermits.onlinePortal;
+        officialSourceLabel = "Official Booking Portal";
+      } else if (d.externalLinks && d.externalLinks.length > 0) {
+        const official = d.externalLinks.find(l => l.type === 'official_permit' || l.type === 'official_portal');
+        if (official) {
+          officialSourceUrl = official.url;
+          officialSourceLabel = official.label || "Official Portal";
+        }
+      }
+      if (!officialSourceUrl) {
+        officialSourceUrl = "https://www.gujarattourism.com/";
+        officialSourceLabel = "Gujarat Tourism Portal";
+      }
 
       container.innerHTML = `
-        <article class="tr-assessment-card">
-          <!-- Full-Bleed High-Res Destination Hero Banner -->
-          <div class="tr-hero-banner" style="background-image: url('${heroImg}');">
-            <div class="tr-hero-overlay"></div>
-            <div class="tr-hero-content">
-              <div class="tr-hero-badges">
-                <span class="tr-hero-badge tr-tag-cat">✨ ${this.escapeHtml(d.category || 'DESTINATION')}</span>
-                <div class="tr-status-pill ${status.badgeClass}">
-                  <span class="tr-status-icon">${status.icon}</span>
-                  <span class="tr-status-text">${status.label}</span>
+        <div class="tr-assessment-results" role="region" aria-label="Trip assessment results">
+          <!-- 1. Compact Trip Snapshot with Jharokha Architectural Frame -->
+          <section class="tr-snapshot-section" aria-label="Your trip snapshot">
+            <div class="tr-snapshot-header">
+              <div class="tr-snapshot-eyebrow">
+                <!-- Ajrakh 8-Point Rosette Motif -->
+                <svg class="tr-motif-ajrakh" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="#B84638" opacity="0.95"/>
+                  <rect x="8.5" y="8.5" width="7" height="7" transform="rotate(45 12 12)" stroke="#E2AE48" stroke-width="1.5" fill="#182D46"/>
+                  <circle cx="12" cy="12" r="1.5" fill="#FFFCF7"/>
+                </svg>
+                <span>YOUR TRIP SNAPSHOT • પ્રવાસ સંક્ષેપ</span>
+              </div>
+              <div class="tr-snapshot-status-pill ${status.badgeClass}">
+                <span class="tr-status-dot-pulse" aria-hidden="true"></span>
+                <span class="tr-status-text">${status.label}</span>
+              </div>
+            </div>
+
+            <div class="tr-snapshot-editorial-grid">
+              <!-- Asymmetrical Visual Column: Jharokha Sandstone Portal Frame -->
+              <div class="tr-snapshot-visual-col">
+                <div class="tr-jharokha-frame">
+                  <img src="${heroImg}" alt="${this.escapeHtml(d.destinationName)}" class="tr-jharokha-img" loading="lazy" />
+                  <div class="tr-jharokha-overlay"></div>
+                  <div class="tr-jharokha-badge">
+                    <span>✦ ${this.escapeHtml(catLabel)}</span>
+                  </div>
+                  <div class="tr-jharokha-caption">
+                    <span class="tr-jhc-coords">📍 ${d.coordinates[1].toFixed(3)}°N, ${d.coordinates[0].toFixed(3)}°E</span>
+                    <span class="tr-jhc-district">${this.escapeHtml(d.district)} District</span>
+                  </div>
                 </div>
               </div>
-              <h2 class="tr-hero-title">${this.escapeHtml(d.destinationName)}</h2>
-              <div class="tr-hero-meta">
-                <span>📍 ${this.escapeHtml(d.district)} District, ${this.escapeHtml(d.region || 'Gujarat')}</span>
-                <span class="tr-meta-dot">•</span>
-                <span>🚀 Trip from: <strong>${this.escapeHtml(originInfo.name)}</strong> (${roadKm} km • ${timeEst.formatted})</span>
-                <span class="tr-meta-dot">•</span>
-                <span>⏱️ Recommended: ${d.recommendedMinHours || 2.5} hrs</span>
+
+              <!-- Editorial Content Column -->
+              <div class="tr-snapshot-content-col">
+                <div class="tr-snapshot-dest-info">
+                  <h2 class="tr-snapshot-title">${this.escapeHtml(d.destinationName)}</h2>
+                  <div class="tr-snapshot-meta-row">
+                    <span class="tr-meta-item">📍 ${this.escapeHtml(d.district)} District • ${this.escapeHtml(d.region || 'Gujarat')}</span>
+                    <span class="tr-meta-sep">•</span>
+                    <span class="tr-meta-item">🏠 Origin: <strong>${this.escapeHtml(originInfo.name)}</strong></span>
+                    <span class="tr-meta-sep">•</span>
+                    <span class="tr-meta-item">${this.activeMode === 'public' ? '🚆 Public Transit' : '🚗 Private Drive'}</span>
+                    <span class="tr-meta-sep">•</span>
+                    <span class="tr-meta-item">📅 ${formattedDate}</span>
+                  </div>
+                </div>
+
+                <!-- 4-Column Editorial Metric Deck -->
+                <div class="tr-snapshot-metrics-bar">
+                  <div class="tr-snap-metric">
+                    <span class="tr-sm-label">Road Distance</span>
+                    <span class="tr-sm-val">${roadKm} km</span>
+                    <span class="tr-sm-sub">Baseline: ${straightLineKm} km</span>
+                  </div>
+                  <div class="tr-snap-metric">
+                    <span class="tr-sm-label">Estimated Transit</span>
+                    <span class="tr-sm-val">${timeEst.formatted}</span>
+                    <span class="tr-sm-sub">${this.activeMode === 'public' ? 'Transit + transfer buffer' : 'Direct highway driving'}</span>
+                  </div>
+                  <div class="tr-snap-metric">
+                    <span class="tr-sm-label">Visit Duration</span>
+                    <span class="tr-sm-val">${d.recommendedMinHours || 2.5} hrs</span>
+                    <span class="tr-sm-sub">Minimum exploration</span>
+                  </div>
+                  <div class="tr-snap-metric">
+                    <span class="tr-sm-label">Same-Day Return</span>
+                    <span class="tr-sm-val ${returnJ.sameDayFeasible ? 'val-feasible' : 'val-caution'}">
+                      ${returnJ.sameDayFeasible ? '✓ Feasible' : '⚠ High Risk'}
+                    </span>
+                    <span class="tr-sm-sub">${returnJ.sameDayFeasible ? 'From ' + originInfo.name : 'Overnight advised'}</span>
+                  </div>
+                </div>
+
+                <!-- Status Reason Banner with Patola Diamond Accent -->
+                <div class="tr-status-reason-banner tr-reason-${status.key}">
+                  <div class="tr-reason-header">
+                    <span class="tr-reason-motif" aria-hidden="true">◇</span>
+                    <span class="tr-reason-status-label">${status.label}</span>
+                    <span class="tr-reason-summary">${status.summary}</span>
+                  </div>
+                  <p class="tr-reason-text"><strong>Assessment justification:</strong> ${this.escapeHtml(d.statusReason)}</p>
+                </div>
               </div>
             </div>
-          </div>
-
-          <!-- Top Classification Bar -->
-          <header class="tr-card-header">
-            <div class="tr-status-reason-box">
-              <span class="tr-vibe-pill">GROUND TRUTH</span>
-              <p><strong>Travel Assessment:</strong> ${this.escapeHtml(d.statusReason)}</p>
-            </div>
-          </header>
+          </section>
 
           <!-- Date Alerts (if triggered) -->
           ${dateAlerts.length > 0 ? `
@@ -725,226 +880,275 @@
             </div>
           ` : ''}
 
-          <!-- Metric Overview Bar -->
-          <div class="tr-metrics-grid">
-            <div class="tr-metric-item">
-              <span class="trm-label">Estimated Road Distance</span>
-              <span class="trm-val">${roadKm} km</span>
-              <span class="trm-sub">Baseline Straight-Line: ${straightLineKm} km</span>
+          <!-- 2. Journey Stages with Solanki Octagonal Motifs & Stepped Top Cantilevers -->
+          <section class="tr-stages-section" aria-label="Journey Stages">
+            <div class="tr-stages-section-header">
+              <div class="tr-stages-eyebrow">
+                <!-- Solanki Stepwell Octagonal Medallion -->
+                <svg class="tr-motif-stepwell" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <polygon points="7,2 17,2 22,7 22,17 17,22 7,22 2,17 2,7" stroke="#E2AE48" stroke-width="2" fill="none"/>
+                  <circle cx="12" cy="12" r="3" fill="#B84638"/>
+                </svg>
+                <span>STEP-BY-STEP ITINERARY REALITY • પ્રવાસ તબક્કા</span>
+              </div>
+              <h3 class="tr-stages-title">Journey Stages &amp; Feasibility Check</h3>
+              <p class="tr-stages-subtitle">Sequenced from departure to destination and return. Confirmed statutory connections are strictly distinguished from local road estimates.</p>
             </div>
-            <div class="tr-metric-item">
-              <span class="trm-label">Est. One-Way Travel Time</span>
-              <span class="trm-val">${timeEst.formatted}</span>
-              <span class="trm-sub">${this.activeMode === 'public' ? 'Public Transit + Transfers' : 'Direct Highway Driving'}</span>
-            </div>
-            <div class="tr-metric-item">
-              <span class="trm-label">Recommended Visit Duration</span>
-              <span class="trm-val">${d.recommendedMinHours || 2.5} Hours</span>
-              <span class="trm-sub">Minimum exploration time</span>
-            </div>
-            <div class="tr-metric-item">
-              <span class="trm-label">Same-Day Return Reality</span>
-              <span class="trm-val ${returnJ.sameDayFeasible ? 'trm-feasible' : 'trm-not-feasible'}">
-                ${returnJ.sameDayFeasible ? '✓ Feasible' : '⚠ Overnight Advised'}
-              </span>
-              <span class="trm-sub">${returnJ.sameDayFeasible ? 'From ' + originInfo.name : 'Long transit distance'}</span>
-            </div>
-          </div>
 
-          <!-- Section 1: Journey Stages Breakdown -->
-          <section class="tr-section">
-            <h4 class="tr-section-title">
-              <span class="tr-section-num">1</span>
-              <span>Getting There: Confirmed Infrastructure &amp; Journey Stages</span>
-            </h4>
-            <div class="tr-stages-timeline">
+            <div class="tr-stages-grid">
               <!-- Stage 1 -->
-              <div class="tr-stage-node">
-                <div class="tr-node-marker">A</div>
-                <div class="tr-node-content">
-                  <div class="tr-node-header">
-                    <strong>Stage 1: Trunk Corridor from ${this.escapeHtml(originInfo.name)}</strong>
-                    <span class="tr-connection-tag">${this.activeMode === 'public' ? 'Rail / State Transport' : 'National / State Highway'}</span>
-                  </div>
-                  <p class="tr-node-desc">
+              <div class="tr-stage-card tr-stage-1">
+                <div class="tr-stage-accent-bar bar-navy"></div>
+                <div class="tr-stage-top">
+                  <div class="tr-stage-num-badge">1</div>
+                  <div class="tr-stage-icon-wrap" aria-hidden="true">
                     ${this.activeMode === 'public' ? 
-                      (hubs.railway ? `Western Railway services to ${this.escapeHtml(hubs.railway.name)}. ` : '') + (hubs.busTerminal ? `GSRTC bus routes connect to ${this.escapeHtml(hubs.busTerminal.name)}.` : '') :
-                      (hubs.highway ? `Traverse ${this.escapeHtml(hubs.highway.name)}. Road type: ${this.escapeHtml(hubs.highway.roadType)}. ${this.escapeHtml(hubs.highway.conditionNote)}` : 'Via paved state highway.')
-                    }
-                  </p>
+                      `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m18 22-2-3"/><circle cx="8" cy="15" r="1"/><circle cx="16" cy="15" r="1"/></svg>` :
+                      `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>`}
+                  </div>
+                  <span class="tr-trust-badge ${stage1TrustClass}">${stage1TrustLabel}</span>
+                </div>
+                <h4 class="tr-stage-label">1. Get to the transport hub</h4>
+                <div class="tr-stage-details">
+                  <div class="tr-stage-hub-name">
+                    <strong>${this.escapeHtml(stage1HubName)}</strong>
+                    <span class="tr-stage-hub-dist">${this.activeMode === 'public' ? (hubs.railway ? hubs.railway.roadDistanceKm + ' km from site' : 'Regional terminal') : (hubs.highway ? hubs.highway.roadType : 'Highway route')}</span>
+                  </div>
+                  <p class="tr-stage-text">${this.escapeHtml(stage1Details)}</p>
                 </div>
               </div>
 
               <!-- Stage 2 -->
-              <div class="tr-stage-node">
-                <div class="tr-node-marker">B</div>
-                <div class="tr-node-content">
-                  <div class="tr-node-header">
-                    <strong>Stage 2: Nearest Practical Transport Hub</strong>
-                    <span class="tr-source-tag">${hubs.railway ? hubs.railway.verification.source : 'Statutory Record'}</span>
+              <div class="tr-stage-card tr-stage-2">
+                <div class="tr-stage-accent-bar bar-turmeric"></div>
+                <div class="tr-stage-top">
+                  <div class="tr-stage-num-badge">2</div>
+                  <div class="tr-stage-icon-wrap" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M5 17h12m-9-6h6l2 3H6l2-3z"/><path d="M9 5h6v6H9z"/></svg>
                   </div>
-                  <div class="tr-hubs-subgrid">
-                    ${hubs.railway ? `
-                      <div class="tr-hub-box">
-                        <strong>🚆 Railway Station:</strong> ${this.escapeHtml(hubs.railway.name)}
-                        <span class="tr-hub-dist">${hubs.railway.roadDistanceKm} km from destination</span>
-                        <p class="tr-hub-note">${this.escapeHtml(hubs.railway.frequencyNote || '')}</p>
+                  <span class="tr-trust-badge ${stage2TrustClass}">${stage2TrustLabel}</span>
+                </div>
+                <h4 class="tr-stage-label">2. Complete the last mile</h4>
+                <div class="tr-stage-details">
+                  <div class="tr-stage-hub-name">
+                    <strong>${lastMile.gapDistanceKm || 5} km Feeder Route</strong>
+                    <span class="tr-stage-hub-dist">${this.escapeHtml(lastMile.terrainType || 'Local road network')}</span>
+                  </div>
+                  <p class="tr-stage-text">${this.escapeHtml(lastMile.gapSummary || 'Local transport options.')}</p>
+                </div>
+              </div>
+
+              <!-- Stage 3 -->
+              <div class="tr-stage-card tr-stage-3">
+                <div class="tr-stage-accent-bar bar-madder"></div>
+                <div class="tr-stage-top">
+                  <div class="tr-stage-num-badge">3</div>
+                  <div class="tr-stage-icon-wrap" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 15h2"/><path d="M14 15h2"/></svg>
+                  </div>
+                  <span class="tr-trust-badge ${stage3TrustClass}">${stage3TrustLabel}</span>
+                </div>
+                <h4 class="tr-stage-label">3. Check visit requirements</h4>
+                <div class="tr-stage-details">
+                  <div class="tr-stage-hub-name">
+                    <strong>${visiting.entryPermits && visiting.entryPermits.required ? 'Mandatory Permit' : 'Open Entry'}</strong>
+                    <span class="tr-stage-hub-dist">${this.escapeHtml(visiting.openingHours ? visiting.openingHours.split('(')[0].trim() : 'Daylight')}</span>
+                  </div>
+                  <p class="tr-stage-text">${visiting.entryPermits ? this.escapeHtml(visiting.entryPermits.pricing || 'Standard rules apply') : 'Standard rules apply'}</p>
+                  ${visiting.entryPermits && visiting.entryPermits.onlinePortal ? `
+                    <a href="${visiting.entryPermits.onlinePortal}" target="_blank" rel="noopener" class="tr-stage-link">
+                      Official Booking ↗
+                    </a>
+                  ` : ''}
+                </div>
+              </div>
+
+              <!-- Stage 4 -->
+              <div class="tr-stage-card tr-stage-4">
+                <div class="tr-stage-accent-bar ${returnJ.sameDayFeasible ? 'bar-neem' : 'bar-caution'}"></div>
+                <div class="tr-stage-top">
+                  <div class="tr-stage-num-badge">4</div>
+                  <div class="tr-stage-icon-wrap" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                  </div>
+                  <span class="tr-trust-badge ${stage4TrustClass}">${stage4TrustLabel}</span>
+                </div>
+                <h4 class="tr-stage-label">4. Understand the return journey</h4>
+                <div class="tr-stage-details">
+                  <div class="tr-stage-hub-name">
+                    <strong>${returnJ.sameDayFeasible ? 'Same-Day Return Feasible' : 'High Risk / Overnight'}</strong>
+                    <span class="tr-stage-hub-dist">To ${this.escapeHtml(originInfo.name)}</span>
+                  </div>
+                  <p class="tr-stage-text">${this.escapeHtml(returnJ.lastScheduledTransitNote || 'Verify departure upon morning arrival.')}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. Practical Information Hierarchy -->
+          <section class="tr-practical-section" aria-label="Practical trip information">
+            <div class="tr-practical-grid">
+              <!-- Column 1: Transport & Last-Mile Detail -->
+              <div class="tr-info-card">
+                <h4 class="tr-info-card-title">
+                  <span class="tr-card-icon-emblem">🚆</span>
+                  <span>Known Transport Connections &amp; Last-Mile</span>
+                </h4>
+                
+                <div class="tr-feeder-modes">
+                  <div class="tr-feeder-item">
+                    <div class="tr-feeder-row">
+                      <span class="tr-feeder-name">Primary Transport Node</span>
+                      <span class="tr-trust-badge ${stage1TrustClass}">${stage1TrustLabel}</span>
+                    </div>
+                    <p class="tr-feeder-note">${this.escapeHtml(stage1Details)}</p>
+                  </div>
+
+                  <div class="tr-feeder-item">
+                    <div class="tr-feeder-row">
+                      <span class="tr-feeder-name">Last-Mile Feeder Gap (${lastMile.gapDistanceKm || 5} km)</span>
+                      <span class="tr-trust-badge ${stage2TrustClass}">${stage2TrustLabel}</span>
+                    </div>
+                    <p class="tr-feeder-note"><strong>Terrain:</strong> ${this.escapeHtml(lastMile.terrainType || 'Local paved road')}</p>
+                    <p class="tr-feeder-note">${this.escapeHtml(lastMile.gapSummary || '')}</p>
+                  </div>
+
+                  ${(lastMile.availableModes || []).map(m => `
+                    <div class="tr-feeder-item">
+                      <div class="tr-feeder-row">
+                        <span class="tr-feeder-name">Feeder Mode: ${this.escapeHtml(m.mode)}</span>
+                        ${m.fareEstimate ? `<span class="tr-feeder-fare">${this.escapeHtml(m.fareEstimate)}</span>` : ''}
                       </div>
-                    ` : ''}
-                    ${hubs.busTerminal ? `
-                      <div class="tr-hub-box">
-                        <strong>🚌 Bus Terminal:</strong> ${this.escapeHtml(hubs.busTerminal.name)}
-                        <span class="tr-hub-dist">${hubs.busTerminal.roadDistanceKm} km from destination</span>
-                        <p class="tr-hub-note">${this.escapeHtml(hubs.busTerminal.frequencyNote || '')}</p>
-                      </div>
+                      <p class="tr-feeder-note"><strong>Availability:</strong> ${this.escapeHtml(m.feasibility)} — ${this.escapeHtml(m.notes || '')}</p>
+                    </div>
+                  `).join('')}
+
+                  <div class="tr-feeder-item">
+                    <div class="tr-feeder-row">
+                      <span class="tr-feeder-name">Return Journey Reality</span>
+                      <span class="tr-trust-badge ${stage4TrustClass}">${stage4TrustLabel}</span>
+                    </div>
+                    <p class="tr-feeder-note">${this.escapeHtml(returnJ.lastScheduledTransitNote || 'Check return transit upon morning arrival.')}</p>
+                    ${returnJ.caution ? `
+                      <p class="tr-feeder-note" style="color: var(--color-madder-red, #B84638); font-weight: 600;">
+                        ⚠️ Warning: ${this.escapeHtml(returnJ.caution)}
+                      </p>
                     ` : ''}
                   </div>
                 </div>
               </div>
 
-              <!-- Stage 3: The Last-Mile Gap -->
-              <div class="tr-stage-node tr-stage-last-mile">
-                <div class="tr-node-marker tr-marker-alert">C</div>
-                <div class="tr-node-content">
-                  <div class="tr-node-header">
-                    <strong class="tr-last-mile-heading">Stage 3: The Last-Mile Gap (${lastMile.gapDistanceKm || 5} km)</strong>
-                    <span class="tr-gap-tag">${this.escapeHtml(lastMile.documentationStatus)}</span>
-                  </div>
-                  
-                  <div class="tr-last-mile-box">
-                    <div class="trlm-summary">
-                      <strong>Terrain &amp; Access Route:</strong> ${this.escapeHtml(lastMile.terrainType || 'Local road network')}
+              <!-- Column 2: Visitor Essentials & Facilities -->
+              <div class="tr-info-card">
+                <h4 class="tr-info-card-title">
+                  <span class="tr-card-icon-emblem">🏛️</span>
+                  <span>Visiting Rules &amp; Verified Facilities</span>
+                </h4>
+
+                <div class="tr-feeder-modes">
+                  <div class="tr-feeder-item">
+                    <div class="tr-feeder-row">
+                      <span class="tr-feeder-name">Statutory Opening Hours</span>
+                      <span class="tr-trust-badge ${stage3TrustClass}">${stage3TrustLabel}</span>
                     </div>
-                    <div class="trlm-modes-list">
-                      <strong>Available Local Transport Options:</strong>
-                      ${(lastMile.availableModes || []).map(m => `
-                        <div class="trlm-mode-item">
-                          <div class="trlm-mode-title">
-                            <span class="trlm-bullet">•</span>
-                            <strong>${this.escapeHtml(m.mode)}</strong>
-                            <span class="trlm-feasibility-tag">${this.escapeHtml(m.feasibility)}</span>
-                            ${m.fareEstimate ? `<span class="trlm-fare">${this.escapeHtml(m.fareEstimate)}</span>` : ''}
-                          </div>
-                          <p class="trlm-mode-note">${this.escapeHtml(m.notes)}</p>
+                    <p class="tr-feeder-note"><strong>Hours:</strong> ${this.escapeHtml(visiting.openingHours || 'Sunrise to Sunset')}</p>
+                    <p class="tr-feeder-note">Source: ${this.escapeHtml(visiting.hoursVerification ? visiting.hoursVerification.source : 'Official Statutory Portal')}</p>
+                  </div>
+
+                  <div class="tr-feeder-item">
+                    <div class="tr-feeder-row">
+                      <span class="tr-feeder-name">Entry Permits &amp; Pricing</span>
+                      <span class="tr-feeder-fare">${visiting.entryPermits ? this.escapeHtml(visiting.entryPermits.pricing || 'Standard') : 'Nominal'}</span>
+                    </div>
+                    <p class="tr-feeder-note">
+                      ${visiting.entryPermits && visiting.entryPermits.required ? 'Mandatory advance booking/permit required.' : 'No special advance permit required. General entry ticket on site.'}
+                    </p>
+                    ${visiting.entryPermits && visiting.entryPermits.onlinePortal ? `
+                      <a href="${visiting.entryPermits.onlinePortal}" target="_blank" rel="noopener" class="tr-stage-link" style="align-self: flex-start; margin-top: 0.35rem;">
+                        Official Permit Booking Portal ↗
+                      </a>
+                    ` : ''}
+                  </div>
+
+                  <!-- Facilities Matrix -->
+                  <div>
+                    <span class="tr-feeder-name" style="display: block; margin-bottom: 0.45rem;">Verified On-Site Visitor Facilities:</span>
+                    <div class="tr-facilities-grid-compact">
+                      <div class="tr-fac-item">
+                        <span class="tr-fac-icon">🅿️</span>
+                        <div>
+                          <strong class="tr-fac-name">Parking</strong>
+                          <span class="tr-fac-desc">${this.escapeHtml(facilities.parking ? facilities.parking.details : 'Check on arrival')}</span>
                         </div>
-                      `).join("")}
+                      </div>
+                      <div class="tr-fac-item">
+                        <span class="tr-fac-icon">🚻</span>
+                        <div>
+                          <strong class="tr-fac-name">Restrooms</strong>
+                          <span class="tr-fac-desc">${this.escapeHtml(facilities.restrooms ? facilities.restrooms.details : 'Basic facility')}</span>
+                        </div>
+                      </div>
+                      <div class="tr-fac-item">
+                        <span class="tr-fac-icon">🚰</span>
+                        <div>
+                          <strong class="tr-fac-name">Drinking Water</strong>
+                          <span class="tr-fac-desc">${this.escapeHtml(facilities.drinkingWater ? facilities.drinkingWater.details : 'Carry bottled water')}</span>
+                        </div>
+                      </div>
+                      <div class="tr-fac-item">
+                        <span class="tr-fac-icon">♿</span>
+                        <div>
+                          <strong class="tr-fac-name">Wheelchair Access</strong>
+                          <span class="tr-fac-desc">${this.escapeHtml(facilities.wheelchairAccess ? facilities.wheelchairAccess.details : 'Partially accessible')}</span>
+                        </div>
+                      </div>
+                      <div class="tr-fac-item">
+                        <span class="tr-fac-icon">📶</span>
+                        <div>
+                          <strong class="tr-fac-name">Mobile Signal</strong>
+                          <span class="tr-fac-desc">${this.escapeHtml(facilities.cellularNetwork ? facilities.cellularNetwork.details : 'Variable network')}</span>
+                        </div>
+                      </div>
+                      <div class="tr-fac-item">
+                        <span class="tr-fac-icon">⚡</span>
+                        <div>
+                          <strong class="tr-fac-name">EV Fast Charging</strong>
+                          <span class="tr-fac-desc">${this.escapeHtml(facilities.evCharging ? facilities.evCharging.details : 'No verified chargers')}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div class="trlm-practical-verdict">
-                      <strong>Last-Mile Practical Reality:</strong> ${this.escapeHtml(lastMile.gapSummary)}
+                  </div>
+
+                  ${visiting.materialRestrictions && visiting.materialRestrictions.length > 0 ? `
+                    <div class="tr-feeder-item">
+                      <span class="tr-feeder-name">Material Restrictions &amp; Prohibitions:</span>
+                      <ul style="margin: 0.3rem 0 0 1.1rem; padding: 0; font-size: 0.78rem; color: var(--color-secondary-text, #716D65);">
+                        ${visiting.materialRestrictions.map(r => `<li>${this.escapeHtml(r)}</li>`).join("")}
+                      </ul>
                     </div>
-                  </div>
+                  ` : ''}
                 </div>
               </div>
+            </div>
+
+            <!-- Full-Width Checklist: Information to Confirm Before Departure -->
+            <div class="tr-checklist-card">
+              <div class="tr-checklist-header">
+                <span class="eyebrow-symbol">✦</span>
+                <h4>Information to Confirm Before Departure</h4>
+              </div>
+              <ul class="tr-checklist-items">
+                ${checklistItems.map(item => `
+                  <li>
+                    <span class="tr-ci-bullet" aria-hidden="true">✓</span>
+                    <span>${this.escapeHtml(item)}</span>
+                  </li>
+                `).join('')}
+              </ul>
             </div>
           </section>
 
-          <!-- Section 2: Return Journey Reality Check -->
-          <section class="tr-section">
-            <h4 class="tr-section-title">
-              <span class="tr-section-num">2</span>
-              <span>Same-Day Return Journey Reality Check</span>
-            </h4>
-            <div class="tr-return-box ${returnJ.sameDayFeasible ? 'tr-return-feasible' : 'tr-return-warning'}">
-              <div class="tr-return-header">
-                <span class="tr-ret-icon">${returnJ.sameDayFeasible ? '✓' : '⚠️'}</span>
-                <div>
-                  <strong>${returnJ.sameDayFeasible ? 'Same-day return is practically feasible from ' + originInfo.name : 'Same-day return from ' + originInfo.name + ' is high risk / impractical'}</strong>
-                  <p class="tr-ret-timing">${this.escapeHtml(returnJ.lastScheduledTransitNote || 'Check return transit upon morning arrival.')}</p>
-                </div>
-              </div>
-              ${returnJ.caution ? `
-                <div class="tr-return-caution">
-                  <strong>Critical Return Warning:</strong> ${this.escapeHtml(returnJ.caution)}
-                </div>
-              ` : ''}
-            </div>
-          </section>
-
-          <!-- Section 3: Before You Go — Visiting Rules & Facilities -->
-          <section class="tr-section">
-            <h4 class="tr-section-title">
-              <span class="tr-section-num">3</span>
-              <span>Before You Go: Visiting Information &amp; Entry Requirements</span>
-            </h4>
-            <div class="tr-visiting-grid">
-              <div class="tr-vg-item">
-                <span class="trvg-label">Statutory Opening Hours</span>
-                <span class="trvg-val">${this.escapeHtml(visiting.openingHours || 'Sunrise to Sunset')}</span>
-                <span class="trvg-source">Source: ${this.escapeHtml(visiting.hoursVerification ? visiting.hoursVerification.source : 'Official Portal')}</span>
-              </div>
-              <div class="tr-vg-item">
-                <span class="trvg-label">Entry Permits &amp; Ticketing</span>
-                <span class="trvg-val">${visiting.entryPermits ? (visiting.entryPermits.required ? 'Mandatory Ticket/Permit Required' : 'Free Entry') : 'Permit checking'}</span>
-                <span class="trvg-pricing">${this.escapeHtml(visiting.entryPermits ? visiting.entryPermits.pricing : 'Standard')}</span>
-                ${visiting.entryPermits && visiting.entryPermits.onlinePortal ? `
-                  <a href="${visiting.entryPermits.onlinePortal}" target="_blank" rel="noopener" class="trvg-link">
-                    Book Official Permit ↗
-                  </a>
-                ` : ''}
-              </div>
-            </div>
-
-            <!-- Facilities Checklist -->
-            <div class="tr-facilities-checklist">
-              <h5 class="tr-subheading">Verified On-Site Visitor Facilities</h5>
-              <div class="tr-facilities-grid">
-                <div class="tr-fac-card">
-                  <span class="trfc-icon">🅿️</span>
-                  <div>
-                    <strong>Parking:</strong>
-                    <span>${this.escapeHtml(facilities.parking ? facilities.parking.details : 'Check on-site')}</span>
-                  </div>
-                </div>
-                <div class="tr-fac-card">
-                  <span class="trfc-icon">🚻</span>
-                  <div>
-                    <strong>Restrooms:</strong>
-                    <span>${this.escapeHtml(facilities.restrooms ? facilities.restrooms.details : 'Basic')}</span>
-                  </div>
-                </div>
-                <div class="tr-fac-card">
-                  <span class="trfc-icon">🚰</span>
-                  <div>
-                    <strong>Drinking Water:</strong>
-                    <span>${this.escapeHtml(facilities.drinkingWater ? facilities.drinkingWater.details : 'Carry water')}</span>
-                  </div>
-                </div>
-                <div class="tr-fac-card">
-                  <span class="trfc-icon">♿</span>
-                  <div>
-                    <strong>Wheelchair Access:</strong>
-                    <span>${this.escapeHtml(facilities.wheelchairAccess ? facilities.wheelchairAccess.details : 'Partially accessible')}</span>
-                  </div>
-                </div>
-                <div class="tr-fac-card">
-                  <span class="trfc-icon">📶</span>
-                  <div>
-                    <strong>Mobile Network:</strong>
-                    <span>${this.escapeHtml(facilities.cellularNetwork ? facilities.cellularNetwork.details : 'Check carrier')}</span>
-                  </div>
-                </div>
-                <div class="tr-fac-card">
-                  <span class="trfc-icon">⚡</span>
-                  <div>
-                    <strong>EV Charging:</strong>
-                    <span>${this.escapeHtml(facilities.evCharging ? facilities.evCharging.details : 'No verified fast chargers')}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Material Restrictions -->
-            ${visiting.materialRestrictions && visiting.materialRestrictions.length > 0 ? `
-              <div class="tr-restrictions-box">
-                <h5 class="tr-subheading">Material Restrictions &amp; Prohibitions</h5>
-                <ul class="tr-restrictions-list">
-                  ${visiting.materialRestrictions.map(r => `<li>${this.escapeHtml(r)}</li>`).join("")}
-                </ul>
-              </div>
-            ` : ''}
-          </section>
-
-          <!-- Section 3.5: Authentic Gujarati Culture & Regional Flavours -->
+          <!-- 4. Authentic Gujarat Experience & Regional Flavours (Terracotta Warm Block) -->
           ${culturalTip ? `
             <section class="tr-section tr-culture-section">
               <h4 class="tr-section-title">
@@ -955,14 +1159,14 @@
                 <div class="tr-culture-card">
                   <div class="trc-icon">🍲</div>
                   <div class="trc-body">
-                    <strong>Local Bites &amp; Highway Food Secrets:</strong>
+                    <strong>Local Highway Flavours &amp; Bites:</strong>
                     <p>${this.escapeHtml(culturalTip.food)}</p>
                   </div>
                 </div>
                 <div class="tr-culture-card">
                   <div class="trc-icon">📸</div>
                   <div class="trc-body">
-                    <strong>Heritage &amp; Photography Vibe:</strong>
+                    <strong>Heritage Atmosphere &amp; Light:</strong>
                     <p>${this.escapeHtml(culturalTip.vibe)}</p>
                   </div>
                 </div>
@@ -970,10 +1174,10 @@
             </section>
           ` : ''}
 
-          <!-- Section 4: Granular Fact Provenance & Freshness Table -->
+          <!-- 5. Statutory Provenance & Freshness Audit -->
           <section class="tr-section">
             <h4 class="tr-section-title">
-              <span class="tr-section-num">4</span>
+              <span class="tr-section-num">📋</span>
               <span>Information Freshness &amp; Statutory Provenance Audit</span>
             </h4>
             <div class="tr-provenance-table-wrap">
@@ -1021,30 +1225,70 @@
               </table>
             </div>
             <p class="tr-disclosure-note">
-              * Distances and durations are estimated based on road network geometry and typical Western Railway / GSRTC run times, not live GPS telematics.
+              * Distances and travel durations are computed based on Gujarat road geometry and typical Western Railway / GSRTC run times, not live telematics.
             </p>
           </section>
 
-          <!-- Section 5: Action Confirmations & Public Reporting -->
-          <footer class="tr-card-footer">
-            <div class="tr-footer-actions">
-              <button class="btn-primary-action" onclick="window.TripReality.viewTripOnMap()">
-                <span>🗺️ View Route &amp; Hubs on Map</span>
+          <!-- 6. High-Contrast Ajrakh Indigo Deck: Useful Next Actions Footer -->
+          <footer class="tr-actions-footer tr-ajrakh-deck">
+            <div class="tr-actions-header">
+              <span class="tr-actions-eyebrow">✦ NEXT STEPS &amp; ACTIONS • આગળનાં પગલાં</span>
+              <h4 class="tr-actions-title">Plan and verify this journey</h4>
+            </div>
+            <div class="tr-actions-button-grid">
+              <button type="button" class="tr-action-btn tr-btn-map" onclick="window.TripReality.viewTripOnMap()">
+                <span class="btn-icon">🗺️</span>
+                <span class="btn-text">
+                  <strong>View on Map</strong>
+                  <small>Show route, origin &amp; transport hubs</small>
+                </span>
               </button>
-              <a href="https://www.google.com/maps/dir/?api=1&destination=${d.coordinates[1]},${d.coordinates[0]}" target="_blank" rel="noopener" class="btn-secondary-action">
-                <span>🚗 Google Maps Direct ↗</span>
+
+              <a href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(originInfo.name + ', Gujarat')}&destination=${d.coordinates[1]},${d.coordinates[0]}" 
+                 target="_blank" rel="noopener" class="tr-action-btn tr-btn-directions">
+                <span class="btn-icon">🚗</span>
+                <span class="btn-text">
+                  <strong>Get Directions</strong>
+                  <small>Open Google Maps navigation ↗</small>
+                </span>
               </a>
-              ${(d.externalLinks || []).filter(l => l.type === 'official_permit').map(l => `
-                <a href="${l.url}" target="_blank" rel="noopener" class="btn-secondary-action">
-                  <span>🎫 ${this.escapeHtml(l.label)} ↗</span>
+
+              ${officialSourceUrl ? `
+                <a href="${officialSourceUrl}" target="_blank" rel="noopener" class="tr-action-btn tr-btn-official">
+                  <span class="btn-icon">🏛️</span>
+                  <span class="btn-text">
+                    <strong>Open Official Source</strong>
+                    <small>${this.escapeHtml(officialSourceLabel)} ↗</small>
+                  </span>
                 </a>
-              `).join("")}
-              <button class="btn-outline-action tr-btn-report" onclick="window.TripReality.openReportModal('${d.destinationId}', '${this.escapeHtml(d.destinationName)}')">
-                <span>⚠️ Report Outdated Info</span>
+              ` : ''}
+
+              <button type="button" class="tr-action-btn tr-btn-change-dest" onclick="window.TripReality.changeDestinationAction()">
+                <span class="btn-icon">🎯</span>
+                <span class="btn-text">
+                  <strong>Change Destination</strong>
+                  <small>Pick another audited place</small>
+                </span>
+              </button>
+
+              <button type="button" class="tr-action-btn tr-btn-change-origin" onclick="window.TripReality.recheckOriginAction()">
+                <span class="btn-icon">🏠</span>
+                <span class="btn-text">
+                  <strong>Recheck Another Origin</strong>
+                  <small>Test trip from 15 regional hubs</small>
+                </span>
+              </button>
+
+              <button type="button" class="tr-action-btn tr-btn-report-feedback" onclick="window.TripReality.openReportModal('${d.destinationId}', '${this.escapeHtml(d.destinationName)}')">
+                <span class="btn-icon">⚠️</span>
+                <span class="btn-text">
+                  <strong>Report Outdated Info</strong>
+                  <small>Submit a civic data correction</small>
+                </span>
               </button>
             </div>
           </footer>
-        </article>
+        </div>
       `;
     },
 
@@ -1237,6 +1481,41 @@
         const modal = document.getElementById("tripRealityReportModal");
         if (modal) modal.close();
       }, 2500);
+    },
+
+    changeDestinationAction: function () {
+      const destSelect = document.getElementById("trDestinationSelect");
+      const quickpicks = document.querySelector(".tr-quickpicks-section");
+      if (quickpicks) {
+        quickpicks.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (destSelect) {
+        destSelect.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      if (destSelect) {
+        setTimeout(() => destSelect.focus(), 350);
+      }
+    },
+
+    recheckOriginAction: function () {
+      const originSelect = document.getElementById("trOriginSelect");
+      if (originSelect) {
+        originSelect.scrollIntoView({ behavior: "smooth", block: "center" });
+        setTimeout(() => originSelect.focus(), 350);
+      }
+    },
+
+    openOfficialSourceAction: function () {
+      if (!this.activeDestination) return;
+      const d = this.activeDestination;
+      let url = d.visitingConditions && d.visitingConditions.entryPermits && d.visitingConditions.entryPermits.onlinePortal;
+      if (!url && d.externalLinks && d.externalLinks.length > 0) {
+        const official = d.externalLinks.find(l => l.type === 'official_permit' || l.type === 'official_portal');
+        if (official) url = official.url;
+      }
+      if (!url) {
+        url = "https://www.gujarattourism.com/";
+      }
+      window.open(url, "_blank", "noopener,noreferrer");
     },
 
     escapeHtml: function (str) {
