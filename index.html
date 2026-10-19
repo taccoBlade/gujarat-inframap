@@ -167,6 +167,9 @@
             <button class="places-mode-btn" id="btnModeTripReality" data-mode="trip-reality" role="tab" aria-selected="false">
               <span>🧭 Trip Reality &amp; Last-Mile Feasibility</span>
             </button>
+            <button class="places-mode-btn" id="btnModeUnfiltered" data-mode="unfiltered" role="tab" aria-selected="false">
+              <span>⚡ Gujarat Unfiltered • અસલી વાર્તાઓ</span>
+            </button>
           </div>
         </div>
 
@@ -247,6 +250,11 @@
           <div id="tourismCardsGrid" class="tourism-cards-grid" role="region" aria-label="Gujarat Destinations Grid">
             <!-- Populated dynamically by TourismDiscovery.render() -->
           </div>
+        </div>
+
+        <!-- Mode 3: Gujarat Unfiltered Sub-View -->
+        <div id="placesUnfilteredSubView" class="places-subview hidden">
+          <!-- Populated dynamically by GujaratUnfiltered.render() -->
         </div>
       </div>
     </section>
@@ -878,6 +886,13 @@
     </div>
   </dialog>
 
+  <!-- Gujarat Unfiltered Story & Reality Modal Dialog -->
+  <dialog id="unfilteredStoryModal" class="unfiltered-modal" aria-label="Gujarat Unfiltered Story Deep-Dive">
+    <div class="unfiltered-modal-inner" id="unfilteredModalContent">
+      <!-- Populated dynamically by GujaratUnfiltered.openStoryModal(id) -->
+    </div>
+  </dialog>
+
   <!-- Leaflet Library -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
@@ -898,6 +913,9 @@
 
   <!-- Gujarat Atlas Trip Reality & Last-Mile Feasibility Engine -->
   <script src="js/trip_reality.js?v=1.0.0"></script>
+
+  <!-- Gujarat Unfiltered — The Unexpected Side of Gujarat Discovery Engine -->
+  <script src="js/gujarat_unfiltered.js?v=1.0.0"></script>
 
   <!-- Gujarat InfraMap Public Views & Editorial Information Engine -->
   <script src="js/public_views.js?v=6.0.0"></script>

@@ -371,6 +371,12 @@
   }
 
   function switchDestination(destKey, updateHash = true) {
+    let targetMode = null;
+    if (destKey === "unfiltered") {
+      destKey = "places";
+      targetMode = "unfiltered";
+    }
+
     // Normalize aliases
     if (destKey === "trip-reality" || destKey === "feasibility") destKey = "plan";
     if (destKey === "directory") destKey = "infrastructure";
@@ -427,8 +433,13 @@
       }
     } else if (destKey === "places") {
       if (placesView) placesView.classList.remove("hidden");
-      if (window.TourismDiscovery && typeof window.TourismDiscovery.render === "function") {
-        window.TourismDiscovery.render();
+      if (targetMode === "unfiltered") {
+        const btnUnfiltered = document.getElementById("btnModeUnfiltered");
+        if (btnUnfiltered) btnUnfiltered.click();
+      } else {
+        if (window.TourismDiscovery && typeof window.TourismDiscovery.render === "function") {
+          window.TourismDiscovery.render();
+        }
       }
     } else if (destKey === "plan") {
       if (planVisitView) planVisitView.classList.remove("hidden");
@@ -485,6 +496,15 @@
     const rawHash = fullHash.split("?")[0].toLowerCase();
     if (!rawHash) {
       switchDestination("explore", false);
+      return;
+    }
+
+    if (rawHash.startsWith("unfiltered") || rawHash === "places/unfiltered") {
+      switchDestination("places", false);
+      setTimeout(() => {
+        const btnUnfiltered = document.getElementById("btnModeUnfiltered");
+        if (btnUnfiltered) btnUnfiltered.click();
+      }, 60);
       return;
     }
 

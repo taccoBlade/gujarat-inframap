@@ -241,11 +241,13 @@
         });
       }
 
-      // Places Exploration Mode Switcher (Catalogue vs Trip Reality)
+      // Places Exploration Mode Switcher (Catalogue vs Trip Reality vs Gujarat Unfiltered)
       const btnModeCatalog = document.getElementById("btnModeCatalog");
       const btnModeTripReality = document.getElementById("btnModeTripReality");
+      const btnModeUnfiltered = document.getElementById("btnModeUnfiltered");
       const subViewCatalog = document.getElementById("placesCatalogSubView");
       const subViewTripReality = document.getElementById("tripRealitySubView");
+      const subViewUnfiltered = document.getElementById("placesUnfilteredSubView");
 
       if (btnModeCatalog && btnModeTripReality) {
         btnModeCatalog.addEventListener("click", () => {
@@ -253,8 +255,13 @@
           btnModeCatalog.setAttribute("aria-selected", "true");
           btnModeTripReality.classList.remove("active");
           btnModeTripReality.setAttribute("aria-selected", "false");
+          if (btnModeUnfiltered) {
+            btnModeUnfiltered.classList.remove("active");
+            btnModeUnfiltered.setAttribute("aria-selected", "false");
+          }
           if (subViewCatalog) subViewCatalog.classList.remove("hidden");
           if (subViewTripReality) subViewTripReality.classList.add("hidden");
+          if (subViewUnfiltered) subViewUnfiltered.classList.add("hidden");
           if (window.history && window.history.pushState) {
             history.pushState(null, "", "#/places");
           }
@@ -265,8 +272,13 @@
           btnModeTripReality.setAttribute("aria-selected", "true");
           btnModeCatalog.classList.remove("active");
           btnModeCatalog.setAttribute("aria-selected", "false");
+          if (btnModeUnfiltered) {
+            btnModeUnfiltered.classList.remove("active");
+            btnModeUnfiltered.setAttribute("aria-selected", "false");
+          }
           if (subViewCatalog) subViewCatalog.classList.add("hidden");
           if (subViewTripReality) subViewTripReality.classList.remove("hidden");
+          if (subViewUnfiltered) subViewUnfiltered.classList.add("hidden");
           if (window.TripReality) {
             window.TripReality.renderAssessment();
             window.TripReality.updateMapVisualization();
@@ -275,6 +287,26 @@
             history.pushState(null, "", "#/trip-reality");
           }
         });
+
+        if (btnModeUnfiltered) {
+          btnModeUnfiltered.addEventListener("click", () => {
+            btnModeUnfiltered.classList.add("active");
+            btnModeUnfiltered.setAttribute("aria-selected", "true");
+            btnModeCatalog.classList.remove("active");
+            btnModeCatalog.setAttribute("aria-selected", "false");
+            btnModeTripReality.classList.remove("active");
+            btnModeTripReality.setAttribute("aria-selected", "false");
+            if (subViewCatalog) subViewCatalog.classList.add("hidden");
+            if (subViewTripReality) subViewTripReality.classList.add("hidden");
+            if (subViewUnfiltered) subViewUnfiltered.classList.remove("hidden");
+            if (window.GujaratUnfiltered) {
+              window.GujaratUnfiltered.render();
+            }
+            if (window.history && window.history.pushState) {
+              history.pushState(null, "", "#/unfiltered");
+            }
+          });
+        }
       }
     },
 
@@ -714,16 +746,23 @@
       }
       const btnModeCatalog = document.getElementById("btnModeCatalog");
       const btnModeTripReality = document.getElementById("btnModeTripReality");
+      const btnModeUnfiltered = document.getElementById("btnModeUnfiltered");
       const subViewCatalog = document.getElementById("placesCatalogSubView");
       const subViewTripReality = document.getElementById("tripRealitySubView");
+      const subViewUnfiltered = document.getElementById("placesUnfilteredSubView");
 
       if (btnModeCatalog && btnModeTripReality) {
         btnModeTripReality.classList.add("active");
         btnModeTripReality.setAttribute("aria-selected", "true");
         btnModeCatalog.classList.remove("active");
         btnModeCatalog.setAttribute("aria-selected", "false");
+        if (btnModeUnfiltered) {
+          btnModeUnfiltered.classList.remove("active");
+          btnModeUnfiltered.setAttribute("aria-selected", "false");
+        }
       }
       if (subViewCatalog) subViewCatalog.classList.add("hidden");
+      if (subViewUnfiltered) subViewUnfiltered.classList.add("hidden");
       if (subViewTripReality) subViewTripReality.classList.remove("hidden");
 
       if (window.TripReality) {
