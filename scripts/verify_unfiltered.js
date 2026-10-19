@@ -319,8 +319,54 @@ async function runUnfilteredVerification() {
     await client.eval(`window.GujaratUnfiltered.closeStoryModal()`);
     await new Promise(r => setTimeout(r, 300));
 
-    // TEST 8: Map Markers Integration
-    console.log('\n--- CHECK 8: Leaflet Map Integration ---');
+    // TEST 8: 34-District Research Audit Ledger Modal
+    console.log('\n--- CHECK 8: 34-District Research Audit Ledger Modal ---');
+    const ledgerInfo = await client.eval(`(async () => {
+      await window.GujaratUnfiltered.openLedgerModal();
+      const modal = document.getElementById('unfilteredLedgerModal');
+      const title = modal.querySelector('.gu-ledger-title')?.innerText;
+      const totalCards = modal.querySelectorAll('.gu-ledger-total-card');
+      const cardsCount = modal.querySelectorAll('.gu-ledger-district-card').length;
+      return {
+        isOpen: modal.hasAttribute('open') || modal.classList.contains('open'),
+        title,
+        totalsFound: totalCards.length,
+        districtsRendered: cardsCount
+      };
+    })()`);
+
+    assert(ledgerInfo.isOpen, 'Research Audit Ledger Modal opens cleanly with showModal()');
+    assert(ledgerInfo.totalsFound === 5, `Audit ledger renders 5 state summary total cards (got: ${ledgerInfo.totalsFound})`);
+    assert(ledgerInfo.districtsRendered === 34, `Audit ledger renders all 34 district audit cards (got: ${ledgerInfo.districtsRendered})`);
+
+    // Test Ledger Search Filter
+    const ledgerFilterTest = await client.eval(`(() => {
+      window.GujaratUnfiltered.filterLedger('Vav-Tharad');
+      const filteredCards = document.querySelectorAll('#unfilteredLedgerModal .gu-ledger-district-card');
+      const firstCardName = filteredCards[0] ? filteredCards[0].querySelector('.gu-ld-name')?.innerText : '';
+      const hasDebunkedClaim = filteredCards[0] ? filteredCards[0].innerText.includes('Suigam') : false;
+      return {
+        count: filteredCards.length,
+        firstCardName,
+        hasDebunkedClaim
+      };
+    })()`);
+
+    assert(ledgerFilterTest.count === 1, `Ledger search for "Vav-Tharad" returns exactly 1 district card`);
+    assert(ledgerFilterTest.firstCardName.includes('Vav-Tharad'), `Matched 34th District ledger card: "${ledgerFilterTest.firstCardName}"`);
+    assert(ledgerFilterTest.hasDebunkedClaim, `Ledger card contains debunked Suigam claim with scientific explanation`);
+
+    // Reset ledger search and capture screenshot
+    await client.eval(`window.GujaratUnfiltered.filterLedger('')`);
+    await new Promise(r => setTimeout(r, 300));
+    await client.captureScreenshot(path.join(artifactDir, 'unfiltered_ledger_modal.png'));
+
+    // Close ledger modal
+    await client.eval(`window.GujaratUnfiltered.closeLedgerModal()`);
+    await new Promise(r => setTimeout(r, 300));
+
+    // TEST 9: Map Markers Integration
+    console.log('\n--- CHECK 9: Leaflet Map Integration ---');
     const mapInfo = await client.eval(`(() => {
       const layer = window.GujaratUnfiltered.mapMarkersLayer;
       const markers = window.GujaratUnfiltered.markerMap;
@@ -333,8 +379,8 @@ async function runUnfilteredVerification() {
     assert(mapInfo.hasLayer, 'Leaflet markers layer group initialized on map');
     assert(mapInfo.layerCount === 45, `All 45 unfiltered stories plotted as map markers (got: ${mapInfo.layerCount})`);
 
-    // TEST 9: Direct Routing Check
-    console.log('\n--- CHECK 9: Hash Routing & Deep Linking (#/unfiltered) ---');
+    // TEST 10: Direct Routing Check
+    console.log('\n--- CHECK 10: Hash Routing & Deep Linking (#/unfiltered) ---');
     const routeCheck = await client.eval(`(() => {
       window.location.hash = '#/unfiltered';
       window.dispatchEvent(new HashChangeEvent('hashchange'));
@@ -347,8 +393,8 @@ async function runUnfilteredVerification() {
     assert(routeCheck.subUnfilteredVisible, 'Navigating to #/unfiltered reveals Gujarat Unfiltered view');
     assert(routeCheck.btnActive, '#btnModeUnfiltered is active on hashchange');
 
-    // TEST 10: Console Health
-    console.log('\n--- CHECK 10: Console Error Audit ---');
+    // TEST 11: Console Health
+    console.log('\n--- CHECK 11: Console Error Audit ---');
     assert(client.consoleErrors.length === 0, `Clean browser console with 0 errors (got: ${client.consoleErrors.length})`);
     if (client.consoleErrors.length > 0) {
       console.error('Console errors logged:', client.consoleErrors);

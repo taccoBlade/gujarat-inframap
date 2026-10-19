@@ -83,6 +83,8 @@
     constructor() {
       this.stories = [];
       this.districts = [];
+      this.ledgerData = null;
+      this.ledgerSearchQuery = '';
       this.activeCollection = 'all';
       this.activeDistrict = 'all';
       this.searchQuery = '';
@@ -101,11 +103,17 @@
       this.isLoading = true;
 
       try {
-        const response = await fetch('data/gujarat_unfiltered.json');
-        if (!response.ok) {
-          throw new Error(`Failed to load gujarat_unfiltered.json: ${response.status}`);
+        const [storiesResp, ledgerResp] = await Promise.all([
+          fetch('data/gujarat_unfiltered.json'),
+          fetch('data/district_coverage_ledger.json')
+        ]);
+        if (!storiesResp.ok) {
+          throw new Error(`Failed to load gujarat_unfiltered.json: ${storiesResp.status}`);
         }
-        this.stories = await response.json();
+        this.stories = await storiesResp.json();
+        if (ledgerResp.ok) {
+          this.ledgerData = await ledgerResp.json();
+        }
         
         // Extract unique districts
         const distSet = new Set(this.stories.map(s => s.district));
@@ -192,6 +200,7 @@
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           this.closeStoryModal();
+          this.closeLedgerModal();
         }
       });
     }
@@ -331,9 +340,9 @@
             Showing <strong>${filtered.length}</strong> unexpected places across Gujarat (34 Districts Audited)
           </span>
           <div class="gu-trust-banner">
-            <span class="gu-trust-pill">
-              <span class="gu-trust-dot">🏛️</span> 34 Districts Audited
-            </span>
+            <button class="gu-trust-pill gu-trust-btn" onclick="window.GujaratUnfiltered.openLedgerModal()" title="View Complete 34-District Research Audit Ledger" aria-label="Open 34-District Research Audit Ledger">
+              <span class="gu-trust-dot">🏛️</span> 34 Districts Audited (View Ledger)
+            </button>
             <span class="gu-trust-pill">
               <span class="gu-trust-dot">⚖️</span> Statutory Access Declared
             </span>
@@ -741,6 +750,234 @@
      */
     closeStoryModal() {
       const modal = document.getElementById('unfilteredStoryModal');
+      if (!modal) return;
+      if (typeof modal.close === 'function') {
+        modal.close();
+      } else {
+        modal.classList.remove('open');
+      }
+    }
+
+    /**
+     * Open 34-District Research Audit Ledger Modal
+     */
+    async openLedgerModal(filterText = '') {
+      const modal = document.getElementById('unfilteredLedgerModal');
+      const content = document.getElementById('unfilteredLedgerModalContent');
+      if (!modal || !content) return;
+
+      if (!this.ledgerData) {
+        try {
+          const resp = await fetch('data/district_coverage_ledger.json');
+          if (resp.ok) this.ledgerData = await resp.json();
+        } catch (e) {
+          console.error('[GujaratUnfiltered] Error loading ledger data:', e);
+        }
+      }
+
+      this.ledgerSearchQuery = filterText;
+      this.renderLedgerContent(content);
+
+      if (typeof modal.showModal === 'function') {
+        modal.showModal();
+      } else {
+        modal.classList.add('open');
+      }
+      modal.scrollTop = 0;
+    }
+
+    /**
+     * Filter ledger in real-time
+     */
+    filterLedger(val) {
+      this.ledgerSearchQuery = val;
+      const content = document.getElementById('unfilteredLedgerModalContent');
+      if (content) {
+        this.renderLedgerContent(content);
+        const searchInput = document.getElementById('guLedgerSearchInput');
+        if (searchInput) {
+          searchInput.focus();
+          searchInput.setSelectionRange(val.length, val.length);
+        }
+      }
+    }
+
+    /**
+     * Render ledger content
+     */
+    renderLedgerContent(content) {
+      if (!this.ledgerData) {
+        content.innerHTML = `
+          <div style="padding: 2rem; text-align: center;">
+            <p>Loading research audit ledger...</p>
+            <button class="btn-secondary-action" onclick="window.GujaratUnfiltered.closeLedgerModal()">Close</button>
+          </div>
+        `;
+        return;
+      }
+
+      const meta = this.ledgerData.metadata || {};
+      const totals = this.ledgerData.statewideAuditTotals || {};
+      const q = (this.ledgerSearchQuery || '').trim().toLowerCase();
+      
+      const districts = (this.ledgerData.districtLedger || []).filter(d => {
+        if (!q) return true;
+        const hay = [
+          d.district,
+          d.is34thDistrict ? '34th district vav tharad' : '',
+          ...(d.verifiedPlaces || []).map(p => `${p.name} ${p.category} ${p.collection}`),
+          ...(d.rejectedClaimsAudit || []).map(r => `${r.candidateName} ${r.claim} ${r.reason}`),
+          d.researchGapNote || ''
+        ].join(' ').toLowerCase();
+        return hay.includes(q);
+      });
+
+      content.innerHTML = `
+        <article class="gu-modal-article">
+          <!-- Modal Close Button -->
+          <button class="gu-modal-close-btn" onclick="window.GujaratUnfiltered.closeLedgerModal()" aria-label="Close Research Ledger">✕</button>
+
+          <!-- Header -->
+          <div class="gu-ledger-header">
+            <span class="gu-ledger-eyebrow">🏛️ STATEWIDE RESEARCH &amp; VERIFICATION AUDIT • ALL 34 DISTRICTS</span>
+            <h2 class="gu-ledger-title">Gujarat Unfiltered: 34-District Place Discovery Ledger</h2>
+            <p class="gu-ledger-desc">
+              ${meta.curationStandard || 'Rigorous physical fact-checking, separation of oral lore from ground reality, statutory access transparency, and zero promotion of trespassing.'}
+            </p>
+          </div>
+
+          <!-- Statewide Totals Bar -->
+          <div class="gu-ledger-totals-grid">
+            <div class="gu-ledger-total-card">
+              <div class="gu-ledger-total-num">${totals.totalCandidatesResearched || 80}</div>
+              <div class="gu-ledger-total-lbl">Candidates Researched</div>
+            </div>
+            <div class="gu-ledger-total-card">
+              <div class="gu-ledger-total-num" style="color: #15803D;">${totals.totalAccepted || 45}</div>
+              <div class="gu-ledger-total-lbl">Accepted Places</div>
+            </div>
+            <div class="gu-ledger-total-card">
+              <div class="gu-ledger-total-num" style="color: #B84638;">${totals.totalRejectedOrDebunked || 35}</div>
+              <div class="gu-ledger-total-lbl">Debunked / Rejected</div>
+            </div>
+            <div class="gu-ledger-total-card">
+              <div class="gu-ledger-total-num" style="color: #315BD6;">${totals.totalDuplicatedConsolidated || 2}</div>
+              <div class="gu-ledger-total-lbl">Duplicates Consolidated</div>
+            </div>
+            <div class="gu-ledger-total-card">
+              <div class="gu-ledger-total-num" style="color: #D97706;">${totals.totalAwaitingFieldVerification || 0}</div>
+              <div class="gu-ledger-total-lbl">Awaiting Verification</div>
+            </div>
+          </div>
+
+          <!-- Body with Search & District Cards -->
+          <div class="gu-ledger-body">
+            <div class="gu-ledger-search-bar">
+              <input 
+                type="text" 
+                id="guLedgerSearchInput" 
+                class="gu-ledger-search-input" 
+                placeholder="Search ledger by district (e.g. Vav-Tharad, Ahmedabad, Kachchh, Surat, Dang) or rejected claim..." 
+                value="${this.ledgerSearchQuery || ''}"
+                oninput="window.GujaratUnfiltered.filterLedger(this.value)"
+              />
+              ${this.ledgerSearchQuery ? `
+                <button class="btn-secondary-action" onclick="window.GujaratUnfiltered.filterLedger('')" style="padding: 0.5rem 1rem;">Clear</button>
+              ` : ''}
+            </div>
+
+            <div style="font-size: 0.78rem; font-weight: 700; color: #555148; margin-bottom: 0.25rem;">
+              Showing <strong>${districts.length}</strong> of 34 Districts
+            </div>
+
+            ${districts.length > 0 ? districts.map(d => `
+              <div class="gu-ledger-district-card">
+                <div class="gu-ld-header">
+                  <div class="gu-ld-name">
+                    <span>${d.district}</span>
+                    ${d.is34thDistrict ? `
+                      <span class="gu-ld-pill" style="background:#E2AE48; color:#20201D; font-weight:800;">★ 34th District (Created 2 Oct 2025)</span>
+                    ` : ''}
+                  </div>
+                  <div class="gu-ld-stats">
+                    <span class="gu-ld-pill gu-ld-pill-accepted">✓ ${d.researchStatistics?.acceptedCount || 0} Accepted</span>
+                    <span class="gu-ld-pill gu-ld-pill-rejected">✕ ${d.researchStatistics?.rejectedCount || 0} Rejected/Debunked</span>
+                    ${d.researchStatistics?.duplicatedConsolidatedCount > 0 ? `
+                      <span class="gu-ld-pill">⚯ ${d.researchStatistics.duplicatedConsolidatedCount} Consolidated</span>
+                    ` : ''}
+                  </div>
+                </div>
+
+                <!-- Accepted Verified Places -->
+                <div class="gu-ld-section">
+                  <span class="gu-ld-sec-title">✓ Verified Places in Database:</span>
+                  <div class="gu-ld-items-list">
+                    ${(d.verifiedPlaces || []).map(p => `
+                      <div class="gu-ld-item gu-ld-item-acc">
+                        <strong>${p.name}</strong> 
+                        <span style="font-size: 0.72rem; color: #555148;">• [${p.category} | ${p.collection}]</span>
+                        <div style="font-size: 0.74rem; color: #166534; margin-top: 0.15rem;">
+                          ⚖️ ${p.accessType} (${p.isLawful ? 'Lawful Entry' : 'Restricted'}) • ${p.primarySourcesCount || 1} Primary Sources • ${p.corroboratingSourcesCount || 1} Citations
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <!-- Rejected / Debunked Claims -->
+                ${(d.rejectedClaimsAudit || []).length > 0 ? `
+                  <div class="gu-ld-section">
+                    <span class="gu-ld-sec-title" style="color: #991B1B;">✕ Debunked Legends &amp; Rejected Claims:</span>
+                    <div class="gu-ld-items-list">
+                      ${d.rejectedClaimsAudit.map(r => `
+                        <div class="gu-ld-item gu-ld-item-rej">
+                          <strong>Candidate: ${r.candidateName}</strong> [${r.category}]
+                          <div style="font-size: 0.75rem; color: #4B5563; margin-top: 0.15rem;"><em>Claim:</em> "${r.claim}"</div>
+                          <span class="gu-ld-reason"><strong>Reason for Rejection:</strong> ${r.reason}</span>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                ` : ''}
+
+                <!-- Category Gaps Note -->
+                ${d.researchGapNote ? `
+                  <div class="gu-ld-gap-note">
+                    <strong>Category Coverage &amp; Gap Rationale:</strong> ${d.researchGapNote}
+                  </div>
+                ` : ''}
+              </div>
+            `).join('') : `
+              <div style="padding: 2rem; text-align: center; color: #716D65;">
+                <p>No districts match "${this.ledgerSearchQuery}".</p>
+                <button class="btn-secondary-action" onclick="window.GujaratUnfiltered.filterLedger('')">Reset Search</button>
+              </div>
+            `}
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="gu-ledger-footer">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <a href="data/district_coverage_ledger.json" download class="btn-secondary-action" style="font-size: 0.8rem; text-decoration: none;">
+                📥 Download Full Ledger (JSON)
+              </a>
+              <a href="data/schema/gujarat_unfiltered.schema.json" target="_blank" rel="noopener noreferrer" class="btn-secondary-action" style="font-size: 0.8rem; text-decoration: none;">
+                📜 View JSON Schema (Draft 2020-12)
+              </a>
+            </div>
+            <button class="btn-primary-action" onclick="window.GujaratUnfiltered.closeLedgerModal()">
+              Close Ledger
+            </button>
+          </div>
+        </article>
+      `;
+    }
+
+    /**
+     * Close ledger modal
+     */
+    closeLedgerModal() {
+      const modal = document.getElementById('unfilteredLedgerModal');
       if (!modal) return;
       if (typeof modal.close === 'function') {
         modal.close();

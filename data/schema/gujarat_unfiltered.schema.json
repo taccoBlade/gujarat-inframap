@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gujarat-inframap.org/schemas/gujarat_unfiltered.schema.json",
+  "title": "Gujarat Unfiltered Discovery Record",
+  "description": "JSON Schema specification for research-backed unexpected Gujarat place discoveries covering all 34 official administrative districts.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "name",
+      "gujaratiName",
+      "district",
+      "taluka",
+      "region",
+      "coordinates",
+      "positionalConfidence",
+      "category",
+      "collection",
+      "collectionLabel",
+      "tagline",
+      "theStory",
+      "theFolklore",
+      "theGroundReality",
+      "claimClassification",
+      "researchStatus",
+      "factCheckBadge",
+      "factCheckStatus",
+      "legalAccess",
+      "primarySources",
+      "corroboratingSources",
+      "researchDate",
+      "uncertaintiesNote",
+      "bestTimeToExperience",
+      "photoSpotTip",
+      "nearbyCityDetour",
+      "imageUrl",
+      "imageCredit",
+      "curatorNote"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+        "description": "Stable unique slug identifier"
+      },
+      "name": {
+        "type": "string",
+        "description": "Canonical English place name"
+      },
+      "alternateNames": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Historical, vernacular, or popular alternate names"
+      },
+      "gujaratiName": {
+        "type": "string",
+        "description": "Native Gujarati script place name"
+      },
+      "district": {
+        "type": "string",
+        "enum": [
+          "Ahmedabad", "Amreli", "Anand", "Aravalli", "Banaskantha", "Bharuch",
+          "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Devbhumi Dwarka",
+          "Gandhinagar", "Gir Somnath", "Jamnagar", "Junagadh", "Kachchh",
+          "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari",
+          "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat",
+          "Surendranagar", "Tapi", "The Dangs", "Dang", "Vadodara", "Valsad", "Vav-Tharad"
+        ],
+        "description": "Official administrative district name"
+      },
+      "taluka": {
+        "type": "string",
+        "description": "Official sub-district revenue taluka"
+      },
+      "region": {
+        "type": "string",
+        "enum": ["Central Gujarat", "North Gujarat", "Saurashtra", "Kachchh", "South Gujarat"],
+        "description": "Geographic sub-region of Gujarat"
+      },
+      "coordinates": {
+        "type": "array",
+        "items": { "type": "number" },
+        "minItems": 2,
+        "maxItems": 2,
+        "description": "Geographic coordinates as [longitude, latitude] in WGS84"
+      },
+      "coordinatesSource": {
+        "type": "string",
+        "description": "Authoritative spatial dataset or geodetic survey reference"
+      },
+      "positionalConfidence": {
+        "type": "string",
+        "enum": ["exact", "approximate", "settlement_level"],
+        "description": "Confidence level of recorded spatial coordinates"
+      },
+      "category": {
+        "type": "string",
+        "enum": ["heritage", "nature", "folklore_eerie", "unusual_landmark", "abandoned_site", "viewpoint"],
+        "description": "Primary domain typology"
+      },
+      "collection": {
+        "type": "string",
+        "enum": ["after-dark", "hidden-plain-sight", "weird-gujarat", "lost-chapters", "nature-side-quests", "worth-detour"],
+        "description": "Curated editorial discovery collection key"
+      },
+      "collectionLabel": {
+        "type": "string",
+        "description": "Display label for editorial collection"
+      },
+      "tagline": {
+        "type": "string",
+        "description": "Short, evocative editorial subtitle"
+      },
+      "theStory": {
+        "type": "string",
+        "description": "Atmospheric, grounded narrative description of place and physical setting"
+      },
+      "theFolklore": {
+        "type": "string",
+        "description": "Attributed oral traditions, campfire tales, and local folklore"
+      },
+      "theGroundReality": {
+        "type": "string",
+        "description": "Documented archaeological, geological, historical, or scientific reality"
+      },
+      "claimClassification": {
+        "type": "string",
+        "enum": ["historical_fact", "community_folklore", "debunked_legend", "geological_anomaly", "unverified_claim"],
+        "description": "Epistemological verdict on the core claim"
+      },
+      "researchStatus": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "documented_place",
+            "documented_history",
+            "local_legend",
+            "unverified_claim",
+            "access_unconfirmed",
+            "public_access",
+            "restricted_access"
+          ]
+        },
+        "description": "Multi-dimensional audit labels coexisting across place, claim, and access dimensions"
+      },
+      "factCheckBadge": {
+        "type": "string",
+        "description": "Visual stamp text summarizing the factual determination"
+      },
+      "factCheckStatus": {
+        "type": "string",
+        "enum": ["verified", "debunked", "geological_fact", "historical_fact", "community_lore"],
+        "description": "Machine-readable fact check categorization"
+      },
+      "legalAccess": {
+        "type": "object",
+        "required": ["isSafeAndLawful", "accessType", "rulesAndWarnings", "source"],
+        "properties": {
+          "isSafeAndLawful": {
+            "type": "boolean",
+            "description": "True if public entry is permitted without trespassing; false if private/restricted property"
+          },
+          "accessType": {
+            "type": "string",
+            "description": "Statutory jurisdiction (e.g. ASI Protected, State Reserve, Forest Sanctuary, Private Property)"
+          },
+          "rulesAndWarnings": {
+            "type": "string",
+            "description": "Explicit visiting hours, safety precautions, permit requirements, or trespassing prohibitions"
+          },
+          "source": {
+            "type": "string",
+            "description": "Authoritative administrative agency governing visitor access"
+          }
+        }
+      },
+      "primarySources": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["title", "url", "publisher", "type"],
+          "properties": {
+            "title": { "type": "string" },
+            "url": { "type": "string" },
+            "publisher": { "type": "string" },
+            "author": { "type": "string" },
+            "publicationDate": { "type": "string" },
+            "type": { "type": "string", "enum": ["official", "news", "academic", "archaeological", "gazetteer"] }
+          }
+        },
+        "minItems": 1,
+        "description": "Authoritative primary sources establishing place identity and status"
+      },
+      "corroboratingSources": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["title", "url", "publisher"],
+          "properties": {
+            "title": { "type": "string" },
+            "url": { "type": "string" },
+            "publisher": { "type": "string" },
+            "author": { "type": "string" },
+            "publicationDate": { "type": "string" }
+          }
+        },
+        "description": "Independent secondary, scholarly, or gazetteer sources corroborating facts"
+      },
+      "researchDate": {
+        "type": "string",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+        "description": "ISO date of research audit completion"
+      },
+      "uncertaintiesNote": {
+        "type": "string",
+        "description": "Transparent documentation of unverified details, scholarly debates, or survey limitations"
+      },
+      "bestTimeToExperience": {
+        "type": "string",
+        "description": "Optimal seasonal and diurnal visiting recommendations"
+      },
+      "photoSpotTip": {
+        "type": "string",
+        "description": "Actionable photographic composition and lighting guidance"
+      },
+      "nearbyCityDetour": {
+        "type": "string",
+        "description": "Kilometer detour estimate and highway transit from nearest urban node"
+      },
+      "imageUrl": {
+        "type": "string",
+        "format": "uri",
+        "description": "High-resolution authenticated CDN image URL"
+      },
+      "imageCredit": {
+        "type": "string",
+        "description": "Photographer and platform attribution"
+      },
+      "imageLicense": {
+        "type": "string",
+        "description": "Commercial license or creative commons provenance"
+      },
+      "curatorNote": {
+        "type": "string",
+        "description": "Synthesized editorial perspective contextualizing the place's cultural significance"
+      }
+    }
+  }
+}
