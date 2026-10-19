@@ -45,11 +45,19 @@ export interface UnfilteredPlaceStory {
 }
 
 export interface UserPassportProfile {
+  uid: string;
   name: string;
   handle: string;
+  email?: string;
+  phoneNumber?: string;
+  photoURL?: string;
+  authProvider?: 'google' | 'phone' | 'demo' | 'anonymous';
   homeDistrict: string;
   collectedStampIds: string[];
   bookmarkedStoryIds: string[];
+  visitedPlaceIds?: string[];
+  badges?: string[];
   lastCheckedInDistrict?: string;
   joinedDate: string;
+  isLoggedIn: boolean;
 }

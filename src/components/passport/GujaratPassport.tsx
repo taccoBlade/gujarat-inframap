@@ -3,10 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { GUJARAT_34_DISTRICTS } from '../../data/passport-districts';
 import { DistrictRegion } from '../../types/atlas';
-import { Share2, CheckCircle2, MapPin, Sparkles, Trophy, Lock } from 'lucide-react';
+import { Share2, CheckCircle2, MapPin, Sparkles, Trophy, Lock, Cloud, CloudOff, LogIn } from 'lucide-react';
 
 export const GujaratPassport: React.FC = () => {
-  const { userProfile, claimDistrictStamp, setShareModalOpen } = useAtlasStore();
+  const { 
+    userProfile, 
+    claimDistrictStamp, 
+    setShareModalOpen, 
+    setAuthModalOpen, 
+    setOnboardingOpen 
+  } = useAtlasStore();
   const [selectedRegion, setSelectedRegion] = useState<DistrictRegion | 'All'>('All');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -55,6 +61,52 @@ export const GujaratPassport: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Cloud Sync & Auth Status Banner */}
+      <div className="mb-4">
+        {!userProfile.isLoggedIn ? (
+          <div className="p-3 sm:p-4 rounded-xl bg-amber-500/10 border-2 border-amber-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                <CloudOff className="w-4 h-4" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-amber-300">
+                  Guest Mode • Stamps saved locally on this browser
+                </p>
+                <p className="text-[11px] text-slate-400">
+                  Sign in with Google or Phone to sync your Gujarat travel passport across devices and claim your explorer rank.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setAuthModalOpen(true)}
+              className="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all flex-shrink-0"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Claim Cloud Passport</span>
+            </button>
+          </div>
+        ) : (
+          <div className="p-2.5 sm:p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2 text-emerald-300">
+              <Cloud className="w-4 h-4 text-emerald-400" />
+              <span>
+                Passport Synced: <strong className="text-white">{userProfile.name}</strong> ({userProfile.handle})
+              </span>
+              <span className="text-[10px] px-2 py-0.5 bg-emerald-500/20 rounded font-mono text-emerald-200">
+                Cloud Active
+              </span>
+            </div>
+            <button
+              onClick={() => setOnboardingOpen(true)}
+              className="text-[11px] text-amber-400 hover:text-amber-300 underline font-mono flex items-center gap-1"
+            >
+              <span>Change Home District ({userProfile.homeDistrict})</span>
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* Hero Header: The Gujarat Cultural Passport */}
       <div className="bg-gradient-to-br from-amber-950/60 via-slate-900 to-slate-950 border-3 border-amber-500/40 rounded-2xl p-6 sm:p-8 mb-8 shadow-2xl relative overflow-hidden">

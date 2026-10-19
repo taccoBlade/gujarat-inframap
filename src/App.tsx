@@ -6,6 +6,8 @@ import { AtlasMap } from './components/map/AtlasMap';
 import { UnfilteredStoriesView } from './components/unfiltered/UnfilteredStoriesView';
 import { InfrastructureDirectoryView } from './components/infrastructure/InfrastructureDirectoryView';
 import { ShareableStoryCardModal } from './components/share/ShareableStoryCardModal';
+import { AuthModal } from './components/auth/AuthModal';
+import { OnboardingModal } from './components/auth/OnboardingModal';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const App: React.FC = () => {
@@ -81,7 +83,9 @@ export const App: React.FC = () => {
         </AnimatePresence>
       </main>
 
-      {/* 9:16 Instagram Share Modal */}
+      {/* Modals & Dialogs */}
+      <AuthModal />
+      <OnboardingModal />
       <ShareableStoryCardModal />
     </div>
   );

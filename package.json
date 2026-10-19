@@ -11,6 +11,7 @@
     "build": "tsc --noEmit",
     "test": "python scripts/verify_deployment.py",
     "test:consumer": "node scripts/verify_consumer_experience.js",
+    "test:auth": "node scripts/verify_auth_step3.js",
     "test:all": "python scripts/verify_deployment.py && node scripts/verify_consumer_experience.js"
   },
   "devDependencies": {
@@ -27,6 +28,7 @@
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
+    "firebase": "^13.0.0",
     "framer-motion": "^14.4.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.59.0",

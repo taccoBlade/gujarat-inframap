@@ -28,7 +28,7 @@ interface StoryItem {
 }
 
 export const UnfilteredStoriesView: React.FC = () => {
-  const { userProfile, toggleBookmark, afterDarkRadarActive } = useAtlasStore();
+  const { userProfile, toggleBookmark } = useAtlasStore();
   const [activeTabMap, setActiveTabMap] = useState<Record<string, 'folklore' | 'reality'>>({});
   const [filterQuery, setFilterQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -36,11 +36,6 @@ export const UnfilteredStoriesView: React.FC = () => {
   const stories: StoryItem[] = ((unfilteredData as { stories?: StoryItem[] }).stories || (unfilteredData as unknown as StoryItem[]));
 
   const filteredStories = stories.filter((story) => {
-    // If After Dark radar is on, prioritize folklore and eerie places
-    if (afterDarkRadarActive && story.category !== 'folklore_eerie' && story.collection !== 'after_dark') {
-      return false;
-    }
-
     if (selectedCategory !== 'all' && story.category !== selectedCategory) {
       return false;
     }

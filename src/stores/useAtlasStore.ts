@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { AtlasMode, UserPassportProfile } from '../types/atlas';
 import { GUJARAT_34_DISTRICTS } from '../data/passport-districts';
+import { syncProfileToFirestore, logoutUser } from '../lib/firebase';
 import confetti from 'canvas-confetti';
 
 interface AtlasState {
@@ -9,8 +10,9 @@ interface AtlasState {
   searchQuery: string;
   selectedDistrict: string | null;
   selectedStoryId: string | null;
-  afterDarkRadarActive: boolean;
   activeShareModal: boolean;
+  isAuthModalOpen: boolean;
+  isOnboardingOpen: boolean;
   userProfile: UserPassportProfile;
 
   // Actions
@@ -19,10 +21,13 @@ interface AtlasState {
   setSearchQuery: (query: string) => void;
   setSelectedDistrict: (districtId: string | null) => void;
   setSelectedStoryId: (storyId: string | null) => void;
-  toggleAfterDarkRadar: () => void;
   setShareModalOpen: (open: boolean) => void;
+  setAuthModalOpen: (open: boolean) => void;
+  setOnboardingOpen: (open: boolean) => void;
 
-  // Passport Actions
+  // Auth & Profile Actions
+  setLoggedInUser: (profile: UserPassportProfile) => void;
+  logout: () => void;
   setHomeDistrict: (districtId: string) => void;
   claimDistrictStamp: (districtId: string) => { success: boolean; message: string };
   toggleBookmark: (storyId: string) => void;
@@ -30,19 +35,26 @@ interface AtlasState {
 }
 
 const DEFAULT_PROFILE: UserPassportProfile = {
+  uid: 'guest_' + Math.random().toString(36).substring(7),
   name: 'Gujarat Explorer',
   handle: '@explorer',
   homeDistrict: 'ahmedabad',
   collectedStampIds: ['ahmedabad'], // Start with home district stamped!
   bookmarkedStoryIds: [],
-  joinedDate: new Date().toISOString().split('T')[0]
+  visitedPlaceIds: ['ahmedabad'],
+  badges: ['solanki_explorer'],
+  joinedDate: new Date().toISOString().split('T')[0],
+  isLoggedIn: false
 };
 
 function getSavedProfile(): UserPassportProfile {
   if (typeof window === 'undefined') return DEFAULT_PROFILE;
   try {
     const raw = localStorage.getItem('gujarat_passport_profile');
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return { ...DEFAULT_PROFILE, ...parsed };
+    }
   } catch (e) {
     console.error('Failed to parse saved passport profile:', e);
   }
@@ -55,8 +67,9 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
   searchQuery: '',
   selectedDistrict: null,
   selectedStoryId: null,
-  afterDarkRadarActive: false,
   activeShareModal: false,
+  isAuthModalOpen: false,
+  isOnboardingOpen: false,
   userProfile: getSavedProfile(),
 
   setMode: (mode) => set({ currentMode: mode }),
@@ -69,9 +82,28 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
 
   setSelectedStoryId: (storyId) => set({ selectedStoryId: storyId }),
 
-  toggleAfterDarkRadar: () => set((state) => ({ afterDarkRadarActive: !state.afterDarkRadarActive })),
-
   setShareModalOpen: (open) => set({ activeShareModal: open }),
+
+  setAuthModalOpen: (open) => set({ isAuthModalOpen: open }),
+
+  setOnboardingOpen: (open) => set({ isOnboardingOpen: open }),
+
+  setLoggedInUser: (profile) => {
+    localStorage.setItem('gujarat_passport_profile', JSON.stringify(profile));
+    set({ userProfile: profile, isAuthModalOpen: false });
+    syncProfileToFirestore(profile);
+  },
+
+  logout: () => {
+    logoutUser();
+    const guest: UserPassportProfile = {
+      ...DEFAULT_PROFILE,
+      uid: 'guest_' + Math.random().toString(36).substring(7),
+      isLoggedIn: false
+    };
+    localStorage.setItem('gujarat_passport_profile', JSON.stringify(guest));
+    set({ userProfile: guest });
+  },
 
   setHomeDistrict: (districtId) => {
     const current = get().userProfile;
@@ -81,7 +113,18 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
       collectedStampIds: Array.from(new Set([...current.collectedStampIds, districtId]))
     };
     localStorage.setItem('gujarat_passport_profile', JSON.stringify(updated));
-    set({ userProfile: updated });
+    set({ userProfile: updated, isOnboardingOpen: false });
+    syncProfileToFirestore(updated);
+
+    // Confetti for setting home district
+    try {
+      confetti({
+        particleCount: 90,
+        spread: 80,
+        origin: { y: 0.5 },
+        colors: ['#f59e0b', '#fbbf24', '#d97706', '#ec4899', '#3b82f6']
+      });
+    } catch (e) {}
   },
 
   claimDistrictStamp: (districtId) => {
@@ -101,6 +144,7 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
 
     localStorage.setItem('gujarat_passport_profile', JSON.stringify(updated));
     set({ userProfile: updated });
+    syncProfileToFirestore(updated);
 
     // 🎊 Trigger cinematic confetti celebration
     try {
@@ -131,6 +175,7 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
     };
     localStorage.setItem('gujarat_passport_profile', JSON.stringify(updated));
     set({ userProfile: updated });
+    syncProfileToFirestore(updated);
   },
 
   resetPassport: () => {
