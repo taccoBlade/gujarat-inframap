@@ -339,7 +339,7 @@ export const EVHighwayRadar: React.FC = () => {
               <a
                 href={`https://www.google.com/maps/dir/?api=1&destination=${station.coordinates[0]},${station.coordinates[1]}`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs rounded-lg shadow-[2px_2px_0px_#000] flex items-center gap-1.5 transition-colors"
               >
                 <span>Navigate in Google Maps</span>

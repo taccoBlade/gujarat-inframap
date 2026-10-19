@@ -225,22 +225,22 @@ export const AtlasMap: React.FC = () => {
               <div style="padding: 12px 14px 14px 14px;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                   <span style="font-size: 10px; font-weight: 800; color: #9a3412; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
-                    ${culture.primaryIcon} ${d.region} • ${isStamped ? '✓ STAMPED' : 'UNVISITED'}
+                    ${culture.primaryIcon} ${escapeHtml(d.region)} • ${isStamped ? '✓ STAMPED' : 'UNVISITED'}
                   </span>
                   <span style="font-size: 9px; font-weight: 600; color: #78716c; font-family: 'Noto Sans Gujarati', sans-serif;">
-                    ${culture.gujaratiTitle}
+                    ${escapeHtml(culture.gujaratiTitle)}
                   </span>
                 </div>
                 <h3 style="margin: 2px 0 3px 0; font-size: 16px; font-weight: 800; color: #0f172a; font-family: 'Lora', serif;">
-                  ${d.name} <span style="font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600; color: #b45309; font-size: 14px;">(${d.gujaratiName})</span>
+                  ${escapeHtml(d.name)} <span style="font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600; color: #b45309; font-size: 14px;">(${escapeHtml(d.gujaratiName)})</span>
                 </h3>
                 <p style="margin: 2px 0 8px 0; font-size: 11px; font-weight: 600; color: #57534e; line-height: 1.35;">
-                  📍 ${d.landmark}
+                  📍 ${escapeHtml(d.landmark)}
                 </p>
                 <div style="font-size: 10px; color: #78716c; background: #f5f0e6; padding: 4px 8px; border-radius: 5px; border: 1px solid #e7dfd3; margin-bottom: 10px; font-family: monospace;">
-                  ${culture.culturalTag}
+                  ${escapeHtml(culture.culturalTag)}
                 </div>
-                <button onclick="window.claimFromMap('${d.id}')" style="
+                <button onclick="window.claimFromMap('${escapeHtml(d.id)}')" style="
                   width: 100%; padding: 8px; background: ${isStamped ? '#15803d' : 'linear-gradient(135deg, #d97706 0%, #b45309 100%)'};
                   color: #fff; font-weight: 800; font-size: 11px; border: 1px solid ${isStamped ? '#14532d' : '#78350f'};
                   border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);
@@ -402,25 +402,26 @@ export const AtlasMap: React.FC = () => {
               <div style="padding: 10px 14px 12px 14px;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                   <span style="font-size: 10px; font-weight: 800; color: #991b1b; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
-                    ${culture.primaryIcon} ${story.district} • Unfiltered Dossier
+                    ${culture.primaryIcon} ${escapeHtml(story.district)} • Unfiltered Dossier
                   </span>
                   <span style="font-size: 9px; font-weight: 600; color: #78716c; font-family: 'Noto Sans Gujarati', sans-serif;">
-                    ${culture.gujaratiTitle}
+                    ${escapeHtml(culture.gujaratiTitle)}
                   </span>
                 </div>
 
                 <h3 style="margin: 0 0 2px 0; font-size: 15px; font-weight: 800; color: #0f172a; font-family: 'Lora', serif;">
-                  ${story.name}
+                  ${escapeHtml(story.name)}
                 </h3>
-                ${story.gujaratiName ? `<div style="font-size: 11px; color: #b45309; margin-bottom: 4px; font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600;">${story.gujaratiName}</div>` : ''}
+                ${story.gujaratiName ? `<div style="font-size: 11px; color: #b45309; margin-bottom: 4px; font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600;">${escapeHtml(story.gujaratiName)}</div>` : ''}
 
                 ${story.imageUrl ? `
                   <div style="position: relative; width: 100%; height: 145px; overflow: hidden; border-radius: 8px; margin: 6px 0; background: #1c1917; border: 1px solid #e7dfd3;">
                     <img 
-                      src="${story.imageUrl}" 
-                      alt="${story.name}" 
+                      src="${escapeHtml(story.imageUrl)}" 
+                      alt="${escapeHtml(story.name)}" 
+                      referrerpolicy="no-referrer"
                       style="width: 100%; height: 100%; object-fit: cover; object-position: center 25%; display: block;" 
-                      onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599837565318-67429bde7162?w=800&auto=format&fit=crop&q=80';"
+                      onerror="this.onerror=null; this.src='/images/destinations/statue-of-unity.jpg';"
                     />
                     <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.65) 100%); pointer-events: none;"></div>
                     <div style="position: absolute; bottom: 6px; left: 8px; font-size: 9px; font-family: monospace; background: rgba(0,0,0,0.7); color: #fde047; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(253,224,71,0.3);">
@@ -430,11 +431,11 @@ export const AtlasMap: React.FC = () => {
                 ` : ''}
 
                 <p style="margin: 4px 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
-                  ${story.tagline}
+                  ${escapeHtml(story.tagline)}
                 </p>
 
                 <div style="padding: 6px 8px; background: #fdfbf7; border-left: 3px solid #991b1b; border: 1px solid #e7dfd3; border-left-width: 3px; font-size: 10px; color: #1c1917; margin-bottom: 8px; border-radius: 4px;">
-                  <strong style="color: #991b1b;">Ground Reality:</strong> ${story.theGroundReality.slice(0, 95)}...
+                  <strong style="color: #991b1b;">Ground Reality:</strong> ${escapeHtml(story.theGroundReality ? story.theGroundReality.slice(0, 95) : '')}...
                 </div>
 
                 <button onclick="window.viewStoriesFromMap()" style="
@@ -497,21 +498,21 @@ export const AtlasMap: React.FC = () => {
               <div style="padding: 10px 14px 12px 14px;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                   <span style="font-size: 10px; font-weight: 800; color: #15803d; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
-                    ⚡ ${station.network} • ${station.totalPowerKw} kW DC Fast
+                    ⚡ ${escapeHtml(station.network)} • ${station.totalPowerKw} kW DC Fast
                   </span>
                   <span style="font-size: 9px; font-weight: 700; color: #854d0e; background: #fef9c3; padding: 1px 5px; border-radius: 3px; border: 1px solid #fde047;">
-                    ${station.corridor}
+                    ${escapeHtml(station.corridor)}
                   </span>
                 </div>
 
                 <h3 style="margin: 0 0 2px 0; font-size: 14px; font-weight: 800; color: #0f172a; font-family: 'Lora', serif;">
-                  ${station.name}
+                  ${escapeHtml(station.name)}
                 </h3>
                 <p style="margin: 0 0 4px 0; font-size: 11px; color: #b45309; font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600;">
-                  ${station.gujaratiName}
+                  ${escapeHtml(station.gujaratiName)}
                 </p>
                 <p style="margin: 0 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
-                  📍 ${station.locationDesc}
+                  📍 ${escapeHtml(station.locationDesc)}
                 </p>
 
                 <div style="font-size: 10px; color: #15803d; font-weight: bold; margin-bottom: 6px; background: #f0fdf4; padding: 4px 6px; border-radius: 4px; border: 1px solid #bbf7d0;">
@@ -520,15 +521,15 @@ export const AtlasMap: React.FC = () => {
 
                 ${station.criticalRoadtripWarning ? `
                   <div style="padding: 4px 6px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; font-size: 10px; color: #991b1b; margin-bottom: 6px;">
-                    ⚠️ ${station.criticalRoadtripWarning}
+                    ⚠️ ${escapeHtml(station.criticalRoadtripWarning)}
                   </div>
                 ` : ''}
 
                 <div style="font-size: 10px; color: #57534e; margin-bottom: 8px; font-family: monospace;">
-                  Tariff: <strong>${station.tariffPerKwh}</strong> | Food: ${station.amenities.food}
+                  Tariff: <strong>${escapeHtml(station.tariffPerKwh)}</strong> | Food: ${escapeHtml(station.amenities ? station.amenities.food : '')}
                 </div>
 
-                <a href="https://www.google.com/maps/dir/?api=1&destination=${station.coordinates[0]},${station.coordinates[1]}" target="_blank" style="
+                <a href="https://www.google.com/maps/dir/?api=1&destination=${station.coordinates[0]},${station.coordinates[1]}" target="_blank" rel="noopener noreferrer" style="
                   display: flex; align-items: center; justify-content: center; gap: 4px;
                   width: 100%; box-sizing: border-box; padding: 8px;
                   background: linear-gradient(135deg, #15803d 0%, #166534 100%);

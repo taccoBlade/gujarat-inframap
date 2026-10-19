@@ -6,7 +6,8 @@ const STATIC_ASSETS = [
   '/app.html',
   '/manifest.webmanifest',
   '/icon-192.svg',
-  '/icon-512.svg'
+  '/icon-512.svg',
+  '/images/destinations/statue-of-unity.jpg'
 ];
 
 self.addEventListener('install', (event) => {

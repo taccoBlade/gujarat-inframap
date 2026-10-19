@@ -77,7 +77,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Subterranean steps may be steep; footwear allowed on terraces but prohibited in immediate sanctum well shaft; touch carvings avoided for preservation",
     "sourceName": "Archaeological Survey of India (ASI) & UNESCO World Heritage Centre",
     "sourceUrl": "https://whc.unesco.org/en/list/1317",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Rani_ki_vav_02.jpg",
+    "image": "/images/destinations/rani-ki-vav.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.8589,
@@ -108,7 +108,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Strict security screening; mobile phones, cameras, leather items, and electronic devices strictly prohibited inside the inner temple perimeter",
     "sourceName": "Shree Somnath Trust Official Portal & Gujarat Tourism",
     "sourceUrl": "https://somnath.org",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/7/7b/%22Aerial_view_of_Somnath_temple_01%2C_Prabhas_Patan_Gujarat.jpg",
+    "image": "/images/destinations/somnath-temple.jpg",
     "isLesserKnown": false,
     "coordinates": [
       20.888,
@@ -139,7 +139,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "No active ritual worship; visitors may not climb on ancient stone plinths or enter the direct water tank",
     "sourceName": "Archaeological Survey of India & Ministry of New & Renewable Energy (MNRE)",
     "sourceUrl": "https://www.gujarattourism.com/north-zone/mehsana/sun-temple.html",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Sun_Temple%2C_Modhera.jpg",
+    "image": "/images/destinations/sun-temple-modhera.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.5835,
@@ -170,7 +170,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Border zone permits mandatory; valid government photo ID required; driving personal vehicles on delicate salt crust prohibited",
     "sourceName": "Tourism Corporation of Gujarat Limited (TCGL) & UNWTO",
     "sourceUrl": "https://www.gujarattourism.com/kutch-zone/kutch/white-rann.html",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Rann_of_Kutch_-_White_Desert_2.jpg",
+    "image": "/images/destinations/white-rann-dhordo.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.7833,
@@ -201,7 +201,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Electronic items, cameras, smartwatches, and leather goods prohibited inside inner temple sanctum; modest traditional dress required",
     "sourceName": "Dwarka Devasthan Samiti & Gujarat Tourism",
     "sourceUrl": "https://dwarkadhish.org",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Dwarkadheesh_temple.jpg",
+    "image": "/images/destinations/dwarkadhish-temple.jpg",
     "isLesserKnown": false,
     "coordinates": [
       22.2376,
@@ -232,7 +232,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "All jungle permits must be pre-booked online through official Gir forest portal; private vehicles prohibited inside core park; disembarking from Gypsy forbidden",
     "sourceName": "Gujarat Forest Department — Wildlife Wing",
     "sourceUrl": "https://girlion.gujarat.gov.in",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Asiatic_lion_03.jpg",
+    "image": "/images/destinations/gir-national-park.jpg",
     "isLesserKnown": false,
     "coordinates": [
       21.1242,
@@ -263,7 +263,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Wear comfortable walking shoes for cobblestones and steps; monkeys present on upper Pavagadh trail so secure bags",
     "sourceName": "UNESCO World Heritage Centre & Archaeological Survey of India",
     "sourceUrl": "https://whc.unesco.org/en/list/1101",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/1/17/JAMI_MASJID%2CCHAMPANER.jpg",
+    "image": "/images/destinations/champaner-pavagadh.jpg",
     "isLesserKnown": false,
     "coordinates": [
       22.4833,
@@ -294,7 +294,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Respect the serene atmosphere; maintain silence in museum galleries; commercial videography requires trust approval",
     "sourceName": "Sabarmati Ashram Preservation and Memorial Trust",
     "sourceUrl": "https://gandhiashramsabarmati.org",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/3/32/Sabarmati_Ashram_-_Ahmedabad_-_Gujarat_-_DSC001.jpg",
+    "image": "/images/destinations/sabarmati-ashram.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.06,
@@ -326,7 +326,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Do not touch, remove, or walk across fragile ancient stone wall crests; carry sun protection and sufficient drinking water; remote desert driving requires full fuel tank",
     "sourceName": "UNESCO World Heritage Centre & Archaeological Survey of India",
     "sourceUrl": "https://whc.unesco.org/en/list/1644",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/8/80/Dholavira_gujarat.jpg",
+    "image": "/images/destinations/dholavira-harappan-city.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.8867,
@@ -357,7 +357,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Plastic-free zone enforced; loud music and evening camping outside designated forest department sites strictly prohibited; wild animals inhabit the area so do not venture off trails after dusk",
     "sourceName": "Gujarat Forest Department & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/north-zone/sabarkantha/polo-monuments-and-vijaynagar-forests.html",
-    "image": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/polo-forest-ruins.jpg",
     "isLesserKnown": true,
     "coordinates": [
       23.9783,
@@ -388,7 +388,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Watch footing on steep, uneven stone steps; flash photography restricted inside deep shaft to preserve stone surfaces",
     "sourceName": "Archaeological Survey of India — Vadodara Circle",
     "sourceUrl": "https://asivadodaracircle.in",
-    "image": "https://images.unsplash.com/photo-1596401057633-54a8fe8ef647?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/dada-harir-stepwell.jpg",
     "isLesserKnown": true,
     "coordinates": [
       23.0504,
@@ -419,7 +419,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Close to the international border; visitors must carry government ID; do not photograph military installations or venture beyond signposted tracks",
     "sourceName": "Gujarat Tourism & Archaeological Survey of India",
     "sourceUrl": "https://www.gujarattourism.com/kutch-zone/kutch/lakhpat.html",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Distant_view_of_Lakhpat_Fort.jpg",
+    "image": "/images/destinations/lakhpat-fort-town.jpg",
     "isLesserKnown": true,
     "coordinates": [
       23.8333,
@@ -450,7 +450,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Limestone is delicate; scratching or touching ancient relief sculptures strictly prohibited; wear sturdy shoes for rock paths",
     "sourceName": "Gujarat Directorate of Archaeology & Tourism Corporation of Gujarat",
     "sourceUrl": "https://www.gujarattourism.com/saurashtra/rajkot/khambhalida-caves.html",
-    "image": "https://images.unsplash.com/photo-1608889825103-eb5ed706fc64?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/khambhalida-caves.jpg",
     "isLesserKnown": true,
     "coordinates": [
       21.8,
@@ -481,7 +481,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Do not venture deep into the Mahi river waters during high discharge periods; maintain cleanliness of riverfront and temple grounds",
     "sourceName": "Archaeological Survey of India — Vadodara Circle",
     "sourceUrl": "https://asivadodaracircle.in",
-    "image": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/galteshwar-temple.jpg",
     "isLesserKnown": true,
     "coordinates": [
       22.8467,
@@ -512,7 +512,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Head covering recommended in inner saint's tomb; remove shoes before entering the mosque platform; professional filming requires prior ASI approval",
     "sourceName": "Sarkhej Roza Committee & Archaeological Survey of India",
     "sourceUrl": "https://sarkhejroza.org",
-    "image": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/sarkhej-roza.jpg",
     "isLesserKnown": true,
     "coordinates": [
       22.9819,
@@ -543,7 +543,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Swimming in the deep whirlpool basin below the waterfall is strictly prohibited due to dangerous undertows; stay within barricades",
     "sourceName": "Gujarat Forest Department — Dangs Division & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/south-zone/dangs/gira-waterfall.html",
-    "image": "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/gira-waterfalls.jpg",
     "isLesserKnown": true,
     "coordinates": [
       20.7639,
@@ -574,7 +574,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Walking inside grassland strictly restricted to prevent disturbance to ground-nesting birds and wolves; stay inside authorized safari vehicles",
     "sourceName": "Gujarat Forest Department — Wildlife Division",
     "sourceUrl": "https://www.gujarattourism.com/saurashtra/bhavnagar/blackbuck-national-park.html",
-    "image": "https://images.unsplash.com/photo-1484406566174-9da000fda645?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/velavadar-blackbuck-np.jpg",
     "isLesserKnown": false,
     "coordinates": [
       21.9333,
@@ -605,7 +605,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Wear thick-soled canvas shoes or diving boots to walk safely over barnacle-crusted rocks; never touch or step on living coral polyps; collecting shells or marine specimens is a non-bailable wildlife offence",
     "sourceName": "Gujarat Forest Department — Marine National Park Division",
     "sourceUrl": "https://www.gujarattourism.com/saurashtra/jamnagar/marine-national-park.html",
-    "image": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/marine-national-park-narara.jpg",
     "isLesserKnown": false,
     "coordinates": [
       22.4667,
@@ -636,7 +636,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Do not chase or approach wild asses closer than permitted distances; desert navigation can be disorienting so always travel with authorized local guides",
     "sourceName": "Gujarat Forest Department — Wild Ass Sanctuary Division",
     "sourceUrl": "https://www.gujarattourism.com/saurashtra/surendranagar/wild-ass-sanctuary.html",
-    "image": "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/wild-ass-sanctuary.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.3333,
@@ -667,7 +667,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Motorized power boats strictly banned to prevent water contamination and noise pollution; feeding wild birds strictly prohibited",
     "sourceName": "Gujarat Forest Department & Ramsar Convention on Wetlands",
     "sourceUrl": "https://rsis.ramsar.org/ris/2078",
-    "image": "https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/nalsarovar-bird-sanctuary.jpg",
     "isLesserKnown": false,
     "coordinates": [
       22.8,
@@ -698,7 +698,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Drive carefully on winding ghat roads with sharp hairpin bends, especially in dense monsoon fog; respect tribal traditions",
     "sourceName": "Gujarat Tourism & Dang District Administration",
     "sourceUrl": "https://www.gujarattourism.com/south-zone/dangs/saputara.html",
-    "image": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/saputara-hill-station.jpg",
     "isLesserKnown": false,
     "coordinates": [
       20.575,
@@ -729,7 +729,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Photography strictly prohibited inside the private residential halls and Darbar Hall; allowed in exterior courtyards; shoe covers provided",
     "sourceName": "Gaekwad Royal Family Trust & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/central-zone/vadodara/laxmi-vilas-palace.html",
-    "image": "https://images.unsplash.com/photo-1566837945700-30057527ade0?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/laxmi-vilas-palace.jpg",
     "isLesserKnown": false,
     "coordinates": [
       22.2933,
@@ -760,7 +760,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Do not climb ancient battlements; watch your step on deep rock-cut well stairways; maintain cleanliness",
     "sourceName": "Gujarat Directorate of Archaeology & Tourism Corporation of Gujarat",
     "sourceUrl": "https://www.gujarattourism.com/saurashtra/junagadh/uparkot-fort.html",
-    "image": "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/uparkot-fort-junagadh.jpg",
     "isLesserKnown": false,
     "coordinates": [
       21.52,
@@ -791,7 +791,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Do not step into the brick dockyard basin or touch excavated brick footings; carry water and hat for open sun",
     "sourceName": "Archaeological Survey of India & Ministry of Ports, Shipping and Waterways",
     "sourceUrl": "https://www.gujarattourism.com/central-zone/ahmedabad/lothal.html",
-    "image": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/lothal-archaeological-site.jpg",
     "isLesserKnown": false,
     "coordinates": [
       22.5222,
@@ -822,7 +822,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Flash photography restricted in delicate mirror rooms; watch footing on steep stairs of the clock tower",
     "sourceName": "Aina Mahal Trust & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/kutch-zone/kutch/aina-mahal.html",
-    "image": "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/aina-mahal-bhuj.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.2547,
@@ -853,7 +853,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Strict code of reverence: no leather items (belts, wallets, shoes) permitted on sacred hill; modest dress code; food consumption on sacred hill strictly prohibited; descent must be completed before sundown",
     "sourceName": "Sheth Anandji Kalyanji Trust & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/saurashtra/bhavnagar/palitana.html",
-    "image": "https://images.unsplash.com/photo-1620619767323-b95a89183081?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/palitana-shatrunjaya.jpg",
     "isLesserKnown": false,
     "coordinates": [
       21.5033,
@@ -884,7 +884,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Photography strictly prohibited inside inner sanctum; mobile phones must be deposited in safe lockers; modest traditional attire required",
     "sourceName": "Shree Arasuri Ambaji Mata Devasthan Trust",
     "sourceUrl": "https://ambajitemple.in",
-    "image": "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/ambaji-temple.jpg",
     "isLesserKnown": false,
     "coordinates": [
       24.3314,
@@ -915,7 +915,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Strict security screening; mobile phones, cameras, electronic devices, bags, and food items strictly prohibited inside; secure free lockers provided",
     "sourceName": "BAPS Swaminarayan Sanstha & Gujarat Tourism",
     "sourceUrl": "https://www.akshardham.com/gandhinagar",
-    "image": "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/akshardham-gandhinagar.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.23,
@@ -946,7 +946,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Non-Parsis are respectfully not permitted inside the inner fire temple sanctum in accordance with centuries-old Zoroastrian tradition; photography of fire chamber strictly prohibited",
     "sourceName": "Udvada Utsav Foundation & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/south-zone/valsad/udvada.html",
-    "image": "https://images.unsplash.com/photo-1572947650440-e8a97ef053b2?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/udvada-atash-behram.jpg",
     "isLesserKnown": false,
     "coordinates": [
       20.4889,
@@ -977,7 +977,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Strict zero-litter and single-use plastic ban; swimming only permitted within designated lifeguard-patrolled zones; consumption of alcohol strictly prohibited under state laws",
     "sourceName": "Foundation for Environmental Education (FEE) Blue Flag & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/saurashtra/devbhumi-dwarka/shivrajpur-beach.html",
-    "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/shivrajpur-beach.jpg",
     "isLesserKnown": false,
     "coordinates": [
       22.3333,
@@ -1008,7 +1008,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Strong undercurrents and sudden drop-offs make swimming hazardous in certain stretches; observe local safety signboards",
     "sourceName": "Gujarat Tourism & Ministry of Culture",
     "sourceUrl": "https://www.gujarattourism.com/saurashtra/porbandar/madhavpur-beach.html",
-    "image": "https://images.unsplash.com/photo-1509233725247-49e657c54213?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/madhavpur-ghed-beach.jpg",
     "isLesserKnown": true,
     "coordinates": [
       21.25,
@@ -1039,7 +1039,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Respect active industrial activity around dry-dock shipbuilding yards; observe tide lines before parking near tidal sands",
     "sourceName": "Gujarat Tourism & Kutch District Administration",
     "sourceUrl": "https://www.gujarattourism.com/kutch-zone/kutch/mandvi-beach.html",
-    "image": "https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/mandvi-beach-palace.jpg",
     "isLesserKnown": false,
     "coordinates": [
       22.8167,
@@ -1070,7 +1070,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "High tide waters reach right up to the sea wall; adhere to lifeguard whistles and avoid entering deep water",
     "sourceName": "Valsad District Administration & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/south-zone/valsad/tithal-beach.html",
-    "image": "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/tithal-beach.jpg",
     "isLesserKnown": false,
     "coordinates": [
       20.6,
@@ -1101,7 +1101,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Always ask permission before photographing individual weavers or printing workshops; purchase directly from artisans to support their livelihood",
     "sourceName": "Kutch Craft Collective & Ministry of Textiles (DC Handlooms)",
     "sourceUrl": "https://www.gujarattourism.com/kutch-zone/kutch/bhujodi.html",
-    "image": "https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/bhujodi-ajrakhpur-crafts.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.2333,
@@ -1132,7 +1132,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Respect the master weavers during active loom operation; photography permitted in designated demonstration area",
     "sourceName": "Patan Patola Heritage Trust & Ministry of Textiles",
     "sourceUrl": "https://www.gujarattourism.com/north-zone/patan/patola-saris.html",
-    "image": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/patan-patola-museum.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.855,
@@ -1163,7 +1163,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Extremely crowded on weekend nights; park two-wheelers outside the heritage pols or take an auto-rickshaw; keep belongings secure in dense crowds",
     "sourceName": "Ahmedabad Municipal Corporation Heritage Department & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/central-zone/ahmedabad/manek-chowk.html",
-    "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80",
+    "image": "/images/destinations/manek-chowk-food-night.jpg",
     "isLesserKnown": false,
     "coordinates": [
       23.0239,

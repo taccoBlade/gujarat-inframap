@@ -155,8 +155,11 @@ export const AuthModal: React.FC = () => {
     setLoading(true);
     setErrorMsg(null);
 
+    const raw = phoneNumber.replace(/\D/g, '');
+    const formattedPhone = phoneNumber.startsWith('+91') ? phoneNumber.trim().replace(/\s+/g, '') : `+91${raw}`;
+
     try {
-      const res = await verifyPhoneOtp(cleanCode, confirmationResult || undefined, phoneNumber);
+      const res = await verifyPhoneOtp(cleanCode, confirmationResult || undefined, formattedPhone);
       if (res.success && res.user) {
         setLoggedInUser(res.user);
         setAuthModalOpen(false);
@@ -345,7 +348,7 @@ export const AuthModal: React.FC = () => {
 
                     <button
                       type="submit"
-                      disabled={loading || cooldown > 0 || phoneNumber.replace(/\D/g, '').length !== 10}
+                      disabled={loading || cooldown > 0 || failedAttempts >= MAX_OTP_ATTEMPTS || phoneNumber.replace(/\D/g, '').length !== 10}
                       className="w-full py-3.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-[3px_3px_0px_#000] transition-all disabled:opacity-50"
                     >
                       {loading ? (
@@ -362,7 +365,7 @@ export const AuthModal: React.FC = () => {
 
                     <button
                       type="button"
-                      onClick={() => setAuthMethod('options')}
+                      onClick={() => { setAuthMethod('options'); setConfirmationResult(null); setOtpSent(false); setOtpCode(''); }}
                       className="w-full text-center text-xs text-slate-400 hover:text-white pt-1"
                     >
                       ← Back to all sign-in options
@@ -394,7 +397,7 @@ export const AuthModal: React.FC = () => {
 
                     <button
                       type="submit"
-                      disabled={loading || otpCode.replace(/\D/g, '').length !== 6}
+                      disabled={loading || failedAttempts >= MAX_OTP_ATTEMPTS || otpCode.replace(/\D/g, '').length !== 6}
                       className="w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-[3px_3px_0px_#000] transition-all disabled:opacity-50"
                     >
                       {loading ? (
@@ -410,10 +413,10 @@ export const AuthModal: React.FC = () => {
                     <div className="flex items-center justify-between pt-1 text-xs">
                       <button
                         type="button"
-                        disabled={cooldown > 0 || loading}
+                        disabled={cooldown > 0 || loading || failedAttempts >= MAX_OTP_ATTEMPTS}
                         onClick={handleSendOtp}
                         className={`flex items-center gap-1 font-mono ${
-                          cooldown > 0 ? 'text-slate-600 cursor-not-allowed' : 'text-amber-400 hover:underline'
+                          cooldown > 0 || failedAttempts >= MAX_OTP_ATTEMPTS ? 'text-slate-600 cursor-not-allowed' : 'text-amber-400 hover:underline'
                         }`}
                       >
                         <RotateCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
@@ -422,7 +425,7 @@ export const AuthModal: React.FC = () => {
 
                       <button
                         type="button"
-                        onClick={() => { setOtpSent(false); setOtpCode(''); }}
+                        onClick={() => { setOtpSent(false); setOtpCode(''); setConfirmationResult(null); }}
                         className="text-slate-400 hover:text-white"
                       >
                         Change number

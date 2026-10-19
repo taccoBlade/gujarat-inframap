@@ -176,7 +176,9 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
   setLoggedInUser: (profile) => {
     localStorage.setItem('gujarat_passport_profile', JSON.stringify(profile));
     set({ userProfile: profile, isAuthModalOpen: false });
-    syncProfileToFirestore(profile);
+    if (profile.isLoggedIn && !profile.uid.startsWith('guest_')) {
+      syncProfileToFirestore(profile);
+    }
   },
 
   logout: () => {
@@ -199,7 +201,9 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
     };
     localStorage.setItem('gujarat_passport_profile', JSON.stringify(updated));
     set({ userProfile: updated, isOnboardingOpen: false });
-    syncProfileToFirestore(updated);
+    if (updated.isLoggedIn && !updated.uid.startsWith('guest_')) {
+      syncProfileToFirestore(updated);
+    }
 
     try {
       confetti({
@@ -228,7 +232,9 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
 
     localStorage.setItem('gujarat_passport_profile', JSON.stringify(updated));
     set({ userProfile: updated });
-    syncProfileToFirestore(updated);
+    if (updated.isLoggedIn && !updated.uid.startsWith('guest_')) {
+      syncProfileToFirestore(updated);
+    }
 
     try {
       confetti({
@@ -256,7 +262,9 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
     };
     localStorage.setItem('gujarat_passport_profile', JSON.stringify(updated));
     set({ userProfile: updated });
-    syncProfileToFirestore(updated);
+    if (updated.isLoggedIn && !updated.uid.startsWith('guest_')) {
+      syncProfileToFirestore(updated);
+    }
   },
 
   resetPassport: () => {

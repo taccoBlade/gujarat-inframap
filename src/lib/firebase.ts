@@ -297,9 +297,14 @@ export async function verifyPhoneOtp(
 export async function syncProfileToFirestore(profile: UserPassportProfile): Promise<boolean> {
   if (!isFirebaseConfigured || !db || !profile.uid) return false;
 
-  // Authorization Check: Prevent User A from writing to User B's profile
-  if (auth?.currentUser && auth.currentUser.uid !== profile.uid) {
-    console.error('[Security] Unauthorized attempt to sync profile: UID mismatch with authenticated session.');
+  // Guest & Unauthenticated check: Never attempt to write guest profiles to Firestore
+  if (!profile.isLoggedIn || profile.uid.startsWith('guest_')) {
+    return false;
+  }
+
+  // Authorization Check: Must have active authenticated session matching the profile UID
+  if (auth && (!auth.currentUser || auth.currentUser.uid !== profile.uid)) {
+    console.error('[Security] Unauthorized attempt to sync profile: UID mismatch or unauthenticated session.');
     return false;
   }
 
@@ -346,11 +351,11 @@ export async function syncProfileToFirestore(profile: UserPassportProfile): Prom
  * Fetch User Profile from Firestore with Identity Isolation
  */
 export async function fetchProfileFromFirestore(uid: string): Promise<UserPassportProfile | null> {
-  if (!isFirebaseConfigured || !db) return null;
+  if (!isFirebaseConfigured || !db || !uid || uid.startsWith('guest_')) return null;
 
-  // Authorization Check: Prevent client-side inspection of other user profiles
-  if (auth?.currentUser && auth.currentUser.uid !== uid) {
-    console.error('[Security] Unauthorized attempt to read another user profile.');
+  // Authorization Check: Prevent client-side inspection of other user profiles or unauthenticated fetch
+  if (auth && (!auth.currentUser || auth.currentUser.uid !== uid)) {
+    console.error('[Security] Unauthorized attempt to read user profile: unauthenticated or UID mismatch.');
     return null;
   }
 
