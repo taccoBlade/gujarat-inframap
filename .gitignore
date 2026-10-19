@@ -9,6 +9,18 @@ desktop.ini
 .vscode/
 .idea/
 
+# Environment variables & secrets (CRITICAL: never commit credentials)
+.env
+.env.local
+.env.*.local
+*.env
+*.pem
+*.key
+service-account*.json
+credentials.json
+firebase-debug.log*
+firestore-debug.log*
+
 # Python cache & virtual environments
 __pycache__/
 *.py[cod]

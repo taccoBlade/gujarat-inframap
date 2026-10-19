@@ -14,7 +14,8 @@
     "test:auth": "node scripts/verify_auth_step3.js",
     "test:pwa": "node scripts/verify_pwa_and_ev.js",
     "test:ethnic": "node scripts/verify_ethnic_redesign.js",
-    "test:all": "python scripts/verify_deployment.py && node scripts/verify_consumer_experience.js"
+    "test:security": "node scripts/verify_security_hardening.js",
+    "test:all": "python scripts/verify_deployment.py && node scripts/verify_consumer_experience.js && node scripts/verify_security_hardening.js"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",

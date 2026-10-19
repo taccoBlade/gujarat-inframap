@@ -169,7 +169,12 @@ async function run() {
   }
 
   const targets = await getJson(`http://127.0.0.1:${port}/json/list`);
-  const pageTarget = targets.find(t => t.type === 'page' && t.url.includes('8080'));
+  let pageTarget = targets.find(t => t.type === 'page' && t.url.includes('8080'));
+  if (!pageTarget) {
+    try {
+      pageTarget = await getJson(`http://127.0.0.1:${port}/json/new?http://127.0.0.1:8080/`);
+    } catch (_) {}
+  }
   if (!pageTarget) {
     chromeProc.kill();
     throw new Error('Could not find active page target');

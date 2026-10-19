@@ -38,6 +38,16 @@ interface StoryItem {
   imageUrl: string;
 }
 
+function escapeHtml(str: any): string {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 export const AtlasMap: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -287,45 +297,45 @@ export const AtlasMap: React.FC = () => {
               <div style="padding: 10px 14px 12px 14px;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                   <span style="font-size: 10px; font-weight: 800; color: #9a3412; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
-                    ${culture.primaryIcon} ${place.district} • ASI &amp; Tourism
+                    ${culture.primaryIcon} ${escapeHtml(place.district)} • ASI &amp; Tourism
                   </span>
                   <span style="font-size: 9px; font-weight: 600; color: #78716c; font-family: 'Noto Sans Gujarati', sans-serif;">
-                    ${culture.gujaratiTitle}
+                    ${escapeHtml(culture.gujaratiTitle)}
                   </span>
                 </div>
 
                 <h3 style="margin: 0 0 4px 0; font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.25; font-family: 'Lora', serif;">
-                  ${place.name}
+                  ${escapeHtml(place.name)}
                 </h3>
 
                 ${place.image ? `
                   <div style="position: relative; width: 100%; height: 155px; overflow: hidden; border-radius: 8px; margin: 6px 0; background: #1c1917; border: 1px solid #e7dfd3;">
                     <img 
                       src="${place.image}" 
-                      alt="${place.name}" 
+                      alt="${escapeHtml(place.name)}" 
                       referrerpolicy="no-referrer"
                       style="width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block;" 
                       onerror="this.onerror=null; this.src='/images/destinations/statue-of-unity.jpg';"
                     />
                     <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, transparent 40%, rgba(0,0,0,0.65) 100%); pointer-events: none;"></div>
                     <div style="position: absolute; bottom: 6px; left: 8px; right: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 10px; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">
-                      <span>🏛️ ${place.district}</span>
-                      <span style="background: rgba(0,0,0,0.65); padding: 1.5px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.25); font-size: 9px; font-family: monospace;">${place.categoryLabel || 'Heritage'}</span>
+                      <span>🏛️ ${escapeHtml(place.district)}</span>
+                      <span style="background: rgba(0,0,0,0.65); padding: 1.5px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.25); font-size: 9px; font-family: monospace;">${escapeHtml(place.categoryLabel || 'Heritage')}</span>
                     </div>
                   </div>
                 ` : ''}
 
                 <p style="margin: 4px 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
-                  ${place.summary.slice(0, 115)}...
+                  ${escapeHtml(place.summary.slice(0, 115))}...
                 </p>
 
                 <!-- Key Logistics Chips -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; font-size: 10px; font-family: monospace;">
                   <div style="background: #f5f0e6; padding: 4px 6px; border-radius: 5px; border: 1px solid #e7dfd3; color: #44403c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    🕒 ${timingsDisplay}
+                    🕒 ${escapeHtml(timingsDisplay)}
                   </div>
                   <div style="background: #f5f0e6; padding: 4px 6px; border-radius: 5px; border: 1px solid #e7dfd3; color: #44403c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    🎟️ ${feeDisplay}
+                    🎟️ ${escapeHtml(feeDisplay)}
                   </div>
                 </div>
 

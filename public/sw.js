@@ -44,6 +44,15 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Security Hardening: Never intercept or cache Firebase Auth, Google Identity, or Firestore requests
+  if (
+    url.hostname.includes('googleapis.com') ||
+    url.hostname.includes('google.com') ||
+    url.hostname.includes('firebase')
+  ) {
+    return;
+  }
+
   // Handle tile requests: Cache with Stale-While-Revalidate
   if (url.hostname.includes('tile.openstreetmap') || url.hostname.includes('cartocdn')) {
     event.respondWith(
@@ -66,7 +75,7 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(request)
       .then((response) => {
-        if (response && response.status === 200) {
+        if (response && response.status === 200 && url.origin === self.location.origin) {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(request, responseToCache);

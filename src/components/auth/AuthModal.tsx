@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAtlasStore } from '../../stores/useAtlasStore';
-import { loginWithGoogle, sendPhoneOtp, verifyPhoneOtp } from '../../lib/firebase';
-import { X, Smartphone, Sparkles, CheckCircle2, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
+import { 
+  loginWithGoogle, 
+  sendPhoneOtp, 
+  verifyPhoneOtp, 
+  setupRecaptcha, 
+  clearRecaptcha, 
+  isValidIndianPhoneNumber 
+} from '../../lib/firebase';
+import { ConfirmationResult, RecaptchaVerifier } from 'firebase/auth';
+import { X, Smartphone, Sparkles, CheckCircle2, ShieldCheck, ArrowRight, Loader2, RotateCw } from 'lucide-react';
+
+const OTP_COOLDOWN_SECONDS = 60;
+const MAX_OTP_ATTEMPTS = 5;
 
 export const AuthModal: React.FC = () => {
   const { isAuthModalOpen, setAuthModalOpen, setLoggedInUser, setOnboardingOpen } = useAtlasStore();
@@ -12,6 +23,51 @@ export const AuthModal: React.FC = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  
+  // Security State: Cooldown & Rate Limiting
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  const [cooldown, setCooldown] = useState(0);
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
+
+  // Countdown timer for OTP resend cooldown
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => {
+      setCooldown((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldown]);
+
+  // Cleanup reCAPTCHA when modal closes
+  useEffect(() => {
+    if (!isAuthModalOpen) {
+      clearRecaptcha();
+      recaptchaVerifierRef.current = null;
+      setLoading(false);
+      setErrorMsg(null);
+      setOtpSent(false);
+      setOtpCode('');
+      setConfirmationResult(null);
+    }
+  }, [isAuthModalOpen]);
+
+  // Setup reCAPTCHA when switching to phone auth
+  useEffect(() => {
+    if (isAuthModalOpen && authMethod === 'phone') {
+      const timer = setTimeout(() => {
+        try {
+          const v = setupRecaptcha('recaptcha-container');
+          if (v) {
+            recaptchaVerifierRef.current = v;
+          }
+        } catch (e) {
+          console.warn('Recaptcha init notice:', e);
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthModalOpen, authMethod]);
 
   if (!isAuthModalOpen) return null;
 
@@ -23,7 +79,6 @@ export const AuthModal: React.FC = () => {
       if (res.success && res.user) {
         setLoggedInUser(res.user);
         setAuthModalOpen(false);
-        // If user has not picked a custom home district yet, open onboarding
         setOnboardingOpen(true);
       } else {
         setErrorMsg(res.error || 'Google sign-in could not be completed.');
@@ -37,25 +92,46 @@ export const AuthModal: React.FC = () => {
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phoneNumber || phoneNumber.replace(/\D/g, '').length < 10) {
-      setErrorMsg('Please enter a valid 10-digit mobile number.');
+
+    if (cooldown > 0) {
+      setErrorMsg(`Please wait ${cooldown}s before requesting a new OTP.`);
       return;
     }
+
+    if (failedAttempts >= MAX_OTP_ATTEMPTS) {
+      setErrorMsg('Too many failed attempts. For your security, please wait 5 minutes before trying again.');
+      return;
+    }
+
+    const raw = phoneNumber.replace(/\D/g, '');
+    const formatted = phoneNumber.startsWith('+91') ? phoneNumber.trim().replace(/\s+/g, '') : `+91${raw}`;
+
+    if (!isValidIndianPhoneNumber(formatted)) {
+      setErrorMsg('Please enter a valid 10-digit Indian mobile number.');
+      return;
+    }
+
     setLoading(true);
     setErrorMsg(null);
+
     try {
-      const formatted = phoneNumber.startsWith('+91') ? phoneNumber : `+91${phoneNumber.replace(/\D/g, '')}`;
-      const res = await sendPhoneOtp(formatted);
+      const res = await sendPhoneOtp(formatted, recaptchaVerifierRef.current || undefined);
       if (res.success) {
         setOtpSent(true);
-        if (res.mockCode) {
-          // Pre-populate or show hint for demo convenience
+        setCooldown(OTP_COOLDOWN_SECONDS);
+        if (res.confirmationResult) {
+          setConfirmationResult(res.confirmationResult);
+        }
+        // In local development mode only, pre-fill mock code for convenience
+        if (!import.meta.env.PROD && res.mockCode) {
           setOtpCode(res.mockCode);
         }
       } else {
-        setErrorMsg(res.error || 'Failed to send OTP.');
+        setFailedAttempts((prev) => prev + 1);
+        setErrorMsg(res.error || 'Failed to dispatch verification SMS.');
       }
     } catch (err: any) {
+      setFailedAttempts((prev) => prev + 1);
       setErrorMsg(err.message || 'Failed to send OTP.');
     } finally {
       setLoading(false);
@@ -64,22 +140,33 @@ export const AuthModal: React.FC = () => {
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (otpCode.length !== 6) {
+
+    const cleanCode = otpCode.replace(/\D/g, '').slice(0, 6);
+    if (cleanCode.length !== 6) {
       setErrorMsg('Please enter the 6-digit OTP code.');
       return;
     }
+
+    if (failedAttempts >= MAX_OTP_ATTEMPTS) {
+      setErrorMsg('Account verification locked due to excessive invalid attempts. Please try again later.');
+      return;
+    }
+
     setLoading(true);
     setErrorMsg(null);
+
     try {
-      const res = await verifyPhoneOtp(otpCode, undefined, phoneNumber);
+      const res = await verifyPhoneOtp(cleanCode, confirmationResult || undefined, phoneNumber);
       if (res.success && res.user) {
         setLoggedInUser(res.user);
         setAuthModalOpen(false);
         setOnboardingOpen(true);
       } else {
+        setFailedAttempts((prev) => prev + 1);
         setErrorMsg(res.error || 'Invalid OTP code.');
       }
     } catch (err: any) {
+      setFailedAttempts((prev) => prev + 1);
       setErrorMsg(err.message || 'Verification failed.');
     } finally {
       setLoading(false);
@@ -87,6 +174,9 @@ export const AuthModal: React.FC = () => {
   };
 
   const handleQuickTesterLogin = () => {
+    // Only permit demo login in non-production environments
+    if (import.meta.env.PROD) return;
+
     const demoUser = {
       uid: 'tester_' + Date.now().toString(36),
       name: 'Hardik Shah',
@@ -147,7 +237,7 @@ export const AuthModal: React.FC = () => {
 
             {errorMsg && (
               <div className="mb-5 p-3 rounded-xl bg-rose-950/60 border border-rose-500/50 text-rose-300 text-xs flex items-center gap-2">
-                <span className="text-sm">⚠️</span>
+                <span className="text-sm flex-shrink-0">⚠️</span>
                 <span>{errorMsg}</span>
               </div>
             )}
@@ -199,30 +289,35 @@ export const AuthModal: React.FC = () => {
                   <span>Continue with Phone / WhatsApp</span>
                 </button>
 
-                {/* Instant Quick Tester Login */}
-                <div className="pt-2">
-                  <div className="relative flex py-2 items-center">
-                    <div className="flex-grow border-t border-slate-800" />
-                    <span className="flex-shrink mx-3 text-[11px] font-mono uppercase text-slate-500">
-                      Or one-click test
-                    </span>
-                    <div className="flex-grow border-t border-slate-800" />
-                  </div>
+                {/* Instant Quick Tester Login (Strictly Gated to Development Environments) */}
+                {!import.meta.env.PROD && (
+                  <div className="pt-2">
+                    <div className="relative flex py-2 items-center">
+                      <div className="flex-grow border-t border-slate-800" />
+                      <span className="flex-shrink mx-3 text-[11px] font-mono uppercase text-slate-500">
+                        Local Dev Testing
+                      </span>
+                      <div className="flex-grow border-t border-slate-800" />
+                    </div>
 
-                  <button
-                    type="button"
-                    onClick={handleQuickTesterLogin}
-                    className="w-full py-2.5 px-3 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-colors"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Instant Demo Explorer Login (No Credentials Required)</span>
-                  </button>
-                </div>
+                    <button
+                      type="button"
+                      onClick={handleQuickTesterLogin}
+                      className="w-full py-2.5 px-3 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-colors"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Instant Demo Explorer Login (Development Only)</span>
+                    </button>
+                  </div>
+                )}
               </div>
             )}
 
             {authMethod === 'phone' && (
               <div>
+                {/* reCAPTCHA Invisible Container */}
+                <div id="recaptcha-container" className="my-1"></div>
+
                 {!otpSent ? (
                   <form onSubmit={handleSendOtp} className="space-y-4">
                     <div>
@@ -236,22 +331,27 @@ export const AuthModal: React.FC = () => {
                         <input
                           type="tel"
                           value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
                           placeholder="98765 43210"
-                          maxLength={12}
-                          className="w-full bg-slate-900 px-4 py-3 text-white text-sm outline-none font-mono"
+                          maxLength={10}
+                          className="w-full bg-slate-900 px-4 py-3 text-white text-sm outline-none font-mono tracking-wide"
                           autoFocus
                         />
                       </div>
+                      <p className="text-[11px] text-slate-500 mt-1.5 font-mono">
+                        Standard E.164 verification via SMS. No promotional spam.
+                      </p>
                     </div>
 
                     <button
                       type="submit"
-                      disabled={loading}
-                      className="w-full py-3.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-[3px_3px_0px_#000] transition-all disabled:opacity-60"
+                      disabled={loading || cooldown > 0 || phoneNumber.replace(/\D/g, '').length !== 10}
+                      className="w-full py-3.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-[3px_3px_0px_#000] transition-all disabled:opacity-50"
                     >
                       {loading ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : cooldown > 0 ? (
+                        <span>Resend in {cooldown}s</span>
                       ) : (
                         <>
                           <span>Send 6-Digit OTP</span>
@@ -275,15 +375,17 @@ export const AuthModal: React.FC = () => {
                         <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
                           Enter 6-Digit OTP
                         </label>
-                        <span className="text-[11px] font-mono text-amber-400">
-                          Demo OTP: 789012
-                        </span>
+                        {!import.meta.env.PROD && (
+                          <span className="text-[11px] font-mono text-amber-400">
+                            Demo OTP: 789012
+                          </span>
+                        )}
                       </div>
                       <input
                         type="text"
                         value={otpCode}
                         onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                        placeholder="789012"
+                        placeholder="••••••"
                         maxLength={6}
                         className="w-full bg-slate-900 border-2 border-slate-700 focus:border-amber-400 rounded-xl px-4 py-3 text-center text-2xl tracking-[0.5em] font-mono text-white outline-none"
                         autoFocus
@@ -292,7 +394,7 @@ export const AuthModal: React.FC = () => {
 
                     <button
                       type="submit"
-                      disabled={loading || otpCode.length !== 6}
+                      disabled={loading || otpCode.replace(/\D/g, '').length !== 6}
                       className="w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-[3px_3px_0px_#000] transition-all disabled:opacity-50"
                     >
                       {loading ? (
@@ -305,13 +407,27 @@ export const AuthModal: React.FC = () => {
                       )}
                     </button>
 
-                    <button
-                      type="button"
-                      onClick={() => { setOtpSent(false); setOtpCode(''); }}
-                      className="w-full text-center text-xs text-slate-400 hover:text-white pt-1"
-                    >
-                      Change phone number
-                    </button>
+                    <div className="flex items-center justify-between pt-1 text-xs">
+                      <button
+                        type="button"
+                        disabled={cooldown > 0 || loading}
+                        onClick={handleSendOtp}
+                        className={`flex items-center gap-1 font-mono ${
+                          cooldown > 0 ? 'text-slate-600 cursor-not-allowed' : 'text-amber-400 hover:underline'
+                        }`}
+                      >
+                        <RotateCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+                        <span>{cooldown > 0 ? `Resend OTP (${cooldown}s)` : 'Resend OTP SMS'}</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => { setOtpSent(false); setOtpCode(''); }}
+                        className="text-slate-400 hover:text-white"
+                      >
+                        Change number
+                      </button>
+                    </div>
                   </form>
                 )}
               </div>

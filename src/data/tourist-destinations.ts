@@ -357,7 +357,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Plastic-free zone enforced; loud music and evening camping outside designated forest department sites strictly prohibited; wild animals inhabit the area so do not venture off trails after dusk",
     "sourceName": "Gujarat Forest Department & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/north-zone/sabarkantha/polo-monuments-and-vijaynagar-forests.html",
-    "image": "https://images.unsplash.com/photo-1511497584788-87676104235f?auto=format&fit=crop&w=1200&q=80",
+    "image": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80",
     "isLesserKnown": true,
     "coordinates": [
       23.9783,
@@ -636,7 +636,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Do not chase or approach wild asses closer than permitted distances; desert navigation can be disorienting so always travel with authorized local guides",
     "sourceName": "Gujarat Forest Department — Wild Ass Sanctuary Division",
     "sourceUrl": "https://www.gujarattourism.com/saurashtra/surendranagar/wild-ass-sanctuary.html",
-    "image": "https://images.unsplash.com/photo-1574063413132-355dbfd83e22?auto=format&fit=crop&w=1200&q=80",
+    "image": "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80",
     "isLesserKnown": false,
     "coordinates": [
       23.3333,
@@ -853,7 +853,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Strict code of reverence: no leather items (belts, wallets, shoes) permitted on sacred hill; modest dress code; food consumption on sacred hill strictly prohibited; descent must be completed before sundown",
     "sourceName": "Sheth Anandji Kalyanji Trust & Gujarat Tourism",
     "sourceUrl": "https://www.gujarattourism.com/saurashtra/bhavnagar/palitana.html",
-    "image": "https://images.unsplash.com/photo-1545638898-0c623266ddc0?auto=format&fit=crop&w=1200&q=80",
+    "image": "https://images.unsplash.com/photo-1620619767323-b95a89183081?auto=format&fit=crop&w=1200&q=80",
     "isLesserKnown": false,
     "coordinates": [
       21.5033,

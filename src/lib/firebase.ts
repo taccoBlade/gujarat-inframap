@@ -56,6 +56,14 @@ if (isFirebaseConfigured) {
 export { app, auth, db, googleProvider };
 
 /**
+ * Standard Indian Phone Number Validator (+91 followed by 10 digits starting with 6-9)
+ */
+export function isValidIndianPhoneNumber(phoneNumber: string): boolean {
+  const formatted = phoneNumber.trim().replace(/\s+/g, '');
+  return /^\+91[6-9]\d{9}$/.test(formatted);
+}
+
+/**
  * Perform Google One-Tap / Popup sign-in
  */
 export async function loginWithGoogle(): Promise<{ success: boolean; user?: UserPassportProfile; error?: string }> {
@@ -64,12 +72,13 @@ export async function loginWithGoogle(): Promise<{ success: boolean; user?: User
       const result = await signInWithPopup(auth, googleProvider);
       const fbUser = result.user;
       
+      const cleanName = (fbUser.displayName || 'Gujarat Explorer').slice(0, 100);
       const profile: UserPassportProfile = {
         uid: fbUser.uid,
-        name: fbUser.displayName || 'Gujarat Explorer',
+        name: cleanName,
         email: fbUser.email || undefined,
         photoURL: fbUser.photoURL || undefined,
-        handle: `@${(fbUser.displayName || 'explorer').toLowerCase().replace(/\s+/g, '_')}`,
+        handle: `@${cleanName.toLowerCase().replace(/[^a-z0-9_]/g, '_').slice(0, 30)}`,
         authProvider: 'google',
         homeDistrict: 'ahmedabad',
         collectedStampIds: ['ahmedabad'],
@@ -84,11 +93,30 @@ export async function loginWithGoogle(): Promise<{ success: boolean; user?: User
       await syncProfileToFirestore(profile);
       return { success: true, user: profile };
     } catch (err: any) {
-      console.warn('[Firebase Auth] Live popup failed, providing demo fallback:', err);
+      const code = err?.code || '';
+      if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+        return { success: false, error: 'Sign-in window was closed before completion.' };
+      }
+      if (code === 'auth/unauthorized-domain') {
+        return { success: false, error: 'Origin domain is not authorized in Google OAuth console.' };
+      }
+      // In production, never disguise real failure with demo accounts
+      if (import.meta.env.PROD) {
+        return { success: false, error: 'Google sign-in could not be completed securely. Please try again.' };
+      }
+      console.warn('[Firebase Auth] Live popup failed in development, providing dev fallback:', err);
     }
   }
 
-  // Graceful Demo Fallback when no API keys are configured
+  // Strictly gate demo fallback to non-production environments
+  if (import.meta.env.PROD) {
+    return { 
+      success: false, 
+      error: 'Google Sign-In is not configured for this production environment. Please configure Firebase API credentials.' 
+    };
+  }
+
+  // Development/Local Testing Demo Identity
   const demoProfile: UserPassportProfile = {
     uid: 'google_demo_' + Date.now().toString(36),
     name: 'Saumya Patel',
@@ -111,18 +139,37 @@ export async function loginWithGoogle(): Promise<{ success: boolean; user?: User
 /**
  * Setup RecaptchaVerifier for Phone Auth
  */
+let activeRecaptchaVerifier: RecaptchaVerifier | null = null;
+
 export function setupRecaptcha(containerId: string): RecaptchaVerifier | null {
   if (!isFirebaseConfigured || !auth) return null;
   try {
-    return new RecaptchaVerifier(auth, containerId, {
+    if (activeRecaptchaVerifier) {
+      activeRecaptchaVerifier.clear();
+      activeRecaptchaVerifier = null;
+    }
+    activeRecaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
       size: 'invisible',
       callback: () => {
-        // reCAPTCHA solved
+        // reCAPTCHA solved - allow phone auth to proceed
+      },
+      'expired-callback': () => {
+        console.warn('[reCAPTCHA] Challenge expired, reset required.');
       }
     });
+    return activeRecaptchaVerifier;
   } catch (e) {
     console.warn('reCAPTCHA setup warning:', e);
     return null;
+  }
+}
+
+export function clearRecaptcha(): void {
+  if (activeRecaptchaVerifier) {
+    try {
+      activeRecaptchaVerifier.clear();
+    } catch (_) {}
+    activeRecaptchaVerifier = null;
   }
 }
 
@@ -133,19 +180,47 @@ export async function sendPhoneOtp(
   phoneNumber: string, 
   verifier?: RecaptchaVerifier
 ): Promise<{ success: boolean; confirmationResult?: ConfirmationResult; mockCode?: string; error?: string }> {
-  if (isFirebaseConfigured && auth && verifier) {
-    try {
-      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, verifier);
-      return { success: true, confirmationResult };
-    } catch (err: any) {
-      console.warn('[Firebase Phone Auth] Live OTP failed, using demo fallback:', err);
+  const formatted = phoneNumber.trim().replace(/\s+/g, '');
+  if (!isValidIndianPhoneNumber(formatted)) {
+    return { success: false, error: 'Please enter a valid 10-digit Indian mobile number (+91).' };
+  }
+
+  if (isFirebaseConfigured && auth) {
+    const v = verifier || activeRecaptchaVerifier;
+    if (v) {
+      try {
+        const confirmationResult = await signInWithPhoneNumber(auth, formatted, v);
+        return { success: true, confirmationResult };
+      } catch (err: any) {
+        console.warn('[Firebase Phone Auth] Error during phone auth dispatch:', err?.code);
+        if (err?.code === 'auth/too-many-requests') {
+          return { success: false, error: 'Too many requests. Please wait a few minutes before trying again.' };
+        }
+        if (err?.code === 'auth/invalid-phone-number') {
+          return { success: false, error: 'The mobile number provided is invalid.' };
+        }
+        if (err?.code === 'auth/captcha-check-failed') {
+          return { success: false, error: 'reCAPTCHA verification failed. Please try again.' };
+        }
+        if (import.meta.env.PROD) {
+          return { success: false, error: 'Unable to dispatch verification SMS. Please verify your connection or try again later.' };
+        }
+      }
     }
   }
 
-  // Demo fallback OTP
+  // In production, never return mock OTP bypasses
+  if (import.meta.env.PROD) {
+    return { 
+      success: false, 
+      error: 'Phone authentication is not configured in this environment. Please configure Firebase Phone Auth.' 
+    };
+  }
+
+  // Development & controlled test fallback OTP
   return { 
     success: true, 
-    mockCode: '789012' // Predictable OTP for seamless live testing
+    mockCode: '789012' // Predictable OTP strictly in non-production local development
   };
 }
 
@@ -157,15 +232,20 @@ export async function verifyPhoneOtp(
   confirmationResult?: ConfirmationResult,
   phoneNumber?: string
 ): Promise<{ success: boolean; user?: UserPassportProfile; error?: string }> {
+  const cleanCode = code.trim();
+  if (!/^\d{6}$/.test(cleanCode)) {
+    return { success: false, error: 'Please enter a valid 6-digit verification code.' };
+  }
+
   if (confirmationResult) {
     try {
-      const res = await confirmationResult.confirm(code);
+      const res = await confirmationResult.confirm(cleanCode);
       const fbUser = res.user;
       const profile: UserPassportProfile = {
         uid: fbUser.uid,
         name: 'Patel Pravasi',
         phoneNumber: fbUser.phoneNumber || phoneNumber || '+91 98765 43210',
-        handle: `@pravasi_${code.slice(-3)}`,
+        handle: `@pravasi_${cleanCode.slice(-3)}`,
         authProvider: 'phone',
         homeDistrict: 'surat',
         collectedStampIds: ['surat'],
@@ -178,43 +258,83 @@ export async function verifyPhoneOtp(
       await syncProfileToFirestore(profile);
       return { success: true, user: profile };
     } catch (err: any) {
-      return { success: false, error: err.message || 'Invalid OTP code' };
+      if (err?.code === 'auth/invalid-verification-code') {
+        return { success: false, error: 'Invalid verification code. Please check and try again.' };
+      }
+      if (err?.code === 'auth/code-expired') {
+        return { success: false, error: 'This verification code has expired. Please request a new one.' };
+      }
+      return { success: false, error: 'Verification failed. Please try again.' };
     }
   }
 
-  // Demo verification check (accepts either 789012, 123456 or any 6 digit number)
-  if (code.trim().length === 6) {
-    const demoProfile: UserPassportProfile = {
-      uid: 'phone_' + Date.now().toString(36),
-      name: 'Pravasi Gujarat',
-      phoneNumber: phoneNumber || '+91 98765 43210',
-      handle: '@gujarat_pravasi',
-      authProvider: 'phone',
-      homeDistrict: 'surat',
-      collectedStampIds: ['surat', 'navsari'],
-      bookmarkedStoryIds: ['story-dumas-beach'],
-      visitedPlaceIds: ['surat'],
-      badges: ['coastal_nomad'],
-      joinedDate: new Date().toISOString().split('T')[0],
-      isLoggedIn: true
-    };
-    return { success: true, user: demoProfile };
+  // In production, confirmationResult is mandatory; no mock bypass allowed
+  if (import.meta.env.PROD) {
+    return { success: false, error: 'Missing active verification session. Please request a new OTP code.' };
   }
 
-  return { success: false, error: 'Please enter a valid 6-digit OTP code' };
+  // Development mode fallback
+  const demoProfile: UserPassportProfile = {
+    uid: 'phone_' + Date.now().toString(36),
+    name: 'Pravasi Gujarat',
+    phoneNumber: phoneNumber || '+91 98765 43210',
+    handle: '@gujarat_pravasi',
+    authProvider: 'phone',
+    homeDistrict: 'surat',
+    collectedStampIds: ['surat', 'navsari'],
+    bookmarkedStoryIds: ['story-dumas-beach'],
+    visitedPlaceIds: ['surat'],
+    badges: ['coastal_nomad'],
+    joinedDate: new Date().toISOString().split('T')[0],
+    isLoggedIn: true
+  };
+  return { success: true, user: demoProfile };
 }
 
 /**
- * Sync User Profile to Firestore
+ * Sync User Profile to Firestore with Strict Ownership Validation & Sanitization
  */
 export async function syncProfileToFirestore(profile: UserPassportProfile): Promise<boolean> {
   if (!isFirebaseConfigured || !db || !profile.uid) return false;
+
+  // Authorization Check: Prevent User A from writing to User B's profile
+  if (auth?.currentUser && auth.currentUser.uid !== profile.uid) {
+    console.error('[Security] Unauthorized attempt to sync profile: UID mismatch with authenticated session.');
+    return false;
+  }
+
   try {
     const userDocRef = doc(db, 'users', profile.uid);
-    await setDoc(userDocRef, {
-      ...profile,
+
+    // Whitelist and sanitize profile payload
+    const sanitizedData = {
+      uid: profile.uid,
+      name: String(profile.name || '').slice(0, 100),
+      handle: String(profile.handle || '').slice(0, 50),
+      email: profile.email ? String(profile.email).slice(0, 120) : null,
+      phoneNumber: profile.phoneNumber ? String(profile.phoneNumber).slice(0, 20) : null,
+      photoURL: profile.photoURL ? String(profile.photoURL).slice(0, 300) : null,
+      authProvider: profile.authProvider || 'google',
+      homeDistrict: String(profile.homeDistrict || 'ahmedabad').slice(0, 50),
+      collectedStampIds: Array.isArray(profile.collectedStampIds) 
+        ? profile.collectedStampIds.slice(0, 34).map(String) 
+        : ['ahmedabad'],
+      bookmarkedStoryIds: Array.isArray(profile.bookmarkedStoryIds) 
+        ? profile.bookmarkedStoryIds.slice(0, 100).map(String) 
+        : [],
+      visitedPlaceIds: Array.isArray(profile.visitedPlaceIds) 
+        ? profile.visitedPlaceIds.slice(0, 100).map(String) 
+        : [],
+      badges: Array.isArray(profile.badges) 
+        ? profile.badges.slice(0, 20).map(String) 
+        : ['solanki_explorer'],
+      joinedDate: profile.joinedDate || new Date().toISOString().split('T')[0],
+      isLoggedIn: true,
+      lastCheckedInDistrict: profile.lastCheckedInDistrict ? String(profile.lastCheckedInDistrict) : null,
       updatedAt: new Date().toISOString()
-    }, { merge: true });
+    };
+
+    await setDoc(userDocRef, sanitizedData, { merge: true });
     return true;
   } catch (e) {
     console.error('[Firestore] Sync error:', e);
@@ -223,10 +343,17 @@ export async function syncProfileToFirestore(profile: UserPassportProfile): Prom
 }
 
 /**
- * Fetch User Profile from Firestore
+ * Fetch User Profile from Firestore with Identity Isolation
  */
 export async function fetchProfileFromFirestore(uid: string): Promise<UserPassportProfile | null> {
   if (!isFirebaseConfigured || !db) return null;
+
+  // Authorization Check: Prevent client-side inspection of other user profiles
+  if (auth?.currentUser && auth.currentUser.uid !== uid) {
+    console.error('[Security] Unauthorized attempt to read another user profile.');
+    return null;
+  }
+
   try {
     const userDocRef = doc(db, 'users', uid);
     const snap = await getDoc(userDocRef);
@@ -240,7 +367,7 @@ export async function fetchProfileFromFirestore(uid: string): Promise<UserPasspo
 }
 
 /**
- * Sign Out
+ * Sign Out & Revoke Local Authentication State
  */
 export async function logoutUser(): Promise<void> {
   if (isFirebaseConfigured && auth) {
@@ -250,4 +377,12 @@ export async function logoutUser(): Promise<void> {
       console.warn('SignOut warning:', e);
     }
   }
+}
+
+/**
+ * Initialize Firebase Auth State Listener
+ */
+export function initAuthListener(onUserChanged: (user: FirebaseUser | null) => void): (() => void) | null {
+  if (!isFirebaseConfigured || !auth) return null;
+  return onAuthStateChanged(auth, onUserChanged);
 }
