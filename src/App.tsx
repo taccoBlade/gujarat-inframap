@@ -6,7 +6,6 @@ import { AtlasMap } from './components/map/AtlasMap';
 import { UnfilteredStoriesView } from './components/unfiltered/UnfilteredStoriesView';
 import { InfrastructureDirectoryView } from './components/infrastructure/InfrastructureDirectoryView';
 import { PlacesDestinationView } from './components/places/PlacesDestinationView';
-import { EVHighwayRadar } from './components/ev/EVHighwayRadar';
 import { OfflineBanner } from './components/pwa/OfflineBanner';
 import { ShareableStoryCardModal } from './components/share/ShareableStoryCardModal';
 import { AuthModal } from './components/auth/AuthModal';
@@ -39,19 +38,7 @@ export const App: React.FC = () => {
             </motion.div>
           )}
 
-          {currentMode === 'ev' && (
-            <motion.div
-              key="ev"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.25 }}
-            >
-              <EVHighwayRadar />
-            </motion.div>
-          )}
-
-          {currentMode === 'explore' && (
+          {(currentMode === 'explore' || currentMode === 'ev') && (
             <motion.div
               key="explore"
               initial={{ opacity: 0 }}

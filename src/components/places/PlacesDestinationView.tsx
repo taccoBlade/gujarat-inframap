@@ -15,7 +15,9 @@ import {
   Sparkles,
   Award,
   ChevronRight,
-  Filter
+  Filter,
+  Zap,
+  ShieldCheck
 } from 'lucide-react';
 
 export const PlacesDestinationView: React.FC = () => {
@@ -268,6 +270,21 @@ export const PlacesDestinationView: React.FC = () => {
                       <Ticket className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
                       <span className="truncate">{place.entryFee || 'Free / ASI'}</span>
                     </div>
+                  </div>
+
+                  {/* EV Roadtrip Readiness & Nearest Fast Charger */}
+                  <div className="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
+                    <span className="flex items-center gap-1.5 text-amber-300 truncate">
+                      <Zap className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+                      {place.district.toLowerCase() === 'kachchh' || place.name.includes('Dholavira') || place.name.includes('Rann')
+                        ? '⚠️ Remote Dead Zone: Top-up 100% at Bhuj'
+                        : place.district.toLowerCase() === 'the dangs' || place.name.includes('Saputara')
+                        ? '⚠️ Forest Dead Zone: Top-up at Waghai'
+                        : '⚡ EV Ready: Fast Charger < 45km'}
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-400 border border-amber-600/40">
+                      {place.district.toLowerCase() === 'kachchh' || place.district.toLowerCase() === 'the dangs' ? 'Dead Zone Alert' : '60-180kW'}
+                    </span>
                   </div>
                 </div>
               </div>

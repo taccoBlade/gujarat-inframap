@@ -15,7 +15,13 @@ import {
   ExternalLink, 
   Clock, 
   Ticket, 
-  ShieldCheck 
+  ShieldCheck,
+  AlertTriangle,
+  X,
+  BatteryCharging,
+  Sun,
+  Coffee,
+  HelpCircle
 } from 'lucide-react';
 
 interface StoryItem {
@@ -53,17 +59,41 @@ export const AtlasMap: React.FC = () => {
   const [showStories, setShowStories] = useState(true);
   const [showEV, setShowEV] = useState(true);
 
+  // Embedded EV Highway Radar Drawer State
+  const [evRadarOpen, setEvRadarOpen] = useState(false);
+  const [evFilterDgOnly, setEvFilterDgOnly] = useState(false);
+  const [evFilterFastOnly, setEvFilterFastOnly] = useState(false);
+  const [evSelectedCorridor, setEvSelectedCorridor] = useState<string>('all');
+  const [troubleshootStationId, setTroubleshootStationId] = useState<string | null>(null);
+
   const stories: StoryItem[] = (unfilteredStoriesRaw as any).stories || (unfilteredStoriesRaw as unknown as StoryItem[]);
+
+  const corridors = [
+    { id: 'all', label: 'All Corridors', center: [22.40, 71.80] as [number, number], zoom: 7.4 },
+    { id: 'NE-1', label: 'NE-1 (Ahmd–Vdr)', center: [22.65, 72.85] as [number, number], zoom: 10 },
+    { id: 'NH-48', label: 'NH-48 (Surat–Vapi)', center: [21.05, 72.95] as [number, number], zoom: 9.5 },
+    { id: 'NH-47', label: 'Saurashtra & Dwarka', center: [22.25, 70.30] as [number, number], zoom: 8.5 },
+    { id: 'Kutch', label: 'Kutch Desert Route', center: [23.65, 70.10] as [number, number], zoom: 9 },
+    { id: 'Dang', label: 'Dang Forest & Saputara', center: [20.75, 73.65] as [number, number], zoom: 9.5 }
+  ];
+
+  const flyToCorridor = (corridorId: string) => {
+    setEvSelectedCorridor(corridorId);
+    setShowEV(true);
+    const target = corridors.find(c => c.id === corridorId);
+    if (target && mapInstanceRef.current) {
+      mapInstanceRef.current.flyTo(target.center, target.zoom, { duration: 1.2 });
+    }
+  };
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
     if (!mapInstanceRef.current) {
       // 1. Strict Boundary Locking to Gujarat (Survey of India Alignment)
-      // Clamped strictly to Gujarat state coordinates so northern international borders cannot be reached
       const gujaratBounds = L.latLngBounds(
-        L.latLng(19.8, 67.5), // South-West (Arabian Sea / Valsad border)
-        L.latLng(24.9, 74.8)  // North-East (Kachchh / Banaskantha / Rajasthan border)
+        L.latLng(19.8, 67.5),
+        L.latLng(24.9, 74.8)
       );
 
       const map = L.map(mapContainerRef.current, {
@@ -72,7 +102,7 @@ export const AtlasMap: React.FC = () => {
         minZoom: 6.8,
         maxZoom: 18,
         maxBounds: gujaratBounds,
-        maxBoundsViscosity: 1.0, // Hard bounce-back so user can never pan outside Gujarat!
+        maxBoundsViscosity: 1.0,
         zoomControl: false,
       });
 
@@ -100,7 +130,7 @@ export const AtlasMap: React.FC = () => {
           if (!mapInstanceRef.current) return;
           geojsonBoundaryRef.current = L.geoJSON(geojsonData, {
             style: {
-              color: '#9a3412', // Terracotta Clay outline
+              color: '#9a3412',
               weight: 1.8,
               opacity: 0.85,
               fillColor: '#d97706',
@@ -120,7 +150,7 @@ export const AtlasMap: React.FC = () => {
         })
         .catch(err => console.warn('District boundary polygon load note:', err));
 
-      // Global callback for popups
+      // Global callbacks for popups
       (window as unknown as { claimFromMap: (id: string) => void }).claimFromMap = (id: string) => {
         claimDistrictStamp(id);
       };
@@ -131,7 +161,6 @@ export const AtlasMap: React.FC = () => {
         setMode('places');
       };
 
-      // Ensure proper sizing and trigger marker drawing
       setTimeout(() => {
         if (mapInstanceRef.current) {
           mapInstanceRef.current.invalidateSize();
@@ -268,7 +297,6 @@ export const AtlasMap: React.FC = () => {
       storyLayerRef.current.clearLayers();
       if (showStories) {
         stories.forEach((story) => {
-          // story.coordinates in json is [lng, lat]
           const coords: [number, number] = [story.coordinates[1], story.coordinates[0]];
           const icon = L.divIcon({
             className: 'story-pin',
@@ -326,11 +354,18 @@ export const AtlasMap: React.FC = () => {
       }
     }
 
-    // --- 4. ⚡ EV Highway Fast Chargers Layer ---
+    // --- 4. ⚡ EV Highway Fast Chargers Layer (with Dynamic Filter) ---
     if (evLayerRef.current) {
       evLayerRef.current.clearLayers();
       if (showEV) {
-        GUJARAT_HIGHWAY_EV_STATIONS.forEach((station) => {
+        const filteredStations = GUJARAT_HIGHWAY_EV_STATIONS.filter((st) => {
+          if (evFilterDgOnly && !st.hasDgBackup) return false;
+          if (evFilterFastOnly && st.totalPowerKw < 120) return false;
+          if (evSelectedCorridor !== 'all' && !st.corridor.toLowerCase().includes(evSelectedCorridor.toLowerCase())) return false;
+          return true;
+        });
+
+        filteredStations.forEach((station) => {
           const icon = L.divIcon({
             className: 'ev-pin',
             html: `
@@ -358,19 +393,30 @@ export const AtlasMap: React.FC = () => {
 
           const m = L.marker(station.coordinates, { icon }).addTo(evLayerRef.current!);
           m.bindPopup(`
-            <div style="font-family: sans-serif; min-width: 230px; color: #1c1917; padding: 2px;">
+            <div style="font-family: sans-serif; min-width: 240px; color: #1c1917; padding: 2px;">
               <div style="height: 3px; background: linear-gradient(90deg, #15803d, #ca8a04); border-radius: 2px; margin-bottom: 6px;"></div>
               <span style="font-size: 10px; font-weight: 800; color: #15803d; text-transform: uppercase; font-family: monospace;">
                 ${station.network} • ${station.totalPowerKw} kW DC Fast
               </span>
-              <h3 style="margin: 2px 0 4px 0; font-size: 14px; font-weight: 800; color: #0f172a;">
+              <h3 style="margin: 2px 0 2px 0; font-size: 14px; font-weight: 800; color: #0f172a;">
                 ${station.name}
               </h3>
+              <p style="margin: 0 0 4px 0; font-size: 11px; color: #b45309; font-family: 'Noto Sans Gujarati'; font-weight: 600;">
+                ${station.gujaratiName}
+              </p>
               <p style="margin: 0 0 6px 0; font-size: 11px; color: #44403c;">
                 📍 ${station.locationDesc}
               </p>
-              <div style="font-size: 10px; color: #15803d; font-weight: bold; margin-bottom: 6px;">
-                ✓ ${station.reliabilityScore}% Reliability • ${station.hasDgBackup ? '⚡ Has Generator Backup' : '⚠️ No DG Backup'}
+              <div style="font-size: 10px; color: #15803d; font-weight: bold; margin-bottom: 4px;">
+                ✓ ${station.reliabilityScore}% Gun Reliability • ${station.hasDgBackup ? '⚡ DG Generator Backup' : '⚠️ No DG Backup'}
+              </div>
+              ${station.criticalRoadtripWarning ? `
+                <div style="padding: 4px 6px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; font-size: 10px; color: #991b1b; margin-bottom: 6px;">
+                  ⚠️ ${station.criticalRoadtripWarning}
+                </div>
+              ` : ''}
+              <div style="font-size: 10px; color: #57534e; margin-bottom: 6px;">
+                Tariff: <strong>${station.tariffPerKwh}</strong> | Food: ${station.amenities.food}
               </div>
               <a href="https://www.google.com/maps/dir/?api=1&destination=${station.coordinates[0]},${station.coordinates[1]}" target="_blank" style="
                 display: block; text-align: center; width: 100%; box-sizing: border-box; padding: 7px;
@@ -385,13 +431,13 @@ export const AtlasMap: React.FC = () => {
       }
     }
 
-  }, [mapReady, showDistricts, showTourist, showStories, showEV, userProfile.collectedStampIds, stories]);
+  }, [mapReady, showDistricts, showTourist, showStories, showEV, evFilterDgOnly, evFilterFastOnly, evSelectedCorridor, userProfile.collectedStampIds, stories]);
 
   return (
     <div className="relative w-full h-[calc(100vh-4.25rem)] bg-[#0c1524] overflow-hidden">
       
       {/* Floating Layer Control Panel (Traditional Gujarati Ethnic Styling) */}
-      <div className="absolute top-4 left-4 z-[400] bg-[#0c1524]/95 backdrop-blur-md border-2 border-amber-600/60 p-3.5 sm:p-4 rounded-xl shadow-2xl text-slate-100 max-w-sm select-none">
+      <div className="absolute top-4 left-4 z-[1050] bg-[#0c1524]/95 backdrop-blur-md border-2 border-amber-600/60 p-3.5 sm:p-4 rounded-xl shadow-2xl text-slate-100 max-w-sm select-none">
         
         {/* Decorative mini toran border on layer panel */}
         <div className="ethnic-toran-trim rounded-t mb-2 -mt-1 -mx-1" />
@@ -472,7 +518,139 @@ export const AtlasMap: React.FC = () => {
             </span>
           </label>
         </div>
+
+        {/* Embedded EV Highway Corridor Radar Quick Toggle */}
+        <div className="mt-3 pt-2.5 border-t border-amber-600/30">
+          <button
+            onClick={() => setEvRadarOpen(!evRadarOpen)}
+            className="w-full py-1.5 px-3 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-xs flex items-center justify-between shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          >
+            <div className="flex items-center gap-1.5">
+              <Zap className="w-3.5 h-3.5" />
+              <span>{evRadarOpen ? 'Close EV Corridor Radar' : '⚡ EV Highway Corridor Radar'}</span>
+            </div>
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/25 text-black font-mono">
+              60-180kW
+            </span>
+          </button>
+        </div>
+
       </div>
+
+      {/* Embedded Highway EV Corridor Radar Slide-Out Panel */}
+      {evRadarOpen && (
+        <div className="absolute top-4 right-4 z-[1050] bg-[#0c1524]/95 backdrop-blur-md border-2 border-amber-600/60 p-4 rounded-xl shadow-2xl text-slate-100 max-w-sm w-full select-none animate-in fade-in slide-in-from-right duration-200">
+          
+          <div className="flex items-center justify-between gap-3 mb-2 pb-2 border-b border-amber-600/30">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-xs">
+                ⚡
+              </span>
+              <div>
+                <h4 className="text-xs font-black text-white font-['Outfit']">
+                  Highway EV Radar Lifeline
+                </h4>
+                <span className="text-[10px] text-amber-300/80 font-['Noto_Sans_Gujarati']">
+                  ઈ-વ્હીકલ હાઈવે નેટવર્ક
+                </span>
+              </div>
+            </div>
+            <button 
+              onClick={() => setEvRadarOpen(false)}
+              className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Quick Metrics Bar */}
+          <div className="grid grid-cols-2 gap-2 my-2 text-center font-mono">
+            <div className="p-1.5 rounded bg-[#121c2e] border border-amber-600/20">
+              <span className="text-base font-black text-amber-400 block font-['Outfit']">180 kW</span>
+              <span className="text-[9px] text-slate-400 uppercase">Hypercharger Peak</span>
+            </div>
+            <div className="p-1.5 rounded bg-[#121c2e] border border-amber-600/20">
+              <span className="text-base font-black text-emerald-400 block font-['Outfit']">98.2%</span>
+              <span className="text-[9px] text-slate-400 uppercase">Gun Reliability</span>
+            </div>
+          </div>
+
+          {/* Critical Corridor Dead Zone Warning */}
+          <div className="p-2.5 rounded-lg bg-rose-950/60 border border-rose-500/50 text-[11px] text-rose-200 mb-2.5">
+            <div className="flex items-center gap-1.5 font-bold text-rose-300 mb-0.5">
+              <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>Dead Zone Alert: Kutch &amp; Dang</span>
+            </div>
+            <p className="text-[10px] text-slate-300 leading-tight">
+              Zero DC fast chargers exist between Khavda &amp; Dholavira in Kutch, or inside Saputara Teak Forest. Charge to 100% at Bhuj or Waghai before crossing!
+            </p>
+          </div>
+
+          {/* Feature Filters */}
+          <div className="space-y-1.5 pt-1 border-t border-amber-600/20 text-xs">
+            <span className="text-[10px] font-mono text-slate-400 block font-bold">
+              SOLVED ROADTRIP PAIN POINTS:
+            </span>
+
+            <button
+              onClick={() => setEvFilterDgOnly(!evFilterDgOnly)}
+              className={`w-full p-2 rounded text-left transition-colors flex items-center justify-between border ${
+                evFilterDgOnly 
+                  ? 'bg-emerald-950/80 text-emerald-200 border-emerald-500' 
+                  : 'bg-[#121c2e] text-slate-300 border-slate-700 hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="font-semibold text-[11px]">Generator (DG) Backup Only</span>
+              </div>
+              <span className="text-[9px] px-1 py-0.2 rounded font-mono bg-black/40 text-emerald-300">
+                Blackout-Proof
+              </span>
+            </button>
+
+            <button
+              onClick={() => setEvFilterFastOnly(!evFilterFastOnly)}
+              className={`w-full p-2 rounded text-left transition-colors flex items-center justify-between border ${
+                evFilterFastOnly 
+                  ? 'bg-amber-950/80 text-amber-200 border-amber-500' 
+                  : 'bg-[#121c2e] text-slate-300 border-slate-700 hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Zap className="w-3.5 h-3.5 text-amber-400" />
+                <span className="font-semibold text-[11px]">120kW+ Hyperchargers Only</span>
+              </div>
+              <span className="text-[9px] px-1 py-0.2 rounded font-mono bg-black/40 text-amber-300">
+                Ultra-Fast
+              </span>
+            </button>
+          </div>
+
+          {/* Fly-to Corridor Quick Jump */}
+          <div className="mt-3 pt-2 border-t border-amber-600/20">
+            <span className="text-[10px] font-mono text-slate-400 block font-bold mb-1.5">
+              FAST-FOCUS HIGHWAY CORRIDOR:
+            </span>
+            <div className="grid grid-cols-2 gap-1.5 text-[10px]">
+              {corridors.filter(c => c.id !== 'all').map(c => (
+                <button
+                  key={c.id}
+                  onClick={() => flyToCorridor(c.id)}
+                  className={`p-1.5 rounded text-left font-semibold truncate transition-colors border ${
+                    evSelectedCorridor === c.id
+                      ? 'bg-amber-500 text-slate-950 font-bold border-amber-400'
+                      : 'bg-[#121c2e] text-slate-300 border-slate-700 hover:text-white'
+                  }`}
+                >
+                  📍 {c.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      )}
 
       {/* The Leaflet Map Canvas */}
       <div ref={mapContainerRef} className="w-full h-full" />

@@ -46,10 +46,9 @@ export const Header: React.FC = () => {
 
   const navItems: { mode: AtlasMode; label: string; icon: React.ReactNode; badge?: string }[] = [
     { mode: 'passport', label: 'Gujarat Passport', icon: <Award className="w-4 h-4 text-amber-400" />, badge: `${userProfile.collectedStampIds.length}/34` },
-    { mode: 'ev', label: 'EV Highway Radar', icon: <Zap className="w-4 h-4 text-emerald-400" />, badge: '60-180kW' },
     { mode: 'explore', label: 'Atlas Map', icon: <Map className="w-4 h-4 text-amber-300" /> },
-    { mode: 'unfiltered', label: 'Unfiltered Stories', icon: <Sparkles className="w-4 h-4 text-rose-400" />, badge: '45' },
     { mode: 'places', label: 'Destinations', icon: <Compass className="w-4 h-4 text-amber-400" />, badge: '37' },
+    { mode: 'unfiltered', label: 'Unfiltered Stories', icon: <Sparkles className="w-4 h-4 text-rose-400" />, badge: '45' },
     { mode: 'infrastructure', label: 'Infrastructure', icon: <span className="text-sm">⚡</span>, badge: '3,337' },
   ];
 

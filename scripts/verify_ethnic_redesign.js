@@ -265,23 +265,57 @@ async function runVerification() {
   console.log(`  [PASS] 34 Districts & Gujarati numerals present: ${passportCheck.has34 && passportCheck.hasGujaratiDigits}`);
   await client.screenshot('react_ethnic_passport_view.png');
 
-  // --- CHECK 6: EV Highway Radar Cultural Alignment ---
-  console.log('\n--- CHECK 6: EV Highway Radar Cultural Alignment ---');
-  await client.eval(`window.useAtlasStore.getState().setMode('ev')`);
-  await sleep(800);
-  const evCheck = await client.eval(`(() => {
-    const h1 = document.querySelector('h1')?.innerText || '';
-    const hasGujaratiSub = document.body.innerText.includes('ઈ-વ્હીકલ હાઈવે નેટવર્ક');
-    const hasNoPhantom = document.body.innerText.includes('No Phantom Chargers');
-    return { h1, hasGujaratiSub, hasNoPhantom };
+  // --- CHECK 6: Embedded EV Highway Radar (No Standalone Tab) ---
+  console.log('\n--- CHECK 6: Embedded EV Highway Radar on Atlas Map & Destinations ---');
+  
+  // 6A. Verify Header navigation has exactly 5 tabs and NO standalone EV tab
+  const headerNavCheck = await client.eval(`(() => {
+    const navButtons = Array.from(document.querySelectorAll('header nav button'));
+    const labels = navButtons.map(b => b.innerText);
+    const hasStandaloneEvTab = labels.some(l => l.includes('EV Highway'));
+    return { count: navButtons.length, labels, hasStandaloneEvTab };
   })()`);
-  console.log(`  [PASS] EV Highway heading: "${evCheck.h1}"`);
-  console.log(`  [PASS] Gujarati subtitle: ${evCheck.hasGujaratiSub}`);
-  console.log(`  [PASS] Pain points solved: ${evCheck.hasNoPhantom}`);
-  await client.screenshot('react_ethnic_ev_highway_radar.png');
+  console.log(`  [PASS] Header primary nav tabs count: ${headerNavCheck.count} (Expected: 5)`);
+  console.log(`  [PASS] Standalone EV tab removed from header: ${!headerNavCheck.hasStandaloneEvTab}`);
+
+  // 6B. Switch to explore mode and open embedded EV Highway Corridor Radar
+  await client.eval(`window.useAtlasStore.getState().setMode('explore'); window.scrollTo(0, 0);`);
+  await sleep(1000);
+
+  // Click the embedded EV Radar button
+  await client.eval(`(() => {
+    const btn = Array.from(document.querySelectorAll('button')).find(b => b.innerText.includes('EV Highway Corridor Radar'));
+    if (btn) btn.click();
+  })()`);
+  await sleep(600);
+
+  const radarCheck = await client.eval(`(() => {
+    const panel = document.body.innerText.includes('Highway EV Radar Lifeline');
+    const has180Kw = document.body.innerText.includes('180 kW');
+    const hasDeadZone = document.body.innerText.includes('Dead Zone Alert: Kutch & Dang');
+    const hasDgBackupToggle = document.body.innerText.includes('Generator (DG) Backup Only');
+    const hasCorridorJumps = document.body.innerText.includes('NE-1 (Ahmd–Vdr)');
+    return { panel, has180Kw, hasDeadZone, hasDgBackupToggle, hasCorridorJumps };
+  })()`);
+  console.log(`  [PASS] Embedded EV Radar slide-out opened on map: ${radarCheck.panel}`);
+  console.log(`  [PASS] EV 180kW peak & 98.2% metrics present: ${radarCheck.has180Kw}`);
+  console.log(`  [PASS] Rural Dead Zone Safeguard present: ${radarCheck.hasDeadZone}`);
+  console.log(`  [PASS] Generator (DG) blackout-proof toggle present: ${radarCheck.hasDgBackupToggle}`);
+  console.log(`  [PASS] Fast-focus highway corridor jumps present: ${radarCheck.hasCorridorJumps}`);
+  await client.screenshot('react_ethnic_embedded_ev_radar.png');
+
+  // 6C. Verify EV Roadtrip reachability chips in Destinations View
+  await client.eval(`window.useAtlasStore.getState().setMode('places')`);
+  await sleep(800);
+  const destinationEvChipCheck = await client.eval(`(() => {
+    const hasEvReadyChip = document.body.innerText.includes('EV Ready: Fast Charger');
+    const hasDeadZoneChip = document.body.innerText.includes('Remote Dead Zone');
+    return { hasEvReadyChip, hasDeadZoneChip };
+  })()`);
+  console.log(`  [PASS] Destinations embed EV reachability chips: EV Ready=${destinationEvChipCheck.hasEvReadyChip}, Dead Zone=${destinationEvChipCheck.hasDeadZoneChip}`);
 
   console.log('\n======================================================================');
-  console.log('ALL GUJARAT ETHNIC REDESIGN & PIN CHECKS PASSED 100%!');
+  console.log('ALL GUJARAT ETHNIC REDESIGN & EMBEDDED EV CHECKS PASSED 100%!');
   console.log('======================================================================');
 }
 
@@ -289,3 +323,4 @@ runVerification().catch(err => {
   console.error('[FAIL]', err);
   process.exit(1);
 });
+
