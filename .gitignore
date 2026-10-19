@@ -41,3 +41,6 @@ lighthouse*.json
 *.tmp
 *.swp
 *~
+
+.agents/
+skills-lock.json

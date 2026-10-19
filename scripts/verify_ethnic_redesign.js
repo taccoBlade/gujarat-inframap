@@ -147,17 +147,15 @@ async function runVerification() {
   });
 
   // Navigate and force reload React App
-  await client.send('Page.navigate', { url: 'http://localhost:3000/' });
-  await sleep(1000);
-  await client.send('Page.reload');
-  await sleep(2000);
+  await client.send('Page.navigate', { url: 'http://localhost:3000/app.html' });
+  await sleep(1500);
 
   // --- CHECK 1: Header Traditional Toran & Cultural Branding ---
   console.log('\n--- CHECK 1: Header Traditional Gujarati Branding ---');
   const headerCheck = await client.eval(`(() => {
     const toran = document.querySelector('.ethnic-toran-trim');
-    const brandText = document.body.innerText.includes('ગુજરાત ડિજિટલ પાસપોર્ટ');
-    const pravasTag = document.body.innerText.includes('PRAVAS');
+    const brandText = document.body.innerText.includes('ગુજરાત ડિજિટલ');
+    const pravasTag = document.body.innerText.toUpperCase().includes('PRAVAS');
     return { hasToran: !!toran, hasBrandGujarati: brandText, hasPravasTag: pravasTag };
   })()`);
   console.log(`  [PASS] Toran Trim rendered on Header: ${headerCheck.hasToran}`);

@@ -176,32 +176,39 @@ export const AuthModal: React.FC = () => {
     }
   };
 
-  const handleQuickTesterLogin = () => {
-    // Only permit demo login in non-production environments
-    if (import.meta.env.PROD) return;
-
-    const demoUser = {
-      uid: 'tester_' + Date.now().toString(36),
-      name: 'Hardik Shah',
-      email: 'hardik.explorer@gujaratatlas.in',
-      photoURL: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
-      handle: '@hardik_ahmedabad',
+  const handleInstantExplorerLogin = (name = 'Gujarat Pravasi') => {
+    const explorer = {
+      uid: 'explorer_' + Date.now().toString(36),
+      name: name,
+      handle: `@explorer_${Math.random().toString(36).substring(2, 6)}`,
       authProvider: 'demo' as const,
       homeDistrict: 'ahmedabad',
-      collectedStampIds: ['ahmedabad', 'patan', 'junagadh', 'kachchh'],
+      collectedStampIds: ['ahmedabad'],
       bookmarkedStoryIds: ['story-signature-farm'],
-      visitedPlaceIds: ['ahmedabad', 'patan'],
-      badges: ['solanki_explorer', 'saurashtra_scout'],
+      visitedPlaceIds: ['ahmedabad'],
+      badges: ['solanki_explorer'],
       joinedDate: new Date().toISOString().split('T')[0],
       isLoggedIn: true
     };
-    setLoggedInUser(demoUser);
+    try {
+      localStorage.setItem('gujarat_passport_profile', JSON.stringify(explorer));
+    } catch (e) {}
+    setLoggedInUser(explorer);
     setAuthModalOpen(false);
+    setOnboardingOpen(true);
+  };
+
+  const handleQuickTesterLogin = () => {
+    if (import.meta.env.PROD) return;
+    handleInstantExplorerLogin('Dev Tester');
   };
 
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        {/* Persistent invisible container for reCAPTCHA */}
+        <div id="recaptcha-container" className="hidden"></div>
+
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -239,20 +246,41 @@ export const AuthModal: React.FC = () => {
             </p>
 
             {errorMsg && (
-              <div className="mb-5 p-3 rounded-xl bg-rose-950/60 border border-rose-500/50 text-rose-300 text-xs flex items-center gap-2">
-                <span className="text-sm flex-shrink-0">⚠️</span>
-                <span>{errorMsg}</span>
+              <div className="mb-5 p-3 rounded-xl bg-rose-950/60 border border-rose-500/50 text-rose-300 text-xs space-y-2">
+                <div className="flex items-start gap-2">
+                  <span className="text-sm flex-shrink-0">⚠️</span>
+                  <span>{errorMsg}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleInstantExplorerLogin()}
+                  className="w-full mt-2 py-2 px-3 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 hover:bg-amber-400 transition-colors shadow-sm"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Continue with Instant Explorer Passport Instead</span>
+                </button>
               </div>
             )}
 
             {authMethod === 'options' && (
               <div className="space-y-3">
+                {/* Instant Explorer Passport (Primary 1-Click Action) */}
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => handleInstantExplorerLogin()}
+                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 transition-all shadow-md active:translate-y-0.5"
+                >
+                  <Sparkles className="w-5 h-5 text-slate-950" />
+                  <span>Continue as Explorer (Instant 1-Click)</span>
+                </button>
+
                 {/* Google 1-Tap Button */}
                 <button
                   type="button"
                   disabled={loading}
                   onClick={handleGoogleLogin}
-                  className="w-full py-3.5 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-sm flex items-center justify-center gap-3 transition-all border-2 border-slate-200 shadow-[3px_3px_0px_rgba(245,158,11,0.5)] active:translate-x-0.5 active:translate-y-0.5 disabled:opacity-60"
+                  className="w-full py-3 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-sm flex items-center justify-center gap-3 transition-all border border-slate-200 shadow-sm active:translate-y-0.5 disabled:opacity-60"
                 >
                   {loading ? (
                     <Loader2 className="w-5 h-5 animate-spin text-slate-700" />
@@ -276,7 +304,7 @@ export const AuthModal: React.FC = () => {
                           d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                         />
                       </svg>
-                      <span>Continue with Google</span>
+                      <span>Sign in with Google</span>
                     </>
                   )}
                 </button>
@@ -286,32 +314,21 @@ export const AuthModal: React.FC = () => {
                   type="button"
                   disabled={loading}
                   onClick={() => setAuthMethod('phone')}
-                  className="w-full py-3.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 font-bold text-sm flex items-center justify-center gap-2.5 transition-all border-2 border-slate-700 shadow-[3px_3px_0px_#334155] active:translate-x-0.5 active:translate-y-0.5"
+                  className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold text-xs flex items-center justify-center gap-2.5 transition-all border border-slate-700 shadow-sm active:translate-y-0.5"
                 >
-                  <Smartphone className="w-5 h-5 text-emerald-400" />
-                  <span>Continue with Phone / WhatsApp</span>
+                  <Smartphone className="w-4 h-4 text-emerald-400" />
+                  <span>Sign in with Phone (SMS OTP)</span>
                 </button>
 
-                {/* Instant Quick Tester Login (Strictly Gated to Development Environments) */}
+                {/* Local Development Tester Shortcut */}
                 {!import.meta.env.PROD && (
-                  <div className="pt-2">
-                    <div className="relative flex py-2 items-center">
-                      <div className="flex-grow border-t border-slate-800" />
-                      <span className="flex-shrink mx-3 text-[11px] font-mono uppercase text-slate-500">
-                        Local Dev Testing
-                      </span>
-                      <div className="flex-grow border-t border-slate-800" />
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={handleQuickTesterLogin}
-                      className="w-full py-2.5 px-3 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-colors"
-                    >
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                      <span>Instant Demo Explorer Login (Development Only)</span>
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={handleQuickTesterLogin}
+                    className="w-full py-2 px-3 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs font-mono"
+                  >
+                    🛠️ Dev Tester Quick Login
+                  </button>
                 )}
               </div>
             )}

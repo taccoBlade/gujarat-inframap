@@ -106,54 +106,61 @@ export const InfrastructureDirectoryView: React.FC = () => {
   });
 
   return (
-    <div className={`max-w-7xl mx-auto px-4 py-8 transition-colors duration-200 ${theme === 'dark' ? 'text-slate-100' : 'text-[#282823]'}`}>
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 transition-colors duration-200 ${theme === 'dark' ? 'text-slate-100' : 'text-[#282823]'}`}>
       
       {/* Header */}
-      <div className="mb-8 space-y-2">
-        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold font-mono uppercase tracking-wider border ${
-          theme === 'dark'
-            ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
-            : 'bg-amber-500/10 border-amber-600/30 text-[#9a3412]'
-        }`}>
-          <Zap className="w-3.5 h-3.5" />
-          <span>STATUTORY PUBLIC INFRASTRUCTURE REGISTRY</span>
+      <div className={`relative border rounded-3xl p-6 sm:p-8 mb-6 sm:mb-8 shadow-sm overflow-hidden transition-colors ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-[#121c2e] via-[#0f172a] to-[#090d16] border-amber-500/20'
+          : 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F4EC] to-[#EFE7D8] border-[#D8C3A5]'
+      }`}>
+        {/* Subtle top hairline */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500" />
+
+        <div className="space-y-2 max-w-3xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold font-mono uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+            <Zap className="w-3.5 h-3.5" />
+            <span>STATUTORY PUBLIC INFRASTRUCTURE REGISTRY</span>
+          </div>
+
+          <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif tracking-tight ${theme === 'dark' ? 'text-white' : 'text-[#1c1917]'}`}>
+            Gujarat <span className="text-amber-500">Infrastructure Directory</span>
+          </h1>
+          <p className={`text-xs sm:text-sm leading-relaxed ${theme === 'dark' ? 'text-slate-300' : 'text-[#57534e]'}`}>
+            Explore 3,337 verified public engineering works across all 34 districts — dams, clean energy hubs, rail corridors, and smart cities.
+          </p>
         </div>
 
-        <h1 className={`text-3xl sm:text-4xl font-extrabold font-['Outfit'] ${theme === 'dark' ? 'text-white' : 'text-[#1c1917]'}`}>
-          Gujarat <span className="text-amber-600">Infrastructure Directory</span>
-        </h1>
-        <p className={`text-sm max-w-xl font-['Lora'] ${theme === 'dark' ? 'text-slate-300' : 'text-[#57534e]'}`}>
-          Explore 3,337 verified public engineering works across all 34 districts — dams, clean energy hubs, rail corridors, and smart cities.
-        </p>
-
         {/* Filter bar */}
-        <div className="pt-4 flex flex-wrap items-center justify-between gap-3">
-          <div className="relative w-full sm:w-72">
-            <Search className={`w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 ${theme === 'dark' ? 'text-slate-400' : 'text-[#78716c]'}`} />
+        <div className={`pt-5 mt-5 border-t flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 ${
+          theme === 'dark' ? 'border-slate-800' : 'border-stone-200'
+        }`}>
+          <div className="relative flex-grow max-w-md">
+            <Search className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 ${theme === 'dark' ? 'text-slate-400' : 'text-stone-400'}`} />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by asset or district..."
-              className={`w-full pl-9 pr-4 py-2 border-2 rounded-xl text-xs outline-none transition-colors ${
+              className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-xs outline-none border transition-all ${
                 theme === 'dark'
-                  ? 'bg-slate-900 border-slate-700 text-white placeholder-slate-500 focus:border-amber-400'
-                  : 'bg-[#F7F2E8] border-[#D8C3A5] text-[#282823] placeholder-[#78716c] focus:border-[#9a3412]'
+                  ? 'bg-slate-900/90 border-slate-700/80 text-white placeholder-slate-500 focus:border-amber-400'
+                  : 'bg-white/90 border-[#D8C3A5] text-[#282823] placeholder-stone-400 focus:border-amber-600'
               }`}
             />
           </div>
 
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
             {['all', 'energy', 'water', 'transport', 'urban'].map(cat => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition-all border ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold capitalize transition-all border whitespace-nowrap ${
                   activeCategory === cat
-                    ? 'bg-amber-500 text-slate-950 border-black shadow-[2px_2px_0px_#000]'
+                    ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-sm'
                     : theme === 'dark'
-                      ? 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
-                      : 'bg-[#EDE5D8] text-[#44403c] border-[#D8C3A5] hover:border-[#9a3412] hover:text-[#1c1917]'
+                      ? 'bg-slate-900/60 text-slate-300 border-slate-800 hover:text-white hover:border-slate-700'
+                      : 'bg-white/60 text-stone-700 border-[#D8C3A5] hover:border-amber-600'
                 }`}
               >
                 {cat}
@@ -169,10 +176,11 @@ export const InfrastructureDirectoryView: React.FC = () => {
           <motion.article
             key={item.id}
             whileHover={{ y: -4 }}
-            className={`border-2 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between transition-colors ${
+            transition={{ duration: 0.25 }}
+            className={`border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl flex flex-col justify-between transition-all duration-300 ${
               theme === 'dark'
-                ? 'bg-slate-900 border-slate-700'
-                : 'bg-[#FDFBF7] border-[#DFD3C3] text-[#282823]'
+                ? 'bg-[#121926] border-slate-800/90 hover:border-amber-500/50'
+                : 'bg-[#FDFBF7] border-[#DFD3C3] hover:border-amber-600 text-[#282823]'
             }`}
           >
             {/* Media */}

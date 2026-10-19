@@ -6,6 +6,7 @@ import { VERIFIED_TOURIST_DESTINATIONS } from '../../data/tourist-destinations';
 import { GUJARAT_HIGHWAY_EV_STATIONS } from '../../data/ev-stations';
 import { getRegionalCulture } from '../../utils/cultural-regions';
 import unfilteredStoriesRaw from '../../../data/gujarat_unfiltered.json';
+import { AjrakhStarPattern, StepwellGeometryPattern, ToranOrnamentalBorder } from '../cultural/GujaratiPatterns';
 import { 
   Award, 
   MapPin, 
@@ -553,17 +554,20 @@ export const AtlasMap: React.FC = () => {
       {/* Floating Layer Control Panel (Traditional Gujarati Ethnic Styling) */}
       <div className="absolute top-4 left-4 z-[1050] bg-[#0c1524]/95 backdrop-blur-md border-2 border-amber-600/60 p-3.5 sm:p-4 rounded-xl shadow-2xl text-slate-100 max-w-sm select-none">
         
-        {/* Decorative mini toran border on layer panel */}
-        <div className="ethnic-toran-trim rounded-t mb-2 -mt-1 -mx-1" />
+        {/* Decorative Gujarati Toran Border */}
+        <ToranOrnamentalBorder className="rounded-t mb-2 -mt-1.5 -mx-1.5" height={10} />
 
         <div className="flex items-center justify-between gap-3 mb-2.5 pb-2 border-b border-amber-600/30">
           <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold flex items-center justify-center text-xs font-['Noto_Sans_Gujarati']">
-              ગૂ
-            </span>
-            <span className="text-xs font-bold font-['Outfit'] text-white">
-              Atlas Map Layers • નકશા સ્તરો
-            </span>
+            <AjrakhStarPattern size={22} className="flex-shrink-0" />
+            <div>
+              <span className="text-xs font-bold font-['Outfit'] text-white block">
+                Atlas Map Layers
+              </span>
+              <span className="text-[10px] text-amber-300/80 font-['Noto_Sans_Gujarati']">
+                નકશા સ્તરો
+              </span>
+            </div>
           </div>
           <span className="text-[10px] font-mono font-bold text-amber-400">
             {userProfile.collectedStampIds.length}/34 Stamped
@@ -654,12 +658,11 @@ export const AtlasMap: React.FC = () => {
       {/* Embedded Highway EV Corridor Radar Slide-Out Panel */}
       {evRadarOpen && (
         <div className="absolute top-4 right-4 z-[1050] bg-[#0c1524]/95 backdrop-blur-md border-2 border-amber-600/60 p-4 rounded-xl shadow-2xl text-slate-100 max-w-sm w-full select-none animate-in fade-in slide-in-from-right duration-200">
+          <ToranOrnamentalBorder className="rounded-t mb-2.5 -mt-2 -mx-2" height={10} />
           
           <div className="flex items-center justify-between gap-3 mb-2 pb-2 border-b border-amber-600/30">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-xs">
-                ⚡
-              </span>
+              <StepwellGeometryPattern size={22} className="flex-shrink-0" />
               <div>
                 <h4 className="text-xs font-black text-white font-['Outfit']">
                   Highway EV Radar Lifeline

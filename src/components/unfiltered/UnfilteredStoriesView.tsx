@@ -60,66 +60,62 @@ export const UnfilteredStoriesView: React.FC = () => {
     <div className={`max-w-7xl mx-auto px-4 py-8 transition-colors duration-200 ${theme === 'dark' ? 'text-slate-100' : 'text-[#282823]'}`}>
       
       {/* Editorial Header in Traditional Gujarati Heritage Style */}
-      <div className={`relative border-2 rounded-2xl p-6 sm:p-8 mb-8 shadow-xl overflow-hidden transition-colors ${
+      <div className={`relative border rounded-3xl p-6 sm:p-8 mb-6 sm:mb-8 shadow-sm overflow-hidden transition-colors ${
         theme === 'dark'
-          ? 'bg-gradient-to-br from-[#1b1724] via-[#121c2e] to-[#0c1524] border-amber-600/50'
-          : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2E8] to-[#EFE7D8] border-[#D8C3A5]'
+          ? 'bg-gradient-to-br from-[#121c2e] via-[#0f172a] to-[#090d16] border-amber-500/20'
+          : 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F4EC] to-[#EFE7D8] border-[#D8C3A5]'
       }`}>
         
         {/* Toran Border Trim on Top */}
-        <div className="ethnic-toran-trim absolute top-0 left-0 right-0 w-full" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500" />
 
-        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold font-mono uppercase tracking-wider border ${
-              theme === 'dark'
-                ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
-                : 'bg-amber-500/10 border-amber-600/30 text-[#9a3412]'
-            }`}>
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div className="space-y-2 max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold font-mono uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+              <Sparkles className="w-3.5 h-3.5" />
               <span>EDITORIAL ARCHIVE • ૪૫ અજાણી વાતો (45 DOSSIERS)</span>
             </div>
 
-            <h1 className={`text-3xl sm:text-5xl font-extrabold font-['Lora',serif] tracking-tight ${
+            <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif tracking-tight ${
               theme === 'dark' ? 'text-white' : 'text-[#1c1917]'
             }`}>
-              Gujarat <span className="text-amber-600 font-serif italic">Unfiltered</span>
+              Gujarat <span className="text-amber-500 font-serif italic">Unfiltered</span>
             </h1>
 
-            <p className={`text-sm sm:text-base max-w-2xl font-['Noto_Sans_Gujarati',sans-serif] leading-relaxed ${
-              theme === 'dark' ? 'text-amber-100/90' : 'text-[#57534e]'
+            <p className={`text-xs sm:text-sm font-['Noto_Sans_Gujarati',sans-serif] leading-relaxed ${
+              theme === 'dark' ? 'text-slate-300' : 'text-[#57534e]'
             }`}>
               ગુજરાતની રહસ્યમય જગ્યાઓ, સદીઓ જૂની લોકવાયકાઓ (Oral Folklore) અને વિજ્ઞાન તેમજ સરકારી ગેઝેટિયર્સ આધારિત ફોરેન્સિક વાસ્તવિકતા (Ground Reality).
             </p>
           </div>
 
-          <div className={`border-2 p-4 rounded-xl shadow-lg flex-shrink-0 text-center font-mono ${
+          <div className={`px-4 py-2.5 rounded-2xl border text-center shadow-sm flex-shrink-0 ${
             theme === 'dark'
-              ? 'bg-[#121c2e] border-amber-600/40'
-              : 'bg-[#FDFBF7] border-[#D8C3A5]'
+              ? 'bg-slate-900/80 border-slate-700/80'
+              : 'bg-white/80 border-[#D8C3A5]'
           }`}>
-            <span className={`text-3xl font-black font-['Outfit'] block ${theme === 'dark' ? 'text-amber-400' : 'text-[#9a3412]'}`}>45</span>
-            <span className={`text-[10px] uppercase tracking-wider ${theme === 'dark' ? 'text-amber-200/70' : 'text-[#78716c]'}`}>Oral Folklore vs Reality</span>
+            <span className={`text-2xl font-black font-mono block ${theme === 'dark' ? 'text-amber-400' : 'text-[#9a3412]'}`}>45</span>
+            <span className={`text-[10px] font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-slate-400' : 'text-[#78716c]'}`}>Oral Folklore vs Reality</span>
           </div>
         </div>
 
         {/* Filter controls */}
-        <div className={`pt-6 mt-6 border-t flex flex-wrap items-center justify-between gap-3 ${
-          theme === 'dark' ? 'border-amber-600/30' : 'border-[#D8C3A5]/60'
+        <div className={`pt-5 mt-5 border-t flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 ${
+          theme === 'dark' ? 'border-slate-800' : 'border-stone-200'
         }`}>
           
           {/* Search box */}
-          <div className="relative w-full sm:w-80">
-            <Search className={`w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 ${theme === 'dark' ? 'text-amber-400' : 'text-[#78716c]'}`} />
+          <div className="relative flex-grow max-w-md">
+            <Search className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 ${theme === 'dark' ? 'text-slate-400' : 'text-stone-400'}`} />
             <input
               type="text"
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
               placeholder="Search Dumas Beach, Shamlaji, Uparkot..."
-              className={`w-full pl-9 pr-4 py-2 border-2 rounded-xl text-xs outline-none font-mono transition-colors ${
+              className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-xs outline-none border transition-all ${
                 theme === 'dark'
-                  ? 'bg-[#0c1524] border-amber-600/40 text-white placeholder-slate-400 focus:border-amber-400'
-                  : 'bg-[#F7F2E8] border-[#D8C3A5] text-[#282823] placeholder-[#78716c] focus:border-[#9a3412]'
+                  ? 'bg-slate-900/90 border-slate-700/80 text-white placeholder-slate-500 focus:border-amber-400'
+                  : 'bg-white/90 border-[#D8C3A5] text-[#282823] placeholder-stone-400 focus:border-amber-600'
               }`}
             />
           </div>
@@ -136,12 +132,12 @@ export const UnfilteredStoriesView: React.FC = () => {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border whitespace-nowrap ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border whitespace-nowrap ${
                   selectedCategory === cat.id
-                    ? 'bg-gradient-to-r from-amber-600 to-amber-700 text-white border-black shadow-[2px_2px_0px_#000]'
+                    ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-sm'
                     : theme === 'dark'
-                      ? 'bg-[#121c2e] text-amber-200/80 border-amber-600/30 hover:text-white hover:border-amber-500'
-                      : 'bg-[#EDE5D8] text-[#44403c] border-[#D8C3A5] hover:border-[#9a3412] hover:text-[#1c1917]'
+                      ? 'bg-slate-900/60 text-slate-300 border-slate-800 hover:text-white hover:border-slate-700'
+                      : 'bg-white/60 text-stone-700 border-[#D8C3A5] hover:border-amber-600'
                 }`}
               >
                 {cat.label}
@@ -167,16 +163,16 @@ export const UnfilteredStoriesView: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                whileHover={{ y: -6, scale: 1.01 }}
-                transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-                className={`rounded-2xl border-2 overflow-hidden shadow-xl flex flex-col justify-between transition-all group ${
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.25 }}
+                className={`rounded-2xl border overflow-hidden shadow-sm hover:shadow-xl flex flex-col justify-between transition-all duration-300 group ${
                   theme === 'dark'
-                    ? 'bg-[#0f1a2d] border-amber-600/40 hover:border-amber-400/80 shadow-[4px_4px_0px_rgba(0,0,0,0.6)]'
-                    : 'bg-[#FDFBF7] border-[#DFD3C3] hover:border-[#9a3412] text-[#282823] shadow-md'
+                    ? 'bg-[#121926] border-slate-800/90 hover:border-amber-500/50'
+                    : 'bg-[#FDFBF7] border-[#DFD3C3] hover:border-amber-600 text-[#282823]'
                 }`}
               >
                 {/* Regional Cultural Toran Trim */}
-                <div style={{ height: '3.5px', background: culture.borderTrimStyle }} className="w-full" />
+                <div style={{ height: '3px', background: culture.borderTrimStyle }} className="w-full" />
 
                 {/* Media Image Header */}
                 <div 

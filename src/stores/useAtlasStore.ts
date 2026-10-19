@@ -87,7 +87,7 @@ function getSavedProfile(): UserPassportProfile {
 }
 
 export const useAtlasStore = create<AtlasState>((set, get) => ({
-  currentMode: 'passport',
+  currentMode: 'explore',
   theme: 'dark',
   searchQuery: '',
   selectedDistrict: null,
