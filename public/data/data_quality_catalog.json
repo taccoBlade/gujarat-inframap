@@ -1,0 +1,151 @@
+{
+  "audit_timestamp": "2026-10-12T05:31:44.762405+00:00",
+  "repository_layers_count": 13,
+  "total_features": 3337,
+  "overall_validity_pct": 100.0,
+  "layers": {
+    "gujarat_district_hq": {
+      "features_count": 33,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 33
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_districts": {
+      "features_count": 33,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 33
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_environment_disaster": {
+      "features_count": 21,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 21
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_geoenvironmental": {
+      "features_count": 41,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 41
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_groundwater_geology": {
+      "features_count": 33,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 33
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_power": {
+      "features_count": 49,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 49
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_railways": {
+      "features_count": 2264,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 99.9,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 2264
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_roads": {
+      "features_count": 43,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 43
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_stations": {
+      "features_count": 623,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 623
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_transmission": {
+      "features_count": 37,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 37
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_transport_structures": {
+      "features_count": 31,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 31
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_urban_industry": {
+      "features_count": 34,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 34
+      },
+      "quality_index": 100.0
+    },
+    "gujarat_water_resources": {
+      "features_count": 95,
+      "crs": "EPSG:4326",
+      "geometry_validity_pct": 100.0,
+      "repaired_geometries": 0,
+      "license_coverage_pct": 100.0,
+      "classifications": {
+        "verified": 95
+      },
+      "quality_index": 100.0
+    }
+  }
+}

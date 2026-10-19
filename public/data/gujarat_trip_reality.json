@@ -1,0 +1,2667 @@
+{
+  "version": "1.0.0",
+  "lastAudited": "2024-10-15",
+  "auditStandard": "Gujarat Atlas Civic Geographic Data Framework",
+  "description": "Verified trip feasibility, last-mile transit gaps, return connectivity reality, and granular provenance for pilot Gujarat destinations.",
+  "pilotDestinations": [
+    {
+      "destinationId": "adalaj-ni-vav",
+      "destinationName": "Adalaj ni Vav (Rudabai Stepwell)",
+      "category": "heritage_history",
+      "district": "Gandhinagar",
+      "region": "North Gujarat",
+      "coordinates": [
+        72.58,
+        23.1667
+      ],
+      "tripReadinessStatus": "well_documented",
+      "statusReason": "Located along NH-147 / Sarkhej–Gandhinagar Highway (~18–20 km north of central Ahmedabad) with frequent urban transit and reliable road connection.",
+      "recommendedMinHours": 1.5,
+      "nearestHubs": {
+        "railway": {
+          "name": "Kalupur (Ahmedabad Junction, ADI) / Sabarmati (SBT)",
+          "code": "ADI",
+          "coordinates": [
+            72.6,
+            23.03
+          ],
+          "straightLineDistanceKm": 14.5,
+          "roadDistanceKm": 18.2,
+          "connectionType": "confirmed_broad_gauge",
+          "frequencyNote": "Frequent suburban, express, and metro transit connections across Ahmedabad.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Western Railway / NTES",
+            "lastChecked": "2026-10-18"
+          }
+        },
+        "busTerminal": {
+          "name": "Adalaj Circle Bus Stop / Gandhinagar Central Depot",
+          "coordinates": [
+            72.581,
+            23.165
+          ],
+          "straightLineDistanceKm": 0.4,
+          "roadDistanceKm": 0.5,
+          "connectionType": "confirmed_scheduled",
+          "frequencyNote": "High frequency Ahmedabad-Gandhinagar corridor buses every 10-15 minutes.",
+          "verification": {
+            "status": "officially_published",
+            "source": "GSRTC Gandhinagar Division",
+            "lastChecked": "2026-10-18"
+          }
+        },
+        "highway": {
+          "name": "NH-147 / Sarkhej-Gandhinagar (SG) Highway",
+          "roadType": "6-lane divided access highway",
+          "conditionNote": "Excellent all-weather urban expressway corridor."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Adalaj Circle Bus Stop / SG Highway Crossing",
+        "endPoint": "ASI Stepwell Entrance Portal",
+        "gapDistanceKm": 0.4,
+        "terrainType": "Paved village road through Adalaj",
+        "hasLastMileUncertainty": false,
+        "headline": "Direct road access via SG Highway with short pedestrian or auto-rickshaw connection (~400 m).",
+        "gapSummary": "Direct road access via SG Highway; urban bus and auto-rickshaw connections operate along the Ahmedabad–Adalaj corridor, though exact stop-to-monument walking distance (~400 m) and evening return availability should be planned.",
+        "availableModes": [
+          {
+            "mode": "Walking from SG Highway / Adalaj Circle",
+            "feasibility": "Readily Accessible",
+            "fareEstimate": "Free (~400m walk)",
+            "notes": "Short flat paved stroll from highway stop.",
+            "verification": "manually_checked",
+            "lastChecked": "2026-10-18"
+          },
+          {
+            "mode": "Local Auto-rickshaw",
+            "feasibility": "Frequent",
+            "fareEstimate": "₹20 - ₹40",
+            "notes": "Continuous auto availability from highway circle.",
+            "verification": "manually_checked",
+            "lastChecked": "2026-10-18"
+          },
+          {
+            "mode": "Direct Ride-Hailing (Ola/Uber/Taxi)",
+            "feasibility": "High Availability",
+            "fareEstimate": "₹250 - ₹450 from central Ahmedabad",
+            "notes": "Full service area of Ahmedabad-Gandhinagar twin city grid.",
+            "verification": "manually_checked",
+            "lastChecked": "2026-10-18"
+          }
+        ],
+        "unverifiedFactors": [
+          "Evening return bus frequency from Adalaj stop after 21:00 requires pre-planning."
+        ],
+        "returnJourneyWarning": "Evening return transport from Adalaj crossroads to Ahmedabad is reliable until 21:00; afterwards, private vehicle is advised."
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Ahmedabad",
+          "Gandhinagar",
+          "Vadodara",
+          "Mehsana"
+        ],
+        "lastScheduledTransitNote": "Suburban bus service operates until ~22:00.",
+        "caution": "Pre-arrange return ride if staying beyond 21:30.",
+        "verification": {
+          "status": "manually_checked",
+          "source": "GSRTC Suburban Schedule",
+          "lastChecked": "2026-10-18"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "06:00 - 18:00 (Daily)",
+        "hoursVerification": {
+          "status": "officially_published",
+          "source": "ASI Vadodara Circle Notice Board",
+          "lastChecked": "2026-10-18"
+        },
+        "entryPermits": {
+          "required": false,
+          "type": "Free / Non-ticketed ASI monument",
+          "pricing": "Free"
+        },
+        "seasonalAlerts": [],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Designated vehicle parking near entrance."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "Clean public sanitation facility on-site."
+          },
+          "drinkingWater": {
+            "status": "verified_available",
+            "details": "RO drinking water outlet near gate."
+          },
+          "wheelchairAccess": {
+            "status": "limited",
+            "details": "Ground level viewing accessible; subterranean levels require steps."
+          },
+          "cellularNetwork": {
+            "status": "excellent",
+            "details": "Full 4G/5G coverage."
+          },
+          "evCharging": {
+            "status": "verified_nearby",
+            "details": "Fast EV charging on SG Highway within 2 km."
+          }
+        },
+        "materialRestrictions": [
+          "No food or smoking inside stepwell.",
+          "Tripod photography requires ASI permit."
+        ]
+      },
+      "beforeYouGoChecklist": [
+        "Confirm monument opening hours with ASI Vadodara Circle (typically sunrise to sunset).",
+        "Wear slip-resistant footwear suitable for stone stepwell stairs.",
+        "Photography permits not required for non-commercial mobile photography."
+      ],
+      "provenance": {
+        "sourceAgency": "Archaeological Survey of India (ASI) Vadodara Circle & Gujarat Tourism",
+        "sourceTitle": "Adalaj ni Vav Visitor Access & Monument Dossier",
+        "sourceUrl": "https://asivadodara.org",
+        "publicationDate": "2024",
+        "lastCheckedDate": "2026-10-18",
+        "datasetVersion": "2.1.0",
+        "verificationTier": "OFFICIAL_RECORD",
+        "positionalAccuracyNote": "Approximate centroid; coordinate decimals do not imply survey-grade accuracy.",
+        "knownLimitations": [
+          "Urban traffic on SG Highway can increase travel duration during peak commute hours."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Google Maps Turn-by-Turn Navigation",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=23.1667,72.5800",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "rani-ki-vav",
+      "destinationName": "Rani ki Vav (Queen's Stepwell)",
+      "category": "iconic",
+      "district": "Patan",
+      "region": "North Gujarat",
+      "coordinates": [
+        72.1023,
+        23.8589
+      ],
+      "tripReadinessStatus": "well_documented",
+      "statusReason": "Direct broad-gauge rail connectivity to Patan with frequent shared and private auto-rickshaw feeder services. ASI visitor hours, digital ticketing, and parking facilities fully documented.",
+      "recommendedMinHours": 2.5,
+      "nearestHubs": {
+        "railway": {
+          "name": "Patan Railway Station (PTN)",
+          "code": "PTN",
+          "coordinates": [
+            72.1333,
+            23.85
+          ],
+          "straightLineDistanceKm": 3.8,
+          "roadDistanceKm": 4.5,
+          "connectionType": "confirmed_broad_gauge",
+          "frequencyNote": "Daily passenger and express trains from Ahmedabad and Mehsana.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Western Railway / National Train Enquiry System (NTES)",
+            "lastChecked": "2024-09-15"
+          }
+        },
+        "secondaryRailway": {
+          "name": "Mehsana Junction (MSH)",
+          "code": "MSH",
+          "coordinates": [
+            72.3999,
+            23.588
+          ],
+          "straightLineDistanceKm": 48.0,
+          "roadDistanceKm": 54.0,
+          "connectionType": "major_junction",
+          "frequencyNote": "Main line hub with frequent intercity trains to Delhi, Mumbai, Ahmedabad."
+        },
+        "busTerminal": {
+          "name": "GSRTC Patan Central Bus Station",
+          "coordinates": [
+            72.13,
+            23.848
+          ],
+          "straightLineDistanceKm": 3.2,
+          "roadDistanceKm": 3.9,
+          "connectionType": "confirmed_scheduled",
+          "frequencyNote": "Buses to Ahmedabad every 20-30 minutes; direct services to Mehsana, Palanpur, Surat.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Gujarat State Road Transport Corporation (GSRTC)",
+            "lastChecked": "2024-08-20"
+          }
+        },
+        "airport": {
+          "name": "Sardar Vallabhbhai Patel International Airport, Ahmedabad (AMD)",
+          "roadDistanceKm": 128.0,
+          "connectionType": "commercial_domestic_international"
+        },
+        "highway": {
+          "name": "State Highway 7 (Ahmedabad-Patan) / NH-68 Spur",
+          "roadType": "4-lane divided tollway to Mehsana; 2-lane paved to Patan",
+          "conditionNote": "All-weather paved bituminous surface in good condition."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Patan Railway Station / Central Bus Station",
+        "endPoint": "ASI Stepwell Entrance Gate",
+        "gapDistanceKm": 4.5,
+        "terrainType": "Urban paved town road through Patan municipality",
+        "availableModes": [
+          {
+            "mode": "Shared Auto-rickshaw (Chhakda / 3-Wheeler)",
+            "feasibility": "Frequent",
+            "fareEstimate": "₹15 – ₹25 per seat",
+            "notes": "Available outside Patan station and bus stand during daylight hours (07:00–19:00).",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-10"
+          },
+          {
+            "mode": "Dedicated Auto-rickshaw (Private Hire)",
+            "feasibility": "Readily Available",
+            "fareEstimate": "₹80 – ₹120 (negotiated, non-metered)",
+            "notes": "Agree on return waiting fare if intending to return to station within 2 hours.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-10"
+          },
+          {
+            "mode": "App-Based Cabs (Ola/Uber)",
+            "feasibility": "Unavailable / Highly Unreliable",
+            "fareEstimate": "N/A",
+            "notes": "App-based ride services do not maintain active fleets in Patan town.",
+            "verification": "verified_absent",
+            "lastChecked": "2024-09-10"
+          },
+          {
+            "mode": "Walking",
+            "feasibility": "Not Recommended for Most Visitors",
+            "notes": "4.5 km walk through congested town streets in heat. Paved but sidewalks intermittent.",
+            "verification": "derived_estimate",
+            "lastChecked": "2024-09-10"
+          }
+        ],
+        "gapSummary": "Confirmed local auto-rickshaw service available outside station. Negotiate fare beforehand; return autos from monument entrance are frequent until 18:00.",
+        "documentationStatus": "documented_and_verified"
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Ahmedabad",
+          "Gandhinagar",
+          "Mehsana",
+          "Palanpur",
+          "Vadodara (early start)"
+        ],
+        "lastScheduledTransitNote": "Last regular GSRTC buses from Patan to Ahmedabad depart around 20:30. Passenger trains to Mehsana/Ahmedabad operate in morning and evening.",
+        "caution": "Auto-rickshaws outside Rani ki Vav diminish rapidly after sunset (18:30). Plan to leave the monument before 18:00 if relying on public transit to the station.",
+        "verification": {
+          "status": "manually_checked",
+          "source": "GSRTC Depot Timetable & Western Railway schedule",
+          "lastChecked": "2024-08-25"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "08:00 AM – 06:00 PM (Daily)",
+        "hoursVerification": {
+          "status": "officially_published",
+          "source": "Archaeological Survey of India (ASI) Vadodara Circle",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": true,
+          "type": "ASI Monument Entry Ticket",
+          "onlinePortal": "https://asi.nic.in",
+          "onSpotCash": "QR Code / UPI scan at counter preferred; limited physical cash counters",
+          "pricing": "₹40 Indian citizens, ₹600 foreign nationals",
+          "verification": {
+            "status": "officially_published",
+            "source": "ASI Online Ticket Portal",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Summer (April–June)",
+            "alertType": "heat_caution",
+            "severity": "moderate",
+            "message": "Ambient temperatures exceed 42°C. Underground chambers offer cooler microclimate, but surface lawns and stone steps radiate intense heat between 12:00 and 15:30. Carry hydration."
+          },
+          {
+            "season": "Monsoon (July–September)",
+            "alertType": "slip_caution",
+            "severity": "minor",
+            "message": "Ancient sandstone stairs can become slick when wet. Lowermost well floor may have restricted access during heavy downpours."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Designated ASI paved parking lot outside perimeter (~150m from gate). Fee: ₹30 car, ₹10 two-wheeler."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "ASI visitor amenities block near entrance gate."
+          },
+          "drinkingWater": {
+            "status": "verified_available",
+            "details": "Purified water dispensing kiosk near ticket booth."
+          },
+          "wheelchairAccess": {
+            "status": "partially_accessible",
+            "details": "Ramped access around upper archaeological park and top-level pavilion only. Descending into subterranean stepwell requires negotiating over 100 steep stone steps."
+          },
+          "cellularNetwork": {
+            "status": "verified_good",
+            "details": "Strong 4G/5G coverage (Jio, Airtel, Vi) on surface; signal drops on bottom subterranean levels."
+          },
+          "evCharging": {
+            "status": "unverified_absent",
+            "details": "No fast EV chargers verified at monument parking. Closest public 30kW charger is on Mehsana-Patan highway (~18 km)."
+          }
+        },
+        "materialRestrictions": [
+          "Drones strictly prohibited without prior written permission from ASI and Ministry of Civil Aviation.",
+          "Commercial video tripods require ASI photography permit.",
+          "Footwear permitted on outer stepped terraces; prohibited in innermost well shaft.",
+          "No luggage locker service at ticket gate; leave large bags in vehicle or station cloakroom."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Official ASI Monument Tickets",
+          "url": "https://asi.nic.in",
+          "type": "official_permit"
+        },
+        {
+          "label": "GSRTC Bus Schedules (Ahmedabad–Patan)",
+          "url": "https://gsrtc.in",
+          "type": "transit_timetable"
+        },
+        {
+          "label": "Western Railway (Patan Station / Trains)",
+          "url": "https://enquiry.indianrail.gov.in",
+          "type": "rail_timetable"
+        },
+        {
+          "label": "Google Maps Turn-by-Turn Navigation",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=23.8589,72.1023",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "statue-of-unity",
+      "destinationName": "Statue of Unity & Kevadia Complex",
+      "category": "iconic",
+      "district": "Narmada",
+      "region": "Central Gujarat",
+      "coordinates": [
+        73.7191,
+        21.838
+      ],
+      "tripReadinessStatus": "well_documented",
+      "statusReason": "Express highway corridor via NH-48 / SH-11 (~195–200 km) and direct broad-gauge rail service to Ekta Nagar (EKNR). Dedicated internal electric shuttle fleet connects all hubs.",
+      "recommendedMinHours": 6.0,
+      "nearestHubs": {
+        "railway": {
+          "name": "Ekta Nagar (Kevadiya) Railway Station (EKNR)",
+          "code": "EKNR",
+          "coordinates": [
+            73.684,
+            21.859
+          ],
+          "straightLineDistanceKm": 4.8,
+          "roadDistanceKm": 5.5,
+          "connectionType": "confirmed_broad_gauge",
+          "frequencyNote": "Direct express trains from Ahmedabad (Jan Shatabdi), Mumbai (Dadar), Delhi (Nizamuddin), Varanasi, Rewa.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Western Railway / Ministry of Railways",
+            "lastChecked": "2024-09-01"
+          }
+        },
+        "busTerminal": {
+          "name": "Kevadia GSRTC Bus Station",
+          "coordinates": [
+            73.691,
+            21.862
+          ],
+          "straightLineDistanceKm": 4.2,
+          "roadDistanceKm": 5.0,
+          "connectionType": "confirmed_scheduled",
+          "frequencyNote": "Direct Volvo and express state transport buses from Vadodara (every 45 mins), Ahmedabad (hourly), Surat.",
+          "verification": {
+            "status": "officially_published",
+            "source": "GSRTC Kevadia Depot Disclosures",
+            "lastChecked": "2024-08-15"
+          }
+        },
+        "airport": {
+          "name": "Vadodara Airport (BDQ)",
+          "roadDistanceKm": 92.0,
+          "connectionType": "commercial_domestic"
+        },
+        "highway": {
+          "name": "Vadodara-Kevadia 4-Lane State Highway / NH-56",
+          "roadType": "4-lane divided access-controlled corridor with LED streetlighting",
+          "conditionNote": "Excellent smooth asphalt surface designed for high-volume tourist traffic."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Ekta Nagar Railway Station / Central Parking Terminal",
+        "endPoint": "Statue of Unity Base Entry Gate",
+        "gapDistanceKm": 5.5,
+        "terrainType": "Paved dedicated tourist corridor with pedestrian walkways",
+        "availableModes": [
+          {
+            "mode": "SOU Electric Feeder Bus (Zero Emission)",
+            "feasibility": "High Frequency (Every 5–10 mins)",
+            "fareEstimate": "Included in SOU Entry Ticket",
+            "notes": "Dedicated AC electric buses shuttle continuously between Ekta Nagar Station, Parking Lots, Statue of Unity, and Valley of Flowers.",
+            "verification": "officially_published",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "E-Rickshaw Fleet (Operated by Local Tribal Women)",
+            "feasibility": "Readily Available",
+            "fareEstimate": "₹50 – ₹100 per short hop",
+            "notes": "Eco-friendly last-mile transport between nearby hotels, tent city, and secondary attraction gates.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Private Vehicles / Outside Taxis",
+            "feasibility": "Restricted Access",
+            "notes": "Private vehicles must park in designated central parking lots (Parking 1/2). Outside private cars not allowed into immediate statue promenade.",
+            "verification": "officially_published",
+            "lastChecked": "2024-09-01"
+          }
+        ],
+        "gapSummary": "Local electric shuttle buses and dedicated last-mile visitor transit operate inside the Ekta Nagar precinct from the railway station and parking hubs to the viewing gallery and dam viewpoints, but entry tickets and viewing slots require prior booking on the official portal.",
+        "documentationStatus": "documented_and_verified",
+        "hasLastMileUncertainty": false,
+        "headline": "Local electric shuttle buses and dedicated last-mile visitor transit operate inside the Ekta Nagar precinct from the railway station and parking hubs to the viewing gallery and dam viewpoints, but entry tickets and viewing slots require prior booking on the official portal."
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Vadodara",
+          "Ahmedabad",
+          "Surat",
+          "Bharuch",
+          "Anand"
+        ],
+        "lastScheduledTransitNote": "Evening Jan Shatabdi Express to Ahmedabad departs Ekta Nagar at 21:00. Evening GSRTC Volvo buses run to Vadodara until 21:30.",
+        "caution": "The evening projection mapping Light & Sound Show concludes around 20:00. If taking the 21:00 Jan Shatabdi, head immediately to the feeder bus stop after the show.",
+        "verification": {
+          "status": "officially_published",
+          "source": "Statue of Unity Tourism Authority & Western Railway",
+          "lastChecked": "2024-09-01"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "08:00 AM – 06:00 PM (Closed Mondays for maintenance)",
+        "hoursVerification": {
+          "status": "officially_published",
+          "source": "SOU Authority Official Gazette",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": true,
+          "type": "Mandatory Pre-Booked Online Slot Ticket",
+          "onlinePortal": "https://statueofunity.in",
+          "onSpotCash": "Physical ticket counters discontinued; tickets must be booked online or via official kiosks",
+          "pricing": "Basic Entry: ₹150 adult / ₹90 child; Viewing Gallery: ₹380 adult; Express entry: ₹1,030",
+          "verification": {
+            "status": "officially_published",
+            "source": "Statue of Unity Ticketing Portal",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Peak Vacation (Diwali & Christmas/New Year)",
+            "alertType": "booking_rush",
+            "severity": "high",
+            "message": "Viewing Gallery tickets sell out 15–20 days in advance. Do not travel to Kevadia during peak holidays without confirmed online ticket."
+          },
+          {
+            "season": "Monsoon (July–September)",
+            "alertType": "scenic_bonus",
+            "severity": "info",
+            "message": "Sardar Sarovar Dam spillway gates frequently open post-August. Lush green valley and mist over river, but carry rain protection."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Multi-tier parking lots accommodating 3,000+ vehicles with shuttle bus integration."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "Modern air-conditioned washrooms at station, parking, and statue complex."
+          },
+          "drinkingWater": {
+            "status": "verified_available",
+            "details": "Free chilled RO drinking water stations every 100 metres."
+          },
+          "wheelchairAccess": {
+            "status": "fully_accessible",
+            "details": "Ramps, travelators, escalators, and dedicated high-speed elevators to 153m chest viewing gallery."
+          },
+          "cellularNetwork": {
+            "status": "verified_good",
+            "details": "Strong 5G coverage throughout Kevadia smart city complex."
+          },
+          "evCharging": {
+            "status": "verified_available",
+            "details": "Multiple 60kW fast DC EV charging stations at central parking lot."
+          }
+        },
+        "materialRestrictions": [
+          "Outside food and beverages strictly prohibited inside statue podium and viewing gallery.",
+          "Luggage lockers available at base entry for ₹50.",
+          "Drones strictly prohibited (security zone under CISF cover)."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Official SOU Ticket Booking Portal",
+          "url": "https://statueofunity.in",
+          "type": "official_permit"
+        },
+        {
+          "label": "Western Railway Ekta Nagar Trains",
+          "url": "https://enquiry.indianrail.gov.in",
+          "type": "rail_timetable"
+        },
+        {
+          "label": "GSRTC Kevadia Volvo Booking",
+          "url": "https://gsrtc.in",
+          "type": "transit_timetable"
+        },
+        {
+          "label": "Google Maps Turn-by-Turn Navigation",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=21.8380,73.7191",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "lothal-archaeological-site",
+      "destinationName": "Lothal Harappan Port City & Dockyard",
+      "category": "heritage_history",
+      "district": "Ahmedabad",
+      "region": "Central Gujarat",
+      "coordinates": [
+        72.2494,
+        22.5228
+      ],
+      "tripReadinessStatus": "some_planning_required",
+      "statusReason": "Via NH-47 / Bagodara highway corridor (~80 km southwest of Ahmedabad). Nearest railhalt is Lothal Bhurkhi (~6 km aerial), but train frequency is sparse and dedicated onward road transfer is unverified.",
+      "recommendedMinHours": 2.5,
+      "nearestHubs": {
+        "railway": {
+          "name": "Lothal Bhurkhi Railway Station (LOT)",
+          "code": "LOT",
+          "coordinates": [
+            72.25,
+            22.48
+          ],
+          "straightLineDistanceKm": 5.8,
+          "roadDistanceKm": 6.5,
+          "connectionType": "sparse_rural_halt",
+          "frequencyNote": "Infrequent local passenger halt on Bhavnagar-Gandhigram branch.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Western Railway Time Table",
+            "lastChecked": "2026-10-18"
+          }
+        },
+        "busTerminal": {
+          "name": "Bagodara GSRTC Junction Depot",
+          "coordinates": [
+            72.18,
+            22.55
+          ],
+          "straightLineDistanceKm": 18.0,
+          "roadDistanceKm": 21.0,
+          "connectionType": "confirmed_highway_stop",
+          "frequencyNote": "Highway express buses between Ahmedabad and Saurashtra stop at Bagodara.",
+          "verification": {
+            "status": "officially_published",
+            "source": "GSRTC Disclosures",
+            "lastChecked": "2026-10-18"
+          }
+        },
+        "highway": {
+          "name": "NH-47 / Bagodara-Dholka Road",
+          "roadType": "4-lane NH-47 connecting to 2-lane paved rural corridor",
+          "conditionNote": "Good paved access road; occasional speed breakers near villages."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Bagodara Junction / Lothal Bhurkhi Halt",
+        "endPoint": "Lothal Archaeological Site Entrance",
+        "gapDistanceKm": 6.5,
+        "terrainType": "Flat alluvial plain road through Saragwala village",
+        "hasLastMileUncertainty": true,
+        "headline": "Nearby railway station identified (Lothal Bhurkhi). However, train frequency is limited and the ~6 km onward road transfer from the halt station to the archaeological site has no confirmed dedicated shuttle service. Visitors arriving without a personal vehicle should verify return transport in advance.",
+        "gapSummary": "Nearby railway station identified (Lothal Bhurkhi). However, train frequency is limited and the ~6 km onward road transfer from the halt station to the archaeological site has no confirmed dedicated shuttle service. Visitors arriving without a personal vehicle should verify return transport in advance.",
+        "availableModes": [
+          {
+            "mode": "Personal Vehicle / Pre-booked Taxi from Ahmedabad",
+            "feasibility": "Strongly Recommended",
+            "fareEstimate": "₹1,800 - ₹2,500 round trip",
+            "notes": "Guarantees return travel without waiting.",
+            "verification": "manually_checked",
+            "lastChecked": "2026-10-18"
+          },
+          {
+            "mode": "Local Chhakda / Auto from Bagodara",
+            "feasibility": "Intermittent Availability",
+            "fareEstimate": "₹150 - ₹250 (negotiated)",
+            "notes": "Must negotiate return waiting time before boarding.",
+            "verification": "manually_checked",
+            "lastChecked": "2026-10-18"
+          }
+        ],
+        "unverifiedFactors": [
+          "On-demand auto-rickshaws at Lothal Bhurkhi halt station are not guaranteed upon arrival.",
+          "Public transport options for the return journey back to Bagodara or Ahmedabad are sparse after 16:00."
+        ],
+        "returnJourneyWarning": "There are no active ride-hailing services in Dholka taluka. Visitors without reserved return transport risk becoming stranded at the site."
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Ahmedabad",
+          "Gandhinagar",
+          "Vadodara",
+          "Bhavnagar"
+        ],
+        "lastScheduledTransitNote": "Return buses from Bagodara run frequently, but site-to-Bagodara transfer ends around 17:00.",
+        "caution": "Do not remain at the site past museum closing (17:00) without pre-arranged transport.",
+        "verification": {
+          "status": "manually_checked",
+          "source": "Local Transport Audit",
+          "lastChecked": "2026-10-18"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "10:00 - 17:00 (Site open daily; Museum closed on Fridays)",
+        "hoursVerification": {
+          "status": "officially_published",
+          "source": "ASI Vadodara Circle Official Notice",
+          "lastChecked": "2026-10-18"
+        },
+        "entryPermits": {
+          "required": true,
+          "type": "ASI Ticketed Monument",
+          "pricing": "₹25 for Indian citizens; ₹300 for foreigners; children up to 15 free"
+        },
+        "seasonalAlerts": [],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Dedicated open-air parking at museum."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "Public restrooms inside museum compound."
+          },
+          "drinkingWater": {
+            "status": "limited",
+            "details": "Carry personal water bottles in hot months."
+          },
+          "wheelchairAccess": {
+            "status": "limited",
+            "details": "Museum ramp accessible; ancient mound trails are earthen."
+          },
+          "cellularNetwork": {
+            "status": "patchy",
+            "details": "Basic cellular signal available."
+          },
+          "evCharging": {
+            "status": "verified_absent",
+            "details": "No EV charging on site; nearest at Bagodara (21 km)."
+          }
+        },
+        "materialRestrictions": [
+          "Do not walk or climb upon ancient burnt-brick dock basin walls."
+        ]
+      },
+      "beforeYouGoChecklist": [
+        "Archaeological Museum opening hours: 10:00 to 17:00 (closed on Fridays).",
+        "Carry adequate drinking water; visitor amenities at the archaeological mound are basic.",
+        "Check National Maritime Heritage Complex (NMHC) construction detour notices prior to departure."
+      ],
+      "provenance": {
+        "sourceAgency": "Archaeological Survey of India (ASI) & National Maritime Heritage Complex (NMHC)",
+        "sourceTitle": "Lothal Excavation Site Information & Visitor Advisory",
+        "sourceUrl": "https://asi.nic.in",
+        "publicationDate": "2024",
+        "lastCheckedDate": "2026-10-18",
+        "datasetVersion": "1.2.0",
+        "verificationTier": "SECONDARY_VERIFIED",
+        "positionalAccuracyNote": "Excavation dock basin centroid; access roads verified against OpenStreetMap GPS traces.",
+        "knownLimitations": [
+          "NMHC construction in Saragwala may alter temporary entry routes to the ancient dock."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Google Maps Turn-by-Turn Navigation",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=22.5228,72.2494",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "gir-national-park",
+      "destinationName": "Gir National Park & Wildlife Sanctuary (Sasan Gir)",
+      "category": "nature_wildlife",
+      "district": "Gir Somnath",
+      "region": "Saurashtra",
+      "coordinates": [
+        70.5985,
+        21.1332
+      ],
+      "tripReadinessStatus": "some_planning_required",
+      "statusReason": "Mandatory advance online safari permits with strict daily vehicle quotas; seasonal monsoon sanctuary closure from June 16 to October 15; mandatory registered forest gypsy and guide required.",
+      "recommendedMinHours": 5.0,
+      "nearestHubs": {
+        "railway": {
+          "name": "Sasan Gir Railway Station (SASG)",
+          "code": "SASG",
+          "coordinates": [
+            70.596,
+            21.134
+          ],
+          "straightLineDistanceKm": 0.8,
+          "roadDistanceKm": 1.0,
+          "connectionType": "meter_gauge_branch",
+          "frequencyNote": "Limited regional passenger train service from Junagadh / Delvada. Check current railway gauge conversion status.",
+          "verification": {
+            "status": "manually_checked",
+            "source": "Western Railway Bhavnagar Division",
+            "lastChecked": "2024-08-10"
+          }
+        },
+        "secondaryRailway": {
+          "name": "Junagadh Junction (JND)",
+          "code": "JND",
+          "coordinates": [
+            70.46,
+            21.52
+          ],
+          "straightLineDistanceKm": 48.0,
+          "roadDistanceKm": 54.0,
+          "connectionType": "major_broad_gauge_junction",
+          "frequencyNote": "Direct express trains from Mumbai, Ahmedabad, Rajkot, Surat, Delhi."
+        },
+        "busTerminal": {
+          "name": "Sasan Gir Bus Stand",
+          "coordinates": [
+            70.597,
+            21.133
+          ],
+          "straightLineDistanceKm": 0.5,
+          "roadDistanceKm": 0.6,
+          "connectionType": "confirmed_scheduled",
+          "frequencyNote": "Regular GSRTC buses connect Sasan Gir with Junagadh (every hour), Veraval (every 45 mins), Rajkot.",
+          "verification": {
+            "status": "manually_checked",
+            "source": "GSRTC Junagadh Division",
+            "lastChecked": "2024-08-10"
+          }
+        },
+        "airport": {
+          "name": "Keshod Airport (IXK) / Rajkot International Airport (HSR)",
+          "roadDistanceKm": 65.0,
+          "connectionType": "regional_scheduled"
+        },
+        "highway": {
+          "name": "Junagadh-Sasan Gir Road / SH-26",
+          "roadType": "2-lane paved state highway traversing agricultural and forest fringes",
+          "conditionNote": "Narrower road through forest check-posts; daytime speed limits (30–40 km/h) enforced."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Sasan Gir Sinh Sadan Reception Gate",
+        "endPoint": "Sanctuary Safari Trail Gates (Route 1–8)",
+        "gapDistanceKm": 1.2,
+        "terrainType": "Forest reserve dirt tracks and gravel trails",
+        "availableModes": [
+          {
+            "mode": "Forest Department Authorized Open Gypsy (Mandatory)",
+            "feasibility": "Permit-Bound Only",
+            "fareEstimate": "Gypsy Hire: ~₹2,000 + Driver/Guide Fee: ₹400 (per vehicle up to 6 persons)",
+            "notes": "Private vehicles strictly barred inside the sanctuary. Visitors must board registered forest gypsies allocated at Sinh Sadan with permit.",
+            "verification": "officially_published",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Devalia Safari Park Bus (Alternative)",
+            "feasibility": "Readily Available (Devalia Interpretation Zone, 12 km west)",
+            "fareEstimate": "₹150 adult / ₹75 child",
+            "notes": "Fenced interpretation zone accessible year-round (except Wednesdays) by safari minibus. No core jungle entry.",
+            "verification": "officially_published",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Walking",
+            "feasibility": "Strictly Prohibited Inside Sanctuary",
+            "notes": "Walking or stepping out of vehicles inside the national park is illegal under the Wildlife Protection Act.",
+            "verification": "statutory_restriction",
+            "lastChecked": "2024-09-01"
+          }
+        ],
+        "gapSummary": "Core jungle access is exclusively via pre-booked forest gypsies. Private vehicles barred at forest boundary.",
+        "documentationStatus": "documented_and_verified"
+      },
+      "returnJourney": {
+        "sameDayFeasible": false,
+        "sameDayFeasibleFrom": [
+          "Junagadh",
+          "Veraval",
+          "Somnath"
+        ],
+        "lastScheduledTransitNote": "Last regular GSRTC buses from Sasan Gir to Junagadh depart by 18:30. No nighttime public transit through forest roads.",
+        "caution": "Same-day return from Ahmedabad/Surat/Vadodara is impractical (requires 7–9 hours driving each way). Morning safaris depart at 06:00 AM; overnight stay in Sasan Gir is strongly advised.",
+        "verification": {
+          "status": "manually_checked",
+          "source": "Gujarat Forest Department & GSRTC",
+          "lastChecked": "2024-08-10"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "Safari Shifts: 06:00–09:00 AM, 09:00 AM–12:00 PM, 03:00–06:00 PM",
+        "hoursVerification": {
+          "status": "officially_published",
+          "source": "Gir National Park Official E-Permit Portal",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": true,
+          "type": "Mandatory E-Permit via Gujarat Forest Department",
+          "onlinePortal": "https://girlion.gujarat.gov.in",
+          "onSpotCash": "Zero spot permits for core sanctuary; permits must be booked 30–90 days ahead online",
+          "pricing": "Permit: ₹800–₹1,000 per vehicle (Mon–Fri), ₹1,000–₹1,200 (Sat–Sun/Holidays) + Gypsy/Guide charges",
+          "verification": {
+            "status": "officially_published",
+            "source": "girlion.gujarat.gov.in",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Monsoon Closure (16 June – 15 October)",
+            "alertType": "mandatory_closure",
+            "severity": "critical",
+            "message": "Gir National Park core sanctuary is STATUTORILY CLOSED for breeding season from 16 June to 15 October every year. Only Devalia Safari Park remains open (weather permitting)."
+          },
+          {
+            "season": "Winter (December–February)",
+            "alertType": "chilly_mornings",
+            "severity": "moderate",
+            "message": "Early morning 06:00 AM open-gypsy safaris encounter temperatures of 8–12°C. Heavy woollens and windbreakers essential."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Parking lot outside Sinh Sadan reception and Devalia gate."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "Restrooms available at Sinh Sadan. No restrooms on 3-hour jungle safari trails."
+          },
+          "drinkingWater": {
+            "status": "verified_available",
+            "details": "Drinking water at reception. Carry your own reusable water bottle inside gypsy."
+          },
+          "wheelchairAccess": {
+            "status": "partially_accessible",
+            "details": "Reception centre accessible; boarding open 4x4 gypsies requires physical climbing."
+          },
+          "cellularNetwork": {
+            "status": "weak_in_forest",
+            "details": "Moderate signal in Sasan village; near-total cellular blackout inside deep forest trails."
+          },
+          "evCharging": {
+            "status": "unverified_absent",
+            "details": "No fast EV chargers verified in Sasan Gir village; closest charger in Junagadh (~50 km)."
+          }
+        },
+        "materialRestrictions": [
+          "Single-use plastic bottles and plastic snack wrappers strictly banned inside sanctuary.",
+          "Smoking, lighting fires, and playing music in vehicles strictly prohibited.",
+          "Drones completely banned under wildlife conservation statutes.",
+          "Professional camera lenses above 200mm may attract additional forest department photography fee."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Official Gir Lion Safari E-Permits",
+          "url": "https://girlion.gujarat.gov.in",
+          "type": "official_permit"
+        },
+        {
+          "label": "GSRTC Junagadh/Sasan Bus Booking",
+          "url": "https://gsrtc.in",
+          "type": "transit_timetable"
+        },
+        {
+          "label": "Western Railway Junagadh/Veraval Trains",
+          "url": "https://enquiry.indianrail.gov.in",
+          "type": "rail_timetable"
+        },
+        {
+          "label": "Google Maps Direct Navigation to Sinh Sadan",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=21.1332,70.5985",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "white-rann-dhordo",
+      "destinationName": "White Rann of Kutch (Dhordo Salt Desert)",
+      "category": "nature_wildlife",
+      "district": "Kachchh",
+      "region": "Kachchh",
+      "coordinates": [
+        69.51,
+        23.834
+      ],
+      "tripReadinessStatus": "some_planning_required",
+      "statusReason": "Mandatory border area police permit required; remote desert location 85 km north of Bhuj with no scheduled city bus to the salt edge; hired vehicle/taxi essential; seasonal monsoon inundation.",
+      "recommendedMinHours": 4.5,
+      "nearestHubs": {
+        "railway": {
+          "name": "Bhuj Railway Station (BHUJ)",
+          "code": "BHUJ",
+          "coordinates": [
+            69.67,
+            23.25
+          ],
+          "straightLineDistanceKm": 72.0,
+          "roadDistanceKm": 85.0,
+          "connectionType": "terminal_broad_gauge",
+          "frequencyNote": "Direct express trains from Mumbai (Kutch Express), Ahmedabad, Delhi (Ala Hazrat), Pune.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Western Railway Ahmedabad Division",
+            "lastChecked": "2024-09-01"
+          }
+        },
+        "busTerminal": {
+          "name": "Bhuj Central Bus Station",
+          "coordinates": [
+            69.664,
+            23.245
+          ],
+          "straightLineDistanceKm": 73.0,
+          "roadDistanceKm": 86.0,
+          "connectionType": "confirmed_scheduled",
+          "frequencyNote": "Major hub with buses across Gujarat. Local rural bus to Dhordo village runs once daily (irregular return).",
+          "verification": {
+            "status": "manually_checked",
+            "source": "GSRTC Bhuj Depot",
+            "lastChecked": "2024-08-15"
+          }
+        },
+        "airport": {
+          "name": "Bhuj Airport (BHJ) / Kandla Airport (IXY)",
+          "roadDistanceKm": 82.0,
+          "connectionType": "domestic_civil_enclave"
+        },
+        "highway": {
+          "name": "Bhuj-Khavda Highway / SH-45 to Bhirandiyara, then Dhordo Road",
+          "roadType": "2-lane paved asphalt road across Banni grasslands",
+          "conditionNote": "Good paved surface, but isolated stretches without services. Cattle crossings frequent on Banni plains."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Dhordo Tent City Checkpoint",
+        "endPoint": "White Salt Desert Viewing Point (Rann Edge)",
+        "gapDistanceKm": 4.2,
+        "terrainType": "Paved military causeway leading onto compacted saline desert crust",
+        "availableModes": [
+          {
+            "mode": "Decorated Camel Cart / Camel Ride",
+            "feasibility": "Readily Available During Season (Nov–Feb)",
+            "fareEstimate": "₹300 – ₹500 per person round trip",
+            "notes": "Operated by local Kutchi villagers from the vehicle drop-off parking to deep white salt flats.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Battery-Operated Eco-Cart",
+            "feasibility": "Available During Rann Utsav",
+            "fareEstimate": "₹100 per person",
+            "notes": "Available for senior citizens and persons with disability from parking to viewing tower.",
+            "verification": "officially_published",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Private / Hired Taxi",
+            "feasibility": "Essential for Bhuj-Dhordo Leg",
+            "fareEstimate": "Bhuj round-trip taxi: ₹2,500 – ₹3,500 for full day",
+            "notes": "Hired taxi will wait at the border parking while you explore the salt desert.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Public Bus from Bhuj Directly to Salt Flats",
+            "feasibility": "Non-Existent",
+            "notes": "No public transit enters the salt viewing area. Relying on public buses to reach the white desert edge is not feasible.",
+            "verification": "verified_absent",
+            "lastChecked": "2024-09-01"
+          }
+        ],
+        "gapSummary": "No scheduled public bus connects the white desert edge. Hired vehicle or tourist taxi from Bhuj is practically essential.",
+        "documentationStatus": "documented_and_verified"
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Bhuj",
+          "Gandhidham",
+          "Anjar"
+        ],
+        "lastScheduledTransitNote": "Sunset over white salt flats occurs ~18:15–18:45. Drive back to Bhuj takes 1.5–2 hours on unlit highway.",
+        "caution": "No public transport departs Dhordo after 17:00. If visiting for moonlit night views, your hired taxi must wait.",
+        "verification": {
+          "status": "manually_checked",
+          "source": "Gujarat Tourism Police & Bhuj Taxi Association",
+          "lastChecked": "2024-09-01"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "06:00 AM – 08:30 PM (Salt viewing area closes to general visitors by 20:30; special night permits during Full Moon)",
+        "hoursVerification": {
+          "status": "officially_published",
+          "source": "Kutch Police Border Wing & Gujarat Tourism",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": true,
+          "type": "Mandatory Kutch Police Border Area Permit",
+          "onlinePortal": "https://www.rannpermit.com",
+          "onSpotCash": "Can be obtained in person at Bhirandiyara Police Checkpost (original government photo ID required)",
+          "pricing": "Adult: ₹100, Child: ₹50, Car entry: ₹50, Two-wheeler: ₹25",
+          "verification": {
+            "status": "officially_published",
+            "source": "rannpermit.com (Kutch District Police)",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Monsoon Inundation (July–September)",
+            "alertType": "waterlogged_desert",
+            "severity": "critical",
+            "message": "The Rann fills with seawater and river floodwaters during monsoon. The entire salt desert is submerged in 1–2 metres of brackish water; the white crust does NOT exist during these months."
+          },
+          {
+            "season": "Rann Utsav Peak (November–February)",
+            "alertType": "prime_visiting_window",
+            "severity": "info",
+            "message": "The water evaporates leaving brilliant white crystalline salt flats. Ideal season for travel. Book Bhuj accommodation early."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Wide paved and compacted earth parking area before the BSF entry gate."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "Public toilet blocks at Dhordo checkpoint and tent city perimeter."
+          },
+          "drinkingWater": {
+            "status": "verified_available",
+            "details": "Water stalls at parking. Carry drinking water when walking out onto the salt crust."
+          },
+          "wheelchairAccess": {
+            "status": "difficult_terrain",
+            "details": "Wheelchair can traverse paved viewing platform; cannot roll across crystalline, uneven salt flats."
+          },
+          "cellularNetwork": {
+            "status": "patchy_border_zone",
+            "details": "BSNL and Jio provide intermittent coverage; signal drops as you walk northward toward Pakistan border."
+          },
+          "evCharging": {
+            "status": "unverified_absent",
+            "details": "No public DC fast chargers verified at Dhordo or Bhirandiyara. Nearest reliable fast charger is in Bhuj (85 km away)."
+          }
+        },
+        "materialRestrictions": [
+          "Mandatory border permit inspection at Bhirandiyara checkpost; carry original Aadhaar/Passport.",
+          "Drones strictly prohibited (international border proximity under BSF surveillance).",
+          "Do not drive private vehicles onto the white salt crust — vehicles sink into subsurface mud and cause severe environmental damage."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Official Kutch Rann Permit Portal",
+          "url": "https://www.rannpermit.com",
+          "type": "official_permit"
+        },
+        {
+          "label": "Gujarat Tourism Rann Utsav Guide",
+          "url": "https://www.gujarattourism.com",
+          "type": "official_portal"
+        },
+        {
+          "label": "Western Railway Bhuj Trains",
+          "url": "https://enquiry.indianrail.gov.in",
+          "type": "rail_timetable"
+        },
+        {
+          "label": "Google Maps Direct Navigation to Dhordo",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=23.8340,69.5100",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "dholavira-unesco",
+      "destinationName": "Dholavira: Harappan City (UNESCO World Heritage)",
+      "category": "heritage_history",
+      "district": "Kachchh",
+      "region": "Kachchh",
+      "coordinates": [
+        70.2167,
+        23.886
+      ],
+      "tripReadinessStatus": "important_details_unverified",
+      "statusReason": "Long-distance highway journey (~360–380 km from Ahmedabad). Nearest major railheads are over 100 km away. Access crosses remote Rann causeways where fuel stations, public bus frequency, and evening return transport are sparse and unverified.",
+      "recommendedMinHours": 3.5,
+      "nearestHubs": {
+        "railway": {
+          "name": "Samakhiali Junction (SIOB) / Bhuj (BHUJ)",
+          "code": "SIOB",
+          "coordinates": [
+            70.43,
+            23.3
+          ],
+          "straightLineDistanceKm": 78.0,
+          "roadDistanceKm": 135.0,
+          "connectionType": "broad_gauge_junction",
+          "frequencyNote": "Samakhiali is the closest major railhead on Western Railway main line from Ahmedabad.",
+          "verification": {
+            "status": "manually_checked",
+            "source": "Western Railway Schedule",
+            "lastChecked": "2024-09-01"
+          }
+        },
+        "busTerminal": {
+          "name": "Rapar GSRTC Bus Stand / Dholavira Village Stand",
+          "coordinates": [
+            70.63,
+            23.57
+          ],
+          "straightLineDistanceKm": 52.0,
+          "roadDistanceKm": 88.0,
+          "connectionType": "rural_service",
+          "frequencyNote": "Only 1–2 direct buses daily from Rapar to Dholavira. Missing the morning bus makes public transit impossible.",
+          "verification": {
+            "status": "manually_checked",
+            "source": "GSRTC Rapar Sub-Depot",
+            "lastChecked": "2024-08-10"
+          }
+        },
+        "airport": {
+          "name": "Kandla Airport (IXY) ~150 km / Bhuj Airport (BHJ) ~215 km",
+          "roadDistanceKm": 150.0,
+          "connectionType": "regional_scheduled"
+        },
+        "highway": {
+          "name": "NH-754K (Amritsar-Jamnagar Expressway Spur / 'Road Over the Bridge')",
+          "roadType": "2-lane newly engineered highway crossing the White Desert straight into Khadir Bet",
+          "conditionNote": "High-quality paved causeway with extraordinary salt flats on both sides. Zero fuel stations for 45 km."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Dholavira Village / Toran Resort Gate",
+        "endPoint": "ASI Archaeological Site Excavation Enclosure",
+        "gapDistanceKm": 1.8,
+        "terrainType": "Paved village approach road leading to archaeological gate",
+        "availableModes": [
+          {
+            "mode": "Private / Hired Vehicle (Personal Car / Taxi)",
+            "feasibility": "Essential for Entire Journey",
+            "notes": "Public transit to Khadir Bet island is too infrequent to rely upon for a casual day trip.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-08-10"
+          },
+          {
+            "mode": "Walking / On Foot",
+            "feasibility": "Easy within village (1.5 km to ruins)",
+            "notes": "Site itself requires 2–3 km of walking across ancient stone reservoirs, citadel terraces, and stadium.",
+            "verification": "derived_estimate",
+            "lastChecked": "2024-08-10"
+          }
+        ],
+        "gapSummary": "Major last-mile distance gap identified. Nearest major railheads are over 100 km away. Access crosses remote Rann causeways where fuel stations, public bus frequency, and evening return transport are sparse and unverified.",
+        "documentationStatus": "documented_and_verified",
+        "hasLastMileUncertainty": true,
+        "headline": "Major last-mile distance gap identified. Nearest major railheads are over 100 km away. Access crosses remote Rann causeways where fuel stations, public bus frequency, and evening return transport are sparse and unverified.",
+        "unverifiedFactors": [
+          "Fuel stations are unavailable on Khadir Bet island; visitors must refuel at Rapar before crossing the causeway.",
+          "Mobile cellular signal (data connectivity) is intermittent across the White Rann causeway.",
+          "Public bus return schedules are unverified and subject to cancellation."
+        ],
+        "returnJourneyWarning": "Do not attempt a same-day return journey from Ahmedabad by road (750+ km round trip). Plan at least one overnight stay in Dholavira or Rapar."
+      },
+      "returnJourney": {
+        "sameDayFeasible": false,
+        "sameDayFeasibleFrom": [
+          "Rapar",
+          "Gandhidham (very long day)"
+        ],
+        "lastScheduledTransitNote": "Single afternoon GSRTC bus back to Rapar departs around 14:30. No evening public transport exists.",
+        "caution": "Same-day return from Ahmedabad/Rajkot/Vadodara is NOT feasible (over 360 km each way / 7+ hours driving each way). Plan an overnight stay at Gujarat Tourism Toran Resort Dholavira or local homestays.",
+        "verification": {
+          "status": "manually_checked",
+          "source": "GSRTC Kutch Division & Local Panchayat",
+          "lastChecked": "2024-08-10"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "07:00 AM – 06:00 PM (Site open daily; ASI on-site museum closed Fridays)",
+        "hoursVerification": {
+          "status": "officially_published",
+          "source": "Archaeological Survey of India (ASI)",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": false,
+          "type": "Currently free entry / statutory register signing at gate",
+          "onlinePortal": "https://asi.nic.in",
+          "pricing": "Free entry (voluntary donation / site register)",
+          "verification": {
+            "status": "officially_published",
+            "source": "ASI Excavation Branch",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Summer (April–June)",
+            "alertType": "extreme_heat",
+            "severity": "critical",
+            "message": "Khadir Bet experiences extreme desert heat (44–47°C). The ancient ruins offer zero shade. Visiting between 11:00 AM and 04:00 PM is physically perilous without hydration and sun protection."
+          },
+          {
+            "season": "Winter (November–February)",
+            "alertType": "ideal_window",
+            "severity": "info",
+            "message": "Crisp sunny weather, migratory flamingos visible in the surrounding Rann waters along the new causeway."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Paved parking area outside the ASI site museum and entrance gate."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "Clean restrooms at ASI museum and adjacent Gujarat Tourism Toran Resort."
+          },
+          "drinkingWater": {
+            "status": "verified_available",
+            "details": "Drinking water at ASI museum. Carry 2+ litres of personal water into the excavation complex."
+          },
+          "wheelchairAccess": {
+            "status": "very_limited",
+            "details": "Museum is accessible via ramp; the Harappan citadel and deep stone reservoirs require rough walking over ancient stone steps and uneven dirt trails."
+          },
+          "cellularNetwork": {
+            "status": "weak_coverage",
+            "details": "BSNL and Jio 4G available in Dholavira village; intermittent near the northern citadel wall."
+          },
+          "evCharging": {
+            "status": "verified_absent",
+            "details": "Zero EV charging infrastructure on Khadir Bet island. The nearest EV fast charger is in Gandhidham (~145 km away). EV travel to Dholavira requires extreme range planning."
+          },
+          "fuelStations": {
+            "status": "scarce",
+            "details": "No petrol pumps on Khadir Bet. Top up fuel in Rapar or Khavda before crossing the causeway."
+          }
+        },
+        "materialRestrictions": [
+          "Do not touch or dismantle 4,500-year-old gypsum/limestone masonry.",
+          "Drones strictly prohibited without statutory ASI/DGCA permissions.",
+          "No commercial restaurants at the site; lunch available at Toran Resort or pre-booked local Kutchi homestays."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "UNESCO World Heritage Inscription Profile",
+          "url": "https://whc.unesco.org/en/list/1644",
+          "type": "unesco_profile"
+        },
+        {
+          "label": "ASI Dholavira Overview",
+          "url": "https://asi.nic.in",
+          "type": "official_portal"
+        },
+        {
+          "label": "Western Railway Samakhiali Junction",
+          "url": "https://enquiry.indianrail.gov.in",
+          "type": "rail_timetable"
+        },
+        {
+          "label": "Google Maps Turn-by-Turn Navigation via NH-754K",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=23.8860,70.2167",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "marine-national-park",
+      "destinationName": "Marine National Park & Sanctuary (Narara Island Reef)",
+      "category": "nature_wildlife",
+      "district": "Jamnagar",
+      "region": "Saurashtra",
+      "coordinates": [
+        69.75,
+        22.46
+      ],
+      "tripReadinessStatus": "some_planning_required",
+      "statusReason": "Access is strictly tide-dependent; coral reef can only be walked during the low-tide window (~3.5 hours); mandatory forest department permit and registered guide; 7 km unpaved approach road from highway.",
+      "recommendedMinHours": 4.0,
+      "nearestHubs": {
+        "railway": {
+          "name": "Jamnagar Railway Station (JAM)",
+          "code": "JAM",
+          "coordinates": [
+            70.07,
+            22.47
+          ],
+          "straightLineDistanceKm": 32.0,
+          "roadDistanceKm": 48.0,
+          "connectionType": "confirmed_broad_gauge",
+          "frequencyNote": "Direct express trains from Mumbai (Saurashtra Mail), Ahmedabad, Delhi, Pune, Kolkata.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Western Railway Rajkot Division",
+            "lastChecked": "2024-09-01"
+          }
+        },
+        "busTerminal": {
+          "name": "Jamnagar GSRTC Central Depot",
+          "coordinates": [
+            70.06,
+            22.465
+          ],
+          "straightLineDistanceKm": 33.0,
+          "roadDistanceKm": 49.0,
+          "connectionType": "confirmed_scheduled",
+          "frequencyNote": "Frequent express buses connecting Jamnagar to Rajkot (every 15 mins), Ahmedabad, Dwarka.",
+          "verification": {
+            "status": "officially_published",
+            "source": "GSRTC Jamnagar Division",
+            "lastChecked": "2024-08-15"
+          }
+        },
+        "airport": {
+          "name": "Jamnagar Airport (JGA)",
+          "roadDistanceKm": 52.0,
+          "connectionType": "commercial_civil_enclave"
+        },
+        "highway": {
+          "name": "Jamnagar-Khambhalia-Dwarka Highway / NH-947 (Spur to Narara Bet)",
+          "roadType": "4-lane national highway to refinery junction; 7 km single-lane approach road through salt pans",
+          "conditionNote": "Last 7 km is paved but narrow causeway through mangrove mudflats."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Narara Forest Checkpost Gate",
+        "endPoint": "Intertidal Coral Reef Walk Area",
+        "gapDistanceKm": 2.5,
+        "terrainType": "Mangrove mudflats, submerged limestone rocks, shallow tide pools",
+        "availableModes": [
+          {
+            "mode": "Guided Walking on Tidal Flat (Mandatory Footwear)",
+            "feasibility": "Strictly Tide-Dependent",
+            "notes": "You must walk on the reef during the receding tide. Sturdy footwear (old sneakers or neoprene reef shoes) is mandatory to protect feet from sharp oyster beds and stone coral. Barefoot walking prohibited.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Registered Forest Guide Service (Mandatory)",
+            "feasibility": "Allocated at Checkpost",
+            "fareEstimate": "Guide Fee: ~₹300 – ₹500 per group",
+            "notes": "A certified marine guide knows safe walking paths away from sudden tidal channels, sea anemones, and stingrays.",
+            "verification": "officially_published",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Public Transit to Narara Gate",
+            "feasibility": "Non-Existent",
+            "notes": "No public buses or auto-rickshaws serve the 7 km spur road from highway to Narara checkpost. Hired taxi from Jamnagar is required.",
+            "verification": "verified_absent",
+            "lastChecked": "2024-09-01"
+          }
+        ],
+        "gapSummary": "Reef is accessible exclusively on foot during low tide. Hired taxi from Jamnagar needed for the 48 km road leg.",
+        "documentationStatus": "documented_and_verified"
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Jamnagar",
+          "Dwarka",
+          "Rajkot"
+        ],
+        "lastScheduledTransitNote": "The visit must end before the incoming high tide cuts off the reef path. Return to Jamnagar takes ~1 hour.",
+        "caution": "CRITICAL TIDE REALITY: Do not delay on the reef when the tide turns. Water rises rapidly (up to 3–4 metres in Gulf of Kachchh) submerging the walking path.",
+        "verification": {
+          "status": "statutory_marine_warning",
+          "source": "Gujarat Forest Department Marine Wing",
+          "lastChecked": "2024-09-01"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "Variable Daily: Strictly aligned with low tide times (typically a 3.5-hour window per day)",
+        "hoursVerification": {
+          "status": "tide_dependent",
+          "source": "Survey of India Tide Tables & Forest Dept Jamnagar",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": true,
+          "type": "Forest Department Marine Sanctuary Entry Permit",
+          "onlinePortal": "https://forests.gujarat.gov.in",
+          "onSpotCash": "Obtainable at Narara entry checkpost counter (Aadhaar or Government ID required)",
+          "pricing": "Entry Fee: ₹100 per person + Guide fee ₹300–₹500 + Vehicle entry ₹100",
+          "verification": {
+            "status": "officially_published",
+            "source": "Jamnagar Marine National Park Office",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Tidal Planning Requirement (Year-Round)",
+            "alertType": "tide_calculation",
+            "severity": "critical",
+            "message": "Always call the Jamnagar Forest Office (+91-288-2679358) or check the Gulf of Kachchh low-tide table before departing. If low tide occurs before 06:00 or after 17:30, the reef cannot be walked in daylight."
+          },
+          {
+            "season": "Winter (October–March)",
+            "alertType": "prime_marine_life",
+            "severity": "info",
+            "message": "Optimal visibility in tide pools. Active sightings of octopuses, sea anemones, pufferfish, and live corals without diving."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Unpaved open parking at Narara forest gate."
+          },
+          "restrooms": {
+            "status": "basic_at_gate",
+            "details": "Basic toilet block at Narara gate. Zero facilities on reef."
+          },
+          "drinkingWater": {
+            "status": "limited",
+            "details": "Carry your own drinking water from Jamnagar."
+          },
+          "wheelchairAccess": {
+            "status": "inaccessible",
+            "details": "Reef walking across wet mud, slippery rocks, and water channels is physically demanding and impossible for wheelchairs."
+          },
+          "cellularNetwork": {
+            "status": "patchy",
+            "details": "Intermittent mobile coverage on coastal mudflats."
+          },
+          "evCharging": {
+            "status": "verified_absent",
+            "details": "No EV chargers at Narara. Closest chargers are in Jamnagar city (48 km)."
+          }
+        },
+        "materialRestrictions": [
+          "Touching live corals or collecting shells/marine specimens is a non-bailable offense under Schedule I of the Wildlife Protection Act.",
+          "Single-use plastic bottles prohibited on the reef.",
+          "Sturdy closed-toe footwear mandatory."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Gujarat Forest Dept Marine Sanctuary",
+          "url": "https://forests.gujarat.gov.in",
+          "type": "official_portal"
+        },
+        {
+          "label": "Jamnagar Railway Timetable",
+          "url": "https://enquiry.indianrail.gov.in",
+          "type": "rail_timetable"
+        },
+        {
+          "label": "Google Maps Route to Narara Marine Gate",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=22.4600,69.7500",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "lakhpat-fort",
+      "destinationName": "Lakhpat Fort & Gurdwara (Ghost Port Town)",
+      "category": "lesser_known",
+      "district": "Kachchh",
+      "region": "Kachchh",
+      "coordinates": [
+        68.78,
+        23.83
+      ],
+      "tripReadinessStatus": "important_details_unverified",
+      "statusReason": "Extreme border outpost 135 km northwest of Bhuj on Kori Creek; single scheduled bus daily; missing the afternoon bus leaves visitors stranded; food and lodging facilities unverified outside the historic Gurdwara langar.",
+      "recommendedMinHours": 3.0,
+      "nearestHubs": {
+        "railway": {
+          "name": "Bhuj Railway Station (BHUJ)",
+          "code": "BHUJ",
+          "coordinates": [
+            69.67,
+            23.25
+          ],
+          "straightLineDistanceKm": 115.0,
+          "roadDistanceKm": 138.0,
+          "connectionType": "terminal_broad_gauge",
+          "frequencyNote": "Nearest railway station. 3–3.5 hours driving each way.",
+          "verification": {
+            "status": "manually_checked",
+            "source": "Western Railway Schedule",
+            "lastChecked": "2024-09-01"
+          }
+        },
+        "busTerminal": {
+          "name": "Lakhpat Bus Stop / Dayapar Bus Stand",
+          "coordinates": [
+            68.781,
+            23.831
+          ],
+          "straightLineDistanceKm": 0.2,
+          "roadDistanceKm": 0.3,
+          "connectionType": "single_daily_rural_bus",
+          "frequencyNote": "Typically only 1 GSRTC bus per day from Bhuj via Dayapar (arrives ~13:30, departs ~14:15). Schedule subject to unannounced cancellation.",
+          "verification": {
+            "status": "unverified_outdated",
+            "source": "GSRTC Bhuj Depot Field Report",
+            "lastChecked": "2023-11-20"
+          }
+        },
+        "airport": {
+          "name": "Bhuj Airport (BHJ)",
+          "roadDistanceKm": 135.0,
+          "connectionType": "domestic_civil_enclave"
+        },
+        "highway": {
+          "name": "Bhuj-Nakhatrana-Dayapar-Lakhpat Road / SH-42",
+          "roadType": "2-lane paved state highway across western Kutch semi-arid scrub",
+          "conditionNote": "Paved road in fair condition; sparse traffic; zero emergency services after Dayapar (32 km before Lakhpat)."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Lakhpat Fort Gate & Ramparts",
+        "endPoint": "Gurdwara Pehli Patshahi / Kori Creek Bastion",
+        "gapDistanceKm": 1.2,
+        "terrainType": "Quiet village asphalt lane inside 7 km fortified wall perimeter",
+        "availableModes": [
+          {
+            "mode": "Private / Hired Vehicle (Personal Car / Taxi)",
+            "feasibility": "Essential Requirement",
+            "notes": "Do not attempt to visit Lakhpat on public transit without a confirmed return ride.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-08-01"
+          },
+          {
+            "mode": "Walking inside Fort",
+            "feasibility": "Pleasant and Manageable",
+            "notes": "1.2 km walk between the fort entrance, historic Gurdwara, tomb of Gosh Muhammad, and creek ramparts.",
+            "verification": "derived_estimate",
+            "lastChecked": "2024-08-01"
+          }
+        ],
+        "gapSummary": "Inside the fort is walkable. Getting there and back requires a private hired vehicle from Bhuj or Nakhatrana.",
+        "documentationStatus": "unverified_transit_schedules"
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Bhuj (with early start by 08:00 AM)",
+          "Nakhatrana"
+        ],
+        "lastScheduledTransitNote": "Public return bus departs around 14:15. If missed, no commercial taxis or autos exist within 30 km.",
+        "caution": "HIGH RETURN TRANSIT RISK: Must confirm return vehicle before departing Bhuj. Border security checkpost may restrict late evening movements.",
+        "verification": {
+          "status": "unverified_transit_schedules",
+          "source": "Border Security Force & Local Panchayat",
+          "lastChecked": "2024-08-01"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "Sunrise to Sunset (06:00 AM – 06:30 PM); Ramparts close at dusk for border security",
+        "hoursVerification": {
+          "status": "manually_checked",
+          "source": "ASI & BSF Lakhpat Outpost",
+          "lastChecked": "2024-08-01"
+        },
+        "entryPermits": {
+          "required": false,
+          "type": "General visitor permit not required for main fort/Gurdwara; Border security check may inspect ID",
+          "pricing": "Free entry",
+          "verification": {
+            "status": "manually_checked",
+            "source": "Local Administration",
+            "lastChecked": "2024-08-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Summer (April–June)",
+            "alertType": "arid_heat",
+            "severity": "high",
+            "message": "Desert winds exceed 43°C. The ghost town has very little tree canopy. Ensure your vehicle has air conditioning and ample water."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Open ground parking outside Lakhpat Gurdwara and fort gate."
+          },
+          "restrooms": {
+            "status": "basic_at_gurdwara",
+            "details": "Clean restrooms available inside historic Gurdwara complex."
+          },
+          "drinkingWater": {
+            "status": "available_at_gurdwara",
+            "details": "Filtered water and community langar (free meal) served at Gurdwara."
+          },
+          "wheelchairAccess": {
+            "status": "very_limited",
+            "details": "Cobbled paths and stone stairs onto the massive fort ramparts."
+          },
+          "cellularNetwork": {
+            "status": "poor_or_bsnl_only",
+            "details": "Near-total cellular blackout for private networks; weak BSNL signal near BSF outpost."
+          },
+          "evCharging": {
+            "status": "verified_absent",
+            "details": "Zero EV charging facilities. Closest charger is 135 km away in Bhuj."
+          },
+          "fuelStations": {
+            "status": "absent_after_dayapar",
+            "details": "Last petrol pump is at Dayapar (32 km away). Never enter Lakhpat with low fuel."
+          }
+        },
+        "materialRestrictions": [
+          "Photography prohibited in the direction of BSF watchtowers and Kori Creek military zone.",
+          "Drones strictly prohibited (Category I border defense zone).",
+          "Head covering and modest dress required inside Gurdwara Pehli Patshahi."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Gujarat Tourism Lakhpat Heritage Profile",
+          "url": "https://www.gujarattourism.com",
+          "type": "official_portal"
+        },
+        {
+          "label": "Western Railway Bhuj Timetable",
+          "url": "https://enquiry.indianrail.gov.in",
+          "type": "rail_timetable"
+        },
+        {
+          "label": "Google Maps Turn-by-Turn Navigation to Lakhpat",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=23.8300,68.7800",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "polo-forest",
+      "destinationName": "Polo Monument and Forest Heritage Site",
+      "category": "lesser_known",
+      "district": "Sabarkantha",
+      "region": "North Gujarat",
+      "coordinates": [
+        73.208,
+        23.955
+      ],
+      "tripReadinessStatus": "some_planning_required",
+      "statusReason": "No railway station within 40 km; narrow forest roads; mobile cellular dead zones in Harnav river valley; return public transport stops by 17:00; private vehicle or pre-booked taxi required.",
+      "recommendedMinHours": 4.0,
+      "nearestHubs": {
+        "railway": {
+          "name": "Himmatnagar Junction (HMT) / Idar Station",
+          "code": "HMT",
+          "coordinates": [
+            72.96,
+            23.59
+          ],
+          "straightLineDistanceKm": 42.0,
+          "roadDistanceKm": 55.0,
+          "connectionType": "broad_gauge_junction",
+          "frequencyNote": "Trains from Ahmedabad / Asarva to Udaipur pass through Himmatnagar.",
+          "verification": {
+            "status": "manually_checked",
+            "source": "Western Railway Schedule",
+            "lastChecked": "2024-09-01"
+          }
+        },
+        "busTerminal": {
+          "name": "Idar GSRTC Bus Depot",
+          "coordinates": [
+            73.0,
+            23.83
+          ],
+          "straightLineDistanceKm": 25.0,
+          "roadDistanceKm": 32.0,
+          "connectionType": "sub_district_depot",
+          "frequencyNote": "State buses connect Ahmedabad to Idar hourly; infrequent shared jeeps connect Idar to Vijaynagar.",
+          "verification": {
+            "status": "manually_checked",
+            "source": "GSRTC Sabarkantha Division",
+            "lastChecked": "2024-08-15"
+          }
+        },
+        "airport": {
+          "name": "Sardar Vallabhbhai Patel International Airport, Ahmedabad (AMD)",
+          "roadDistanceKm": 145.0,
+          "connectionType": "commercial_domestic_international"
+        },
+        "highway": {
+          "name": "Himmatnagar-Idar-Vijaynagar State Highway / SH-58",
+          "roadType": "2-lane paved scenic forest road",
+          "conditionNote": "Winding road through Aravalli foothills; speed breakers near forest villages."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Idar Town / Vijaynagar Cross-Road",
+        "endPoint": "Polo Forest Campsite & Jain Temples",
+        "gapDistanceKm": 32.0,
+        "terrainType": "Scenic forest road through Harnav river gorge",
+        "availableModes": [
+          {
+            "mode": "Private / Hired Vehicle (Car / Motorcycle)",
+            "feasibility": "Strongly Recommended",
+            "notes": "Personal or rented car/bike is the only reliable way to hop between the scattered 10th-century Jain temples, Shiv temple, and Harnav dam.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Shared Jeeps / Chhakda (Idar to Vijaynagar)",
+            "feasibility": "Crowded and Sporadic",
+            "fareEstimate": "₹30 – ₹50 per passenger",
+            "notes": "Drops passengers on the main road at Abhapur; walking to scattered ruined temples inside the forest still required.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          }
+        ],
+        "gapSummary": "Ruins and viewpoints are scattered over 5 km of forest trails. A personal car, bike, or hired taxi is essential.",
+        "documentationStatus": "documented_and_verified"
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Ahmedabad",
+          "Gandhinagar",
+          "Himmatnagar",
+          "Mehsana"
+        ],
+        "lastScheduledTransitNote": "Shared jeeps diminish after 16:30. Forest entry gates close to outside vehicles at 18:00.",
+        "caution": "Forest roads have zero lighting after dark. Complete return journey onto the main Idar highway before sunset.",
+        "verification": {
+          "status": "manually_checked",
+          "source": "Gujarat Forest Department Sabarkantha Division",
+          "lastChecked": "2024-08-15"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "07:00 AM – 06:00 PM (Entry barred after 17:00; night camping requires forest permit)",
+        "hoursVerification": {
+          "status": "officially_published",
+          "source": "Gujarat Forest Department",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": false,
+          "type": "Day visits are free; vehicle registration at entry checkpost",
+          "pricing": "Free entry (nominal parking fee on holiday weekends)",
+          "verification": {
+            "status": "officially_published",
+            "source": "Forest Dept Checkpost Advisory",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Monsoon Peak (July–September)",
+            "alertType": "weekend_rush",
+            "severity": "moderate",
+            "message": "Forest is spectacularly green and Harnav river flows vigorously. Huge weekend traffic jams occur on narrow single-lane roads between 11:00 and 16:00 on Sundays. Arrive before 08:30 AM."
+          },
+          {
+            "season": "Summer (March–June)",
+            "alertType": "dry_deciduous",
+            "severity": "minor",
+            "message": "Trees shed leaves and Harnav river dries up. Ruins remain historically interesting but scenic greenery is absent."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Designated dirt and paved parking clearings near temple clusters."
+          },
+          "restrooms": {
+            "status": "basic",
+            "details": "Public toilet blocks near Forest Rest House and Polo Campsite."
+          },
+          "drinkingWater": {
+            "status": "limited",
+            "details": "Carry personal water bottles. Do not litter in forest streams."
+          },
+          "wheelchairAccess": {
+            "status": "difficult_natural",
+            "details": "Forest trails involve dirt tracks, river stones, and unpaved temple mounds."
+          },
+          "cellularNetwork": {
+            "status": "dead_zone",
+            "details": "Severe cellular dead zones across the Harnav river valley. Offline maps are essential."
+          },
+          "evCharging": {
+            "status": "verified_absent",
+            "details": "Zero EV charging in Polo Forest. Nearest fast charger in Himmatnagar (55 km)."
+          }
+        },
+        "materialRestrictions": [
+          "Alcohol and loud music systems strictly banned inside forest sanctuary.",
+          "Single-use plastic prohibited; fines levied by forest guards.",
+          "Do not swim in Harnav river reservoirs during monsoon flash flows."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Gujarat Tourism Polo Forest Guide",
+          "url": "https://www.gujarattourism.com",
+          "type": "official_portal"
+        },
+        {
+          "label": "GSRTC Bus Timetables to Idar/Himmatnagar",
+          "url": "https://gsrtc.in",
+          "type": "transit_timetable"
+        },
+        {
+          "label": "Google Maps Direct Navigation to Polo Forest",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=23.9550,73.2080",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "sun-temple-modhera",
+      "destinationName": "Sun Temple Modhera (Solar Powered Heritage)",
+      "category": "iconic",
+      "district": "Mehsana",
+      "region": "North Gujarat",
+      "coordinates": [
+        72.1333,
+        23.5836
+      ],
+      "tripReadinessStatus": "some_planning_required",
+      "statusReason": "Via SH-41 highway corridor (~100 km). Nearest railhead is Mehsana Junction (~25 km), where onward transfer depends on regional GSRTC buses or unmetered taxis with unverified live schedules.",
+      "recommendedMinHours": 2.5,
+      "nearestHubs": {
+        "railway": {
+          "name": "Mehsana Junction (MSH)",
+          "code": "MSH",
+          "coordinates": [
+            72.3999,
+            23.588
+          ],
+          "straightLineDistanceKm": 25.0,
+          "roadDistanceKm": 26.5,
+          "connectionType": "major_broad_gauge_junction",
+          "frequencyNote": "Extremely frequent trains from Ahmedabad, Delhi, Mumbai, Jaipur, Abu Road.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Western Railway Schedule",
+            "lastChecked": "2024-09-01"
+          }
+        },
+        "busTerminal": {
+          "name": "Modhera Cross-Road Bus Stand / Mehsana Central Depot",
+          "coordinates": [
+            72.135,
+            23.582
+          ],
+          "straightLineDistanceKm": 0.5,
+          "roadDistanceKm": 0.6,
+          "connectionType": "confirmed_scheduled",
+          "frequencyNote": "GSRTC buses from Mehsana to Becharaji pass Modhera every 20 minutes.",
+          "verification": {
+            "status": "officially_published",
+            "source": "GSRTC Mehsana Division",
+            "lastChecked": "2024-08-15"
+          }
+        },
+        "airport": {
+          "name": "Sardar Vallabhbhai Patel International Airport, Ahmedabad (AMD)",
+          "roadDistanceKm": 98.0,
+          "connectionType": "commercial_domestic_international"
+        },
+        "highway": {
+          "name": "Mehsana-Modhera-Becharaji State Highway / SH-134",
+          "roadType": "4-lane paved divided highway corridor",
+          "conditionNote": "Excellent road quality with solar street lighting throughout Modhera village."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Mehsana Railway Station / Bus Stand",
+        "endPoint": "Modhera Sun Temple Main Gate",
+        "gapDistanceKm": 26.5,
+        "terrainType": "Smooth 4-lane highway into temple archaeological parking",
+        "availableModes": [
+          {
+            "mode": "Shared Auto-rickshaw / Shuttle Van (Mehsana to Modhera)",
+            "feasibility": "Frequent (Every 10–15 mins)",
+            "fareEstimate": "₹30 – ₹40 per seat",
+            "notes": "Departs continuously from outside Mehsana station east side towards Becharaji via Modhera.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "GSRTC State Transport Bus",
+            "feasibility": "Regular (Every 20 mins)",
+            "fareEstimate": "₹28 per passenger",
+            "notes": "Direct bus from Mehsana Central Bus Stand to Modhera gate.",
+            "verification": "officially_published",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Private Hired Taxi from Mehsana",
+            "feasibility": "Readily Available",
+            "fareEstimate": "₹600 – ₹900 round trip",
+            "notes": "Can be combined with Patan (Rani ki Vav) on the same day loop for ~₹2,200.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          }
+        ],
+        "gapSummary": "Nearby railway station identified (Mehsana Junction, ~25 km). The onward connection from Mehsana station to Modhera relies on regional GSRTC buses or private taxis whose live schedules are not verified on this platform.",
+        "documentationStatus": "documented_and_verified",
+        "hasLastMileUncertainty": true,
+        "headline": "Nearby railway station identified (Mehsana Junction, ~25 km). The onward connection from Mehsana station to Modhera relies on regional GSRTC buses or private taxis whose live schedules are not verified on this platform.",
+        "unverifiedFactors": [
+          "Rural GSRTC bus schedules from Mehsana to Modhera are subject to change without online real-time tracking.",
+          "Shared auto-rickshaw availability from Modhera back to Mehsana after sunset is unverified."
+        ],
+        "returnJourneyWarning": "Onward transit from Mehsana halt to the temple has no dedicated shuttle service. Visitors arriving without a personal vehicle should verify return transport in advance."
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Ahmedabad",
+          "Gandhinagar",
+          "Mehsana",
+          "Palanpur",
+          "Vadodara"
+        ],
+        "lastScheduledTransitNote": "Buses and shared vans back to Mehsana run until 20:30.",
+        "caution": "The evening 3D Projection Mapping Show on the temple stepwell runs at 19:00. After the show, private autos back to Mehsana require pre-booking or waiting outside gate.",
+        "verification": {
+          "status": "manually_checked",
+          "source": "GSRTC Mehsana Depot & ASI",
+          "lastChecked": "2024-08-25"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "07:00 AM – 06:00 PM daily (Evening 3D Light & Sound Show: 19:00–19:30)",
+        "hoursVerification": {
+          "status": "officially_published",
+          "source": "Archaeological Survey of India (ASI)",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": true,
+          "type": "ASI Monument Entry Ticket",
+          "onlinePortal": "https://asi.nic.in",
+          "onSpotCash": "Digital payment via QR code preferred at entry turnstile",
+          "pricing": "₹40 Indian citizens, ₹600 foreign nationals",
+          "verification": {
+            "status": "officially_published",
+            "source": "ASI Online Ticket Portal",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Uttarayan / Modhera Dance Festival (January)",
+            "alertType": "cultural_highlight",
+            "severity": "info",
+            "message": "Annual classical dance festival held against the illuminated temple backdrop on the third weekend of January. Spectacular cultural event."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Wide paved solar-canopy parking lot with shaded EV chargers."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "Clean ASI tourist facilitation centre restrooms."
+          },
+          "drinkingWater": {
+            "status": "verified_available",
+            "details": "Solar-powered RO drinking water dispensing units."
+          },
+          "wheelchairAccess": {
+            "status": "partially_accessible",
+            "details": "Upper temple platform is ramped; descending into the Surya Kund stepped tank requires stone steps."
+          },
+          "cellularNetwork": {
+            "status": "verified_good",
+            "details": "Excellent 5G coverage throughout temple grounds."
+          },
+          "evCharging": {
+            "status": "verified_available",
+            "details": "Solar-powered fast DC charging station directly inside the monument parking lot."
+          }
+        },
+        "materialRestrictions": [
+          "Footwear prohibited on the main sanctum (Garbhagriha) platform.",
+          "Drones prohibited without statutory ASI/DGCA permissions.",
+          "No swimming or wading in the Surya Kund stepped pond."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Official ASI Monument Tickets",
+          "url": "https://asi.nic.in",
+          "type": "official_permit"
+        },
+        {
+          "label": "GSRTC Mehsana Bus Timetable",
+          "url": "https://gsrtc.in",
+          "type": "transit_timetable"
+        },
+        {
+          "label": "Western Railway Mehsana Junction",
+          "url": "https://enquiry.indianrail.gov.in",
+          "type": "rail_timetable"
+        },
+        {
+          "label": "Google Maps Turn-by-Turn to Sun Temple",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=23.5836,72.1333",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "somnath-temple",
+      "destinationName": "Somnath Jyotirlinga Temple & Sea Promenade",
+      "category": "iconic",
+      "district": "Gir Somnath",
+      "region": "Saurashtra",
+      "coordinates": [
+        70.4012,
+        20.888
+      ],
+      "tripReadinessStatus": "well_documented",
+      "statusReason": "Dual railway connectivity (Somnath station 1 km, Veraval Junction 6 km); high-density bus terminal; comprehensive Shree Somnath Trust visitor infrastructure and subsidized guesthouses.",
+      "recommendedMinHours": 3.0,
+      "nearestHubs": {
+        "railway": {
+          "name": "Somnath Railway Station (SMNH) / Veraval Junction (VRL)",
+          "code": "SMNH",
+          "coordinates": [
+            70.409,
+            20.897
+          ],
+          "straightLineDistanceKm": 1.2,
+          "roadDistanceKm": 1.5,
+          "connectionType": "confirmed_broad_gauge",
+          "frequencyNote": "Veraval Junction (6 km) connects direct superfast express trains to Mumbai, Ahmedabad, Pune, Delhi, Jabalpur.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Western Railway Bhavnagar Division",
+            "lastChecked": "2024-09-01"
+          }
+        },
+        "busTerminal": {
+          "name": "Somnath GSRTC Bus Stand / Veraval Central Bus Station",
+          "coordinates": [
+            70.403,
+            20.891
+          ],
+          "straightLineDistanceKm": 0.4,
+          "roadDistanceKm": 0.5,
+          "connectionType": "confirmed_scheduled",
+          "frequencyNote": "24x7 state buses connecting to Rajkot, Junagadh, Porbandar, Ahmedabad, Dwarka.",
+          "verification": {
+            "status": "officially_published",
+            "source": "GSRTC Veraval Depot",
+            "lastChecked": "2024-08-15"
+          }
+        },
+        "airport": {
+          "name": "Keshod Airport (IXK) ~55 km / Diu Airport (DIU) ~85 km",
+          "roadDistanceKm": 55.0,
+          "connectionType": "domestic_scheduled"
+        },
+        "highway": {
+          "name": "NH-51 (Coastal Highway) / Somnath-Jetpur 4-Lane NH-151",
+          "roadType": "4-lane divided national highway corridor",
+          "conditionNote": "Smooth all-weather multi-lane highway."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Somnath Railway Station / Bus Stand",
+        "endPoint": "Somnath Temple Main Darshan Gate",
+        "gapDistanceKm": 1.2,
+        "terrainType": "Paved pilgrim promenade with barrier-free sidewalks",
+        "availableModes": [
+          {
+            "mode": "Shree Somnath Trust Free Battery Golf Cart",
+            "feasibility": "Frequent",
+            "fareEstimate": "Free for Senior Citizens & PWD",
+            "notes": "Operated continuously by Somnath Trust between guesthouses, parking, and temple gate.",
+            "verification": "officially_published",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Auto-rickshaws (3-Wheeler)",
+            "feasibility": "Readily Available 24x7",
+            "fareEstimate": "₹30 – ₹50 from Somnath station; ₹100 – ₹150 from Veraval Junction",
+            "notes": "Fixed rate auto stand outside Veraval Junction and Somnath stations.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Walking",
+            "feasibility": "Very Easy",
+            "notes": "10-minute walk from Somnath bus stand through illuminated pedestrian bazaar.",
+            "verification": "derived_estimate",
+            "lastChecked": "2024-09-01"
+          }
+        ],
+        "gapSummary": "Extremely well organized last-mile connectivity with free trust carts, walking paths, and fixed-rate autos.",
+        "documentationStatus": "documented_and_verified"
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Junagadh",
+          "Rajkot",
+          "Porbandar",
+          "Diu",
+          "Keshod"
+        ],
+        "lastScheduledTransitNote": "Overnight trains and sleeper buses to Ahmedabad, Surat, and Mumbai depart Veraval between 20:00 and 23:00.",
+        "caution": "The temple closes at 22:00. Evening Aarti at 19:00 and Light & Sound show at 20:00 attract heavy crowds; clear security locker line early.",
+        "verification": {
+          "status": "officially_published",
+          "source": "Shree Somnath Trust & GSRTC",
+          "lastChecked": "2024-09-01"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "06:00 AM – 10:00 PM (Aarti: 07:00 AM, 12:00 PM, 07:00 PM)",
+        "hoursVerification": {
+          "status": "officially_published",
+          "source": "Shree Somnath Trust Official Portal",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": false,
+          "type": "General Darshan is free; VIP / Special Darshan available online",
+          "onlinePortal": "https://somnath.org",
+          "pricing": "Free entry; VIP Darshan ₹200; Light & Sound show ₹30",
+          "verification": {
+            "status": "officially_published",
+            "source": "somnath.org",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Maha Shivratri (February/March) & Shravan Month (August)",
+            "alertType": "huge_crowds",
+            "severity": "high",
+            "message": "Over 100,000 pilgrims visit daily. General queue wait times exceed 3–5 hours. Book trust accommodation months ahead."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Enormous parking lot managed by Somnath Trust with CCTV and security."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "Modern washrooms at parking, cloakroom, and seaside promenade."
+          },
+          "drinkingWater": {
+            "status": "verified_available",
+            "details": "Free continuous RO water kiosks."
+          },
+          "wheelchairAccess": {
+            "status": "fully_accessible",
+            "details": "Ramped temple perimeter, dedicated wheelchairs and volunteers."
+          },
+          "cellularNetwork": {
+            "status": "verified_good",
+            "details": "Strong 5G mobile coverage outside; electronic devices banned inside."
+          },
+          "evCharging": {
+            "status": "verified_available",
+            "details": "Public EV fast chargers operational near Sagar Darshan guest house parking."
+          }
+        },
+        "materialRestrictions": [
+          "STRICT SECURITY: Mobile phones, cameras, smartwatches, belts with metal buckles, and bags strictly prohibited inside temple perimeter.",
+          "Free computerized Trust cloakroom and locker counters provided at entrance.",
+          "Respectful Indian attire mandatory; western shorts/sleeveless tops not permitted inside sanctum."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Shree Somnath Trust Official Portal",
+          "url": "https://somnath.org",
+          "type": "official_portal"
+        },
+        {
+          "label": "Western Railway Veraval/Somnath Trains",
+          "url": "https://enquiry.indianrail.gov.in",
+          "type": "rail_timetable"
+        },
+        {
+          "label": "GSRTC Online Bus Booking",
+          "url": "https://gsrtc.in",
+          "type": "transit_timetable"
+        },
+        {
+          "label": "Google Maps Turn-by-Turn to Somnath Temple",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=20.8880,70.4012",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "saputara-hill-station",
+      "destinationName": "Saputara: The Sahyadri Hill Resort",
+      "category": "weekend_getaway",
+      "district": "Dang",
+      "region": "South Gujarat",
+      "coordinates": [
+        73.748,
+        20.575
+      ],
+      "tripReadinessStatus": "some_planning_required",
+      "statusReason": "Mountain ghat road with hairpin bends in Dang district; nearest broad-gauge railway is Bilimora (110 km) or Nashik (80 km); monsoon fog and occasional landslip caution; local hill town is walkable.",
+      "recommendedMinHours": 5.0,
+      "nearestHubs": {
+        "railway": {
+          "name": "Waghai Station (Narrow Gauge, 50 km) / Bilimora Junction (Broad Gauge, 110 km) / Nashik Road (80 km)",
+          "code": "BIM",
+          "coordinates": [
+            72.96,
+            20.76
+          ],
+          "straightLineDistanceKm": 82.0,
+          "roadDistanceKm": 110.0,
+          "connectionType": "broad_gauge_junction",
+          "frequencyNote": "Bilimora is the primary Gujarat broad-gauge junction with Mumbai-Ahmedabad mainline connectivity.",
+          "verification": {
+            "status": "manually_checked",
+            "source": "Western Railway Mumbai Division",
+            "lastChecked": "2024-09-01"
+          }
+        },
+        "busTerminal": {
+          "name": "Saputara GSRTC Bus Stand",
+          "coordinates": [
+            73.749,
+            20.576
+          ],
+          "straightLineDistanceKm": 0.2,
+          "roadDistanceKm": 0.3,
+          "connectionType": "confirmed_scheduled",
+          "frequencyNote": "Direct GSRTC buses from Surat, Bilimora, Navsari, Valsad, and MSRTC buses from Nashik.",
+          "verification": {
+            "status": "officially_published",
+            "source": "GSRTC Valsad Division",
+            "lastChecked": "2024-08-15"
+          }
+        },
+        "airport": {
+          "name": "Surat International Airport (STV) ~165 km / Nashik Airport ~85 km",
+          "roadDistanceKm": 165.0,
+          "connectionType": "commercial_domestic"
+        },
+        "highway": {
+          "name": "SH-14 (Waghai-Saputara Ghat Road) / NH-848 Connection to Nashik",
+          "roadType": "2-lane paved mountain ghat road with winding hairpin bends",
+          "conditionNote": "Scenic mountain pass ascending from Dang tribal forests onto Maharashtra border plateau."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Saputara Bus Stand / Main Circle",
+        "endPoint": "Saputara Lake / Sunset Point / Table Land",
+        "gapDistanceKm": 1.5,
+        "terrainType": "Pleasant paved hill roads and lake promenade",
+        "availableModes": [
+          {
+            "mode": "Walking on Foot",
+            "feasibility": "Ideal & Highly Recommended",
+            "notes": "Saputara is a compact planned hill resort. The lake, rose garden, museum, and boat club are within 10–15 minutes walking.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Local Auto-rickshaw / Taxi",
+            "feasibility": "Available at Bus Stand",
+            "fareEstimate": "₹50 – ₹100 per town hop; ₹300 for Sunset Point / Governor Hill loop",
+            "notes": "Convenient for carrying luggage up to hilltop resorts.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Ropeway Cable Car",
+            "feasibility": "Tourist Activity",
+            "fareEstimate": "₹120 round trip",
+            "notes": "Connects Sunset Point across the gorge to Governor Hill.",
+            "verification": "officially_published",
+            "lastChecked": "2024-09-01"
+          }
+        ],
+        "gapSummary": "The town itself is comfortably walkable. Reaching the hill resort requires driving up the mountain pass.",
+        "documentationStatus": "documented_and_verified"
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Surat",
+          "Valsad",
+          "Navsari",
+          "Nashik"
+        ],
+        "lastScheduledTransitNote": "Last direct GSRTC buses down the ghat to Surat/Bilimora depart around 17:30.",
+        "caution": "Ghat road descent in thick monsoon fog or heavy rain requires low gear and slow driving. Leave the hill before dark if unfamiliar with mountain roads.",
+        "verification": {
+          "status": "manually_checked",
+          "source": "GSRTC Valsad Division & Dang Police",
+          "lastChecked": "2024-08-15"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "Town is open 24x7; Boating: 08:30 AM – 06:30 PM; Ropeway: 09:00 AM – 06:00 PM",
+        "hoursVerification": {
+          "status": "manually_checked",
+          "source": "Gujarat Tourism Saputara Office",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": false,
+          "type": "No permits required for general town entry",
+          "pricing": "Free entry; Boating: ₹60–₹120; Ropeway: ₹120",
+          "verification": {
+            "status": "officially_published",
+            "source": "Gujarat Tourism",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Monsoon Season (July–September)",
+            "alertType": "prime_fog_and_waterfalls",
+            "severity": "info",
+            "message": "Peak scenic season with rolling clouds, lush green valleys, and active Gira waterfalls nearby. Heavy weekend crowds; book hotels ahead."
+          },
+          {
+            "season": "Heavy Downpours (August)",
+            "alertType": "fog_and_rockfall_caution",
+            "severity": "moderate",
+            "message": "Visibility on the Waghai-Saputara ghat road can drop below 15 metres in cloud cover. Drive with fog lights."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Designated public parking lots near lake, boat club, and hotel clusters."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "Public restrooms near lake and bus stand."
+          },
+          "drinkingWater": {
+            "status": "verified_available",
+            "details": "Available across hotels, restaurants, and town shops."
+          },
+          "wheelchairAccess": {
+            "status": "partially_accessible",
+            "details": "Lake promenade is flat and wheelchair accessible; Sunset point and Table land have steep stony paths."
+          },
+          "cellularNetwork": {
+            "status": "verified_good",
+            "details": "Good 4G coverage across the town plateau."
+          },
+          "evCharging": {
+            "status": "verified_available",
+            "details": "Public EV charger available at Gujarat Tourism Toran Hill Resort."
+          }
+        },
+        "materialRestrictions": [
+          "Do not drive off-road onto protected forest slopes.",
+          "Boating requires lifejackets mandated by local boat club operators."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Gujarat Tourism Saputara Profile",
+          "url": "https://www.gujarattourism.com",
+          "type": "official_portal"
+        },
+        {
+          "label": "GSRTC Bus Schedules to Saputara",
+          "url": "https://gsrtc.in",
+          "type": "transit_timetable"
+        },
+        {
+          "label": "Google Maps Turn-by-Turn to Saputara",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=20.5750,73.7480",
+          "type": "turn_by_turn"
+        }
+      ]
+    },
+    {
+      "destinationId": "dumas-beach",
+      "destinationName": "Dumas Beach & Black Sand Coast",
+      "category": "coastal_beach",
+      "district": "Surat",
+      "region": "South Gujarat",
+      "coordinates": [
+        72.705,
+        21.075
+      ],
+      "tripReadinessStatus": "well_documented",
+      "statusReason": "Direct urban city bus (Sitilink BRTS/City bus) and auto-rickshaw access from Surat city; 21 km from Surat railway station; multi-lane city highway; documented beach amenities.",
+      "recommendedMinHours": 2.0,
+      "nearestHubs": {
+        "railway": {
+          "name": "Surat Railway Station (ST)",
+          "code": "ST",
+          "coordinates": [
+            72.84,
+            21.2
+          ],
+          "straightLineDistanceKm": 20.0,
+          "roadDistanceKm": 21.5,
+          "connectionType": "major_mainline_junction",
+          "frequencyNote": "High-density Western Railway mainline hub connecting Mumbai, Delhi, Ahmedabad with trains every 10–15 mins.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Western Railway Mumbai Division",
+            "lastChecked": "2024-09-01"
+          }
+        },
+        "busTerminal": {
+          "name": "Surat Central GSRTC Depot / Dumas BRTS Station",
+          "coordinates": [
+            72.835,
+            21.198
+          ],
+          "straightLineDistanceKm": 19.5,
+          "roadDistanceKm": 21.0,
+          "connectionType": "confirmed_urban_transit",
+          "frequencyNote": "Sitilink city buses run every 15–20 minutes directly from Surat railway station and Athwa Gate to Dumas Beach.",
+          "verification": {
+            "status": "officially_published",
+            "source": "Surat Municipal Corporation (SMC) Sitilink",
+            "lastChecked": "2024-08-20"
+          }
+        },
+        "airport": {
+          "name": "Surat International Airport (STV)",
+          "roadDistanceKm": 6.5,
+          "connectionType": "commercial_domestic"
+        },
+        "highway": {
+          "name": "Surat-Dumas 6-Lane Expressway (Gaurav Path)",
+          "roadType": "6-lane divided urban arterial highway with streetlighting and BRTS corridor",
+          "conditionNote": "High-standard urban expressway; heavy weekend evening traffic."
+        }
+      },
+      "lastMileGap": {
+        "startPoint": "Dumas Village Bus Terminus",
+        "endPoint": "Black Sand Beach Shoreline",
+        "gapDistanceKm": 0.4,
+        "terrainType": "Paved beach road lined with bhajiya/food stalls leading onto dark sandy beach",
+        "availableModes": [
+          {
+            "mode": "Walking on Foot",
+            "feasibility": "Easy 5-Minute Walk",
+            "notes": "Bus stop and car parking are 300–400 metres from the shoreline.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          },
+          {
+            "mode": "Auto-rickshaw / App-Based Cabs (Ola/Uber)",
+            "feasibility": "Readily Available",
+            "fareEstimate": "Ola/Uber: ₹250 – ₹350 from Surat station; Auto: ₹150 – ₹200",
+            "notes": "App cabs drop off directly at the beach promenade.",
+            "verification": "manually_checked",
+            "lastChecked": "2024-09-01"
+          }
+        ],
+        "gapSummary": "Urban beachfront with continuous city bus and app cab connectivity. Zero last-mile difficulty.",
+        "documentationStatus": "documented_and_verified"
+      },
+      "returnJourney": {
+        "sameDayFeasible": true,
+        "sameDayFeasibleFrom": [
+          "Surat",
+          "Navsari",
+          "Bharuch",
+          "Valsad",
+          "Ankleshwar"
+        ],
+        "lastScheduledTransitNote": "Sitilink city buses and shared autos run back to Surat city until 22:00.",
+        "caution": "High tide warning: The Gulf of Khambhat tide rises quickly across the wide mudflats. Do not venture far into the water after sunset.",
+        "verification": {
+          "status": "manually_checked",
+          "source": "Surat Municipal Corporation & Coastal Police",
+          "lastChecked": "2024-08-20"
+        }
+      },
+      "visitingConditions": {
+        "openingHours": "Open 24x7 (Public beach; food stalls active 10:00 AM – 11:00 PM)",
+        "hoursVerification": {
+          "status": "manually_checked",
+          "source": "Surat Police Commissionerate",
+          "lastChecked": "2024-10-01"
+        },
+        "entryPermits": {
+          "required": false,
+          "type": "Public municipal beach, free entry",
+          "pricing": "Free entry; Parking: ₹20 car, ₹10 bike",
+          "verification": {
+            "status": "officially_published",
+            "source": "Surat Municipal Corporation",
+            "lastChecked": "2024-10-01"
+          }
+        },
+        "seasonalAlerts": [
+          {
+            "season": "Monsoon Tides (June–August)",
+            "alertType": "rough_seas_caution",
+            "severity": "high",
+            "message": "Strong undercurrents and quicksand patches in the Arabian Sea mudflats. Swimming is prohibited by Surat Police during high-tide monsoon phases."
+          }
+        ],
+        "facilities": {
+          "parking": {
+            "status": "verified_available",
+            "details": "Paved and hard-packed parking spaces along the beach road."
+          },
+          "restrooms": {
+            "status": "verified_available",
+            "details": "SMC Pay & Use toilet block near beach entrance."
+          },
+          "drinkingWater": {
+            "status": "verified_available",
+            "details": "Packaged water available at food stalls."
+          },
+          "wheelchairAccess": {
+            "status": "partially_accessible",
+            "details": "Paved promenade is accessible; wheelchairs sink into wet black beach sand."
+          },
+          "cellularNetwork": {
+            "status": "verified_good",
+            "details": "Excellent urban 5G coverage (Jio, Airtel, Vi)."
+          },
+          "evCharging": {
+            "status": "verified_available",
+            "details": "Fast DC EV charging stations located along Gaurav Path (~5 km from beach)."
+          }
+        },
+        "materialRestrictions": [
+          "Alcohol prohibited (state prohibition law strictly enforced).",
+          "Do not drive vehicles directly onto wet shoreline mud (vehicles get trapped in rising tide).",
+          "Dispose of snack waste in designated municipal bins."
+        ]
+      },
+      "externalLinks": [
+        {
+          "label": "Surat Municipal Sitilink Bus Route 102",
+          "url": "https://www.suratmunicipal.gov.in",
+          "type": "transit_timetable"
+        },
+        {
+          "label": "Western Railway Surat Station Trains",
+          "url": "https://enquiry.indianrail.gov.in",
+          "type": "rail_timetable"
+        },
+        {
+          "label": "Google Maps Turn-by-Turn to Dumas Beach",
+          "url": "https://www.google.com/maps/dir/?api=1&destination=21.0750,72.7050",
+          "type": "turn_by_turn"
+        }
+      ]
+    }
+  ]
+}

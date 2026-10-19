@@ -5,10 +5,10 @@
   "description": "Gujarat InfraMap — Contemporary Gujarati Heritage & Public Spatial Discovery Platform",
   "scripts": {
     "dev": "vite",
-    "build:react": "tsc --noEmit && vite build",
+    "build:react": "tsc --noEmit && vite build && node -e \"require('fs').copyFileSync('dist/app.html', 'dist/index.html')\"",
     "preview": "vite preview",
     "start": "python -m http.server 8080",
-    "build": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build && node -e \"require('fs').copyFileSync('dist/app.html', 'dist/index.html')\"",
     "test": "python scripts/verify_deployment.py",
     "test:consumer": "node scripts/verify_consumer_experience.js",
     "test:auth": "node scripts/verify_auth_step3.js",
