@@ -15,6 +15,19 @@ interface AtlasState {
   isOnboardingOpen: boolean;
   userProfile: UserPassportProfile;
 
+  // PWA & Offline Roadtrip state
+  isOnline: boolean;
+  isInstallPromptAvailable: boolean;
+  deferredInstallPrompt: any;
+  offlinePackProgress: number; // 0 to 100
+  offlinePackReady: boolean;
+
+  // EV Corridor state
+  selectedEVStationId: string | null;
+  evFilterCorridor: string;
+  evFilterFastOnly: boolean;
+  evFilterDgBackupOnly: boolean;
+
   // Actions
   setMode: (mode: AtlasMode) => void;
   toggleTheme: () => void;
@@ -24,6 +37,18 @@ interface AtlasState {
   setShareModalOpen: (open: boolean) => void;
   setAuthModalOpen: (open: boolean) => void;
   setOnboardingOpen: (open: boolean) => void;
+
+  // PWA Actions
+  setIsOnline: (online: boolean) => void;
+  setDeferredInstallPrompt: (prompt: any) => void;
+  triggerPwaInstall: () => Promise<boolean>;
+  downloadOfflinePack: () => Promise<void>;
+
+  // EV Actions
+  setSelectedEVStationId: (id: string | null) => void;
+  setEvFilterCorridor: (corridor: string) => void;
+  setEvFilterFastOnly: (fast: boolean) => void;
+  setEvFilterDgBackupOnly: (dg: boolean) => void;
 
   // Auth & Profile Actions
   setLoggedInUser: (profile: UserPassportProfile) => void;
@@ -62,7 +87,7 @@ function getSavedProfile(): UserPassportProfile {
 }
 
 export const useAtlasStore = create<AtlasState>((set, get) => ({
-  currentMode: 'passport', // Boot straight to the viral passport experience!
+  currentMode: 'passport',
   theme: 'dark',
   searchQuery: '',
   selectedDistrict: null,
@@ -71,6 +96,19 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
   isAuthModalOpen: false,
   isOnboardingOpen: false,
   userProfile: getSavedProfile(),
+
+  // PWA initial state
+  isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+  isInstallPromptAvailable: false,
+  deferredInstallPrompt: null,
+  offlinePackProgress: 0,
+  offlinePackReady: typeof localStorage !== 'undefined' ? localStorage.getItem('gujarat_offline_pack_ready') === 'true' : false,
+
+  // EV initial state
+  selectedEVStationId: null,
+  evFilterCorridor: 'all',
+  evFilterFastOnly: false,
+  evFilterDgBackupOnly: false,
 
   setMode: (mode) => set({ currentMode: mode }),
 
@@ -88,6 +126,53 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
 
   setOnboardingOpen: (open) => set({ isOnboardingOpen: open }),
 
+  // PWA & Offline methods
+  setIsOnline: (online) => set({ isOnline: online }),
+
+  setDeferredInstallPrompt: (prompt) => set({ deferredInstallPrompt: prompt, isInstallPromptAvailable: Boolean(prompt) }),
+
+  triggerPwaInstall: async () => {
+    const prompt = get().deferredInstallPrompt;
+    if (!prompt) return false;
+    prompt.prompt();
+    const { outcome } = await prompt.userChoice;
+    if (outcome === 'accepted') {
+      set({ deferredInstallPrompt: null, isInstallPromptAvailable: false });
+      return true;
+    }
+    return false;
+  },
+
+  downloadOfflinePack: async () => {
+    set({ offlinePackProgress: 10 });
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'DOWNLOAD_OFFLINE_PACK' });
+    }
+    // Simulate / step progress gracefully
+    for (let p = 25; p <= 100; p += 25) {
+      await new Promise(r => setTimeout(r, 200));
+      set({ offlinePackProgress: p });
+    }
+    localStorage.setItem('gujarat_offline_pack_ready', 'true');
+    set({ offlinePackReady: true });
+
+    try {
+      confetti({
+        particleCount: 60,
+        spread: 60,
+        origin: { y: 0.6 },
+        colors: ['#10b981', '#34d399', '#059669', '#f59e0b']
+      });
+    } catch (e) {}
+  },
+
+  // EV Corridor methods
+  setSelectedEVStationId: (id) => set({ selectedEVStationId: id }),
+  setEvFilterCorridor: (corridor) => set({ evFilterCorridor: corridor }),
+  setEvFilterFastOnly: (fast) => set({ evFilterFastOnly: fast }),
+  setEvFilterDgBackupOnly: (dg) => set({ evFilterDgBackupOnly: dg }),
+
+  // User Auth & Passport methods
   setLoggedInUser: (profile) => {
     localStorage.setItem('gujarat_passport_profile', JSON.stringify(profile));
     set({ userProfile: profile, isAuthModalOpen: false });
@@ -116,7 +201,6 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
     set({ userProfile: updated, isOnboardingOpen: false });
     syncProfileToFirestore(updated);
 
-    // Confetti for setting home district
     try {
       confetti({
         particleCount: 90,
@@ -146,7 +230,6 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
     set({ userProfile: updated });
     syncProfileToFirestore(updated);
 
-    // 🎊 Trigger cinematic confetti celebration
     try {
       confetti({
         particleCount: 80,
@@ -154,9 +237,7 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
         origin: { y: 0.6 },
         colors: ['#f59e0b', '#d97706', '#b45309', '#ef4444', '#10b981']
       });
-    } catch (e) {
-      // Confetti fallback
-    }
+    } catch (e) {}
 
     return { 
       success: true, 

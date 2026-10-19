@@ -3,7 +3,8 @@ export type AtlasMode =
   | 'places'
   | 'unfiltered'
   | 'passport'
-  | 'infrastructure';
+  | 'infrastructure'
+  | 'ev';
 
 export type DistrictRegion = 
   | 'Kachchh' 

@@ -5,6 +5,8 @@ import { GujaratPassport } from './components/passport/GujaratPassport';
 import { AtlasMap } from './components/map/AtlasMap';
 import { UnfilteredStoriesView } from './components/unfiltered/UnfilteredStoriesView';
 import { InfrastructureDirectoryView } from './components/infrastructure/InfrastructureDirectoryView';
+import { EVHighwayRadar } from './components/ev/EVHighwayRadar';
+import { OfflineBanner } from './components/pwa/OfflineBanner';
 import { ShareableStoryCardModal } from './components/share/ShareableStoryCardModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { OnboardingModal } from './components/auth/OnboardingModal';
@@ -18,6 +20,9 @@ export const App: React.FC = () => {
       {/* Sticky Navigation Header */}
       <Header />
 
+      {/* PWA & Offline Roadtrip Status Banner */}
+      <OfflineBanner />
+
       {/* Main View Container */}
       <main className="relative">
         <AnimatePresence mode="wait">
@@ -30,6 +35,18 @@ export const App: React.FC = () => {
               transition={{ duration: 0.25 }}
             >
               <GujaratPassport />
+            </motion.div>
+          )}
+
+          {currentMode === 'ev' && (
+            <motion.div
+              key="ev"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25 }}
+            >
+              <EVHighwayRadar />
             </motion.div>
           )}
 

@@ -1,0 +1,26 @@
+{
+  "name": "Gujarat Atlas — Cultural Passport & Roadtrip Companion",
+  "short_name": "Gujarat Atlas",
+  "description": "Offline-ready 34-district travel passport, unvarnished stories, and highway EV fast-charger radar across Gujarat.",
+  "start_url": "/app.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["travel", "navigation", "utilities", "culture"]
+}

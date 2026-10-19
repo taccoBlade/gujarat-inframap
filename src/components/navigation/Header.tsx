@@ -13,7 +13,8 @@ import {
   LogOut, 
   Share2, 
   MapPin, 
-  ChevronDown 
+  ChevronDown,
+  Zap
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -45,6 +46,7 @@ export const Header: React.FC = () => {
 
   const navItems: { mode: AtlasMode; label: string; icon: React.ReactNode; badge?: string }[] = [
     { mode: 'passport', label: 'Gujarat Passport', icon: <Award className="w-4 h-4 text-amber-400" />, badge: `${userProfile.collectedStampIds.length}/34` },
+    { mode: 'ev', label: 'EV Highway Radar', icon: <Zap className="w-4 h-4 text-emerald-400" />, badge: '60-180kW' },
     { mode: 'explore', label: 'Atlas Map', icon: <Map className="w-4 h-4 text-sky-400" /> },
     { mode: 'unfiltered', label: 'Unfiltered Stories', icon: <Sparkles className="w-4 h-4 text-rose-400" />, badge: '45' },
     { mode: 'places', label: 'Destinations', icon: <Compass className="w-4 h-4 text-emerald-400" /> },
