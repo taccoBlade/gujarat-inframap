@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAtlasStore } from './stores/useAtlasStore';
 import { Header } from './components/navigation/Header';
 import { GujaratPassport } from './components/passport/GujaratPassport';
@@ -14,6 +14,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export const App: React.FC = () => {
   const { currentMode, theme } = useAtlasStore();
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.body.classList.toggle('theme-light', theme === 'light');
+    }
+  }, [theme]);
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#0c1524] text-[#f7f2e8]' : 'bg-[#f7f2e8] text-[#282823]'} font-sans`}>

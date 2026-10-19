@@ -146,9 +146,11 @@ async function runVerification() {
     mobile: false
   });
 
-  // Navigate to React App
+  // Navigate and force reload React App
   await client.send('Page.navigate', { url: 'http://localhost:3000/' });
-  await sleep(1500);
+  await sleep(1000);
+  await client.send('Page.reload');
+  await sleep(2000);
 
   // --- CHECK 1: Header Traditional Toran & Cultural Branding ---
   console.log('\n--- CHECK 1: Header Traditional Gujarati Branding ---');
@@ -248,7 +250,7 @@ async function runVerification() {
     const pin = document.querySelector('.tourist-pin');
     if (pin) pin.click();
   })()`);
-  await sleep(600);
+  await sleep(1500);
   await client.screenshot('react_ethnic_atlas_map_with_pins.png');
 
   // --- CHECK 5: Gujarat Passport Cultural Aesthetic ---
@@ -313,6 +315,35 @@ async function runVerification() {
     return { hasEvReadyChip, hasDeadZoneChip };
   })()`);
   console.log(`  [PASS] Destinations embed EV reachability chips: EV Ready=${destinationEvChipCheck.hasEvReadyChip}, Dead Zone=${destinationEvChipCheck.hasDeadZoneChip}`);
+
+  // --- CHECK 7: Light Theme Authentic Off-White Kagdi Paper Visual Check ---
+  console.log('\n--- CHECK 7: Light Theme Authentic Off-White Kagdi Paper ---');
+  // Switch to light theme
+  await client.eval(`(() => {
+    if (window.useAtlasStore.getState().theme !== 'light') {
+      window.useAtlasStore.getState().toggleTheme();
+    }
+  })()`);
+  await client.eval(`window.useAtlasStore.getState().setMode('places')`);
+  await sleep(1000);
+  await client.screenshot('react_ethnic_light_theme_destinations.png');
+
+  await client.eval(`window.useAtlasStore.getState().setMode('explore')`);
+  await sleep(1000);
+  await client.eval(`(() => {
+    const pin = document.querySelector('.tourist-pin');
+    if (pin) pin.click();
+  })()`);
+  await sleep(1500);
+  await client.screenshot('react_ethnic_light_theme_map.png');
+
+  // Switch back to dark theme
+  await client.eval(`(() => {
+    if (window.useAtlasStore.getState().theme !== 'dark') {
+      window.useAtlasStore.getState().toggleTheme();
+    }
+  })()`);
+  await sleep(400);
 
   console.log('\n======================================================================');
   console.log('ALL GUJARAT ETHNIC REDESIGN & EMBEDDED EV CHECKS PASSED 100%!');

@@ -46,7 +46,7 @@ export const VERIFIED_TOURIST_DESTINATIONS: TouristDestination[] = [
     "rulesRestrictions": "Online pre-booking mandatory on official portal; outside food prohibited inside statue complex; drone flying strictly prohibited without statutory permit",
     "sourceName": "Statue of Unity Official Portal (SOU Tourism Authority)",
     "sourceUrl": "https://statueofunity.in",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/0/07/Statue_of_Unity.jpg",
+    "image": "/images/destinations/statue-of-unity.jpg",
     "isLesserKnown": false,
     "coordinates": [
       21.838,

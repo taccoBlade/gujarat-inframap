@@ -4,6 +4,7 @@ import { useAtlasStore } from '../../stores/useAtlasStore';
 import { GUJARAT_34_DISTRICTS } from '../../data/passport-districts';
 import { VERIFIED_TOURIST_DESTINATIONS } from '../../data/tourist-destinations';
 import { GUJARAT_HIGHWAY_EV_STATIONS } from '../../data/ev-stations';
+import { getRegionalCulture } from '../../utils/cultural-regions';
 import unfilteredStoriesRaw from '../../../data/gujarat_unfiltered.json';
 import { 
   Award, 
@@ -206,28 +207,39 @@ export const AtlasMap: React.FC = () => {
             iconAnchor: [18, 18],
           });
 
+          const culture = getRegionalCulture(d.region || d.name);
           const m = L.marker(d.coordinates, { icon }).addTo(districtLayerRef.current!);
           m.bindPopup(`
-            <div style="font-family: sans-serif; min-width: 220px; color: #1c1917; padding: 2px;">
-              <div style="height: 3px; background: linear-gradient(90deg, #9a3412, #d97706); border-radius: 2px; margin-bottom: 6px;"></div>
-              <span style="font-size: 10px; font-weight: 800; color: #9a3412; text-transform: uppercase; font-family: monospace;">
-                ${d.region} • ${isStamped ? '✓ STAMPED' : 'UNVISITED'}
-              </span>
-              <h3 style="margin: 2px 0; font-size: 15px; font-weight: 800; color: #0f172a;">
-                ${d.name} (${d.gujaratiName})
-              </h3>
-              <p style="margin: 0 0 8px 0; font-size: 12px; font-weight: 600; color: #57534e;">
-                📍 ${d.landmark}
-              </p>
-              <button onclick="window.claimFromMap('${d.id}')" style="
-                width: 100%; padding: 7px; background: ${isStamped ? '#15803d' : '#d97706'};
-                color: #fff; font-weight: bold; font-size: 11px; border: 1.5px solid #000;
-                border-radius: 6px; cursor: pointer; box-shadow: 1px 1px 0px #000;
-              ">
-                ${isStamped ? '✓ Stamped in Passport' : 'Stamp This District'}
-              </button>
+            <div style="font-family: 'Manrope', -apple-system, sans-serif; min-width: 260px; max-width: 300px; color: #1c1917; overflow: hidden; border-radius: 10px;">
+              <div style="height: 4px; background: ${culture.borderTrimStyle}; width: 100%;"></div>
+              <div style="padding: 12px 14px 14px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                  <span style="font-size: 10px; font-weight: 800; color: #9a3412; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
+                    ${culture.primaryIcon} ${d.region} • ${isStamped ? '✓ STAMPED' : 'UNVISITED'}
+                  </span>
+                  <span style="font-size: 9px; font-weight: 600; color: #78716c; font-family: 'Noto Sans Gujarati', sans-serif;">
+                    ${culture.gujaratiTitle}
+                  </span>
+                </div>
+                <h3 style="margin: 2px 0 3px 0; font-size: 16px; font-weight: 800; color: #0f172a; font-family: 'Lora', serif;">
+                  ${d.name} <span style="font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600; color: #b45309; font-size: 14px;">(${d.gujaratiName})</span>
+                </h3>
+                <p style="margin: 2px 0 8px 0; font-size: 11px; font-weight: 600; color: #57534e; line-height: 1.35;">
+                  📍 ${d.landmark}
+                </p>
+                <div style="font-size: 10px; color: #78716c; background: #f5f0e6; padding: 4px 8px; border-radius: 5px; border: 1px solid #e7dfd3; margin-bottom: 10px; font-family: monospace;">
+                  ${culture.culturalTag}
+                </div>
+                <button onclick="window.claimFromMap('${d.id}')" style="
+                  width: 100%; padding: 8px; background: ${isStamped ? '#15803d' : 'linear-gradient(135deg, #d97706 0%, #b45309 100%)'};
+                  color: #fff; font-weight: 800; font-size: 11px; border: 1px solid ${isStamped ? '#14532d' : '#78350f'};
+                  border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+                ">
+                  ${isStamped ? '✓ Stamped in Digital Passport' : '★ Stamp This District in Passport'}
+                </button>
+              </div>
             </div>
-          `);
+          `, { className: 'ethnic-leaflet-popup', maxWidth: 310, minWidth: 260 });
         });
       }
     }
@@ -262,32 +274,80 @@ export const AtlasMap: React.FC = () => {
             iconAnchor: [18, 18],
           });
 
+          const culture = getRegionalCulture(place.district || place.region);
+          const isDeadZone = place.district.toLowerCase() === 'kachchh' || place.district.toLowerCase() === 'the dangs';
+          const timingsDisplay = place.timings ? place.timings.split('(')[0].trim() : '08:00 – 18:00';
+          const feeDisplay = place.entryFee ? place.entryFee.split(';')[0].replace('Basic Entry: ', '').trim() : 'Free / ASI';
+
           const m = L.marker(place.coordinates, { icon }).addTo(touristLayerRef.current!);
           m.bindPopup(`
-            <div style="font-family: sans-serif; min-width: 240px; max-width: 270px; color: #1c1917; padding: 2px;">
-              <div style="height: 3px; background: linear-gradient(90deg, #b45309, #d97706); border-radius: 2px; margin-bottom: 6px;"></div>
-              <span style="font-size: 10px; font-weight: 800; color: #9a3412; text-transform: uppercase; font-family: monospace;">
-                ${place.district} • ASI &amp; Tourism Landmark
-              </span>
-              <h3 style="margin: 2px 0 4px 0; font-size: 15px; font-weight: 800; color: #0f172a;">
-                ${place.name}
-              </h3>
-              ${place.image ? `<img src="${place.image}" style="width: 100%; height: 110px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; border: 1px solid #e7e5e4;" />` : ''}
-              <p style="margin: 0 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
-                ${place.summary.slice(0, 115)}...
-              </p>
-              <div style="font-size: 10px; color: #78716c; margin-bottom: 8px; font-family: monospace;">
-                🕒 ${place.timings || '08:00 - 18:00'} | 🎟️ ${place.entryFee || 'Free'}
+            <div style="font-family: 'Manrope', -apple-system, sans-serif; min-width: 285px; max-width: 325px; color: #1c1917; overflow: hidden; border-radius: 10px;">
+              <div style="height: 4px; background: ${culture.borderTrimStyle}; width: 100%;"></div>
+              
+              <div style="padding: 10px 14px 12px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                  <span style="font-size: 10px; font-weight: 800; color: #9a3412; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
+                    ${culture.primaryIcon} ${place.district} • ASI &amp; Tourism
+                  </span>
+                  <span style="font-size: 9px; font-weight: 600; color: #78716c; font-family: 'Noto Sans Gujarati', sans-serif;">
+                    ${culture.gujaratiTitle}
+                  </span>
+                </div>
+
+                <h3 style="margin: 0 0 4px 0; font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.25; font-family: 'Lora', serif;">
+                  ${place.name}
+                </h3>
+
+                ${place.image ? `
+                  <div style="position: relative; width: 100%; height: 155px; overflow: hidden; border-radius: 8px; margin: 6px 0; background: #1c1917; border: 1px solid #e7dfd3;">
+                    <img 
+                      src="${place.image}" 
+                      alt="${place.name}" 
+                      referrerpolicy="no-referrer"
+                      style="width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block;" 
+                      onerror="this.onerror=null; this.src='/images/destinations/statue-of-unity.jpg';"
+                    />
+                    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, transparent 40%, rgba(0,0,0,0.65) 100%); pointer-events: none;"></div>
+                    <div style="position: absolute; bottom: 6px; left: 8px; right: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 10px; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">
+                      <span>🏛️ ${place.district}</span>
+                      <span style="background: rgba(0,0,0,0.65); padding: 1.5px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.25); font-size: 9px; font-family: monospace;">${place.categoryLabel || 'Heritage'}</span>
+                    </div>
+                  </div>
+                ` : ''}
+
+                <p style="margin: 4px 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
+                  ${place.summary.slice(0, 115)}...
+                </p>
+
+                <!-- Key Logistics Chips -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; font-size: 10px; font-family: monospace;">
+                  <div style="background: #f5f0e6; padding: 4px 6px; border-radius: 5px; border: 1px solid #e7dfd3; color: #44403c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    🕒 ${timingsDisplay}
+                  </div>
+                  <div style="background: #f5f0e6; padding: 4px 6px; border-radius: 5px; border: 1px solid #e7dfd3; color: #44403c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    🎟️ ${feeDisplay}
+                  </div>
+                </div>
+
+                <!-- EV Reachability Status -->
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 3px 7px; border-radius: 5px; background: ${isDeadZone ? '#fef2f2' : '#f0fdf4'}; border: 1px solid ${isDeadZone ? '#fecaca' : '#bbf7d0'}; font-size: 10px; font-family: monospace; margin-bottom: 8px;">
+                  <span style="color: ${isDeadZone ? '#991b1b' : '#166534'}; font-weight: 700;">
+                    ${isDeadZone ? '⚠️ Remote Dead Zone: Top-up battery' : '⚡ EV Ready: Fast Charger < 45km'}
+                  </span>
+                  <span style="font-size: 9px; color: #64748b;">${isDeadZone ? 'Remote' : '60-180kW'}</span>
+                </div>
+
+                <button onclick="window.viewDestinationsFromMap()" style="
+                  width: 100%; padding: 8px; background: linear-gradient(135deg, #b45309 0%, #9a3412 100%);
+                  color: #fff; font-weight: 800; font-size: 11px; border: 1px solid #78350f;
+                  border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+                  display: flex; align-items: center; justify-content: center; gap: 4px;
+                ">
+                  <span>Explore Destination Details</span> <span>→</span>
+                </button>
               </div>
-              <button onclick="window.viewDestinationsFromMap()" style="
-                width: 100%; padding: 7px; background: #9a3412; color: #fff;
-                font-weight: bold; font-size: 11px; border: 1.5px solid #000;
-                border-radius: 6px; cursor: pointer; box-shadow: 1px 1px 0px #000;
-              ">
-                Explore Destination Details →
-              </button>
             </div>
-          `);
+          `, { className: 'ethnic-leaflet-popup', maxWidth: 325, minWidth: 285 });
         });
       }
     }
@@ -323,33 +383,61 @@ export const AtlasMap: React.FC = () => {
             iconAnchor: [18, 18],
           });
 
+          const culture = getRegionalCulture(story.district);
           const m = L.marker(coords, { icon }).addTo(storyLayerRef.current!);
           m.bindPopup(`
-            <div style="font-family: sans-serif; min-width: 240px; max-width: 270px; color: #1c1917; padding: 2px;">
-              <div style="height: 3px; background: linear-gradient(90deg, #991b1b, #f59e0b); border-radius: 2px; margin-bottom: 6px;"></div>
-              <span style="font-size: 10px; font-weight: 800; color: #991b1b; text-transform: uppercase; font-family: monospace;">
-                ${story.district} • Unfiltered Dossier
-              </span>
-              <h3 style="margin: 2px 0 2px 0; font-size: 14px; font-weight: 800; color: #0f172a;">
-                ${story.name}
-              </h3>
-              ${story.gujaratiName ? `<div style="font-size: 11px; color: #b45309; margin-bottom: 4px; font-family: 'Noto Sans Gujarati'; font-weight: 600;">${story.gujaratiName}</div>` : ''}
-              ${story.imageUrl ? `<img src="${story.imageUrl}" style="width: 100%; height: 105px; object-fit: cover; border-radius: 6px; margin-bottom: 6px; border: 1px solid #e7e5e4;" />` : ''}
-              <p style="margin: 0 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
-                ${story.tagline}
-              </p>
-              <div style="padding: 5px 7px; background: #fdfbf7; border-left: 3px solid #991b1b; border: 1px solid #e7e5e4; border-left-width: 3px; font-size: 10px; color: #1c1917; margin-bottom: 8px;">
-                <strong>Truth:</strong> ${story.theGroundReality.slice(0, 95)}...
+            <div style="font-family: 'Manrope', -apple-system, sans-serif; min-width: 285px; max-width: 325px; color: #1c1917; overflow: hidden; border-radius: 10px;">
+              <div style="height: 4px; background: ${culture.borderTrimStyle}; width: 100%;"></div>
+
+              <div style="padding: 10px 14px 12px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                  <span style="font-size: 10px; font-weight: 800; color: #991b1b; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
+                    ${culture.primaryIcon} ${story.district} • Unfiltered Dossier
+                  </span>
+                  <span style="font-size: 9px; font-weight: 600; color: #78716c; font-family: 'Noto Sans Gujarati', sans-serif;">
+                    ${culture.gujaratiTitle}
+                  </span>
+                </div>
+
+                <h3 style="margin: 0 0 2px 0; font-size: 15px; font-weight: 800; color: #0f172a; font-family: 'Lora', serif;">
+                  ${story.name}
+                </h3>
+                ${story.gujaratiName ? `<div style="font-size: 11px; color: #b45309; margin-bottom: 4px; font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600;">${story.gujaratiName}</div>` : ''}
+
+                ${story.imageUrl ? `
+                  <div style="position: relative; width: 100%; height: 145px; overflow: hidden; border-radius: 8px; margin: 6px 0; background: #1c1917; border: 1px solid #e7dfd3;">
+                    <img 
+                      src="${story.imageUrl}" 
+                      alt="${story.name}" 
+                      style="width: 100%; height: 100%; object-fit: cover; object-position: center 25%; display: block;" 
+                      onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1599837565318-67429bde7162?w=800&auto=format&fit=crop&q=80';"
+                    />
+                    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.65) 100%); pointer-events: none;"></div>
+                    <div style="position: absolute; bottom: 6px; left: 8px; font-size: 9px; font-family: monospace; background: rgba(0,0,0,0.7); color: #fde047; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(253,224,71,0.3);">
+                      ⚖️ Forensic Ground Reality
+                    </div>
+                  </div>
+                ` : ''}
+
+                <p style="margin: 4px 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
+                  ${story.tagline}
+                </p>
+
+                <div style="padding: 6px 8px; background: #fdfbf7; border-left: 3px solid #991b1b; border: 1px solid #e7dfd3; border-left-width: 3px; font-size: 10px; color: #1c1917; margin-bottom: 8px; border-radius: 4px;">
+                  <strong style="color: #991b1b;">Ground Reality:</strong> ${story.theGroundReality.slice(0, 95)}...
+                </div>
+
+                <button onclick="window.viewStoriesFromMap()" style="
+                  width: 100%; padding: 8px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+                  color: #fde047; font-weight: 800; font-size: 11px; border: 1px solid #991b1b;
+                  border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                  display: flex; align-items: center; justify-content: center; gap: 4px;
+                ">
+                  <span>Read Full Folklore vs Reality</span> <span>→</span>
+                </button>
               </div>
-              <button onclick="window.viewStoriesFromMap()" style="
-                width: 100%; padding: 7px; background: #1e293b; color: #fff;
-                font-weight: bold; font-size: 11px; border: 1.5px solid #000;
-                border-radius: 6px; cursor: pointer; box-shadow: 1px 1px 0px #000;
-              ">
-                Read Full Folklore vs Reality →
-              </button>
             </div>
-          `);
+          `, { className: 'ethnic-leaflet-popup', maxWidth: 325, minWidth: 285 });
         });
       }
     }
@@ -393,40 +481,55 @@ export const AtlasMap: React.FC = () => {
 
           const m = L.marker(station.coordinates, { icon }).addTo(evLayerRef.current!);
           m.bindPopup(`
-            <div style="font-family: sans-serif; min-width: 240px; color: #1c1917; padding: 2px;">
-              <div style="height: 3px; background: linear-gradient(90deg, #15803d, #ca8a04); border-radius: 2px; margin-bottom: 6px;"></div>
-              <span style="font-size: 10px; font-weight: 800; color: #15803d; text-transform: uppercase; font-family: monospace;">
-                ${station.network} • ${station.totalPowerKw} kW DC Fast
-              </span>
-              <h3 style="margin: 2px 0 2px 0; font-size: 14px; font-weight: 800; color: #0f172a;">
-                ${station.name}
-              </h3>
-              <p style="margin: 0 0 4px 0; font-size: 11px; color: #b45309; font-family: 'Noto Sans Gujarati'; font-weight: 600;">
-                ${station.gujaratiName}
-              </p>
-              <p style="margin: 0 0 6px 0; font-size: 11px; color: #44403c;">
-                📍 ${station.locationDesc}
-              </p>
-              <div style="font-size: 10px; color: #15803d; font-weight: bold; margin-bottom: 4px;">
-                ✓ ${station.reliabilityScore}% Gun Reliability • ${station.hasDgBackup ? '⚡ DG Generator Backup' : '⚠️ No DG Backup'}
-              </div>
-              ${station.criticalRoadtripWarning ? `
-                <div style="padding: 4px 6px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; font-size: 10px; color: #991b1b; margin-bottom: 6px;">
-                  ⚠️ ${station.criticalRoadtripWarning}
+            <div style="font-family: 'Manrope', -apple-system, sans-serif; min-width: 275px; max-width: 310px; color: #1c1917; overflow: hidden; border-radius: 10px;">
+              <div style="height: 4px; background: linear-gradient(90deg, #15803d 0%, #ca8a04 50%, #166534 100%); width: 100%;"></div>
+
+              <div style="padding: 10px 14px 12px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                  <span style="font-size: 10px; font-weight: 800; color: #15803d; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
+                    ⚡ ${station.network} • ${station.totalPowerKw} kW DC Fast
+                  </span>
+                  <span style="font-size: 9px; font-weight: 700; color: #854d0e; background: #fef9c3; padding: 1px 5px; border-radius: 3px; border: 1px solid #fde047;">
+                    ${station.corridor}
+                  </span>
                 </div>
-              ` : ''}
-              <div style="font-size: 10px; color: #57534e; margin-bottom: 6px;">
-                Tariff: <strong>${station.tariffPerKwh}</strong> | Food: ${station.amenities.food}
+
+                <h3 style="margin: 0 0 2px 0; font-size: 14px; font-weight: 800; color: #0f172a; font-family: 'Lora', serif;">
+                  ${station.name}
+                </h3>
+                <p style="margin: 0 0 4px 0; font-size: 11px; color: #b45309; font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600;">
+                  ${station.gujaratiName}
+                </p>
+                <p style="margin: 0 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
+                  📍 ${station.locationDesc}
+                </p>
+
+                <div style="font-size: 10px; color: #15803d; font-weight: bold; margin-bottom: 6px; background: #f0fdf4; padding: 4px 6px; border-radius: 4px; border: 1px solid #bbf7d0;">
+                  ✓ ${station.reliabilityScore}% Gun Reliability • ${station.hasDgBackup ? '⚡ DG Generator Backup' : '⚠️ No DG Backup'}
+                </div>
+
+                ${station.criticalRoadtripWarning ? `
+                  <div style="padding: 4px 6px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; font-size: 10px; color: #991b1b; margin-bottom: 6px;">
+                    ⚠️ ${station.criticalRoadtripWarning}
+                  </div>
+                ` : ''}
+
+                <div style="font-size: 10px; color: #57534e; margin-bottom: 8px; font-family: monospace;">
+                  Tariff: <strong>${station.tariffPerKwh}</strong> | Food: ${station.amenities.food}
+                </div>
+
+                <a href="https://www.google.com/maps/dir/?api=1&destination=${station.coordinates[0]},${station.coordinates[1]}" target="_blank" style="
+                  display: flex; align-items: center; justify-content: center; gap: 4px;
+                  width: 100%; box-sizing: border-box; padding: 8px;
+                  background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+                  color: #fff; font-weight: 800; font-size: 11px; text-decoration: none;
+                  border-radius: 6px; border: 1px solid #14532d; box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+                ">
+                  <span>Open in Google Maps Navigation</span> <span>↗</span>
+                </a>
               </div>
-              <a href="https://www.google.com/maps/dir/?api=1&destination=${station.coordinates[0]},${station.coordinates[1]}" target="_blank" style="
-                display: block; text-align: center; width: 100%; box-sizing: border-box; padding: 7px;
-                background: #15803d; color: #fff; font-weight: bold; font-size: 11px;
-                text-decoration: none; border-radius: 6px; border: 1.5px solid #000; box-shadow: 1px 1px 0px #000;
-              ">
-                Navigate in Maps →
-              </a>
             </div>
-          `);
+          `, { className: 'ethnic-leaflet-popup', maxWidth: 300, minWidth: 260 });
         });
       }
     }

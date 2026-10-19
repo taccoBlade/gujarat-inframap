@@ -53,7 +53,11 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-[#0c1524]/95 backdrop-blur-md border-b-2 border-amber-600/40 text-[#f7f2e8] shadow-2xl">
+    <header className={`sticky top-0 z-40 backdrop-blur-md border-b-2 transition-colors duration-200 shadow-xl ${
+      theme === 'dark' 
+        ? 'bg-[#0c1524]/95 border-amber-600/40 text-[#f7f2e8]' 
+        : 'bg-[#FDFBF7]/95 border-[#D8C3A5] text-[#282823]'
+    }`}>
       {/* Traditional Gujarati Toran Trim */}
       <div className="ethnic-toran-trim w-full" />
 
@@ -70,21 +74,25 @@ export const Header: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="font-extrabold tracking-tight text-lg text-white font-['Outfit']">
-                Gujarat <span className="text-amber-400">Atlas</span>
+              <span className={`font-extrabold tracking-tight text-lg font-['Outfit'] ${theme === 'dark' ? 'text-white' : 'text-[#1c1917]'}`}>
+                Gujarat <span className="text-amber-600">Atlas</span>
               </span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded uppercase tracking-wider font-mono">
+              <span className="text-[10px] font-bold px-1.5 py-0.5 bg-amber-500/20 text-amber-600 border border-amber-500/40 rounded uppercase tracking-wider font-mono">
                 Pravas
               </span>
             </div>
-            <span className="text-[11px] text-amber-200/70 font-['Noto_Sans_Gujarati']">
+            <span className={`text-[11px] font-['Noto_Sans_Gujarati'] ${theme === 'dark' ? 'text-amber-200/70' : 'text-[#78716c]'}`}>
               ગુજરાત ડિજિટલ પાસપોર્ટ &amp; એટલાસ
             </span>
           </div>
         </div>
 
         {/* Primary Mode Navigation */}
-        <nav className="hidden md:flex items-center gap-1.5 bg-[#121c2e] p-1.5 rounded-xl border border-amber-600/30 shadow-inner">
+        <nav className={`hidden md:flex items-center gap-1.5 p-1.5 rounded-xl border shadow-inner ${
+          theme === 'dark' 
+            ? 'bg-[#121c2e] border-amber-600/30' 
+            : 'bg-[#EDE5D8] border-[#D8C3A5]'
+        }`}>
           {navItems.map((item) => {
             const isActive = currentMode === item.mode;
             return (
@@ -94,14 +102,20 @@ export const Header: React.FC = () => {
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all relative ${
                   isActive
                     ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-[2px_2px_0px_#78350f] translate-y-[-1px]'
-                    : 'text-amber-100/80 hover:text-white hover:bg-amber-950/40'
+                    : theme === 'dark'
+                      ? 'text-amber-100/80 hover:text-white hover:bg-amber-950/40'
+                      : 'text-[#44403c] hover:text-[#1c1917] hover:bg-[#E2D6C3]'
                 }`}
               >
                 {item.icon}
                 <span>{item.label}</span>
                 {item.badge && (
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
-                    isActive ? 'bg-black/25 text-black' : 'bg-slate-900 text-amber-300 border border-amber-600/40'
+                    isActive 
+                      ? 'bg-black/25 text-black' 
+                      : theme === 'dark'
+                        ? 'bg-slate-900 text-amber-300 border border-amber-600/40'
+                        : 'bg-[#FDFBF7] text-[#9a3412] border border-[#D8C3A5]'
                   }`}>
                     {item.badge}
                   </span>
@@ -117,10 +131,14 @@ export const Header: React.FC = () => {
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
-            className="w-9 h-9 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-500 transition-colors"
+            className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors ${
+              theme === 'dark'
+                ? 'bg-slate-900 border-slate-700 text-slate-300 hover:text-white hover:border-slate-500'
+                : 'bg-[#EDE5D8] border-[#D8C3A5] text-[#282823] hover:border-[#9a3412]'
+            }`}
             title="Toggle Day/Night View"
           >
-            {theme === 'dark' ? <Moon className="w-4 h-4 text-amber-400" /> : <Sun className="w-4 h-4 text-amber-500" />}
+            {theme === 'dark' ? <Moon className="w-4 h-4 text-amber-400" /> : <Sun className="w-4 h-4 text-amber-600" />}
           </button>
 
           {/* User Auth / Profile Section */}

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { GUJARAT_34_DISTRICTS } from '../../data/passport-districts';
 import { DistrictRegion } from '../../types/atlas';
+import { getRegionalCulture } from '../../utils/cultural-regions';
 import { Share2, CheckCircle2, MapPin, Sparkles, Trophy, Lock, Cloud, CloudOff, LogIn } from 'lucide-react';
 
 export const GujaratPassport: React.FC = () => {
@@ -11,7 +12,8 @@ export const GujaratPassport: React.FC = () => {
     claimDistrictStamp, 
     setShareModalOpen, 
     setAuthModalOpen, 
-    setOnboardingOpen 
+    setOnboardingOpen,
+    theme
   } = useAtlasStore();
   const [selectedRegion, setSelectedRegion] = useState<DistrictRegion | 'All'>('All');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -45,7 +47,7 @@ export const GujaratPassport: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 relative text-slate-100">
+    <div className={`max-w-6xl mx-auto px-4 py-8 relative transition-colors duration-200 ${theme === 'dark' ? 'text-slate-100' : 'text-[#282823]'}`}>
       
       {/* Toast Alert */}
       <AnimatePresence>
@@ -109,10 +111,14 @@ export const GujaratPassport: React.FC = () => {
       </div>
 
       {/* Hero Header: Royal Solanki Gujarat Cultural Passport */}
-      <div className="bg-gradient-to-br from-amber-950/70 via-[#121c2e] to-[#0c1524] border-2 border-amber-600/50 rounded-2xl p-6 sm:p-8 mb-8 shadow-2xl relative overflow-hidden">
+      <div className={`border-2 rounded-2xl p-6 sm:p-8 mb-8 shadow-xl relative overflow-hidden transition-colors ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-amber-950/70 via-[#121c2e] to-[#0c1524] border-amber-600/50'
+          : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2E8] to-[#EFE7D8] border-[#D8C3A5]'
+      }`}>
         
         {/* Toran Border Trim on Top */}
-        <div className="ethnic-toran-trim absolute top-0 left-0 right-0" />
+        <div className="ethnic-toran-trim absolute top-0 left-0 right-0 w-full" />
 
         {/* Background decorative Solanki rosette watermark */}
         <div className="absolute -right-12 -bottom-12 w-72 h-72 rounded-full border-8 border-amber-500/10 pointer-events-none flex items-center justify-center">
@@ -122,35 +128,47 @@ export const GujaratPassport: React.FC = () => {
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/20 border border-amber-500/40 rounded-full text-xs font-bold text-amber-300 uppercase tracking-widest font-mono">
-              <Trophy className="w-3.5 h-3.5 text-amber-400" />
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest font-mono border ${
+              theme === 'dark'
+                ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
+                : 'bg-amber-500/10 border-amber-600/30 text-[#9a3412]'
+            }`}>
+              <Trophy className="w-3.5 h-3.5 text-amber-500" />
               <span>OFFICIAL CULTURAL PASSPORT • ગુજરાત પાસપોર્ટ</span>
             </div>
             
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white font-['Lora',serif] tracking-tight">
-              34 Districts <span className="text-amber-400">Explorer Challenge</span>
+            <h1 className={`text-3xl sm:text-4xl font-extrabold font-['Lora',serif] tracking-tight ${
+              theme === 'dark' ? 'text-white' : 'text-[#1c1917]'
+            }`}>
+              34 Districts <span className="text-amber-600">Explorer Challenge</span>
             </h1>
 
-            <p className="text-sm text-amber-100/90 max-w-xl font-['Noto_Sans_Gujarati'] leading-relaxed">
+            <p className={`text-sm max-w-xl font-['Noto_Sans_Gujarati'] leading-relaxed ${
+              theme === 'dark' ? 'text-amber-100/90' : 'text-[#57534e]'
+            }`}>
               ગુજરાતના તમામ ૩૪ જિલ્લાઓની મુલાકાત લો, ડિજિટલ મોહર (Stamp) સંગ્રહિત કરો અને તમારો યાત્રા સ્કોર મિત્રો સાથે શેર કરો.
             </p>
           </div>
 
           {/* User Score & Share Button */}
-          <div className="flex flex-wrap items-center gap-4 bg-[#0c1524]/90 border-2 border-amber-600/40 p-4 rounded-xl shadow-lg">
+          <div className={`flex flex-wrap items-center gap-4 border-2 p-4 rounded-xl shadow-lg ${
+            theme === 'dark'
+              ? 'bg-[#0c1524]/90 border-amber-600/40'
+              : 'bg-[#FDFBF7] border-[#D8C3A5]'
+          }`}>
             
             <div className="flex flex-col text-right">
-              <span className="text-xs text-amber-200/70 uppercase font-mono tracking-wider">Collected</span>
+              <span className={`text-xs uppercase font-mono tracking-wider ${theme === 'dark' ? 'text-amber-200/70' : 'text-[#78716c]'}`}>Collected</span>
               <div className="flex items-baseline gap-1">
-                <span className="text-3xl font-black text-amber-400 font-['Outfit']">{collectedCount}</span>
-                <span className="text-amber-100/50 font-bold">/ 34</span>
-                <span className="text-xs text-amber-300 font-bold ml-1 font-['Noto_Sans_Gujarati']">
+                <span className={`text-3xl font-black font-['Outfit'] ${theme === 'dark' ? 'text-amber-400' : 'text-[#9a3412]'}`}>{collectedCount}</span>
+                <span className={`font-bold ${theme === 'dark' ? 'text-amber-100/50' : 'text-[#78716c]'}`}>/ 34</span>
+                <span className={`text-xs font-bold ml-1 font-['Noto_Sans_Gujarati'] ${theme === 'dark' ? 'text-amber-300' : 'text-amber-600'}`}>
                   ({toGujaratiDigits(collectedCount)}/૩૪)
                 </span>
               </div>
             </div>
 
-            <div className="w-px h-10 bg-amber-600/30 hidden sm:block"></div>
+            <div className={`w-px h-10 hidden sm:block ${theme === 'dark' ? 'bg-amber-600/30' : 'bg-[#D8C3A5]'}`}></div>
 
             <button
               onClick={() => setShareModalOpen(true)}
@@ -165,14 +183,16 @@ export const GujaratPassport: React.FC = () => {
         {/* State Completion Progress Bar */}
         <div className="mt-6 space-y-1.5">
           <div className="flex items-center justify-between text-xs font-mono font-bold">
-            <span className="text-amber-100/70">State Completion Progress: {progressPercent}%</span>
-            <span className="text-amber-400">
+            <span className={theme === 'dark' ? 'text-amber-100/70' : 'text-[#57534e]'}>State Completion Progress: {progressPercent}%</span>
+            <span className="text-amber-600">
               {progressPercent === 100 
                 ? '🏆 સંપૂર્ણ ગુજરાત અનલૉક!' 
                 : `${34 - collectedCount} districts remaining to unlock Gold Badge`}
             </span>
           </div>
-          <div className="w-full h-3 bg-[#0c1524] rounded-full overflow-hidden border border-amber-600/40 p-0.5">
+          <div className={`w-full h-3 rounded-full overflow-hidden border p-0.5 ${
+            theme === 'dark' ? 'bg-[#0c1524] border-amber-600/40' : 'bg-[#EDE5D8] border-[#D8C3A5]'
+          }`}>
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: `${progressPercent}%` }}
@@ -195,7 +215,9 @@ export const GujaratPassport: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all border-2 ${
                 isSelected
                   ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 border-black shadow-[3px_3px_0px_#78350f] translate-y-[-2px]'
-                  : 'bg-[#121c2e] text-amber-100/80 border-amber-600/30 hover:border-amber-500 hover:text-white'
+                  : theme === 'dark'
+                    ? 'bg-[#121c2e] text-amber-100/80 border-amber-600/30 hover:border-amber-500 hover:text-white'
+                    : 'bg-[#EDE5D8] text-[#44403c] border-[#D8C3A5] hover:border-[#9a3412] hover:text-[#1c1917]'
               }`}
             >
               {region} {region === 'All' ? '(34)' : ''}
@@ -209,6 +231,7 @@ export const GujaratPassport: React.FC = () => {
         {filteredDistricts.map((district) => {
           const isCollected = userProfile.collectedStampIds.includes(district.id);
           const isHome = userProfile.homeDistrict === district.id;
+          const culture = getRegionalCulture(district.region || district.name);
 
           return (
             <motion.div
@@ -217,35 +240,48 @@ export const GujaratPassport: React.FC = () => {
               transition={{ type: 'spring', stiffness: 400, damping: 25 }}
               className={`relative rounded-xl border-2 p-5 transition-all flex flex-col justify-between overflow-hidden ${
                 isCollected
-                  ? 'bg-gradient-to-b from-amber-950/40 to-[#121c2e] border-amber-500/80 shadow-[4px_4px_0px_rgba(217,119,6,0.3)]'
-                  : 'bg-[#0f1a2d]/80 border-amber-600/30 hover:border-amber-400/60 opacity-95'
+                  ? theme === 'dark'
+                    ? 'bg-gradient-to-b from-amber-950/40 to-[#121c2e] border-amber-500/80 shadow-[4px_4px_0px_rgba(217,119,6,0.3)]'
+                    : 'bg-gradient-to-b from-amber-50 to-[#FDFBF7] border-amber-600/70 shadow-[4px_4px_0px_rgba(180,83,9,0.25)] text-[#282823]'
+                  : theme === 'dark'
+                    ? 'bg-[#0f1a2d]/80 border-amber-600/30 hover:border-amber-400/60 opacity-95'
+                    : 'bg-[#FDFBF7] border-[#DFD3C3] hover:border-[#9a3412] text-[#282823]'
               }`}
             >
+              {/* Toran top ribbon */}
+              <div style={{ height: '3px', background: culture.borderTrimStyle }} className="w-full absolute top-0 left-0 right-0" />
+
               {/* Top Row: Regional Tag & Rarity */}
-              <div className="flex items-center justify-between gap-2 mb-3">
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#0c1524] text-amber-200 border border-amber-600/30">
-                  {district.region}
+              <div className="flex items-center justify-between gap-2 mb-3 mt-1">
+                <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                  theme === 'dark'
+                    ? 'bg-[#0c1524] text-amber-200 border-amber-600/30'
+                    : 'bg-[#EDE5D8] text-[#9a3412] border-[#D8C3A5]'
+                }`}>
+                  {culture.primaryIcon} {district.region}
                 </span>
 
                 {isHome && (
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 border border-emerald-500/40">
                     🏠 Home District
                   </span>
                 )}
 
-                <span className="text-[10px] font-mono text-amber-100/60">
+                <span className={`text-[10px] font-mono ${theme === 'dark' ? 'text-amber-100/60' : 'text-[#78716c]'}`}>
                   Top {100 - district.rarityPercentile}% rarity
                 </span>
               </div>
 
               {/* District Identity & Stamp Seal */}
-              <div className="flex items-start gap-4 mb-4">
+              <div className="flex items-start gap-4 mb-3">
                 
                 {/* Stamp Icon / Circular Seal */}
                 <div className={`w-16 h-16 rounded-2xl flex-shrink-0 flex items-center justify-center text-3xl border-2 shadow-inner transition-transform ${
                   isCollected
-                    ? 'bg-amber-500/15 border-amber-400 text-amber-300 shadow-[2px_2px_0px_#d97706] rotate-[-4deg]'
-                    : 'bg-[#0c1524]/60 border-dashed border-amber-600/30 text-amber-100/30'
+                    ? 'bg-amber-500/15 border-amber-400 text-amber-500 shadow-[2px_2px_0px_#d97706] rotate-[-4deg]'
+                    : theme === 'dark'
+                      ? 'bg-[#0c1524]/60 border-dashed border-amber-600/30 text-amber-100/30'
+                      : 'bg-[#EDE5D8]/60 border-dashed border-[#D8C3A5] text-[#78716c]'
                 }`}>
                   {isCollected ? district.icon : <Lock className="w-6 h-6 text-amber-600/40" />}
                 </div>
@@ -253,40 +289,59 @@ export const GujaratPassport: React.FC = () => {
                 {/* Name & Gujarati Script */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2">
-                    <h3 className="font-extrabold text-base text-white tracking-tight font-['Lora',serif] truncate">
+                    <h3 className={`font-extrabold text-base tracking-tight font-['Lora',serif] truncate ${
+                      theme === 'dark' ? 'text-white' : 'text-[#1c1917]'
+                    }`}>
                       {district.name}
                     </h3>
-                    <span className="text-xs font-bold text-amber-400 font-['Noto_Sans_Gujarati']">
+                    <span className="text-xs font-bold text-amber-600 font-['Noto_Sans_Gujarati']">
                       {district.gujaratiName}
                     </span>
                   </div>
 
-                  <p className="text-xs text-amber-100/90 font-semibold line-clamp-1 mt-0.5">
+                  <p className={`text-xs font-semibold line-clamp-1 mt-0.5 ${
+                    theme === 'dark' ? 'text-amber-100/90' : 'text-[#44403c]'
+                  }`}>
                     {district.landmark}
                   </p>
                   
-                  <p className="text-[11px] text-amber-200/60 line-clamp-2 mt-1 leading-snug">
+                  <p className={`text-[11px] line-clamp-2 mt-1 leading-snug ${
+                    theme === 'dark' ? 'text-amber-200/60' : 'text-[#78716c]'
+                  }`}>
                     {district.culturalTitle}
                   </p>
                 </div>
               </div>
 
+              {/* Regional Cultural Craft Tag */}
+              <div className={`text-[10px] font-mono px-2 py-0.5 rounded mb-3 w-fit ${culture.badgeBg} ${culture.textColor} border ${culture.badgeBorder}`}>
+                <span>{culture.culturalTag}</span>
+              </div>
+
               {/* Action Button: Check In / Stamped */}
-              <div className="pt-3 border-t border-amber-600/20 flex items-center justify-between">
-                <span className="text-[11px] text-amber-200/60 flex items-center gap-1 font-mono">
-                  <MapPin className="w-3 h-3 text-amber-400" />
+              <div className={`pt-3 border-t flex items-center justify-between ${
+                theme === 'dark' ? 'border-amber-600/20' : 'border-[#DFD3C3]'
+              }`}>
+                <span className={`text-[11px] flex items-center gap-1 font-mono ${
+                  theme === 'dark' ? 'text-amber-200/60' : 'text-[#78716c]'
+                }`}>
+                  <MapPin className="w-3 h-3 text-amber-500" />
                   HQ: {district.hq}
                 </span>
 
                 {isCollected ? (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-amber-500/20 border border-amber-500/40 text-amber-600 text-xs font-bold">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-amber-500" />
                     <span>Stamped ✓</span>
                   </div>
                 ) : (
                   <button
                     onClick={() => handleStampClick(district.id)}
-                    className="px-3 py-1.5 rounded-lg bg-[#0c1524] hover:bg-gradient-to-r hover:from-amber-500 hover:to-amber-600 text-amber-200 hover:text-slate-950 text-xs font-bold transition-all border border-amber-600/40 hover:border-black hover:shadow-[2px_2px_0px_#000] flex items-center gap-1.5"
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 ${
+                      theme === 'dark'
+                        ? 'bg-[#0c1524] hover:bg-gradient-to-r hover:from-amber-500 hover:to-amber-600 text-amber-200 hover:text-slate-950 border-amber-600/40 hover:border-black hover:shadow-[2px_2px_0px_#000]'
+                        : 'bg-[#EDE5D8] hover:bg-amber-500 text-[#1c1917] hover:text-slate-950 border-[#D8C3A5] hover:border-black hover:shadow-[2px_2px_0px_#000]'
+                    }`}
                   >
                     <span>Stamp Passport</span>
                   </button>

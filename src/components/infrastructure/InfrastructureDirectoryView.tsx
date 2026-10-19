@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useAtlasStore } from '../../stores/useAtlasStore';
 import { Search, MapPin, ExternalLink, Zap } from 'lucide-react';
 
 interface InfraAsset {
@@ -91,6 +92,7 @@ const SAMPLE_INFRA_ASSETS: InfraAsset[] = [
 ];
 
 export const InfrastructureDirectoryView: React.FC = () => {
+  const { theme } = useAtlasStore();
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [query, setQuery] = useState('');
 
@@ -104,32 +106,40 @@ export const InfrastructureDirectoryView: React.FC = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className={`max-w-7xl mx-auto px-4 py-8 transition-colors duration-200 ${theme === 'dark' ? 'text-slate-100' : 'text-[#282823]'}`}>
       
       {/* Header */}
       <div className="mb-8 space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-xs font-bold text-amber-400 font-mono uppercase tracking-wider">
+        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold font-mono uppercase tracking-wider border ${
+          theme === 'dark'
+            ? 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+            : 'bg-amber-500/10 border-amber-600/30 text-[#9a3412]'
+        }`}>
           <Zap className="w-3.5 h-3.5" />
           <span>STATUTORY PUBLIC INFRASTRUCTURE REGISTRY</span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white font-['Outfit']">
-          Gujarat <span className="text-amber-400">Infrastructure Directory</span>
+        <h1 className={`text-3xl sm:text-4xl font-extrabold font-['Outfit'] ${theme === 'dark' ? 'text-white' : 'text-[#1c1917]'}`}>
+          Gujarat <span className="text-amber-600">Infrastructure Directory</span>
         </h1>
-        <p className="text-sm text-slate-300 max-w-xl font-['Lora']">
+        <p className={`text-sm max-w-xl font-['Lora'] ${theme === 'dark' ? 'text-slate-300' : 'text-[#57534e]'}`}>
           Explore 3,337 verified public engineering works across all 34 districts — dams, clean energy hubs, rail corridors, and smart cities.
         </p>
 
         {/* Filter bar */}
         <div className="pt-4 flex flex-wrap items-center justify-between gap-3">
           <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className={`w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 ${theme === 'dark' ? 'text-slate-400' : 'text-[#78716c]'}`} />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by asset or district..."
-              className="w-full pl-9 pr-4 py-2 bg-slate-900 border-2 border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+              className={`w-full pl-9 pr-4 py-2 border-2 rounded-xl text-xs outline-none transition-colors ${
+                theme === 'dark'
+                  ? 'bg-slate-900 border-slate-700 text-white placeholder-slate-500 focus:border-amber-400'
+                  : 'bg-[#F7F2E8] border-[#D8C3A5] text-[#282823] placeholder-[#78716c] focus:border-[#9a3412]'
+              }`}
             />
           </div>
 
@@ -140,8 +150,10 @@ export const InfrastructureDirectoryView: React.FC = () => {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition-all border ${
                   activeCategory === cat
-                    ? 'bg-amber-400 text-slate-950 border-black shadow-[2px_2px_0px_#000]'
-                    : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
+                    ? 'bg-amber-500 text-slate-950 border-black shadow-[2px_2px_0px_#000]'
+                    : theme === 'dark'
+                      ? 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
+                      : 'bg-[#EDE5D8] text-[#44403c] border-[#D8C3A5] hover:border-[#9a3412] hover:text-[#1c1917]'
                 }`}
               >
                 {cat}
@@ -157,12 +169,16 @@ export const InfrastructureDirectoryView: React.FC = () => {
           <motion.article
             key={item.id}
             whileHover={{ y: -4 }}
-            className="bg-slate-900 border-2 border-slate-700 rounded-2xl overflow-hidden shadow-[4px_4px_0px_#000] flex flex-col justify-between"
+            className={`border-2 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between transition-colors ${
+              theme === 'dark'
+                ? 'bg-slate-900 border-slate-700'
+                : 'bg-[#FDFBF7] border-[#DFD3C3] text-[#282823]'
+            }`}
           >
             {/* Media */}
             <div 
-              className="h-48 w-full bg-cover bg-center relative p-3 flex flex-col justify-between"
-              style={{ backgroundImage: `url('${item.imgUrl}')` }}
+              className="h-48 w-full bg-cover relative p-3 flex flex-col justify-between"
+              style={{ backgroundImage: `url('${item.imgUrl}')`, backgroundPosition: 'center 20%' }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-black/50 pointer-events-none" />
               
@@ -179,33 +195,41 @@ export const InfrastructureDirectoryView: React.FC = () => {
             {/* Content */}
             <div className="p-5 flex-1 flex flex-col justify-between">
               <div>
-                <span className="text-xs font-bold text-amber-400 font-['Noto_Sans_Gujarati']">
+                <span className="text-xs font-bold text-amber-600 font-['Noto_Sans_Gujarati']">
                   {item.gujarati}
                 </span>
-                <h3 className="text-lg font-black text-white font-['Outfit'] mt-0.5">
+                <h3 className={`text-lg font-black font-['Outfit'] mt-0.5 ${theme === 'dark' ? 'text-white' : 'text-[#1c1917]'}`}>
                   {item.name}
                 </h3>
-                <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                <p className={`text-xs mt-1 line-clamp-2 leading-relaxed ${theme === 'dark' ? 'text-slate-400' : 'text-[#57534e]'}`}>
                   {item.subtitle}
                 </p>
               </div>
 
               {/* Specs Grid */}
-              <div className="grid grid-cols-2 gap-2 my-4 pt-3 border-t border-slate-800">
-                <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
-                  <span className="text-[9px] font-mono text-slate-500 uppercase block">Metric 01</span>
-                  <span className="text-xs font-bold text-slate-200">{item.spec1}</span>
+              <div className={`grid grid-cols-2 gap-2 my-4 pt-3 border-t ${theme === 'dark' ? 'border-slate-800' : 'border-[#DFD3C3]'}`}>
+                <div className={`p-2 rounded-lg border ${
+                  theme === 'dark' ? 'bg-slate-950/80 border-slate-800' : 'bg-[#F7F2E8] border-[#D8C3A5]'
+                }`}>
+                  <span className={`text-[9px] font-mono uppercase block ${theme === 'dark' ? 'text-slate-500' : 'text-[#78716c]'}`}>Metric 01</span>
+                  <span className={`text-xs font-bold ${theme === 'dark' ? 'text-slate-200' : 'text-[#1c1917]'}`}>{item.spec1}</span>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
-                  <span className="text-[9px] font-mono text-slate-500 uppercase block">Metric 02</span>
-                  <span className="text-xs font-bold text-slate-200">{item.spec2}</span>
+                <div className={`p-2 rounded-lg border ${
+                  theme === 'dark' ? 'bg-slate-950/80 border-slate-800' : 'bg-[#F7F2E8] border-[#D8C3A5]'
+                }`}>
+                  <span className={`text-[9px] font-mono uppercase block ${theme === 'dark' ? 'text-slate-500' : 'text-[#78716c]'}`}>Metric 02</span>
+                  <span className={`text-xs font-bold ${theme === 'dark' ? 'text-slate-200' : 'text-[#1c1917]'}`}>{item.spec2}</span>
                 </div>
               </div>
 
               {/* Action */}
               <button 
                 onClick={() => alert(`Opening technical dossier for ${item.name}`)}
-                className="w-full py-2 bg-slate-800 hover:bg-amber-500 text-slate-300 hover:text-slate-950 text-xs font-bold rounded-lg transition-colors border border-slate-700 hover:border-black flex items-center justify-center gap-1.5"
+                className={`w-full py-2 text-xs font-bold rounded-lg transition-colors border flex items-center justify-center gap-1.5 ${
+                  theme === 'dark'
+                    ? 'bg-slate-800 hover:bg-amber-500 text-slate-300 hover:text-slate-950 border-slate-700 hover:border-black'
+                    : 'bg-[#EDE5D8] hover:bg-amber-500 text-[#1c1917] hover:text-slate-950 border-[#D8C3A5] hover:border-black'
+                }`}
               >
                 <span>View Engineering Dossier</span>
                 <ExternalLink className="w-3.5 h-3.5" />

@@ -119,9 +119,148 @@ h1, h2, .font-editorial {
   border-right: 2px solid #d97706;
 }
 
-.bandhani-pattern-subtle {
-  background-image: radial-gradient(#d97706 1px, transparent 1px);
-  background-size: 16px 16px;
-  background-position: 0 0;
+/* ==========================================================================
+   SUB-REGIONAL GUJARATI CULTURAL PATTERNS
+   ========================================================================== */
+
+/* 1. Kutch & Bhuj: Ajrakh Star Block-Print & Lippan Kaam */
+.pattern-kutch-ajrakh {
+  background-color: rgba(153, 27, 27, 0.05);
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(180, 83, 9, 0.22) 2px, transparent 3px),
+    radial-gradient(circle at 0% 0%, rgba(153, 27, 27, 0.18) 2px, transparent 3px),
+    radial-gradient(circle at 100% 100%, rgba(30, 58, 138, 0.2) 2px, transparent 3px);
+  background-size: 20px 20px;
 }
+
+/* 2. Saurashtra & Kathiawad: Jamnagar Bandhani Tie-Dye */
+.pattern-saurashtra-bandhani {
+  background-color: rgba(217, 119, 6, 0.04);
+  background-image: 
+    radial-gradient(circle, rgba(217, 119, 6, 0.35) 1.5px, transparent 1.5px),
+    radial-gradient(circle, rgba(220, 38, 38, 0.25) 1px, transparent 1px);
+  background-size: 16px 16px, 8px 8px;
+  background-position: 0 0, 4px 4px;
+}
+
+/* 3. Gir & Junagadh: Teak & Lion Sanctuary */
+.pattern-gir-lion {
+  background-color: rgba(82, 102, 75, 0.05);
+  background-image:
+    radial-gradient(ellipse at 50% 50%, rgba(82, 102, 75, 0.28) 2.5px, transparent 3.5px),
+    radial-gradient(circle at 25% 75%, rgba(196, 154, 69, 0.2) 1.5px, transparent 2px);
+  background-size: 24px 24px;
+}
+
+/* 4. North Gujarat & Patan: Patan Patola Double-Ikat */
+.pattern-patola-ikkat {
+  background-color: rgba(166, 64, 54, 0.05);
+  background-image:
+    linear-gradient(45deg, rgba(166, 64, 54, 0.15) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(166, 64, 54, 0.15) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(196, 154, 69, 0.2) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(196, 154, 69, 0.2) 75%);
+  background-size: 18px 18px;
+  background-position: 0 0, 9px 0, 9px -9px, 0px 9px;
+}
+
+/* 5. South Gujarat & Dang: Warli Tribal Art */
+.pattern-dang-warli {
+  background-color: rgba(21, 128, 61, 0.04);
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(21, 128, 61, 0.25) 2px, transparent 2.5px),
+    linear-gradient(60deg, rgba(154, 52, 18, 0.12) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* 6. Solanki Stepwell Architecture */
+.pattern-solanki-stepwell {
+  background-color: rgba(196, 154, 69, 0.04);
+  background-image:
+    linear-gradient(45deg, rgba(196, 154, 69, 0.12) 25%, transparent 25%, transparent 75%, rgba(196, 154, 69, 0.12) 75%),
+    linear-gradient(45deg, rgba(196, 154, 69, 0.12) 25%, transparent 25%, transparent 75%, rgba(196, 154, 69, 0.12) 75%);
+  background-size: 14px 14px;
+  background-position: 0 0, 7px 7px;
+}
+
+/* ==========================================================================
+   ETHNIC LEAFLET POPUP REFINEMENT & PROPORTIONS
+   ========================================================================== */
+.ethnic-leaflet-popup .leaflet-popup-content-wrapper {
+  background: #FDFBF7 !important;
+  color: #282823 !important;
+  border: 1.5px solid #D8C3A5 !important;
+  border-radius: 12px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 14px 35px -4px rgba(40, 40, 35, 0.22), 0 4px 10px -2px rgba(40, 40, 35, 0.1) !important;
+}
+
+body:not(.theme-light) .ethnic-leaflet-popup .leaflet-popup-content-wrapper {
+  background: #121926 !important;
+  color: #f7f2e8 !important;
+  border: 1.5px solid #9a3412 !important;
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.75), 0 0 14px rgba(245, 158, 11, 0.18) !important;
+}
+
+body:not(.theme-light) .ethnic-leaflet-popup h3 {
+  color: #fef3c7 !important;
+}
+
+body:not(.theme-light) .ethnic-leaflet-popup p {
+  color: #cbd5e1 !important;
+}
+
+body:not(.theme-light) .ethnic-leaflet-popup div {
+  color: inherit;
+}
+
+body:not(.theme-light) .ethnic-leaflet-popup div[style*="background: #f5f0e6"],
+body:not(.theme-light) .ethnic-leaflet-popup div[style*="background: rgb(245, 240, 230)"],
+body:not(.theme-light) .ethnic-leaflet-popup div[style*="background: #fdfbf7"],
+body:not(.theme-light) .ethnic-leaflet-popup div[style*="background: rgb(253, 251, 247)"] {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+.ethnic-leaflet-popup .leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+.ethnic-leaflet-popup .leaflet-popup-tip {
+  background: #FDFBF7 !important;
+  border: 1px solid #D8C3A5 !important;
+}
+
+body:not(.theme-light) .ethnic-leaflet-popup .leaflet-popup-tip {
+  background: #121926 !important;
+  border: 1px solid #9a3412 !important;
+}
+
+.ethnic-leaflet-popup .leaflet-popup-close-button {
+  top: 10px !important;
+  right: 10px !important;
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 50% !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  color: #f8fafc !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(4px) !important;
+  transition: all 0.2s ease !important;
+  z-index: 30 !important;
+}
+
+.ethnic-leaflet-popup .leaflet-popup-close-button:hover {
+  background: #9a3412 !important;
+  color: #ffffff !important;
+  transform: scale(1.08) !important;
+}
+
 
