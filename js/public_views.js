@@ -317,12 +317,17 @@
     localStorage.setItem("inframap_theme", theme);
 
     const body = document.body;
+    const htmlEl = document.documentElement;
     if (theme === "dark") {
       body.classList.add("theme-dark");
       body.classList.remove("theme-light");
+      htmlEl.classList.add("theme-dark");
+      htmlEl.classList.remove("theme-light");
     } else {
       body.classList.add("theme-light");
       body.classList.remove("theme-dark");
+      htmlEl.classList.add("theme-light");
+      htmlEl.classList.remove("theme-dark");
     }
 
     const themeBtn = document.getElementById("toggleThemeBtn") || document.getElementById("themeToggleBtn");
@@ -333,9 +338,9 @@
         : `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
     }
 
-    // Switch default basemap if appropriate and LayerManager is ready
-    if (window.LayerManager && typeof window.LayerManager.setBasemap === "function") {
-      window.LayerManager.setBasemap(theme === "dark" ? "dark" : "osm");
+    // Switch default basemap synchronously
+    if (typeof window.setMapBasemap === "function") {
+      window.setMapBasemap(theme === "dark" ? "dark" : "osm");
     }
   }
 
@@ -656,6 +661,28 @@
     }
   }
 
+  function getAssetPhoto(item) {
+    if (window.ImageManifest) {
+      const destImg = window.ImageManifest.getDestinationImage(item.id);
+      if (destImg && destImg.url) return destImg.url;
+
+      const projImg = window.ImageManifest.getProjectImage(item.id);
+      if (projImg && projImg.url) return projImg.url;
+
+      const assetImg = window.ImageManifest.getAssetImage(item.name || item.id);
+      if (assetImg && assetImg.url) return assetImg.url;
+    }
+
+    const sectorFallbacks = {
+      water: "https://images.unsplash.com/photo-1574482620826-40685ca5ebd2?auto=format&fit=crop&w=800&q=80",
+      energy: "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80",
+      transport: "https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=800&q=80",
+      urban: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
+      public: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80"
+    };
+    return sectorFallbacks[item.category] || sectorFallbacks.public;
+  }
+
   function renderDirectory() {
     const grid = document.getElementById("dirCardsGrid");
     const countEl = document.getElementById("dirResultsCount");
@@ -696,26 +723,58 @@
       return;
     }
 
-    // Render first 72 items cleanly for instant performance
+    const CATEGORY_META = {
+      water: { icon: "💧", gujarati: "જળ સંસાધન", label: "Water & Irrigation", color: "#315BD6" },
+      energy: { icon: "⚡", gujarati: "ઊર્જા અને પાવર", label: "Clean Energy", color: "#E2AE48" },
+      transport: { icon: "🛣️", gujarati: "પરિવહન કોરિડોર", label: "Expressway & Rail", color: "#B84638" },
+      urban: { icon: "🏭", gujarati: "બંદરો અને ઉદ્યોગ", label: "Port & Industry", color: "#53694B" },
+      public: { icon: "🏛️", gujarati: "જાહેર સ્થાપત્ય", label: "Civic Architecture", color: "#D97706" }
+    };
+
+    // Render first 72 items with rich photography and neo-brutalist metrics
     const pageItems = filtered.slice(0, 72);
-    grid.innerHTML = pageItems.map(item => `
-      <article class="dir-card" data-id="${item.id}">
-        <div class="dir-card-header">
-          <span class="dir-badge dir-badge-${item.category}">${escapeHtml(item.categoryLabel)}</span>
-          <span class="dir-district-tag">${escapeHtml(item.district)}</span>
-        </div>
-        <h3 class="dir-card-title">${escapeHtml(item.name)}</h3>
-        <p class="dir-card-subtitle">${escapeHtml(item.subtitle)}</p>
-        <div class="dir-card-actions">
-          <button class="dir-action-btn btn-view-map" onclick="window.PublicViews.viewOnMap('${item.id}')">
-            <span>🗺️ View on Map</span>
-          </button>
-          <button class="dir-action-btn btn-inspect" onclick="window.PublicViews.inspectDirectoryItem('${item.id}')">
-            <span>Details</span>
-          </button>
-        </div>
-      </article>
-    `).join("");
+    grid.innerHTML = pageItems.map(item => {
+      const imgUrl = getAssetPhoto(item);
+      const catMeta = CATEGORY_META[item.category] || CATEGORY_META.public;
+
+      return `
+        <article class="dir-card" data-id="${item.id}">
+          <div class="dir-card-media" style="background-image: url('${imgUrl}');">
+            <div class="dir-media-overlay"></div>
+            <span class="dir-badge dir-badge-${item.category}">
+              <span>${catMeta.icon}</span> ${catMeta.label}
+            </span>
+            <span class="dir-district-tag">📍 ${escapeHtml(item.district)}</span>
+          </div>
+          
+          <div class="dir-card-body">
+            <span class="dir-card-guj">${catMeta.gujarati}</span>
+            <h3 class="dir-card-title">${escapeHtml(item.name)}</h3>
+            <p class="dir-card-subtitle">${escapeHtml(item.subtitle)}</p>
+
+            <div class="dir-specs-grid">
+              <div class="dir-spec-chip">
+                <span class="dir-spec-lbl">District</span>
+                <span class="dir-spec-val">${escapeHtml(item.district)}</span>
+              </div>
+              <div class="dir-spec-chip">
+                <span class="dir-spec-lbl">Category</span>
+                <span class="dir-spec-val">${escapeHtml(item.categoryLabel)}</span>
+              </div>
+            </div>
+
+            <div class="dir-card-actions">
+              <button class="dir-action-btn btn-view-map" onclick="window.PublicViews.viewOnMap('${item.id}')" title="Locate on Gujarat Map">
+                <span>🗺️ View on Map</span>
+              </button>
+              <button class="dir-action-btn btn-inspect" onclick="window.PublicViews.inspectDirectoryItem('${item.id}')" title="View Full Technical Dossier">
+                <span>📋 Details</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join("");
   }
 
   function viewOnMap(itemId) {

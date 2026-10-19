@@ -186,41 +186,56 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const basemapLayers = createBasemaps();
-  basemapLayers.dark.addTo(map);
+  const currentTheme = localStorage.getItem("inframap_theme") || "light";
+  const initialBasemap = currentTheme === "dark" ? "dark" : "osm";
+  if (basemapLayers[initialBasemap]) {
+    basemapLayers[initialBasemap].addTo(map);
+  } else {
+    basemapLayers.dark.addTo(map);
+  }
+
+  window.setMapBasemap = function(chosen) {
+    if (!basemapLayers[chosen]) return;
+    Object.values(basemapLayers).forEach(l => {
+      if (map.hasLayer(l)) map.removeLayer(l);
+    });
+    basemapLayers[chosen].addTo(map);
+    document.querySelectorAll(".segment-btn[data-basemap]").forEach(b => {
+      b.classList.toggle("active", b.getAttribute("data-basemap") === chosen);
+    });
+  };
 
   // Basemap switcher listener (delegated for dynamic LayerManager basemaps)
   document.addEventListener("click", (e) => {
     const btn = e.target.closest(".segment-btn[data-basemap]");
     if (!btn) return;
-    document.querySelectorAll(".segment-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
     const chosen = btn.getAttribute("data-basemap");
-
-    Object.values(basemapLayers).forEach(l => {
-      if (map.hasLayer(l)) map.removeLayer(l);
-    });
-    if (basemapLayers[chosen]) {
-      basemapLayers[chosen].addTo(map);
-    }
+    window.setMapBasemap(chosen);
   });
 
-  // 4. Infrastructure Layer Groups (Overview Preset Default: Districts, Roads, Power, WaterDams, Reservoirs)
+  // Map popup open listener to prevent overlap with #exploreEditorialDeck
+  map.on('popupopen', () => {
+    const deck = document.getElementById('exploreEditorialDeck');
+    if (deck) deck.classList.add('collapsed');
+  });
+
+  // 4. Infrastructure Layer Groups (Consumer Default: Only Districts active to keep map uncluttered)
   const layerGroups = {
     districts: L.layerGroup().addTo(map),
     hq: L.layerGroup(),
-    roads: L.layerGroup().addTo(map),
+    roads: L.layerGroup(),
     structures: L.layerGroup(),
     railways: L.layerGroup(),
     stations: L.layerGroup(),
-    waterDams: L.layerGroup().addTo(map),
-    reservoirs: L.layerGroup().addTo(map),
+    waterDams: L.layerGroup(),
+    reservoirs: L.layerGroup(),
     rivers: L.layerGroup(),
     canals: L.layerGroup(),
     waterways: L.layerGroup(),
     groundwater: L.layerGroup(),
     gwStations: L.layerGroup(),
     commandAreas: L.layerGroup(),
-    power: L.layerGroup().addTo(map),
+    power: L.layerGroup(),
     transmission: L.layerGroup(),
     substations: L.layerGroup(),
     urbanMetro: L.layerGroup(),
@@ -6684,19 +6699,7 @@ document.addEventListener("DOMContentLoaded", () => {
     floatingDrawerBtn.addEventListener("click", () => setDrawerCollapsed(false));
   }
 
-  // Theme Toggle Button
-  const themeToggleBtn = document.getElementById("themeToggleBtn");
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener("click", () => {
-      const isLight = document.body.classList.contains("theme-light");
-      if (window.PublicViews) {
-        window.PublicViews.applyTheme(isLight ? "dark" : "light");
-      } else {
-        document.body.classList.toggle("theme-light", !isLight);
-        document.body.classList.toggle("theme-dark", isLight);
-      }
-    });
-  }
+  // Theme Toggle Button is managed authoritatively by window.PublicViews.bindThemeToggle()
 
   // Shortcuts & Navigation Help Modal
   const shortcutsHelpBtn = document.getElementById("shortcutsHelpBtn");

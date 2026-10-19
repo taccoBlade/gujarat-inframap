@@ -129,7 +129,7 @@
       count: "43 corridors (8,940 km)",
       minZoom: 6,
       maxZoom: 19,
-      defaultOn: true,
+      defaultOn: false,
       swatch: { color: "#f97316", width: 3, type: "line" },
       panes: ["roadsPane"],
       searchTerms: "expressway highway ne-1 nh-48 nhai corridor road traffic golden quadrilateral"
@@ -183,7 +183,7 @@
       count: "34 structures (23.6 BCM)",
       minZoom: 6,
       maxZoom: 19,
-      defaultOn: true,
+      defaultOn: false,
       swatch: { color: "#0284c7", fill: "#0284c7", type: "circle" },
       panes: ["damsPane"],
       searchTerms: "dam reservoir barrage weir cwc nrld storage sardar sarovar ukai kadana dharoi"
@@ -196,7 +196,7 @@
       count: "6 major reservoirs",
       minZoom: 6.5,
       maxZoom: 19,
-      defaultOn: true,
+      defaultOn: false,
       swatch: { color: "#0ea5e9", fill: "rgba(14, 165, 233, 0.20)", type: "polygon" },
       panes: ["reservoirsPane"],
       searchTerms: "reservoir water spread lake bathymetry submergence frl vallabh sagar"
@@ -276,7 +276,7 @@
       count: "49 plants (33.7 GW)",
       minZoom: 6,
       maxZoom: 19,
-      defaultOn: true,
+      defaultOn: false,
       swatch: { color: "#f59e0b", fill: "#f59e0b", type: "circle" },
       panes: ["powerPane"],
       searchTerms: "power plant solar wind thermal nuclear hydro gas khavda mundra wanakbori generation"
