@@ -426,6 +426,9 @@
     if (projView) projView.classList.add("hidden");
     if (aboutView) aboutView.classList.add("hidden");
 
+    const exploreDeck = document.getElementById("exploreEditorialDeck");
+    if (exploreDeck) exploreDeck.classList.toggle("hidden", !isExplore);
+
     if (destKey === "explore") {
       // Map is dominant working area
       if (window.map && typeof window.map.invalidateSize === "function") {
@@ -485,6 +488,19 @@
       });
     });
 
+
+    // Explore Editorial Deck Collapse Toggle
+    const eedBtn = document.getElementById("eedCollapseBtn");
+    const eedDeck = document.getElementById("exploreEditorialDeck");
+    if (eedBtn && eedDeck) {
+      eedBtn.addEventListener("click", () => {
+        eedDeck.classList.toggle("collapsed");
+        const icon = eedBtn.querySelector(".eed-toggle-icon");
+        if (icon) {
+          icon.textContent = eedDeck.classList.contains("collapsed") ? "+" : "−";
+        }
+      });
+    }
 
     window.addEventListener("hashchange", () => {
       handleInitialRoute();

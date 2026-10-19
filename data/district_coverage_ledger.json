@@ -1,0 +1,888 @@
+{
+  "metadata": {
+    "datasetTitle": "Gujarat Unfiltered: 34-District Discovery Database",
+    "version": "2.0.0",
+    "lastAudited": "2026-10-19",
+    "totalDistrictsTargeted": 34,
+    "totalDistrictsCovered": 34,
+    "totalVerifiedRecords": 45,
+    "vavTharadIncluded": true,
+    "signatureFarmCaseStudyIncluded": true,
+    "curationStandard": "Rigorous physical fact-checking, oral lore vs ground reality separation, statutory lawful access transparency"
+  },
+  "statistics": {
+    "byCollection": {
+      "after-dark": 5,
+      "hidden-plain-sight": 6,
+      "weird-gujarat": 7,
+      "lost-chapters": 13,
+      "nature-side-quests": 6,
+      "worth-detour": 8
+    },
+    "byClaimClassification": {
+      "historical_fact": 41,
+      "geological_anomaly": 0,
+      "community_folklore": 3,
+      "debunked_legend": 1
+    },
+    "byAccessType": {
+      "public_access": 44,
+      "restricted_access": 1
+    }
+  },
+  "districtLedger": [
+    {
+      "district": "Ahmedabad",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 6,
+      "places": [
+        {
+          "id": "dada-harir-stepwell",
+          "name": "Dada Harir's Subterranean Sunken Pavilion",
+          "category": "heritage",
+          "collection": "hidden-plain-sight",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected National Monument — Free Access",
+          "isLawful": true
+        },
+        {
+          "id": "amritvarshini-l-vav",
+          "name": "Amritvarshini Vav: The Hidden L-Shaped Stepwell",
+          "category": "heritage",
+          "collection": "hidden-plain-sight",
+          "claimClassification": "historical_fact",
+          "accessType": "AMC & State Archaeology Protected Site — Free Access",
+          "isLawful": true
+        },
+        {
+          "id": "sarkhej-roza-palaces",
+          "name": "Sarkhej Roza: The Forgotten Water Palaces",
+          "category": "heritage",
+          "collection": "hidden-plain-sight",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI & Trust Heritage Complex — Free Public Entry",
+          "isLawful": true
+        },
+        {
+          "id": "jhulta-minar-shaking-towers",
+          "name": "Sidi Bashir Jhulta Minar: The Shaking Towers",
+          "category": "unusual_landmark",
+          "collection": "weird-gujarat",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected National Monument — Exterior Viewing Free",
+          "isLawful": true
+        },
+        {
+          "id": "lothal-harappan-dockyard",
+          "name": "Lothal: The 4,400-Year Tidal Dockyard & Bead Port",
+          "category": "viewpoint",
+          "collection": "worth-detour",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected National Monument & Archaeological Museum — Ticketed (~₹25)",
+          "isLawful": true
+        },
+        {
+          "id": "signature-farm-ghuma",
+          "name": "Signature Farm Sculptures (Ghuma-Bopal)",
+          "category": "abandoned_site",
+          "collection": "after-dark",
+          "claimClassification": "debunked_legend",
+          "accessType": "Private Property — Strictly Restricted",
+          "isLawful": false
+        }
+      ],
+      "categoriesCovered": [
+        "heritage",
+        "unusual_landmark",
+        "viewpoint",
+        "abandoned_site"
+      ],
+      "statutoryAccessSummary": "Contains Restricted Sites (Strict Warning)",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Amreli",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "sana-buddhist-caves",
+          "name": "Sana Buddhist Rock-Cut Caves & Stupas",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected Monument",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Anand",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "lambhvel-hanuman-doors",
+          "name": "Lambhvel 12-Bari Hanuman & The Night Watch",
+          "category": "folklore_eerie",
+          "collection": "after-dark",
+          "claimClassification": "historical_fact",
+          "accessType": "Active Religious & Heritage Site — Free Access",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "folklore_eerie"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Aravalli",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "devni-mori-buddhist-stupa",
+          "name": "Devni Mori Relic Stupa & Buddhist Vihara",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "State Archaeological Site",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Banaskantha",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "kumbhariya-jain-temples",
+          "name": "Kumbhariya Solanki White Marble Temples",
+          "category": "heritage",
+          "collection": "hidden-plain-sight",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected & Active Tirth",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Bharuch",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "kabirvad-banyan-island",
+          "name": "Kabirvad: The 3-Acre Single Banyan Island",
+          "category": "unusual_landmark",
+          "collection": "weird-gujarat",
+          "claimClassification": "historical_fact",
+          "accessType": "Public River Island & Temple — Small Boat Ferry Fare (~₹30)",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "unusual_landmark"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Bhavnagar",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "hathab-beach-bungalow",
+          "name": "Hathab: The Quiet Coast & Ancient Port Mounds",
+          "category": "viewpoint",
+          "collection": "worth-detour",
+          "claimClassification": "historical_fact",
+          "accessType": "Public Beach & State Rest House — Free Public Beach Access",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "viewpoint"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Botad",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "bhimnath-mahadev-forest-shrine",
+          "name": "Bhimnath Mahadev & Riparian Banyan Grove",
+          "category": "nature",
+          "collection": "nature-side-quests",
+          "claimClassification": "community_folklore",
+          "accessType": "Community Sacred Grove & Public Temple",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "nature"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Chhota Udepur",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "hampheshwar-submerged-temple",
+          "name": "Hampheshwar Mahadev & The Narmada Gorge",
+          "category": "viewpoint",
+          "collection": "worth-detour",
+          "claimClassification": "historical_fact",
+          "accessType": "Public Ghat & Forest Periphery",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "viewpoint"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Dahod",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "aurangzeb-fort-birthplace",
+          "name": "Dahod Fort & Emperor Aurangzeb's Birthplace",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected Heritage Monument",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Devbhumi Dwarka",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "bet-dwarka-marine-ruins",
+          "name": "Bet Dwarka & The Submerged Proto-Historic Jetty",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "Public Island Heritage & Marine Intertidal Zone",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Gandhinagar",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "mahudi-sukhadi-tradition",
+          "name": "Mahudi & The Mystery of the Uncarried Sweet",
+          "category": "unusual_landmark",
+          "collection": "weird-gujarat",
+          "claimClassification": "community_folklore",
+          "accessType": "Public Religious Trust Compound",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "unusual_landmark"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Gir Somnath",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "baan-stambh-antarctica-pillar",
+          "name": "Baan Stambh: The South Pole Arrow Pillar",
+          "category": "unusual_landmark",
+          "collection": "weird-gujarat",
+          "claimClassification": "historical_fact",
+          "accessType": "Public Promenade / Somnath Temple Complex",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "unusual_landmark"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Jamnagar",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "narara-marine-national-park",
+          "name": "Narara Reef: Barefoot Coral Walking Safari",
+          "category": "nature",
+          "collection": "nature-side-quests",
+          "claimClassification": "historical_fact",
+          "accessType": "Statutory Marine National Park — Forest Dept Permit & Guide Required (~₹150)",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "nature"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Junagadh",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "adi-kadi-navghan-rock-wells",
+          "name": "Adi-Kadi Vav & Navghan Kuvo: The Basalt Monoliths",
+          "category": "heritage",
+          "collection": "hidden-plain-sight",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected Heritage Monument (Uparkot Fort)",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Kachchh",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 6,
+      "places": [
+        {
+          "id": "lakhpat-ghost-fortress",
+          "name": "Lakhpat Ghost Fortress on the Salt Frontier",
+          "category": "folklore_eerie",
+          "collection": "after-dark",
+          "claimClassification": "historical_fact",
+          "accessType": "State Protected Heritage Town & Gurudwara — Free Access",
+          "isLawful": true
+        },
+        {
+          "id": "kalo-dungar-gravity-hill",
+          "name": "Kalo Dungar Anti-Gravity Ridge & Jackal Feast",
+          "category": "unusual_landmark",
+          "collection": "weird-gujarat",
+          "claimClassification": "historical_fact",
+          "accessType": "Public Hilltop & Sacred Temple — Free Access",
+          "isLawful": true
+        },
+        {
+          "id": "dholavira-road-to-heaven",
+          "name": "Dholavira: Road to Heaven & The Citadel Reservoirs",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI UNESCO World Heritage Monument & Museum — Free Entry",
+          "isLawful": true
+        },
+        {
+          "id": "roha-fort-summit",
+          "name": "Roha Fort & The Poet's Cliffside Pavilion",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "State Protected Heritage Ruin — Free Public Entry",
+          "isLawful": true
+        },
+        {
+          "id": "tera-fort-heritage-village",
+          "name": "Tera Fort & The Tri-Lake Heritage Hamlet",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "State Heritage Village & Active Settlement — Free Access",
+          "isLawful": true
+        },
+        {
+          "id": "mandvi-wooden-shipbuilding",
+          "name": "Mandvi: 400-Year Hand-Crafted Wooden Dhow Yards",
+          "category": "viewpoint",
+          "collection": "worth-detour",
+          "claimClassification": "historical_fact",
+          "accessType": "Active Riverbank Shipbuilding Yard — Free Public Walking Access",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "folklore_eerie",
+        "unusual_landmark",
+        "heritage",
+        "viewpoint"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Kheda",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "galteshwar-shiva-confluence",
+          "name": "Galteshwar Solanki Temple & Mahi Confluence",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected Heritage Monument",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Mahisagar",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "raiyoli-balasinor-dinosaur-park",
+          "name": "Raiyoli Dinosaur Fossil Park & Balasinor Hatchery",
+          "category": "unusual_landmark",
+          "collection": "weird-gujarat",
+          "claimClassification": "historical_fact",
+          "accessType": "State Geopark & Dinosaur Museum",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "unusual_landmark"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Mehsana",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "modhera-solar-living-village",
+          "name": "Modhera: India's First 24x7 Solar Living Village",
+          "category": "unusual_landmark",
+          "collection": "weird-gujarat",
+          "claimClassification": "historical_fact",
+          "accessType": "Public Heritage & Model Village — Free Entry to Village; ASI Ticket for Temple",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "unusual_landmark"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Morbi",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "mani-mandir-palace-ruins",
+          "name": "Mani Mandir: The Courtyard of Unfinished Love",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "State Protected Heritage Complex",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Narmada",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "zarwani-waterfalls-gorge",
+          "name": "Zarwani Waterfalls & Shoolpaneshwar Chasm",
+          "category": "nature",
+          "collection": "nature-side-quests",
+          "claimClassification": "historical_fact",
+          "accessType": "Forest Reserve (Eco-Tourism Zone)",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "nature"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Navsari",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "dandi-salt-coast",
+          "name": "Dandi Historic Salt Coast & Magnetic Black Sands",
+          "category": "heritage",
+          "collection": "worth-detour",
+          "claimClassification": "historical_fact",
+          "accessType": "Public Coastal Heritage & National Memorial",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Panchmahal",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "champaner-saat-kaman",
+          "name": "Champaner Saat Kaman & The Ridge Bastion",
+          "category": "folklore_eerie",
+          "collection": "after-dark",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected UNESCO World Heritage Monument — Ticketed",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "folklore_eerie"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Patan",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "sahasralinga-talav-ruins",
+          "name": "Sahasralinga Talav & The Ruined Water Citadel",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected Heritage Monument",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Porbandar",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "ghumli-naulakha-temple-ruins",
+          "name": "Ghumli Naulakha Ruins & The Lost Jethwa Capital",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "ASI Protected Heritage Monument",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Rajkot",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "hingolgadh-nature-fort",
+          "name": "Hingolgadh: Nature Sanctuary & Hilltop Fort",
+          "category": "viewpoint",
+          "collection": "worth-detour",
+          "claimClassification": "historical_fact",
+          "accessType": "Forest Dept Sanctuary & GEER Foundation — Ticketed (~₹20)",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "viewpoint"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Sabarkantha",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "polo-forest-ruined-shrines",
+          "name": "Polo Forest: Ruined Shrines Under Forest Canopy",
+          "category": "nature",
+          "collection": "nature-side-quests",
+          "claimClassification": "historical_fact",
+          "accessType": "Forest Dept Eco-Tourism Zone & ASI Ruins — Free Public Entry",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "nature"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Surat",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "dumas-beach-black-sand",
+          "name": "Dumas Beach & Black Sand Whispers",
+          "category": "folklore_eerie",
+          "collection": "after-dark",
+          "claimClassification": "community_folklore",
+          "accessType": "Public Coastal Beach — Free Public Access",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "folklore_eerie"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Surendranagar",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "zinzuwada-solanki-gates",
+          "name": "Zinzuwada: Solanki Salt Desert Gates",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "State Archaeology Protected Monument — Free Access",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Tapi",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "songadh-hill-fort-bastion",
+          "name": "Songadh Hilltop Fort & Gaekwad Volcanic Bastion",
+          "category": "viewpoint",
+          "collection": "worth-detour",
+          "claimClassification": "historical_fact",
+          "accessType": "State Protected Heritage Monument",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "viewpoint"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "The Dangs",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 2,
+      "places": [
+        {
+          "id": "gira-dhod-ambika-falls",
+          "name": "Gira Dhod & The Monsoonal Teak Chasm",
+          "category": "nature",
+          "collection": "nature-side-quests",
+          "claimClassification": "historical_fact",
+          "accessType": "Forest Dept Eco-Tourism Zone — Free Access; Nominal Parking Fee",
+          "isLawful": true
+        },
+        {
+          "id": "don-hill-station-mist",
+          "name": "Don Hill Station: The High-Altitude Quiet Frontier",
+          "category": "nature",
+          "collection": "nature-side-quests",
+          "claimClassification": "historical_fact",
+          "accessType": "Public Village & Hill Station — Free Access",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "nature"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Vadodara",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "sevasi-vav-vadodara",
+          "name": "Sevasi Vav: The Banyan-Engulfed Stepwell",
+          "category": "heritage",
+          "collection": "hidden-plain-sight",
+          "claimClassification": "historical_fact",
+          "accessType": "State Archaeology Protected Monument — Free Access",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Valsad",
+      "is34thDistrict": false,
+      "creationDate": "Pre-2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "sanjan-stambh-parsi-coast",
+          "name": "Sanjan Memorial Stambh & The Parsi Landing Coast",
+          "category": "heritage",
+          "collection": "lost-chapters",
+          "claimClassification": "historical_fact",
+          "accessType": "Public Heritage Memorial & Civic Monument",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "heritage"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    },
+    {
+      "district": "Vav-Tharad",
+      "is34thDistrict": true,
+      "creationDate": "2 October 2025",
+      "verifiedPlacesCount": 1,
+      "places": [
+        {
+          "id": "nadabet-seema-darshan-border",
+          "name": "Nadabet 'Seema Darshan': The Zero Line Salt Outpost",
+          "category": "unusual_landmark",
+          "collection": "worth-detour",
+          "claimClassification": "historical_fact",
+          "accessType": "Government Border Tourism (BSF Regulated)",
+          "isLawful": true
+        }
+      ],
+      "categoriesCovered": [
+        "unusual_landmark"
+      ],
+      "statutoryAccessSummary": "Public Access Verified",
+      "evidenceStatus": "Accepted & Verified Against Statutory Sources"
+    }
+  ]
+}

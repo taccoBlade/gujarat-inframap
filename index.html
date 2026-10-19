@@ -155,6 +155,34 @@
     <!-- Map Container (Always Mounted & Fast) -->
     <div id="map"></div>
 
+    <!-- Explore View Compact Neo-Brutalist Opening Composition -->
+    <div id="exploreEditorialDeck" class="explore-editorial-deck" role="region" aria-label="Gujarat Atlas Introduction">
+      <div class="eed-header-row">
+        <div class="eed-tag-pill">
+          <span class="eed-motif-star">✦</span>
+          <span class="eed-tag-text">ATLAS OF GUJARAT • ગુજરાત</span>
+        </div>
+        <button id="eedCollapseBtn" class="eed-toggle-btn" title="Toggle introduction panel" aria-label="Toggle Introduction Panel">
+          <span class="eed-toggle-icon">−</span>
+        </button>
+      </div>
+      <div class="eed-content-body">
+        <h2 class="eed-headline">Gujarat, beyond the obvious.</h2>
+        <p class="eed-copy">Explore the places, projects, and stories that shape the state — from subterranean Solanki stepwells to desert renewable complexes.</p>
+        <div class="eed-quick-links">
+          <button class="eed-link-pill pill-places" onclick="window.PublicViews.switchDestination('places', true)">
+            <span>🏛️ Places to Explore</span>
+          </button>
+          <button class="eed-link-pill pill-infra" onclick="window.PublicViews.switchDestination('infrastructure', true)">
+            <span>🏗️ Infrastructure</span>
+          </button>
+          <button class="eed-link-pill pill-unfiltered" onclick="window.PublicViews.switchDestination('unfiltered', true)">
+            <span>⚡ Gujarat Unfiltered</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- 2. Places to Explore (Tourism & Destinations) View Overlay -->
     <section id="placesView" class="public-view-container hidden" aria-label="Gujarat Places to Explore">
       <div class="public-view-inner">

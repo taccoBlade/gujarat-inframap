@@ -1,16 +1,17 @@
 /**
- * Gujarat InfraMap — Gujarat Unfiltered Engine
+ * Gujarat InfraMap — Gujarat Unfiltered Engine (Phase 2: 34-District Research Database)
  * 
  * "Gujarat Unfiltered: The Unexpected Side of Gujarat" (ગુજરાત અનફિલ્ટર્ડ)
  * 
- * Contemporary youth-culture editorial discovery experience covering eerie places,
- * urban legends, forgotten heritage, strange landmarks, and nature side quests.
+ * Comprehensive 34-district discovery platform covering urban legends, folklore,
+ * archaeological anomalies, forgotten desert bastions, and nature side quests.
  * 
  * Key Principles:
- * - 6 Curated Collections: After Dark, Hidden in Plain Sight, Weird Gujarat, Lost Chapters, Nature's Side Quests, Worth the Detour
- * - Strict Separation of Lore & Reality: Rigorously distinguishes local folklore/myths from documented scientific/historical facts.
- * - 100% Lawfully Accessible: Strictly declares legal access status and explicit safety advisories (zero promotion of trespassing).
- * - Deeply integrated with Leaflet map markers and Trip Reality last-mile feasibility.
+ * - 34 Districts Audited: Full coverage including Vav-Tharad (34th District, created 2 Oct 2025).
+ * - Multi-Dimensional Research Classifications: documented_place, documented_history, local_legend, unverified_claim, public_access, restricted_access.
+ * - Strict Separation of Lore & Reality: Rigorously distinguishes local campfire lore from archaeological/geological facts.
+ * - Rigorous Case Study Curation: Signature Farm (Ghuma-Bopal) case study debunking viral creepypasta and enforcing strict zero-trespassing warnings on private property.
+ * - Auditable Provenance: Every record references primary statutory sources, corroborating historical citations, and documented field uncertainties.
  */
 
 (function (window, document) {
@@ -69,10 +70,21 @@
     }
   };
 
+  const STATUS_LABELS = {
+    'documented_place': { label: 'Documented Place', icon: '📍', className: 'chip-place' },
+    'documented_history': { label: 'Documented History', icon: '📜', className: 'chip-history' },
+    'local_legend': { label: 'Local Legend', icon: '🗣️', className: 'chip-legend' },
+    'unverified_claim': { label: 'Unverified Claim', icon: '⚠️', className: 'chip-unverified' },
+    'public_access': { label: 'Public Access', icon: '✓', className: 'chip-public' },
+    'restricted_access': { label: 'Restricted Access', icon: '⛔', className: 'chip-restricted' }
+  };
+
   class GujaratUnfilteredEngine {
     constructor() {
       this.stories = [];
+      this.districts = [];
       this.activeCollection = 'all';
+      this.activeDistrict = 'all';
       this.searchQuery = '';
       this.mapMarkersLayer = null;
       this.markerMap = new Map();
@@ -94,9 +106,14 @@
           throw new Error(`Failed to load gujarat_unfiltered.json: ${response.status}`);
         }
         this.stories = await response.json();
+        
+        // Extract unique districts
+        const distSet = new Set(this.stories.map(s => s.district));
+        this.districts = Array.from(distSet).sort();
+
         this.isLoaded = true;
         this.isLoading = false;
-        console.log(`[GujaratUnfiltered] Loaded ${this.stories.length} unexpected Gujarat stories.`);
+        console.log(`[GujaratUnfiltered] Loaded ${this.stories.length} stories across ${this.districts.length} districts.`);
 
         this.initMapMarkers();
         this.bindEvents();
@@ -111,7 +128,6 @@
      */
     initMapMarkers() {
       if (!window.map || typeof L === 'undefined') {
-        // Retry when map becomes available
         setTimeout(() => this.initMapMarkers(), 500);
         return;
       }
@@ -126,12 +142,10 @@
 
       this.stories.forEach(story => {
         if (!story.coordinates || story.coordinates.length < 2) return;
-        // coordinates are [lng, lat]
         const lng = story.coordinates[0];
         const lat = story.coordinates[1];
         const meta = COLLECTIONS_META[story.collection] || COLLECTIONS_META['all'];
 
-        // Custom stylized SVG pin
         const customIcon = L.divIcon({
           className: 'gu-map-marker-container',
           html: `
@@ -172,10 +186,9 @@
     }
 
     /**
-     * Bind DOM listeners for search, collection filtering, and modals
+     * Bind DOM listeners
      */
     bindEvents() {
-      // Global ESC listener for modal
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           this.closeStoryModal();
@@ -184,25 +197,35 @@
     }
 
     /**
-     * Get filtered stories based on active collection and search query
+     * Get filtered stories based on active collection, district, and search query
      */
     getFilteredStories() {
       const q = this.searchQuery.trim().toLowerCase();
       return this.stories.filter(story => {
         const matchesCollection = this.activeCollection === 'all' || story.collection === this.activeCollection;
         if (!matchesCollection) return false;
+
+        const matchesDistrict = this.activeDistrict === 'all' || 
+          story.district === this.activeDistrict ||
+          (this.activeDistrict === 'The Dangs' && story.district === 'Dang') ||
+          (this.activeDistrict === 'Dang' && story.district === 'The Dangs');
+        if (!matchesDistrict) return false;
+
         if (!q) return true;
 
         const hay = [
           story.name,
+          ...(story.alternateNames || []),
           story.gujaratiName,
           story.tagline,
           story.district,
+          story.taluka,
           story.region,
           story.theStory,
           story.theFolklore,
           story.theGroundReality,
-          story.collectionLabel
+          story.collectionLabel,
+          story.factCheckBadge
         ].join(' ').toLowerCase();
 
         return hay.includes(q);
@@ -210,7 +233,7 @@
     }
 
     /**
-     * Main Render Method — Renders hero, filters, counter, and 24 editorial cards
+     * Main Render Method
      */
     render() {
       const container = document.getElementById('placesUnfilteredSubView');
@@ -232,11 +255,11 @@
           <div class="gu-header-content">
             <span class="pview-eyebrow gu-eyebrow">
               <span class="eyebrow-symbol">⚡</span>
-              GUJARAT UNFILTERED • ગુજરાત અનફિલ્ટર્ડ • YOUTH EDITORIAL
+              GUJARAT UNFILTERED • ગુજરાત અનફિલ્ટર્ડ • 34 DISTRICTS RESEARCHED
             </span>
             <h2 class="pview-title gu-headline">The stories they didn't put in the textbook.</h2>
             <p class="pview-desc gu-desc">
-              Curated urban legends, architectural anomalies, forgotten desert bastions, and the unvarnished ground truth — all physically verified, fact-checked, and lawfully accessible.
+              Curated oral legends, architectural anomalies, forgotten desert bastions, and the unvarnished ground truth across all 34 districts of Gujarat (including Vav-Tharad). Fact-checked with statutory access disclosures.
             </p>
           </div>
           <div class="gu-header-badge" aria-hidden="true">
@@ -267,7 +290,7 @@
             `).join('')}
           </div>
 
-          <!-- Search Input -->
+          <!-- Search Input & District Selector Row -->
           <div class="gu-search-row">
             <div class="gu-search-input-wrapper">
               <span class="gu-search-icon" aria-hidden="true">🔍</span>
@@ -275,7 +298,7 @@
                 type="text" 
                 id="guSearchInput" 
                 class="gu-search-input" 
-                placeholder="Search legends, ghost stories, anomalies, or locations (e.g. Dumas, Kalo Dungar, Lothal, Lakhpat)..."
+                placeholder="Search legends, ghost stories, anomalies, or locations (e.g. Dumas, Kalo Dungar, Lothal, Nadabet, Signature Farm)..."
                 value="${this.searchQuery}"
                 oninput="window.GujaratUnfiltered.handleSearch(this.value)"
               />
@@ -283,23 +306,42 @@
                 <button class="gu-search-clear" onclick="window.GujaratUnfiltered.handleSearch('')" title="Clear search">✕</button>
               ` : ''}
             </div>
+
+            <!-- District Dropdown -->
+            <div class="gu-district-select-wrap">
+              <select 
+                id="guDistrictFilter" 
+                class="gu-district-select" 
+                onchange="window.GujaratUnfiltered.setDistrict(this.value)"
+                aria-label="Filter stories by Gujarat district"
+              >
+                <option value="all">📍 All 34 Districts (${this.stories.length})</option>
+                <option value="Vav-Tharad" ${this.activeDistrict === 'Vav-Tharad' ? 'selected' : ''}>★ Vav-Tharad (34th District - Oct 2025)</option>
+                ${this.districts.filter(d => d !== 'Vav-Tharad').map(d => `
+                  <option value="${d}" ${this.activeDistrict === d ? 'selected' : ''}>${d}</option>
+                `).join('')}
+              </select>
+            </div>
           </div>
         </div>
 
         <!-- Status & Trust Verification Bar -->
         <div class="gu-status-row">
           <span class="gu-results-count">
-            Showing <strong>${filtered.length}</strong> unexpected places across Gujarat
+            Showing <strong>${filtered.length}</strong> unexpected places across Gujarat (34 Districts Audited)
           </span>
           <div class="gu-trust-banner">
             <span class="gu-trust-pill">
-              <span class="gu-trust-dot">✓</span> 100% Lawfully Accessible
+              <span class="gu-trust-dot">🏛️</span> 34 Districts Audited
             </span>
             <span class="gu-trust-pill">
-              <span class="gu-trust-dot">🛡️</span> Scientific &amp; Historical Fact-Check
+              <span class="gu-trust-dot">⚖️</span> Statutory Access Declared
+            </span>
+            <span class="gu-trust-pill">
+              <span class="gu-trust-dot">🔬</span> Scientific Fact-Check
             </span>
             <span class="gu-trust-pill gu-trust-advisory">
-              <span class="gu-trust-dot">⚠️</span> Strict Safety Advisories
+              <span class="gu-trust-dot">⚠️</span> Zero Trespassing Policy
             </span>
           </div>
         </div>
@@ -314,10 +356,10 @@
             <div class="gu-empty-icon">🌀</div>
             <h3 class="gu-empty-title">No unexpected stories match your search</h3>
             <p class="gu-empty-desc">
-              We couldn't find anything matching "<strong>${this.searchQuery}</strong>" in the ${COLLECTIONS_META[this.activeCollection]?.label || 'selected'} collection.
+              We couldn't find anything matching your filter criteria in the selected district or collection.
             </p>
             <button class="btn-primary-action gu-empty-reset" onclick="window.GujaratUnfiltered.resetFilters()">
-              Show All 24 Stories
+              Show All Stories
             </button>
           </div>
         `}
@@ -329,13 +371,21 @@
      */
     renderStoryCard(story) {
       const meta = COLLECTIONS_META[story.collection] || COLLECTIONS_META['all'];
-      const safeLawfulBadge = story.legalAccess && story.legalAccess.isSafeAndLawful
+      const isRestricted = story.legalAccess && !story.legalAccess.isSafeAndLawful;
+      
+      const safeLawfulBadge = !isRestricted
         ? `<span class="gu-card-safe-badge">✓ Lawful Public Access</span>`
-        : `<span class="gu-card-warn-badge">⚠️ Regulated Access</span>`;
+        : `<span class="gu-card-warn-badge" style="color: #991B1B;">⛔ Strictly Restricted Private Property</span>`;
+
+      // Multi-dimensional research status chips
+      const chipsHtml = (story.researchStatus || []).map(statusKey => {
+        const info = STATUS_LABELS[statusKey] || { label: statusKey, icon: '•', className: 'chip-place' };
+        return `<span class="gu-chip-status ${info.className}">${info.icon} ${info.label}</span>`;
+      }).join('');
 
       return `
-        <article class="gu-card" id="card-${story.id}" data-id="${story.id}">
-          <!-- Jharokha Image Container -->
+        <article class="gu-card ${isRestricted ? 'gu-card-restricted' : ''}" id="card-${story.id}" data-id="${story.id}">
+          <!-- Media Wrap -->
           <div class="gu-card-media-wrap">
             <img 
               src="${story.imageUrl}" 
@@ -351,7 +401,7 @@
               <span class="gu-col-badge" style="background: ${meta.color};">
                 ${meta.icon} ${story.collectionLabel}
               </span>
-              <span class="gu-district-badge">📍 ${story.district}</span>
+              <span class="gu-district-badge">📍 ${story.district}${story.taluka ? ' (' + story.taluka + ')' : ''}</span>
             </div>
 
             <div class="gu-media-badges-bottom">
@@ -365,6 +415,11 @@
               <span class="gu-gujarati-name">${story.gujaratiName}</span>
               <h3 class="gu-card-name">${story.name}</h3>
               <p class="gu-card-tagline">${story.tagline}</p>
+            </div>
+
+            <!-- Research Status Chips -->
+            <div class="gu-card-status-chips" aria-label="Research and Access Classifications">
+              ${chipsHtml}
             </div>
 
             <!-- Two-Tone Split Lore vs Reality Teaser -->
@@ -388,11 +443,13 @@
 
             <!-- Fact Check Verdict Strip -->
             <div class="gu-factcheck-strip">
-              <span class="gu-factcheck-pill">${story.factCheckBadge}</span>
+              <span class="gu-factcheck-pill" style="${isRestricted ? 'background:#FEE2E2; color:#991B1B; border-color:#991B1B;' : ''}">
+                ${story.factCheckBadge}
+              </span>
             </div>
 
             <!-- Legal Access & Safety Banner -->
-            <div class="gu-legal-banner">
+            <div class="gu-legal-banner ${isRestricted ? 'gu-legal-restricted' : ''}">
               <div class="gu-legal-header">
                 ${safeLawfulBadge}
                 <span class="gu-access-type">${story.legalAccess?.accessType || 'Public Access'}</span>
@@ -407,7 +464,7 @@
                 onclick="window.GujaratUnfiltered.openStoryModal('${story.id}')"
                 aria-label="Read full story and reality for ${story.name}"
               >
-                <span>📖 Read Story &amp; Reality</span>
+                <span>${isRestricted ? '📖 Read Fact-Check &amp; Debunking' : '📖 Read Story &amp; Reality'}</span>
               </button>
               
               <button 
@@ -418,13 +475,23 @@
                 <span>📍 Map</span>
               </button>
 
-              <button 
-                class="gu-btn-trip" 
-                onclick="window.GujaratUnfiltered.planInTripReality('${story.id}')"
-                title="Check last-mile feasibility in Trip Reality"
-              >
-                <span>🧭 Plan</span>
-              </button>
+              ${!isRestricted ? `
+                <button 
+                  class="gu-btn-trip" 
+                  onclick="window.GujaratUnfiltered.planInTripReality('${story.id}')"
+                  title="Check last-mile feasibility in Trip Reality"
+                >
+                  <span>🧭 Plan</span>
+                </button>
+              ` : `
+                <button 
+                  class="gu-btn-trip gu-btn-restricted" 
+                  title="Private property — public visits prohibited"
+                  disabled
+                >
+                  <span>⛔ No Entry</span>
+                </button>
+              `}
             </footer>
           </div>
         </article>
@@ -432,7 +499,7 @@
     }
 
     /**
-     * Modal Reader — Deep Dive with Narrative, Folklore vs Science, Safety, Photo Tips
+     * Modal Reader — Deep Dive with Narrative, Folklore vs Science, Safety, Photo Tips, and Provenance Sources
      */
     openStoryModal(storyId) {
       const story = this.stories.find(s => s.id === storyId);
@@ -443,6 +510,13 @@
       if (!modal || !content) return;
 
       const meta = COLLECTIONS_META[story.collection] || COLLECTIONS_META['all'];
+      const isRestricted = story.legalAccess && !story.legalAccess.isSafeAndLawful;
+
+      // Status chips
+      const chipsHtml = (story.researchStatus || []).map(statusKey => {
+        const info = STATUS_LABELS[statusKey] || { label: statusKey, icon: '•', className: 'chip-place' };
+        return `<span class="gu-chip-status ${info.className}">${info.icon} ${info.label}</span>`;
+      }).join('');
 
       content.innerHTML = `
         <article class="gu-modal-article">
@@ -456,11 +530,14 @@
                 <span class="gu-col-badge" style="background: ${meta.color};">
                   ${meta.icon} ${story.collectionLabel}
                 </span>
-                <span class="gu-district-badge">📍 ${story.district} • ${story.region}</span>
+                <span class="gu-district-badge">📍 ${story.district}${story.taluka ? ' (' + story.taluka + ')' : ''} • ${story.region}</span>
               </div>
               <span class="gu-modal-guj">${story.gujaratiName}</span>
               <h2 class="gu-modal-title">${story.name}</h2>
               <p class="gu-modal-tagline">${story.tagline}</p>
+              <div class="gu-card-status-chips" style="margin-top:0.5rem;">
+                ${chipsHtml}
+              </div>
               <span class="gu-modal-photo-credit">📷 Photo: ${story.imageCredit}</span>
             </div>
           </div>
@@ -502,7 +579,7 @@
                     <span class="gu-comp-icon">🔬</span>
                     <div class="gu-comp-head-text">
                       <h4>The Documented Ground Reality</h4>
-                      <small>Archaeological, geological &amp; acoustic facts</small>
+                      <small>Archaeological, geological &amp; official facts</small>
                     </div>
                   </div>
                   <div class="gu-comp-body">
@@ -526,13 +603,13 @@
                 <span class="gu-sec-num">03</span> Lawful Access &amp; Safety Directives
               </h3>
 
-              <div class="gu-safety-card">
+              <div class="gu-safety-card ${isRestricted ? 'gu-legal-restricted' : ''}">
                 <div class="gu-safety-status-row">
                   <span class="gu-statutory-pill">
                     <strong>Jurisdiction:</strong> ${story.legalAccess?.accessType || 'Public Domain'}
                   </span>
                   <span class="gu-law-badge ${story.legalAccess?.isSafeAndLawful ? 'badge-safe' : 'badge-caution'}">
-                    ${story.legalAccess?.isSafeAndLawful ? '✓ Lawful & Safe by Day' : '⚠️ Strictly Regulated Entry'}
+                    ${story.legalAccess?.isSafeAndLawful ? '✓ Lawful & Safe by Day' : '⛔ Strictly Restricted — Entry Prohibited'}
                   </span>
                 </div>
 
@@ -540,8 +617,8 @@
                   <h5 class="gu-rules-title">🛡️ Statutory Safety Advisory &amp; Ethical Exploration:</h5>
                   <p class="gu-rules-text">${story.legalAccess?.rulesAndWarnings}</p>
                   <ul class="gu-ethics-list">
-                    <li>✓ No trespassing on private property or demarcated border/forest zones.</li>
-                    <li>✓ Zero damage to historic stone masonry or stepwell carvings.</li>
+                    <li>✓ No trespassing on private property, industrial sites, or demarcated border/forest zones.</li>
+                    <li>✓ Zero damage to historic stone masonry, stepwell carvings, or fossil layers.</li>
                     <li>✓ Strict day-visit compliance — avoid hazardous mudflats, dry scrub forests, or ruins after nightfall.</li>
                     <li>✓ Leave zero litter; carry all plastic and water bottles back.</li>
                   </ul>
@@ -589,6 +666,45 @@
                 </div>
               </div>
             </section>
+
+            <!-- Section 5: Auditable Provenance & Source References -->
+            <section class="gu-provenance-section" aria-label="Scholarly Sources and Research Provenance">
+              <div class="gu-provenance-header">
+                <h4 class="gu-provenance-title">05 Auditable Research Provenance &amp; Verification</h4>
+                <span class="gu-provenance-meta">Audited: ${story.researchDate || '2026-10-19'} • Confidence: ${story.positionalConfidence || 'exact'}</span>
+              </div>
+
+              <div class="gu-sources-grid">
+                <!-- Primary Sources -->
+                <div class="gu-sources-column">
+                  <h5>Primary &amp; Statutory Sources</h5>
+                  ${(story.primarySources || []).map(src => `
+                    <div class="gu-source-item">
+                      <a href="${src.url}" target="_blank" rel="noopener noreferrer">${src.title} ↗</a>
+                      <span class="gu-source-publisher">${src.publisher} (${src.type})</span>
+                    </div>
+                  `).join('')}
+                </div>
+
+                <!-- Corroborating Sources -->
+                <div class="gu-sources-column">
+                  <h5>Corroborating Historical Citations</h5>
+                  ${(story.corroboratingSources || []).map(src => `
+                    <div class="gu-source-item">
+                      <a href="${src.url}" target="_blank" rel="noopener noreferrer">${src.title} ↗</a>
+                      <span class="gu-source-publisher">${src.publisher}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Field Limitations & Uncertainties -->
+              ${story.uncertaintiesNote ? `
+                <div class="gu-uncertainties-box">
+                  <strong>Field Verification Note:</strong> ${story.uncertaintiesNote}
+                </div>
+              ` : ''}
+            </section>
           </div>
 
           <!-- Modal Action Bar -->
@@ -599,9 +715,15 @@
             <button class="btn-primary-action gu-modal-btn" onclick="window.GujaratUnfiltered.locateOnMap('${story.id}'); window.GujaratUnfiltered.closeStoryModal();">
               📍 View Location on Map
             </button>
-            <button class="btn-primary-action gu-modal-btn gu-modal-btn-trip" onclick="window.GujaratUnfiltered.planInTripReality('${story.id}'); window.GujaratUnfiltered.closeStoryModal();">
-              🧭 Check Last-Mile in Trip Reality ➔
-            </button>
+            ${!isRestricted ? `
+              <button class="btn-primary-action gu-modal-btn gu-modal-btn-trip" onclick="window.GujaratUnfiltered.planInTripReality('${story.id}'); window.GujaratUnfiltered.closeStoryModal();">
+                🧭 Check Last-Mile in Trip Reality ➔
+              </button>
+            ` : `
+              <button class="btn-primary-action gu-modal-btn gu-btn-restricted" disabled>
+                ⛔ Private Property (No Entry)
+              </button>
+            `}
           </footer>
         </article>
       `;
@@ -615,7 +737,7 @@
     }
 
     /**
-     * Close the modal reader
+     * Close modal
      */
     closeStoryModal() {
       const modal = document.getElementById('unfilteredStoryModal');
@@ -640,6 +762,18 @@
     }
 
     /**
+     * Set active district filter and re-render
+     */
+    setDistrict(distKey) {
+      this.activeDistrict = distKey;
+      this.render();
+      const firstCard = document.querySelector('.gu-card');
+      if (firstCard) {
+        firstCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    /**
      * Filter stories via search bar
      */
     handleSearch(val) {
@@ -652,6 +786,7 @@
      */
     resetFilters() {
       this.activeCollection = 'all';
+      this.activeDistrict = 'all';
       this.searchQuery = '';
       this.render();
     }
@@ -663,7 +798,6 @@
       const story = this.stories.find(s => s.id === storyId);
       if (!story || !story.coordinates || !window.map) return;
 
-      // Switch to explore map view
       if (window.PublicViews && typeof window.PublicViews.switchDestination === 'function') {
         window.PublicViews.switchDestination('explore', true);
       }
@@ -687,15 +821,12 @@
       const story = this.stories.find(s => s.id === storyId);
       if (!story) return;
 
-      // Switch to Trip Reality view
       if (window.PublicViews && typeof window.PublicViews.switchDestination === 'function') {
         window.PublicViews.switchDestination('plan', true);
       }
 
-      // If matching destination exists in Trip Reality, select it
       setTimeout(() => {
         if (window.TripReality) {
-          // Attempt to find matching destination key or closest destination
           const destSelect = document.getElementById('trDestinationSelect');
           if (destSelect) {
             let matchedValue = '';

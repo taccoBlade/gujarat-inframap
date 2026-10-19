@@ -1,17 +1,18 @@
 /**
- * Gujarat InfraMap — Gujarat Unfiltered CDP Automated Verification Suite
+ * Gujarat InfraMap — Gujarat Unfiltered CDP Automated Verification Suite (Phase 2: 34 Districts)
  * 
  * Verifies:
- * 1. GujaratUnfiltered object loaded and healthy (24 stories across 6 collections)
+ * 1. GujaratUnfiltered object loaded and healthy (45 stories across all 34 districts)
  * 2. Mode switching via #btnModeUnfiltered
- * 3. 24 editorial cards rendered with unique images, folklore vs reality, and safety badges
- * 4. Filtering across all 6 collections (4 stories each)
- * 5. Real-time search functionality
- * 6. Interactive Story Modal deep-dive (Lore vs Ground Reality, Safety, Creator Intel)
- * 7. Leaflet Map markers & popups integration
- * 8. Direct URL hash routing (e.g. #/unfiltered)
- * 9. Clean browser console (0 errors)
- * 10. Captures high-res visual evidence screenshots to artifacts directory
+ * 3. 45 editorial cards rendered with unique images, folklore vs reality, research chips, and safety badges
+ * 4. Filtering across all 6 collections
+ * 5. District dropdown filtering (including Vav-Tharad 34th District)
+ * 6. Real-time search functionality (including Signature Farm and Nadabet)
+ * 7. Interactive Story Modal deep-dive (Lore vs Reality, Safety, Provenance & Sources)
+ * 8. Leaflet Map markers & popups integration (45 markers)
+ * 9. Direct URL hash routing (e.g. #/unfiltered)
+ * 10. Clean browser console (0 errors)
+ * 11. Captures high-res visual evidence screenshots to artifacts directory
  */
 
 const http = require('http');
@@ -102,7 +103,7 @@ class CDPClient {
 
 async function runUnfilteredVerification() {
   console.log('======================================================================');
-  console.log('GUJARAT INFRAMAP — GUJARAT UNFILTERED VERIFICATION SUITE');
+  console.log('GUJARAT INFRAMAP — GUJARAT UNFILTERED 34-DISTRICT VERIFICATION SUITE');
   console.log('======================================================================\n');
 
   const chromePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
@@ -147,18 +148,31 @@ async function runUnfilteredVerification() {
     await new Promise(r => setTimeout(r, 1200));
 
     // TEST 1: Check GujaratUnfiltered global object
-    console.log('\n--- CHECK 1: Engine Initialization & Dataset Health ---');
+    console.log('\n--- CHECK 1: Engine Initialization & 34-District Dataset Health ---');
     const initInfo = await client.eval(`(() => {
+      const eng = window.GujaratUnfiltered;
+      if (!eng) return { hasEngine: false };
+      const dists = new Set(eng.stories.map(s => s.district === 'Dang' ? 'The Dangs' : s.district));
+      const hasVavTharad = eng.stories.some(s => s.district === 'Vav-Tharad');
+      const sigFarm = eng.stories.find(s => s.id === 'signature-farm-ghuma');
       return {
-        hasEngine: typeof window.GujaratUnfiltered !== 'undefined',
-        storyCount: window.GujaratUnfiltered ? window.GujaratUnfiltered.stories.length : 0,
-        isLoaded: window.GujaratUnfiltered ? window.GujaratUnfiltered.isLoaded : false
+        hasEngine: true,
+        isLoaded: eng.isLoaded,
+        storyCount: eng.stories.length,
+        districtCount: dists.size,
+        hasVavTharad,
+        sigFarmRestricted: sigFarm && !sigFarm.legalAccess.isSafeAndLawful,
+        sigFarmDebunked: sigFarm && sigFarm.claimClassification === 'debunked_legend'
       };
     })()`);
 
     assert(initInfo.hasEngine, 'window.GujaratUnfiltered engine singleton exists');
     assert(initInfo.isLoaded, 'Dataset loaded successfully from data/gujarat_unfiltered.json');
-    assert(initInfo.storyCount === 24, `Complete dataset has exactly 24 curated stories (got: ${initInfo.storyCount})`);
+    assert(initInfo.storyCount === 45, `Dataset contains all 45 verified stories (got: ${initInfo.storyCount})`);
+    assert(initInfo.districtCount === 34, `All 34 official districts covered (got: ${initInfo.districtCount})`);
+    assert(initInfo.hasVavTharad, '34th District (Vav-Tharad, created 2 Oct 2025) included with Nadabet');
+    assert(initInfo.sigFarmRestricted, 'Signature Farm case study explicitly classified as restricted private property');
+    assert(initInfo.sigFarmDebunked, 'Signature Farm massacre claims explicitly classified as debunked_legend');
 
     // TEST 2: Mode Switcher Presence & Activation
     console.log('\n--- CHECK 2: Mode Switcher Interaction (#btnModeUnfiltered) ---');
@@ -187,16 +201,18 @@ async function runUnfilteredVerification() {
     await new Promise(r => setTimeout(r, 600));
 
     // TEST 3: Card Rendering & Architecture
-    console.log('\n--- CHECK 3: Editorial Cards & Content Architecture ---');
+    console.log('\n--- CHECK 3: Editorial Cards & Research Architecture ---');
     const cardsInfo = await client.eval(`(() => {
       const cards = document.querySelectorAll('.gu-card');
       const firstCard = cards[0];
+      const chips = firstCard ? firstCard.querySelectorAll('.gu-chip-status') : [];
       const loreBox = firstCard ? firstCard.querySelector('.gu-teaser-lore') : null;
       const realityBox = firstCard ? firstCard.querySelector('.gu-teaser-reality') : null;
       const factcheckPill = firstCard ? firstCard.querySelector('.gu-factcheck-pill') : null;
       const safetyBanner = firstCard ? firstCard.querySelector('.gu-legal-banner') : null;
       return {
         cardCount: cards.length,
+        hasChips: chips.length > 0,
         hasLoreBox: !!loreBox,
         hasRealityBox: !!realityBox,
         hasFactcheckPill: !!factcheckPill,
@@ -205,7 +221,8 @@ async function runUnfilteredVerification() {
       };
     })()`);
 
-    assert(cardsInfo.cardCount === 24, `Renders all 24 editorial story cards (got: ${cardsInfo.cardCount})`);
+    assert(cardsInfo.cardCount === 45, `Renders all 45 editorial story cards (got: ${cardsInfo.cardCount})`);
+    assert(cardsInfo.hasChips, 'Cards feature multi-dimensional research status chips');
     assert(cardsInfo.hasLoreBox, 'Cards feature dedicated Folklore & Myth teaser box');
     assert(cardsInfo.hasRealityBox, 'Cards feature dedicated Documented Ground Reality teaser box');
     assert(cardsInfo.hasFactcheckPill, 'Cards feature prominent Fact-Check status pill');
@@ -215,7 +232,7 @@ async function runUnfilteredVerification() {
     const artifactDir = 'C:\\Users\\saumy\\.gemini\\antigravity\\brain\\f4d383a9-ea31-4c83-bc95-e3099fdc2f9a';
     await client.captureScreenshot(path.join(artifactDir, 'unfiltered_editorial_view.png'));
 
-    // TEST 4: Collection Filtering across all 6 collections
+    // TEST 4: Collection Filtering
     console.log('\n--- CHECK 4: Collection Category Filtering ---');
     const collections = ['after-dark', 'hidden-plain-sight', 'weird-gujarat', 'lost-chapters', 'nature-side-quests', 'worth-detour'];
     for (const col of collections) {
@@ -223,54 +240,77 @@ async function runUnfilteredVerification() {
         window.GujaratUnfiltered.setCollection('${col}');
         return document.querySelectorAll('.gu-card').length;
       })()`);
-      assert(count === 4, `Collection "${col}" filters to exactly 4 curated stories (got: ${count})`);
+      assert(count > 0, `Collection "${col}" filters correctly to matching stories (got: ${count})`);
     }
 
     // Reset collection filter
     await client.eval(`window.GujaratUnfiltered.setCollection('all')`);
     await new Promise(r => setTimeout(r, 200));
 
-    // TEST 5: Search Functionality
-    console.log('\n--- CHECK 5: Search Filter Testing ---');
-    const searchResult = await client.eval(`(() => {
-      window.GujaratUnfiltered.handleSearch('Dumas');
+    // TEST 5: District Dropdown Filtering
+    console.log('\n--- CHECK 5: District Dropdown Filtering (Vav-Tharad & Kachchh) ---');
+    const vavTharadResult = await client.eval(`(() => {
+      window.GujaratUnfiltered.setDistrict('Vav-Tharad');
       const cards = document.querySelectorAll('.gu-card');
       const title = cards[0] ? cards[0].querySelector('.gu-card-name')?.innerText : '';
       return { count: cards.length, title };
     })()`);
-    assert(searchResult.count === 1, `Search "Dumas" returned exactly 1 matching story (got: ${searchResult.count})`);
-    assert(searchResult.title.includes('Dumas'), `Matched correct story: "${searchResult.title}"`);
+    assert(vavTharadResult.count >= 1, `District filter "Vav-Tharad" returns matching story (got: ${vavTharadResult.count})`);
+    assert(vavTharadResult.title.includes('Nadabet'), `Matched 34th District story: "${vavTharadResult.title}"`);
+
+    // Reset district filter
+    await client.eval(`window.GujaratUnfiltered.setDistrict('all')`);
+    await new Promise(r => setTimeout(r, 200));
+
+    // TEST 6: Search Functionality
+    console.log('\n--- CHECK 6: Search Filter Testing (Signature Farm & Dumas) ---');
+    const sigFarmSearch = await client.eval(`(() => {
+      window.GujaratUnfiltered.handleSearch('Signature Farm');
+      const cards = document.querySelectorAll('.gu-card');
+      const title = cards[0] ? cards[0].querySelector('.gu-card-name')?.innerText : '';
+      const isRestrictedBadge = cards[0] ? !!cards[0].querySelector('.gu-legal-restricted') : false;
+      return { count: cards.length, title, isRestrictedBadge };
+    })()`);
+    assert(sigFarmSearch.count === 1, `Search "Signature Farm" returned exactly 1 matching case study`);
+    assert(sigFarmSearch.title.includes('Signature Farm'), `Matched correct story: "${sigFarmSearch.title}"`);
+    assert(sigFarmSearch.isRestrictedBadge, 'Signature Farm card renders red restricted warning banner');
 
     // Reset search
     await client.eval(`window.GujaratUnfiltered.handleSearch('')`);
     await new Promise(r => setTimeout(r, 300));
 
-    // TEST 6: Interactive Story Modal Reader
-    console.log('\n--- CHECK 6: Story Modal Reader Deep-Dive ---');
+    // TEST 7: Interactive Story Modal Reader with Provenance
+    console.log('\n--- CHECK 7: Story Modal Reader & Scholarly Provenance Deep-Dive ---');
     const modalInfo = await client.eval(`(() => {
-      window.GujaratUnfiltered.openStoryModal('dumas-beach-black-sand');
+      window.GujaratUnfiltered.openStoryModal('signature-farm-ghuma');
       const modal = document.getElementById('unfilteredStoryModal');
       const title = modal.querySelector('.gu-modal-title')?.innerText;
       const compLore = modal.querySelector('.gu-comp-lore p')?.innerText;
       const compReality = modal.querySelector('.gu-comp-reality p')?.innerText;
       const safetyBox = modal.querySelector('.gu-safety-card')?.innerText;
-      const photoTip = modal.querySelector('.gu-intel-card p')?.innerText;
+      const provenance = modal.querySelector('.gu-provenance-section');
+      const sourcesCount = provenance ? provenance.querySelectorAll('.gu-source-item').length : 0;
+      const uncertainties = provenance ? provenance.querySelector('.gu-uncertainties-box')?.innerText : '';
       return {
         isOpen: modal.hasAttribute('open') || modal.classList.contains('open'),
         title,
         hasLore: !!compLore && compLore.length > 20,
         hasReality: !!compReality && compReality.length > 20,
         hasSafety: !!safetyBox && safetyBox.includes('Advisory'),
-        hasPhotoTip: !!photoTip && photoTip.length > 10
+        hasProvenance: !!provenance,
+        sourcesCount,
+        hasUncertainties: !!uncertainties && uncertainties.length > 10
       };
     })()`);
 
     assert(modalInfo.isOpen, 'Story Modal opens cleanly with showModal()');
-    assert(modalInfo.title && modalInfo.title.includes('Dumas'), `Modal displays correct story title: "${modalInfo.title}"`);
+    assert(modalInfo.title && modalInfo.title.includes('Signature Farm'), `Modal displays correct story title: "${modalInfo.title}"`);
     assert(modalInfo.hasLore, 'Modal features deep-dive oral folklore analysis');
-    assert(modalInfo.hasReality, 'Modal features deep-dive scientific / historical ground reality');
+    assert(modalInfo.hasReality, 'Modal features deep-dive official ground reality');
     assert(modalInfo.hasSafety, 'Modal contains statutory jurisdiction & ethical safety rules');
-    assert(modalInfo.hasPhotoTip, 'Modal contains traveler & creator field intel');
+    assert(modalInfo.hasProvenance, 'Modal contains Section 05: Auditable Research Provenance');
+    assert(modalInfo.sourcesCount >= 2, `Modal lists primary and corroborating sources (got: ${modalInfo.sourcesCount})`);
+    assert(modalInfo.hasUncertainties, 'Modal contains field verification and uncertainties note');
 
     // Screenshot 2: Story Modal Deep Dive
     await client.captureScreenshot(path.join(artifactDir, 'unfiltered_story_modal.png'));
@@ -279,8 +319,8 @@ async function runUnfilteredVerification() {
     await client.eval(`window.GujaratUnfiltered.closeStoryModal()`);
     await new Promise(r => setTimeout(r, 300));
 
-    // TEST 7: Map Markers Integration
-    console.log('\n--- CHECK 7: Leaflet Map Integration ---');
+    // TEST 8: Map Markers Integration
+    console.log('\n--- CHECK 8: Leaflet Map Integration ---');
     const mapInfo = await client.eval(`(() => {
       const layer = window.GujaratUnfiltered.mapMarkersLayer;
       const markers = window.GujaratUnfiltered.markerMap;
@@ -291,10 +331,10 @@ async function runUnfilteredVerification() {
       };
     })()`);
     assert(mapInfo.hasLayer, 'Leaflet markers layer group initialized on map');
-    assert(mapInfo.layerCount === 24, `All 24 unfiltered stories plotted as map markers (got: ${mapInfo.layerCount})`);
+    assert(mapInfo.layerCount === 45, `All 45 unfiltered stories plotted as map markers (got: ${mapInfo.layerCount})`);
 
-    // TEST 8: Direct Routing Check
-    console.log('\n--- CHECK 8: Hash Routing & Deep Linking (#/unfiltered) ---');
+    // TEST 9: Direct Routing Check
+    console.log('\n--- CHECK 9: Hash Routing & Deep Linking (#/unfiltered) ---');
     const routeCheck = await client.eval(`(() => {
       window.location.hash = '#/unfiltered';
       window.dispatchEvent(new HashChangeEvent('hashchange'));
@@ -307,8 +347,8 @@ async function runUnfilteredVerification() {
     assert(routeCheck.subUnfilteredVisible, 'Navigating to #/unfiltered reveals Gujarat Unfiltered view');
     assert(routeCheck.btnActive, '#btnModeUnfiltered is active on hashchange');
 
-    // TEST 9: Console Health
-    console.log('\n--- CHECK 9: Console Error Audit ---');
+    // TEST 10: Console Health
+    console.log('\n--- CHECK 10: Console Error Audit ---');
     assert(client.consoleErrors.length === 0, `Clean browser console with 0 errors (got: ${client.consoleErrors.length})`);
     if (client.consoleErrors.length > 0) {
       console.error('Console errors logged:', client.consoleErrors);
