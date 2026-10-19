@@ -50,8 +50,8 @@
 }
 
 body {
-  background-color: #0b0f19;
-  color: #f8fafc;
+  background-color: #0c1524;
+  color: #f7f2e8;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   margin: 0;
@@ -72,3 +72,56 @@ h1, h2, .font-editorial {
 .lang-gu {
   font-family: var(--font-gujarati);
 }
+
+/* Leaflet Custom Marker & DivIcon Reset */
+.leaflet-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Traditional Gujarati Ethnic Motifs & Accents */
+.ethnic-toran-trim {
+  background: linear-gradient(90deg, #9a3412 0%, #d97706 25%, #991b1b 50%, #d97706 75%, #9a3412 100%);
+  height: 4px;
+}
+
+.lippan-mirror-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 30%, #e2e8f0 70%, #94a3b8 100%);
+  border: 1px solid #64748b;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+  display: inline-block;
+}
+
+.solanki-corner-bracket {
+  position: relative;
+}
+.solanki-corner-bracket::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid #d97706;
+  border-left: 2px solid #d97706;
+}
+.solanki-corner-bracket::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid #d97706;
+  border-right: 2px solid #d97706;
+}
+
+.bandhani-pattern-subtle {
+  background-image: radial-gradient(#d97706 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: 0 0;
+}
+

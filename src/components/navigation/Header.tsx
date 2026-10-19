@@ -47,14 +47,17 @@ export const Header: React.FC = () => {
   const navItems: { mode: AtlasMode; label: string; icon: React.ReactNode; badge?: string }[] = [
     { mode: 'passport', label: 'Gujarat Passport', icon: <Award className="w-4 h-4 text-amber-400" />, badge: `${userProfile.collectedStampIds.length}/34` },
     { mode: 'ev', label: 'EV Highway Radar', icon: <Zap className="w-4 h-4 text-emerald-400" />, badge: '60-180kW' },
-    { mode: 'explore', label: 'Atlas Map', icon: <Map className="w-4 h-4 text-sky-400" /> },
+    { mode: 'explore', label: 'Atlas Map', icon: <Map className="w-4 h-4 text-amber-300" /> },
     { mode: 'unfiltered', label: 'Unfiltered Stories', icon: <Sparkles className="w-4 h-4 text-rose-400" />, badge: '45' },
-    { mode: 'places', label: 'Destinations', icon: <Compass className="w-4 h-4 text-emerald-400" /> },
+    { mode: 'places', label: 'Destinations', icon: <Compass className="w-4 h-4 text-amber-400" />, badge: '37' },
     { mode: 'infrastructure', label: 'Infrastructure', icon: <span className="text-sm">⚡</span>, badge: '3,337' },
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-[#0f172a]/90 backdrop-blur-md border-b-2 border-slate-800 text-slate-100 shadow-xl">
+    <header className="sticky top-0 z-40 bg-[#0c1524]/95 backdrop-blur-md border-b-2 border-amber-600/40 text-[#f7f2e8] shadow-2xl">
+      {/* Traditional Gujarati Toran Trim */}
+      <div className="ethnic-toran-trim w-full" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
         
         {/* Brand identity */}
@@ -62,26 +65,27 @@ export const Header: React.FC = () => {
           onClick={() => setMode('passport')}
           className="flex items-center gap-3 cursor-pointer select-none group"
         >
-          <div className="w-10 h-10 rounded-lg bg-amber-500/10 border-2 border-amber-500/40 flex items-center justify-center font-bold text-amber-400 text-xl shadow-[2px_2px_0px_#f59e0b] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform">
-            ગૂ
+          <div className="relative w-10 h-10 rounded-lg bg-gradient-to-br from-amber-600 via-amber-700 to-amber-900 border-2 border-amber-400/60 flex items-center justify-center font-bold text-amber-100 text-xl shadow-[2px_2px_0px_#78350f] group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform">
+            <span className="font-['Noto_Sans_Gujarati']">ગૂ</span>
+            <div className="absolute -top-1 -right-1 lippan-mirror-dot" />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
               <span className="font-extrabold tracking-tight text-lg text-white font-['Outfit']">
                 Gujarat <span className="text-amber-400">Atlas</span>
               </span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded uppercase tracking-wider font-mono">
+              <span className="text-[10px] font-bold px-1.5 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded uppercase tracking-wider font-mono">
                 Pravas
               </span>
             </div>
-            <span className="text-[11px] text-slate-400 font-['Noto_Sans_Gujarati']">
+            <span className="text-[11px] text-amber-200/70 font-['Noto_Sans_Gujarati']">
               ગુજરાત ડિજિટલ પાસપોર્ટ &amp; એટલાસ
             </span>
           </div>
         </div>
 
         {/* Primary Mode Navigation */}
-        <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/80 p-1.5 rounded-xl border border-slate-800 shadow-inner">
+        <nav className="hidden md:flex items-center gap-1.5 bg-[#121c2e] p-1.5 rounded-xl border border-amber-600/30 shadow-inner">
           {navItems.map((item) => {
             const isActive = currentMode === item.mode;
             return (
@@ -90,15 +94,15 @@ export const Header: React.FC = () => {
                 onClick={() => setMode(item.mode)}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all relative ${
                   isActive
-                    ? 'bg-amber-500 text-slate-950 shadow-[2px_2px_0px_rgba(0,0,0,0.4)] translate-y-[-1px]'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-[2px_2px_0px_#78350f] translate-y-[-1px]'
+                    : 'text-amber-100/80 hover:text-white hover:bg-amber-950/40'
                 }`}
               >
                 {item.icon}
                 <span>{item.label}</span>
                 {item.badge && (
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold ${
-                    isActive ? 'bg-black/20 text-black' : 'bg-slate-800 text-amber-400 border border-slate-700'
+                    isActive ? 'bg-black/25 text-black' : 'bg-slate-900 text-amber-300 border border-amber-600/40'
                   }`}>
                     {item.badge}
                   </span>

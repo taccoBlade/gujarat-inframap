@@ -5,6 +5,7 @@ import { GujaratPassport } from './components/passport/GujaratPassport';
 import { AtlasMap } from './components/map/AtlasMap';
 import { UnfilteredStoriesView } from './components/unfiltered/UnfilteredStoriesView';
 import { InfrastructureDirectoryView } from './components/infrastructure/InfrastructureDirectoryView';
+import { PlacesDestinationView } from './components/places/PlacesDestinationView';
 import { EVHighwayRadar } from './components/ev/EVHighwayRadar';
 import { OfflineBanner } from './components/pwa/OfflineBanner';
 import { ShareableStoryCardModal } from './components/share/ShareableStoryCardModal';
@@ -16,7 +17,7 @@ export const App: React.FC = () => {
   const { currentMode, theme } = useAtlasStore();
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#0b0f19] text-slate-100' : 'bg-[#f8fafc] text-slate-900'} font-sans`}>
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#0c1524] text-[#f7f2e8]' : 'bg-[#f7f2e8] text-[#282823]'} font-sans`}>
       {/* Sticky Navigation Header */}
       <Header />
 
@@ -94,7 +95,7 @@ export const App: React.FC = () => {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.25 }}
             >
-              <UnfilteredStoriesView />
+              <PlacesDestinationView />
             </motion.div>
           )}
         </AnimatePresence>

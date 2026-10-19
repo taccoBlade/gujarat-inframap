@@ -25,10 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Initialize Leaflet Map (Framed upfront to eliminate redundant tile fetch passes)
+  // Initialize Leaflet Map locked strictly to Gujarat (Survey of India Alignment)
+  const gujaratBounds = L.latLngBounds(
+    L.latLng(19.8, 67.5),
+    L.latLng(24.9, 74.8)
+  );
   const map = L.map("map", {
-    minZoom: 6,
+    minZoom: 6.8,
     maxZoom: 18,
+    maxBounds: gujaratBounds,
+    maxBoundsViscosity: 1.0,
     zoomControl: false // custom position
   });
   map.fitBounds([[20.10, 68.10], [24.75, 74.50]], { padding: [30, 30], animate: false });

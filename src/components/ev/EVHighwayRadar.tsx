@@ -55,44 +55,44 @@ export const EVHighwayRadar: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 text-slate-100">
       
-      {/* Hero Header */}
-      <div className="relative bg-gradient-to-br from-emerald-950/70 via-slate-900 to-slate-950 border-3 border-emerald-500/50 rounded-2xl p-6 sm:p-8 mb-6 shadow-2xl overflow-hidden">
+      {/* Hero Header with Traditional Gujarati Travel Theme */}
+      <div className="relative bg-gradient-to-br from-[#0c2417] via-[#0f1d2c] to-[#0c1524] border-2 border-amber-600/50 rounded-2xl p-6 sm:p-8 mb-6 shadow-2xl overflow-hidden">
         
-        {/* Decorative electric glow in background */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        {/* Toran Border Trim on Top */}
+        <div className="ethnic-toran-trim absolute top-0 left-0 right-0" />
 
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 border border-emerald-500/40 rounded-full text-xs font-bold text-emerald-300 uppercase tracking-widest font-mono">
-              <Zap className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/15 border border-amber-500/40 rounded-full text-xs font-bold text-amber-300 uppercase tracking-widest font-mono">
+              <Zap className="w-3.5 h-3.5 text-amber-400" />
               <span>HIGHWAY FAST-CHARGING RADAR • ઈ-વ્હીકલ હાઈવે નેટવર્ક</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-black text-white font-['Outfit'] tracking-tight">
-              Gujarat EV <span className="text-emerald-400">Roadtrip Lifeline</span>
+            <h1 className="text-3xl sm:text-4xl font-black text-white font-['Lora',serif] tracking-tight">
+              Gujarat EV <span className="text-amber-400">Roadtrip Lifeline</span>
             </h1>
 
-            <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
+            <p className="text-sm text-slate-300 max-w-2xl font-['Plus_Jakarta_Sans',sans-serif] leading-relaxed">
               Real-world highway fast chargers (60kW–180kW) with live gun reliability ratings, diesel generator power-cut protection, 45°C thermal shade indicators, and dead-zone warnings for remote Kutch &amp; Dang roadtrips.
             </p>
           </div>
 
           {/* Quick Metrics */}
-          <div className="grid grid-cols-2 gap-3 bg-slate-900/90 border-2 border-slate-700 p-3.5 rounded-xl shadow-lg flex-shrink-0 text-center font-mono">
-            <div className="p-2 border-r border-slate-800">
-              <span className="text-2xl font-black text-emerald-400 font-['Outfit']">180 kW</span>
+          <div className="grid grid-cols-2 gap-3 bg-[#0c1524] border-2 border-amber-600/40 p-3.5 rounded-xl shadow-lg flex-shrink-0 text-center font-mono">
+            <div className="p-2 border-r border-amber-600/30">
+              <span className="text-2xl font-black text-amber-400 font-['Outfit']">180 kW</span>
               <p className="text-[10px] text-slate-400 uppercase">Peak Hypercharger</p>
             </div>
             <div className="p-2">
-              <span className="text-2xl font-black text-amber-400 font-['Outfit']">98.2%</span>
+              <span className="text-2xl font-black text-emerald-400 font-['Outfit']">98.2%</span>
               <p className="text-[10px] text-slate-400 uppercase">Gun Reliability</p>
             </div>
           </div>
         </div>
 
         {/* Trending Pain Points Solved Banner */}
-        <div className="mt-6 pt-5 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+        <div className="mt-6 pt-5 border-t border-amber-600/30 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-[#0c1524]/70 border border-amber-600/20">
             <span className="w-6 h-6 rounded bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-bold">✓</span>
             <div>
               <strong className="text-white block text-[11px]">No Phantom Chargers</strong>
@@ -100,16 +100,16 @@ export const EVHighwayRadar: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
-            <span className="w-6 h-6 rounded bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-bold">⚡</span>
+          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-[#0c1524]/70 border border-amber-600/20">
+            <span className="w-6 h-6 rounded bg-amber-500/20 flex items-center justify-center text-amber-400 text-xs font-bold">⚡</span>
             <div>
               <strong className="text-white block text-[11px]">Rural Power-Cut Shield</strong>
               <span className="text-[10px] text-slate-400">Flags generator backup at dhabas</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
-            <span className="w-6 h-6 rounded bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-bold">⚠️</span>
+          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-[#0c1524]/70 border border-amber-600/20">
+            <span className="w-6 h-6 rounded bg-rose-500/20 flex items-center justify-center text-rose-400 text-xs font-bold">⚠️</span>
             <div>
               <strong className="text-white block text-[11px]">Dead-Zone Warnings</strong>
               <span className="text-[10px] text-slate-400">Last-chance alerts before Kutch &amp; Dangs</span>
@@ -120,7 +120,7 @@ export const EVHighwayRadar: React.FC = () => {
       </div>
 
       {/* Critical Highway Warning Banner */}
-      <div className="mb-6 p-4 rounded-xl bg-rose-950/50 border-2 border-rose-500/40 text-rose-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+      <div className="mb-6 p-4 rounded-xl bg-rose-950/60 border-2 border-rose-500/50 text-rose-200 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400 flex-shrink-0 mt-0.5 sm:mt-0">
             <AlertTriangle className="w-4 h-4" />
@@ -140,7 +140,7 @@ export const EVHighwayRadar: React.FC = () => {
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-slate-900 border-2 border-slate-800 rounded-xl p-4 mb-6 space-y-3">
+      <div className="bg-[#0f1a2d] border-2 border-amber-600/30 rounded-xl p-4 mb-6 space-y-3">
         {/* Corridors scroll */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
           {corridors.map((c) => (
@@ -149,8 +149,8 @@ export const EVHighwayRadar: React.FC = () => {
               onClick={() => setEvFilterCorridor(c.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all border ${
                 evFilterCorridor === c.id
-                  ? 'bg-emerald-500 text-slate-950 border-emerald-400 shadow-[2px_2px_0px_#000]'
-                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white'
+                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 border-black shadow-[2px_2px_0px_#000]'
+                  : 'bg-[#0c1524] text-slate-300 border-slate-700 hover:text-white'
               }`}
             >
               {c.label}
@@ -159,9 +159,9 @@ export const EVHighwayRadar: React.FC = () => {
         </div>
 
         {/* Feature Toggles */}
-        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800 text-xs">
+        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-amber-600/20 text-xs">
           <span className="text-slate-400 font-mono text-[11px] flex items-center gap-1 mr-1">
-            <Filter className="w-3.5 h-3.5" />
+            <Filter className="w-3.5 h-3.5 text-amber-400" />
             Filters:
           </span>
 
@@ -170,10 +170,10 @@ export const EVHighwayRadar: React.FC = () => {
             className={`px-3 py-1 rounded-full text-xs font-bold border transition-colors flex items-center gap-1.5 ${
               evFilterFastOnly
                 ? 'bg-amber-500/20 text-amber-300 border-amber-500'
-                : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white'
+                : 'bg-[#0c1524] text-slate-400 border-slate-700 hover:text-white'
             }`}
           >
-            <Zap className="w-3 h-3" />
+            <Zap className="w-3 h-3 text-amber-400" />
             <span>120kW+ Hyperchargers Only</span>
           </button>
 
@@ -182,10 +182,10 @@ export const EVHighwayRadar: React.FC = () => {
             className={`px-3 py-1 rounded-full text-xs font-bold border transition-colors flex items-center gap-1.5 ${
               evFilterDgBackupOnly
                 ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500'
-                : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white'
+                : 'bg-[#0c1524] text-slate-400 border-slate-700 hover:text-white'
             }`}
           >
-            <ShieldCheck className="w-3 h-3" />
+            <ShieldCheck className="w-3 h-3 text-emerald-400" />
             <span>Has Generator (DG) Backup</span>
           </button>
 
@@ -202,37 +202,37 @@ export const EVHighwayRadar: React.FC = () => {
             key={station.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-slate-900 border-2 border-slate-800 hover:border-emerald-500/60 rounded-xl p-5 shadow-xl transition-all flex flex-col justify-between relative overflow-hidden"
+            className="bg-[#0f1a2d] border-2 border-amber-600/30 hover:border-amber-400/70 rounded-xl p-5 shadow-xl transition-all flex flex-col justify-between relative overflow-hidden"
           >
             {/* Top row: Network, Corridor & Speed badge */}
             <div>
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono">
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-mono">
                     {station.network}
                   </span>
-                  <span className="text-[11px] font-mono text-slate-400 border border-slate-800 px-2 py-0.5 rounded bg-slate-950">
+                  <span className="text-[11px] font-mono text-slate-400 border border-slate-700 px-2 py-0.5 rounded bg-[#0c1524]">
                     {station.district} • {station.corridor.split(' ')[0]}
                   </span>
                 </div>
 
                 <div className="flex flex-col items-end">
-                  <span className="text-lg font-black text-emerald-400 font-['Outfit'] leading-none">
+                  <span className="text-lg font-black text-amber-400 font-['Outfit'] leading-none">
                     {station.totalPowerKw} kW
                   </span>
-                  <span className="text-[10px] font-mono text-slate-500 uppercase">DC Peak</span>
+                  <span className="text-[10px] font-mono text-slate-400 uppercase">DC Peak</span>
                 </div>
               </div>
 
               {/* Station Name & Location */}
-              <h3 className="font-extrabold text-base text-white tracking-tight font-['Outfit'] mb-0.5">
+              <h3 className="font-extrabold text-base text-white tracking-tight font-['Lora',serif] mb-0.5">
                 {station.name}
               </h3>
-              <p className="text-xs text-emerald-400/90 font-['Noto_Sans_Gujarati'] mb-1">
+              <p className="text-xs text-amber-300/90 font-['Noto_Sans_Gujarati'] mb-1 font-semibold">
                 {station.gujaratiName}
               </p>
-              <p className="text-xs text-slate-400 flex items-center gap-1.5 mb-3">
-                <MapPin className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" />
+              <p className="text-xs text-slate-300 flex items-center gap-1.5 mb-3">
+                <MapPin className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
                 <span>{station.locationDesc}</span>
               </p>
 
@@ -247,7 +247,7 @@ export const EVHighwayRadar: React.FC = () => {
               )}
 
               {/* Gun Availability & Speeds */}
-              <div className="p-3 bg-slate-950 rounded-lg border border-slate-800 mb-3 space-y-2">
+              <div className="p-3 bg-[#0c1524] rounded-lg border border-amber-600/20 mb-3 space-y-2">
                 <div className="flex items-center justify-between text-xs font-mono">
                   <span className="text-slate-400 font-bold uppercase">Connectors</span>
                   <span className="text-emerald-400 font-bold flex items-center gap-1">
@@ -260,11 +260,11 @@ export const EVHighwayRadar: React.FC = () => {
                   {station.guns.map((gun, idx) => (
                     <div 
                       key={idx}
-                      className="px-2.5 py-1 rounded bg-slate-900 border border-slate-700 flex items-center gap-2 text-xs"
+                      className="px-2.5 py-1 rounded bg-[#121c2e] border border-slate-700 flex items-center gap-2 text-xs"
                     >
-                      <BatteryCharging className="w-3.5 h-3.5 text-emerald-400" />
+                      <BatteryCharging className="w-3.5 h-3.5 text-amber-400" />
                       <span className="font-bold text-white">{gun.type}</span>
-                      <span className="text-slate-400 font-mono text-[11px]">{gun.speedKw}kW ({gun.count} Guns)</span>
+                      <span className="text-slate-300 font-mono text-[11px]">{gun.speedKw}kW ({gun.count} Guns)</span>
                       <span className="w-2 h-2 rounded-full bg-emerald-400" />
                     </div>
                   ))}
@@ -295,21 +295,21 @@ export const EVHighwayRadar: React.FC = () => {
                 )}
 
                 {station.amenities.nightSafeForFamily && (
-                  <span className="px-2 py-0.5 bg-slate-800 text-sky-300 border border-slate-700 rounded flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3 text-sky-400" />
+                  <span className="px-2 py-0.5 bg-slate-800 text-amber-200 border border-slate-700 rounded flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3 text-amber-400" />
                     24/7 Security &amp; Well-Lit
                   </span>
                 )}
               </div>
 
               {/* Amenities & Tariff info */}
-              <div className="text-xs text-slate-300 space-y-1 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80">
+              <div className="text-xs text-slate-300 space-y-1 bg-[#0c1524]/60 p-2.5 rounded-lg border border-amber-600/20">
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Tariff: <strong className="text-amber-300 font-mono">{station.tariffPerKwh}</strong></span>
                   <span className="text-slate-400">Washrooms: <strong className="text-white">{station.amenities.washroom}</strong></span>
                 </div>
                 <div className="flex items-start gap-1.5 text-slate-400 text-[11px] pt-1">
-                  <Coffee className="w-3.5 h-3.5 text-slate-500 flex-shrink-0 mt-0.5" />
+                  <Coffee className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
                   <span className="text-slate-300 line-clamp-1">Food: {station.amenities.food}</span>
                 </div>
               </div>
@@ -318,29 +318,29 @@ export const EVHighwayRadar: React.FC = () => {
               <div className="mt-2.5">
                 <button
                   onClick={() => setExpandedTroubleshootId(expandedTroubleshootId === station.id ? null : station.id)}
-                  className="text-[11px] text-emerald-400 hover:text-emerald-300 font-mono flex items-center gap-1"
+                  className="text-[11px] text-amber-400 hover:text-amber-300 font-mono flex items-center gap-1"
                 >
                   <HelpCircle className="w-3 h-3" />
                   <span>{expandedTroubleshootId === station.id ? 'Hide Handshake Tip' : 'Handshake Stuck? Click Troubleshooting Tip'}</span>
                 </button>
 
                 {expandedTroubleshootId === station.id && (
-                  <div className="mt-2 p-2.5 rounded bg-emerald-950/40 border border-emerald-500/30 text-xs text-emerald-200">
+                  <div className="mt-2 p-2.5 rounded bg-amber-950/40 border border-amber-500/30 text-xs text-amber-200">
                     <p className="font-bold text-[11px] mb-1">🔧 Pro Tip for this Charger:</p>
                     <p className="text-[11px] text-slate-300 leading-relaxed">{station.troubleshootingTip}</p>
-                    <p className="text-[10px] text-emerald-400 mt-1 font-mono">Operator Support: {station.supportPhone}</p>
+                    <p className="text-[10px] text-amber-400 mt-1 font-mono">Operator Support: {station.supportPhone}</p>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Bottom Actions */}
-            <div className="pt-3 mt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+            <div className="pt-3 mt-3 border-t border-amber-600/20 flex items-center justify-between gap-2">
               <a
                 href={`https://www.google.com/maps/dir/?api=1&destination=${station.coordinates[0]},${station.coordinates[1]}`}
                 target="_blank"
                 rel="noreferrer"
-                className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs rounded-lg shadow-[2px_2px_0px_#000] flex items-center gap-1.5 transition-colors"
+                className="px-3 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs rounded-lg shadow-[2px_2px_0px_#000] flex items-center gap-1.5 transition-colors"
               >
                 <span>Navigate in Google Maps</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -348,9 +348,9 @@ export const EVHighwayRadar: React.FC = () => {
 
               <a
                 href={`tel:${station.supportPhone}`}
-                className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs rounded-lg border border-slate-700 flex items-center gap-1.5 transition-colors"
+                className="px-3 py-1.5 bg-[#0c1524] hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-xs rounded-lg border border-slate-700 flex items-center gap-1.5 transition-colors"
               >
-                <Phone className="w-3.5 h-3.5" />
+                <Phone className="w-3.5 h-3.5 text-amber-400" />
                 <span>Call Support</span>
               </a>
             </div>
