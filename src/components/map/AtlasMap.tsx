@@ -260,64 +260,26 @@ export const AtlasMap: React.FC = () => {
 
       mapInstanceRef.current = map;
 
-      // Load official administrative district boundaries & build Game Fog-of-War Inverted Mask
+      // Load official administrative district boundaries & render clean cartographic boundaries
       fetch('/data/gujarat_districts.geojson')
         .then(res => res.json())
         .then(geojsonData => {
           if (!mapInstanceRef.current) return;
 
-          // Game-Style Inverted Fog Mask: Other states fade out into ancient dark fog
-          try {
-            const worldRing: [number, number][] = [
-              [-90, -180],
-              [-90, 180],
-              [90, 180],
-              [90, -180]
-            ];
-            const holes: [number, number][][] = [];
-            if (geojsonData.features) {
-              geojsonData.features.forEach((feat: any) => {
-                if (feat.geometry?.type === 'Polygon') {
-                  const ring = feat.geometry.coordinates[0].map((coord: number[]) => [coord[1], coord[0]] as [number, number]);
-                  if (ring && ring.length > 2) holes.push(ring);
-                } else if (feat.geometry?.type === 'MultiPolygon') {
-                  feat.geometry.coordinates.forEach((poly: any) => {
-                    const ring = poly[0].map((coord: number[]) => [coord[1], coord[0]] as [number, number]);
-                    if (ring && ring.length > 2) holes.push(ring);
-                  });
-                }
-              });
-            }
-
-            if (holes.length > 0) {
-              L.polygon([worldRing, ...holes], {
-                stroke: true,
-                color: '#FF9418',
-                weight: 2.5,
-                opacity: 0.9,
-                fillColor: '#070D18', // Deep ancient fog over outer states (Rajasthan, MP, Maharashtra, sea)
-                fillOpacity: 0.74,
-                interactive: false
-              }).addTo(mapInstanceRef.current);
-            }
-          } catch (maskErr) {
-            console.warn('Game fog mask note:', maskErr);
-          }
-
           geojsonBoundaryRef.current = L.geoJSON(geojsonData, {
             style: {
-              color: '#FF9418',
-              weight: 2,
-              opacity: 0.85,
-              fillColor: '#FF9418',
-              fillOpacity: 0.05,
+              color: '#B45309', // Warm amber / Solanki terracotta cartographic border
+              weight: 1.5,
+              opacity: 0.70,
+              fillColor: 'transparent',
+              fillOpacity: 0,
               dashArray: '3 3'
             },
             onEachFeature: (feature, layer: any) => {
               const dName = feature.properties?.district || 'District';
               const dGu = feature.properties?.district_gu || '';
               layer.bindTooltip(`
-                <div style="font-family: 'Noto Sans Gujarati', sans-serif; font-weight: bold; font-size: 11px; color: #101827;">
+                <div style="font-family: 'Noto Sans Gujarati', sans-serif; font-weight: bold; font-size: 11px; color: #101827; padding: 2px 6px;">
                   ${dName} ${dGu ? `(${dGu})` : ''}
                 </div>
               `, { sticky: true });
@@ -326,10 +288,10 @@ export const AtlasMap: React.FC = () => {
               layer.on({
                 mouseover: (e: any) => {
                   e.target.setStyle({
-                    weight: 3.5,
+                    weight: 3.0,
                     color: '#FF9418',
                     fillColor: '#FF9418',
-                    fillOpacity: 0.20,
+                    fillOpacity: 0.15,
                     dashArray: ''
                   });
                   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
