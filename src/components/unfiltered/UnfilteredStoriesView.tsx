@@ -59,25 +59,25 @@ export const UnfilteredStoriesView: React.FC = () => {
   };
 
   return (
-    <div className={`max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 transition-colors duration-200 ${
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 transition-colors duration-200 ${
       theme === 'dark' ? 'text-[#F1E8D7]' : 'text-[#101827]'
     }`}>
       
       {/* Editorial Header in Gen Z Neo-Brutalist Frame */}
-      <div className={`relative border-2 rounded-2xl p-5 sm:p-8 mb-6 sm:mb-8 shadow-[4px_4px_0px_#101827] overflow-hidden transition-colors ${
+      <div className={`relative border-2 rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8 shadow-[4px_4px_0px_#101827] overflow-hidden transition-colors ${
         theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
       }`}>
         {/* Toran Border Trim on Top */}
-        <ToranOrnamentalBorder className="rounded-t mb-4 -mt-5 -mx-5 sm:-mt-8 sm:-mx-8" height={10} />
+        <ToranOrnamentalBorder className="rounded-t mb-4 -mt-6 -mx-6 sm:-mt-8 sm:-mx-8" height={10} />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2 max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold font-mono uppercase tracking-wider bg-[#9D233B]/15 text-[#9D233B] border border-[#9D233B]/40">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-[11px] font-bold font-mono uppercase tracking-wider bg-[#9D233B]/15 text-[#9D233B] border border-[#9D233B]/40">
               <Sparkles className="w-3.5 h-3.5" />
               <span>EDITORIAL ARCHIVE • ૪૫ અજાણી વાતો (45 DOSSIERS)</span>
             </div>
 
-            <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-black font-editorial tracking-tight ${
+            <h1 className={`text-2xl sm:text-3xl md:text-4xl font-black font-editorial tracking-tight ${
               theme === 'dark' ? 'text-white' : 'text-[#101827]'
             }`}>
               Gujarat <span className="text-[#FF9418] italic font-serif">Unfiltered</span>
@@ -169,25 +169,37 @@ export const UnfilteredStoriesView: React.FC = () => {
                 {/* Regional Cultural Toran Trim */}
                 <div style={{ height: '3px', background: culture.borderTrimStyle }} className="w-full" />
 
-                {/* Media Image Header with district-accurate photo & clear visibility */}
-                <div 
-                  className="h-48 w-full bg-cover relative p-3 flex flex-col justify-between overflow-hidden border-b-2 border-[#25324A]"
-                  style={{ backgroundImage: `url('${story.imageUrl || getDistrictPhoto(story.district, story.id)}')`, backgroundPosition: 'center 20%' }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
+                {/* Media Image Header with district-accurate photo & guaranteed visibility */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden border-b-2 border-[#25324A] bg-[#101827]">
+                  <img
+                    src={story.imageUrl || getDistrictPhoto(story.district, story.id)}
+                    alt={story.name}
+                    loading="lazy"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      const fallback = getDistrictPhoto(story.district, story.id);
+                      if (target.src !== fallback) {
+                        target.src = fallback;
+                      } else {
+                        target.src = '/images/destinations/statue-of-unity.jpg';
+                      }
+                    }}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#101827] via-black/20 to-black/35 pointer-events-none" />
 
                   {/* Top Badges */}
-                  <div className="relative z-10 flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#101827]/90 text-[#FF9418] border border-[#25324A]">
+                  <div className="absolute top-2.5 left-2.5 right-2.5 z-10 flex items-center justify-between gap-2">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#101827]/90 text-[#FF9418] border border-[#25324A] backdrop-blur-sm">
                       📍 {story.district}
                     </span>
 
                     <button
                       onClick={() => toggleBookmark(story.id)}
-                      className={`p-1.5 rounded-lg border-2 transition-all ${
+                      className={`p-1.5 rounded-lg border-2 transition-all backdrop-blur-sm ${
                         isBookmarked 
                           ? 'bg-[#FF9418] text-[#101827] border-[#101827] shadow-[2px_2px_0px_#101827]' 
-                          : 'bg-[#101827]/80 text-[#8F9CAE] border-[#25324A] hover:text-white'
+                          : 'bg-[#101827]/85 text-[#8F9CAE] border-[#25324A] hover:text-white'
                       }`}
                       aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark story'}
                     >
@@ -196,11 +208,11 @@ export const UnfilteredStoriesView: React.FC = () => {
                   </div>
 
                   {/* Bottom Header: Region Name & Fact-check Badge */}
-                  <div className="relative z-10 flex items-center justify-between gap-2">
+                  <div className="absolute bottom-2.5 left-2.5 right-2.5 z-10 flex items-center justify-between gap-2">
                     <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#FF9418] text-[#101827] border border-[#101827] shadow-sm font-mono">
                       {story.factCheckBadge || 'Documented Lore'}
                     </span>
-                    <span className="text-[10px] font-mono text-[#F1E8D7] bg-[#101827]/90 px-2 py-0.5 rounded border border-[#25324A]">
+                    <span className="text-[10px] font-mono text-[#F1E8D7] bg-[#101827]/90 px-2 py-0.5 rounded border border-[#25324A] backdrop-blur-sm">
                       {culture.primaryIcon} {culture.regionName}
                     </span>
                   </div>

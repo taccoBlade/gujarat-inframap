@@ -46,68 +46,26 @@ export const App: React.FC = () => {
 
       {/* Main View Container with Fluid Transitions & Safe Area Mobile Spacing */}
       <main className={`relative ${isMapMode ? 'pb-16 lg:pb-0' : 'pb-24 lg:pb-12'}`}>
+        {/* Persistent Atlas Map View (Preserves Leaflet Instance & Camera Pan/Zoom) */}
+        <div className={isMapMode ? 'block' : 'hidden'} aria-hidden={!isMapMode}>
+          <AtlasMap />
+        </div>
+
+        {/* Content Views with Fluid Framer-Motion Transitions */}
         <AnimatePresence mode="wait">
-          {isMapMode && (
+          {!isMapMode && (
             <motion.div
-              key="explore"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.18 }}
-            >
-              <AtlasMap />
-            </motion.div>
-          )}
-
-          {currentMode === 'places' && (
-            <motion.div
-              key="places"
+              key={currentMode}
               variants={fluidPageVariants}
               initial="initial"
               animate="animate"
               exit="exit"
               transition={fluidTransition}
             >
-              <PlacesDestinationView />
-            </motion.div>
-          )}
-
-          {currentMode === 'passport' && (
-            <motion.div
-              key="passport"
-              variants={fluidPageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={fluidTransition}
-            >
-              <GujaratPassport />
-            </motion.div>
-          )}
-
-          {currentMode === 'unfiltered' && (
-            <motion.div
-              key="unfiltered"
-              variants={fluidPageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={fluidTransition}
-            >
-              <UnfilteredStoriesView />
-            </motion.div>
-          )}
-
-          {currentMode === 'infrastructure' && (
-            <motion.div
-              key="infrastructure"
-              variants={fluidPageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={fluidTransition}
-            >
-              <InfrastructureDirectoryView />
+              {currentMode === 'places' && <PlacesDestinationView />}
+              {currentMode === 'passport' && <GujaratPassport />}
+              {currentMode === 'unfiltered' && <UnfilteredStoriesView />}
+              {currentMode === 'infrastructure' && <InfrastructureDirectoryView />}
             </motion.div>
           )}
         </AnimatePresence>

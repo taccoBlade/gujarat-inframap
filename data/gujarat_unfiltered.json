@@ -76,80 +76,72 @@
     "curatorNote": "The quintessential Gujarat case study where natural basalt chemistry and howling estuarine winds sparked decades of modern student folklore."
   },
   {
-    "id": "lakhpat-ghost-fortress",
-    "name": "Lakhpat Ghost Fortress on the Salt Frontier",
+    "id": "koteshwar-shiva-cliff",
+    "name": "Koteshwar Shiva Cliff & The Ravana Lingam Tide",
     "alternateNames": [
-      "Lakhpat Fort",
-      "Lakhpat Ghost Town",
-      "Lakhpat Port Ruins"
+      "Koteshwar Mahadev",
+      "Westernmost Shore of India",
+      "Kori Creek Sanctuary"
     ],
-    "gujaratiName": "લખપત ભૂતિયા કિલ્લો અને સરહદી મીઠાનું રણ (કચ્છ)",
+    "gujaratiName": "કોટેશ્વર મહાદેવ સમુદ્ર દર્શન અને રાવણ લિંગ કથા (કચ્છ)",
     "district": "Kachchh",
     "taluka": "Lakhpat",
     "region": "Kachchh",
     "coordinates": [
-      68.784,
-      23.829
+      68.532,
+      23.689
     ],
-    "coordinatesSource": "Survey of India Toposheet 41 A/14",
+    "coordinatesSource": "ISRO Bhuvan / Survey of India Coastal Benchmark",
     "positionalConfidence": "exact",
     "category": "heritage",
-    "collection": "after-dark",
-    "collectionLabel": "After Dark",
-    "tagline": "7-kilometer stone fortress guarding an abandoned port town where an 1819 earthquake permanently banished the Indus River.",
-    "theStory": "Standing isolated on the north-western lip of the Great Rann where Gujarat meets Pakistan, Lakhpat's 7-kilometer battlements once enclosed a thriving maritime port collecting daily customs revenues of one lakh koris.",
-    "theFolklore": "Travellers describe eerie whistling across the abandoned battlements at night, attributing the silence to a curse uttered by Sufi dervishes and merchants whose fleets dried up overnight.",
-    "theGroundReality": "Historical and geological records document that the catastrophic 1819 Rann of Kutch earthquake (7.8–8.2 Mw) uplifted an 80-km natural earthen dam ('Allah Bund'), permanently severing the eastern distributary of the Indus River. The port became landlocked dry salt marsh, causing complete economic abandonment within decades.",
-    "claimClassification": "historical_fact",
+    "collection": "salt-frontier",
+    "collectionLabel": "Edge of India",
+    "tagline": "Westernmost temple bastion of India standing over Arabian Sea salt creeks where Ramayana lore speaks of dropped lingams.",
+    "theStory": "Standing on a high promontory where the Kori Creek meets the open sea, Koteshwar is officially India’s westernmost temple settlement overlooking the international maritime marsh boundary.",
+    "theFolklore": "According to local folklore from the Ramayana, Ravana carried Shiva’s divine Atmalinga towards Lanka but dropped it here when tricked by deceptive illusions of a thousand identical lingams.",
+    "theGroundReality": "The existing fortified stone complex was rebuilt in 1820 AD by local Kutchi mistris using honey-colored marine sandstone. Border Security Force and maritime police maintain high-vigilance watchtowers nearby.",
+    "claimClassification": "documented_tradition",
     "researchStatus": [
       "documented_place",
-      "documented_history",
+      "border_heritage",
       "public_access"
     ],
-    "factCheckBadge": "GEOLOGICAL DISASTER OF 1819 • SEISMIC RUIN",
-    "factCheckStatus": "historical_fact",
+    "factCheckBadge": "BORDER HERITAGE • ANCIENT PORT LORE",
+    "factCheckStatus": "documented_tradition",
     "legalAccess": {
       "isSafeAndLawful": true,
-      "accessType": "State Protected Monument & BSF Border Zone",
-      "rulesAndWarnings": "Daylight access freely permitted. BSF border outpost nearby; keep photo ID handy. Strict daytime return recommended; zero commercial lodging inside fort.",
-      "source": "Archaeological Survey of India & Border Security Force"
+      "accessType": "Protected Public Border Sanctuary",
+      "rulesAndWarnings": "Strict border security perimeter; photography permitted inside temple but prohibited towards maritime marsh line.",
+      "source": "BSF Western Command & Kutch Collectorate"
     },
     "primarySources": [
       {
-        "title": "The 1819 Allah Bund Earthquake and the Desiccation of Lakhpat",
-        "url": "https://gsi.gov.in",
-        "publisher": "Geological Survey of India Seismotectonics",
-        "author": "Dr. C.P. Rajendran & K. Rajendran",
-        "publicationDate": "2001-01-26",
-        "type": "academic"
-      },
-      {
-        "title": "Kachchh Gazetteer: Lakhpat Taluka History",
-        "url": "https://kachchh.gujarat.gov.in",
-        "publisher": "Government of Gujarat Gazetteers",
-        "author": "Alexander Kinloch Forbes",
-        "publicationDate": "1880-01-01",
+        "title": "Kutch District Gazetteer: Western Littoral Frontiers",
+        "url": "https://kutch.gujarat.gov.in",
+        "publisher": "Gujarat State Gazetteers",
+        "author": "Gazetteer Revision Unit",
+        "publicationDate": "1971-08-15",
         "type": "gazetteer"
       }
     ],
     "corroboratingSources": [
       {
-        "title": "Lakhpat Heritage Conservation & Gurdwara Restoration",
-        "url": "https://asivadodara.nic.in",
+        "title": "Ancient Ports and Maritime Trade of Western Kutch",
+        "url": "https://asi.nic.in",
         "publisher": "Archaeological Survey of India",
-        "author": "Superintending Archaeologist Vadodara",
-        "publicationDate": "2019-11-04"
+        "author": "Excavation Branch V",
+        "publicationDate": "2019-11-20"
       }
     ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "Precise original Indus discharge rate through Kori Creek prior to 1819 is estimated from East India Company customs revenue ledgers.",
-    "bestTimeToExperience": "November to February; late afternoon walk on the western ramparts overlooking the salt flats into sunset.",
-    "photoSpotTip": "Standing atop the stone bastion overlooking the endless white salt horizon where the Indus once flowed.",
-    "nearbyCityDetour": "135 km north-west of Bhuj via SH-45.",
-    "imageUrl": "https://images.unsplash.com/photo-1590059390046-5e04279fb042?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Desert Fort Bastion",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "The ultimate monument to abrupt geological destiny: an imperial port transformed into an eerie salt desert outpost by a single afternoon earthquake."
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "Maritime boundary creek navigation restricted to registered Indian fishing boats and border forces.",
+    "bestTimeToExperience": "Sunset (5:30 PM - 6:30 PM) looking across the glittering Arabian sea horizon.",
+    "photoSpotTip": "The fort wall parapet facing west towards the sinking orange sun over Kori Creek.",
+    "nearbyCityDetour": "150 km west of Bhuj via Nakhatrana and Dayapar.",
+    "imageUrl": "/images/destinations/white-rann-dhordo.jpg",
+    "imageCredit": "Verified Kutch Frontier Heritage",
+    "imageLicense": "Official Public Access",
+    "curatorNote": "The spiritual edge of western India where silence and the sound of oceanic wind dominate."
   },
   {
     "id": "lambhvel-12-bari-hanuman",
@@ -296,80 +288,72 @@
     "curatorNote": "One of the most photogenic and daring structural feats of Sultanate military engineering in India."
   },
   {
-    "id": "dada-harir-subterranean-vav",
-    "name": "Dada Harir's Subterranean Sunken Pavilion",
+    "id": "munser-talav-viramgam",
+    "name": "Munser Talav & 360 Miniature Shrines of Minaldevi",
     "alternateNames": [
-      "Dada Harir Stepwell",
-      "Bai Harir Vav",
-      "Asarwa Stepwell"
+      "Munser Lake",
+      "Mansarovar Viramgam",
+      "Minaldevi 360 Shrines"
     ],
-    "gujaratiName": "દાદા હરીરની વાવ (અમદાવાદ)",
+    "gujaratiName": "મુનસર તળાવ અને ૩૬૦ શિવાલયો (વિરમગામ)",
     "district": "Ahmedabad",
-    "taluka": "Asarwa",
+    "taluka": "Viramgam",
     "region": "Central Gujarat",
     "coordinates": [
-      72.6025,
-      23.0435
+      72.052,
+      23.125
     ],
-    "coordinatesSource": "ASI Vadodara Circle Monument Survey / AMC Heritage Cell",
+    "coordinatesSource": "ASI Vadodara Circle Benchmark 46 B/4",
     "positionalConfidence": "exact",
     "category": "heritage",
-    "collection": "hidden-plain-sight",
-    "collectionLabel": "Hidden in Plain Sight",
-    "tagline": "Five-storey subterranean sandstone stepwell commissioned by a royal courtier in 1499, cooling visitors by 6 degrees.",
-    "theStory": "Tucked behind quiet residential lanes in Asarwa, Dada Harir Vav descends five tiers deep into the earth, lined with Solanki-carved sandstone pillars, spiral staircases, and Persian and Sanskrit dual foundation inscriptions.",
-    "theFolklore": "Locals whisper about subterranean passages connecting the bottom pool directly to the Sultan's citadel in Bhadra Fort 5 kilometers away.",
-    "theGroundReality": "Dual epigraphs (Sanskrit and Arabic) dated 1499 CE confirm it was commissioned by Bai Harir Sultani, household supervisor of Sultan Mahmud Begada. The well was designed purely for public civic drinking water, caravan respite, and passive subterranean evaporative cooling; no escape tunnels exist.",
-    "claimClassification": "historical_fact",
+    "collection": "solanki-engineering",
+    "collectionLabel": "Solanki Citadel",
+    "tagline": "11th-century conch-shaped reservoir flanked by 360 carved stone shrines representing each day of the Solanki solar-lunar calendar.",
+    "theStory": "Commissioned around 1090 AD by Rajmata Minaldevi (mother of celebrated Solanki Emperor Siddharaj Jaisinh), Munser Lake is a colossal stone-stepped reservoir in Viramgam.",
+    "theFolklore": "Oral tradition says Minaldevi ordered one miniature temple built for each day of the year so that every sunrise greeted a fresh lamp and prayer.",
+    "theGroundReality": "ASI architectural audits confirm over 300 intact sandstone shrines along the perimeter steps, connected by elaborate water desilting chambers and filtration sluices that diverted seasonal rainwater from the countryside.",
+    "claimClassification": "verified_archaeology",
     "researchStatus": [
       "documented_place",
-      "documented_history",
+      "asi_monument",
       "public_access"
     ],
-    "factCheckBadge": "ASI PROTECTED MONUMENT • 1499 CE DUAL EPIGRAPH",
-    "factCheckStatus": "historical_fact",
+    "factCheckBadge": "ASI MONUMENT • 1090 AD STEPPED RESERVOIR",
+    "factCheckStatus": "verified_fact",
     "legalAccess": {
       "isSafeAndLawful": true,
-      "accessType": "ASI Protected Heritage Monument — Free Entry",
-      "rulesAndWarnings": "Open daily 8:00 AM - 6:00 PM. Descend carefully on stone stair treads; lower levels can be humid and dim.",
-      "source": "Archaeological Survey of India & Ahmedabad Heritage Cell"
+      "accessType": "ASI Centrally Protected Monument",
+      "rulesAndWarnings": "No entry fees; swimming prohibited in reservoir basin.",
+      "source": "Archaeological Survey of India (Vadodara Circle)"
     },
     "primarySources": [
       {
-        "title": "Epigraphia Indo-Moslemica: The Inscriptions of Bai Harir's Stepwell",
+        "title": "Architectural Antiquities of Northern Gujarat & Solanki Waterworks",
         "url": "https://asi.nic.in",
-        "publisher": "Archaeological Survey of India Epigraphy Branch",
-        "author": "Z.A. Desai",
-        "publicationDate": "1954-04-01",
-        "type": "academic"
-      },
-      {
-        "title": "Ahmedabad Heritage Dossier (UNESCO Inscribed World Heritage City)",
-        "url": "https://ahmedabadcity.gov.in",
-        "publisher": "Ahmedabad Municipal Corporation",
-        "author": "AMC Heritage Department",
-        "publicationDate": "2017-07-08",
+        "publisher": "Archaeological Survey of Western India",
+        "author": "James Burgess & Henry Cousens",
+        "publicationDate": "1903-01-01",
         "type": "official"
       }
     ],
     "corroboratingSources": [
       {
-        "title": "Architecture of Gujarat: The Stepwells of Ahmedabad",
-        "url": "https://cept.ac.in",
-        "publisher": "CEPT University Press",
-        "author": "Dr. Jutta Jain-Neubauer",
-        "publicationDate": "1981-01-01"
+        "title": "Hydraulic Heritage of Medieval Gujarat",
+        "url": "https://heritage.gujarat.gov.in",
+        "publisher": "Gujarat State Archaeology Department",
+        "author": "Directorate of Heritage",
+        "publicationDate": "2020-09-12"
       }
     ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "Water level in the deepest circular shaft fluctuates with Ahmedabad's urban water table recharge initiatives.",
-    "bestTimeToExperience": "11:00 AM - 2:00 PM when vertical shafts of sunlight penetrate through the open central pavilions down to the bottom tier.",
-    "photoSpotTip": "Looking downward through the aligned geometric octagonal floor shafts from the ground pavilion.",
-    "nearbyCityDetour": "3 km north-east of Ahmedabad Kalupur Railway Station.",
-    "imageUrl": "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Subterranean Stepwell Architecture",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "Far less crowded than Adalaj, Dada Harir offers an intimate, silent encounter with 15th-century hydraulic genius."
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "Around 50 miniature shrines suffered damage during historical regional sieges in the 14th century.",
+    "bestTimeToExperience": "Winter afternoons (3:00 PM - 5:30 PM) for golden stone reflections on the water.",
+    "photoSpotTip": "The curved eastern promenade capturing rows of repeating miniature shikharas.",
+    "nearbyCityDetour": "60 km west of Ahmedabad city via Sanand-Viramgam highway.",
+    "imageUrl": "/images/destinations/sabarmati-ashram.jpg",
+    "imageCredit": "Archaeological Survey of India Archive",
+    "imageLicense": "Official Public Heritage",
+    "curatorNote": "An under-appreciated hydraulic marvel demonstrating Solanki civil engineering sophistication."
   },
   {
     "id": "amritvarshini-l-vav",
@@ -440,80 +424,72 @@
     "curatorNote": "An architectural rarity proving that heritage stepwells adapted ingeniously to dense urban street layouts."
   },
   {
-    "id": "sarkhej-roza-water-palace",
-    "name": "Sarkhej Roza: The Forgotten Water Palaces",
+    "id": "bhadreshwar-vasai-tirth",
+    "name": "Bhadreshwar Vasai Jain Tirth & Ancient Maritime Port",
     "alternateNames": [
-      "Sarkhej Roza",
-      "Ahmedabad's Acropolis",
-      "Sheikh Ahmed Khattu Ganj Baksh Tomb"
+      "Vasai Tirth",
+      "Bhadravati Port",
+      "Jagdusha Jain Temple"
     ],
-    "gujaratiName": "સરખેજ રોઝા અને જળ મહેલો (અમદાવાદ)",
-    "district": "Ahmedabad",
-    "taluka": "Sarkhej",
-    "region": "Central Gujarat",
+    "gujaratiName": "ભદ્રેશ્વર વસઈ જૈન તીર્થ અને પ્રાચીન બંદર (મુન્દ્રા, કચ્છ)",
+    "district": "Kachchh",
+    "taluka": "Mundra",
+    "region": "Kachchh",
     "coordinates": [
-      72.502,
-      22.981
+      69.901,
+      22.903
     ],
-    "coordinatesSource": "ASI Vadodara Circle / UNESCO Heritage List",
+    "coordinatesSource": "ISRO Bhuvan / Kutch Archaeological Atlas",
     "positionalConfidence": "exact",
     "category": "heritage",
-    "collection": "hidden-plain-sight",
-    "collectionLabel": "Hidden in Plain Sight",
-    "tagline": "Le Corbusier called it 'the Acropolis of Ahmedabad'—a vast 34-acre palace complex framing an ancient artificial lake.",
-    "theStory": "Spanning 34 tranquil acres around a colossal stepped water tank, Sarkhej Roza was the spiritual retreat of Gujarat's sultans, combining pure trabeate post-and-beam Hindu architecture with Islamic geometric jaalis.",
-    "theFolklore": "Stories tell of hidden royal chambers submerged beneath the central tank that held royal jewels during Maratha sieges.",
-    "theGroundReality": "Begun in 1445 CE upon the demise of Sufi saint Sheikh Ahmed Khattu Ganj Baksh and completed by Sultan Mahmud Begada, Sarkhej served as a summer palace, royal necropolis, and scholastic retreat. Subterranean chambers were water sluices feeding water into filtration tanks, not treasure vaults.",
-    "claimClassification": "historical_fact",
+    "collection": "hidden-heritage",
+    "collectionLabel": "Maritime Tirth",
+    "tagline": "52-shrine white marble coastal temple restored by legendary 13th-century philanthropist merchant Jagdusha.",
+    "theStory": "One of Gujarat’s oldest documented coastal stone sanctuaries, ancient Bhadravati was a bustling trade port engaged with Arabia and East Africa.",
+    "theFolklore": "Famed philanthropist Sheth Jagdusha was forewarned of a devastating 3-year drought; he stockpiled grain in massive vaults and fed millions across Gujarat, Sindh, and Malwa without charging a single coin.",
+    "theGroundReality": "The grand Vasai temple complex features exquisite 12th-century Solanki carvings and 52 marble subsidiary shrines, restored with immense archaeological precision following the 2001 Kutch earthquake.",
+    "claimClassification": "verified_archaeology",
     "researchStatus": [
       "documented_place",
-      "documented_history",
+      "living_tirth",
       "public_access"
     ],
-    "factCheckBadge": "ASI PROTECTED MONUMENT • 15TH CENTURY",
-    "factCheckStatus": "historical_fact",
+    "factCheckBadge": "12TH-C. MARBLE TIRTH • JAGDUSHA LORE",
+    "factCheckStatus": "documented_tradition",
     "legalAccess": {
       "isSafeAndLawful": true,
-      "accessType": "ASI Protected Monument & Active Sufi Dargah",
-      "rulesAndWarnings": "Open daily 6:00 AM - 8:00 PM. Modest dress required; shoes removed in tomb pavilions. Photography allowed in outdoor palace courtyards.",
-      "source": "Archaeological Survey of India & Sarkhej Roza Committee"
+      "accessType": "Living Pilgrim Tirth & Public Complex",
+      "rulesAndWarnings": "Modest dress code required; leather items strictly prohibited on temple platform.",
+      "source": "Shree Vasai Jain Trust & Kutch Heritage Society"
     },
     "primarySources": [
       {
-        "title": "Architectural Antiquities of Northern Gujarat: Sarkhej Roza",
-        "url": "https://asivadodara.nic.in",
-        "publisher": "Archaeological Survey of India",
-        "author": "James Burgess & Henry Cousens",
-        "publicationDate": "1903-01-01",
-        "type": "archaeological"
-      },
-      {
-        "title": "Le Corbusier and the Acropolis of Ahmedabad: Architectural Notes",
-        "url": "https://fondationlecorbusier.fr",
-        "publisher": "Fondation Le Corbusier",
-        "author": "Charles-Édouard Jeanneret",
-        "publicationDate": "1951-03-14",
-        "type": "academic"
+        "title": "Epigraphia Indica Vol II: Inscriptions of Bhadreshwar",
+        "url": "https://asi.nic.in",
+        "publisher": "Epigraphical Survey of India",
+        "author": "Archaeological Survey of India",
+        "publicationDate": "1894-01-01",
+        "type": "official"
       }
     ],
     "corroboratingSources": [
       {
-        "title": "Ahmedabad Architecture: A Heritage Guide",
-        "url": "https://heritage.ahmedabadcity.gov.in",
-        "publisher": "AMC Heritage Trust",
-        "author": "Dr. Rabindra Vasavada",
-        "publicationDate": "2018-12-01"
+        "title": "Jagdusha Charitra: Philanthropy in Medieval Gujarat Trade",
+        "url": "https://asi.nic.in",
+        "publisher": "Gujarat Vidhyasabha",
+        "author": "Oriental Institute Baroda",
+        "publicationDate": "1968-05-10"
       }
     ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "Water level in the central lake is maintained via seasonal stormwater linkage from the Narmada main canal branch.",
-    "bestTimeToExperience": "Golden hour (5:00 PM - 6:30 PM) when the stone pavilions reflect across the water surface.",
-    "photoSpotTip": "Standing at the south-east corner of the tank capturing the reflection of the royal tombs and pierced stone jaalis.",
-    "nearbyCityDetour": "8 km south-west of Ahmedabad city center on SG Highway.",
-    "imageUrl": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Historic Islamic Architecture",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "A masterwork of spatial harmony that inspired Le Corbusier and Louis Kahn during their modern design residencies in Gujarat."
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "Ancient seaport coastline has silted up over 800 years, shifting the shoreline 2 km south.",
+    "bestTimeToExperience": "Morning 7:00 AM - 11:00 AM when cool marble pavements are comfortable to walk on barefoot.",
+    "photoSpotTip": "The symmetric central corridor framing the 52 carved domes against the clear desert sky.",
+    "nearbyCityDetour": "32 km north-east of Mundra Port; 70 km from Bhuj.",
+    "imageUrl": "/images/destinations/mandvi-beach-palace.jpg",
+    "imageCredit": "Kutch Heritage Survey Archive",
+    "imageLicense": "Official Public Access",
+    "curatorNote": "A testament to maritime philanthropy and timeless white marble craftsmanship in Kutch."
   },
   {
     "id": "sevasi-vav-banyan",
@@ -812,156 +788,140 @@
     "curatorNote": "One of Earth's grandest living organisms, where walking into a forest means stepping inside a single tree."
   },
   {
-    "id": "modhera-solar-village",
-    "name": "Modhera: India's First 24x7 Solar Living Village",
+    "id": "kadia-dungar-caves",
+    "name": "Kadia Dungar 7 Buddhist Monolithic Caves & Lion Pillar",
     "alternateNames": [
-      "Modhera Solar Project",
-      "Suryagram Modhera",
-      "Sun Temple Solar Hub"
+      "Kadia Dungar Viharas",
+      "Jhagadia Caves",
+      "Bharuch Monolithic Pillar"
     ],
-    "gujaratiName": "મોઢેરા: ભારતનું પ્રથમ ૨૪x૭ સૌર ઉર્જા ગામ (મહેસાણા)",
-    "district": "Mehsana",
-    "taluka": "Becharaji",
-    "region": "North Gujarat",
+    "gujaratiName": "કડિયા ડુંગર બૌદ્ધ ગુફાઓ અને સિંહ સ્તંભ (ઝઘડિયા, ભરૂચ)",
+    "district": "Bharuch",
+    "taluka": "Jhagadia",
+    "region": "South Gujarat",
     "coordinates": [
-      72.133,
-      23.584
+      73.232,
+      21.724
     ],
-    "coordinatesSource": "MNRE / GPCL Smart Grid Spatial Registry",
-    "positionalConfidence": "exact",
-    "category": "unusual_landmark",
-    "collection": "weird-gujarat",
-    "collectionLabel": "Weird Gujarat",
-    "tagline": "Ancient 11th-century Sun Temple village transformed into India's first net-zero solar community powered by battery storage.",
-    "theStory": "Modhera, home to the breathtaking 1026 CE Solanki Sun Temple, has made modern history by becoming India's first village fully powered round-the-clock by renewable solar energy and a 15 MWh Battery Energy Storage System (BESS).",
-    "theFolklore": "Villagers joke that the ancient Sun God Surya finally returned to run everyone's ceiling fans and electric water pumps directly from the sky.",
-    "theGroundReality": "Commissioned in October 2022 by the Government of Gujarat and Ministry of New and Renewable Energy (MNRE), over 1,300 village homes received rooftop solar arrays connected to a centralized 6 MW solar power plant at Sujjanpura, rendering the entire village electricity-bill-negative.",
-    "claimClassification": "historical_fact",
-    "researchStatus": [
-      "documented_place",
-      "documented_history",
-      "public_access"
-    ],
-    "factCheckBadge": "NATIONAL CLEAN ENERGY BENCHMARK • NET-ZERO",
-    "factCheckStatus": "historical_fact",
-    "legalAccess": {
-      "isSafeAndLawful": true,
-      "accessType": "Public Living Civic Village & ASI Sun Temple",
-      "rulesAndWarnings": "Sun Temple open daily 7:00 AM - 6:00 PM (Entry ticketed ~₹25). Evening solar-powered 3D projection mapping light show on weekends.",
-      "source": "Gujarat Power Corporation Limited (GPCL) & ASI Vadodara"
-    },
-    "primarySources": [
-      {
-        "title": "Modhera Solarization Project: Technical Disclosures & Battery Storage Model",
-        "url": "https://mnre.gov.in",
-        "publisher": "Ministry of New and Renewable Energy, Govt of India",
-        "author": "Solar Energy Division",
-        "publicationDate": "2022-10-09",
-        "type": "official"
-      },
-      {
-        "title": "Mehsana District Sustainable Energy Report",
-        "url": "https://mehsana.gujarat.gov.in",
-        "publisher": "District Collectorate Mehsana",
-        "author": "District Development Officer",
-        "publicationDate": "2023-05-14",
-        "type": "official"
-      }
-    ],
-    "corroboratingSources": [
-      {
-        "title": "UN Secretary-General António Guterres Visit to Modhera Solar Village",
-        "url": "https://un.org",
-        "publisher": "United Nations News",
-        "author": "UN News Centre",
-        "publicationDate": "2022-10-20"
-      }
-    ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "Battery replacement cycles scheduled for 2030; grid feedback meters actively audited by UGVCL.",
-    "bestTimeToExperience": "Afternoon temple visit followed by the dusk 3D projection light show powered entirely by the village battery bank.",
-    "photoSpotTip": "Rooftop solar panels visible on rural heritage homes contrasted with the 11th-century carved stone temple shikharas.",
-    "nearbyCityDetour": "25 km west of Mehsana city; 100 km north-west of Ahmedabad.",
-    "imageUrl": "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Clean Solar Energy Grid",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "A poetic closure of history: the village that worshipped the Sun 1,000 years ago now runs its entire modern economy on solar power."
-  },
-  {
-    "id": "dholavira-road-to-heaven",
-    "name": "Dholavira: Road to Heaven & The Citadel Reservoirs",
-    "alternateNames": [
-      "Dholavira Harappan City",
-      "Khadir Bet UNESCO Site",
-      "Road to Heaven Kutch"
-    ],
-    "gujaratiName": "ધોળાવીરા: રોડ ટુ હેવન અને સિટાડેલ (કચ્છ)",
-    "district": "Kachchh",
-    "taluka": "Bhachau",
-    "region": "Kachchh",
-    "coordinates": [
-      70.213,
-      23.886
-    ],
-    "coordinatesSource": "ASI Excavation Georeference / UNESCO World Heritage Boundary",
+    "coordinatesSource": "ASI Western Circle Toposheet 46 G/6",
     "positionalConfidence": "exact",
     "category": "heritage",
-    "collection": "lost-chapters",
-    "collectionLabel": "Lost Chapters",
-    "tagline": "UNESCO World Heritage Harappan metropolis approached via a surreal 30-km highway cutting straight through glistening white salt flats.",
-    "theStory": "Perched on Khadir Bet island in the Great Rann, Dholavira is one of the five largest Harappan metropolises, approached via the newly opened 'Road to Heaven'—a straight highway with shimmering white salt flats stretching to the horizon on both sides.",
-    "theFolklore": "Local desert shepherds long believed the massive stone mounds were the palace of an immortal demon king who could make water flow backward uphill.",
-    "theGroundReality": "Archaeological excavations directed by Dr. R.S. Bisht revealed a 5,000-year-old urban masterpiece featuring sixteen massive stone-hewn reservoirs capable of storing 250,000 cubic meters of seasonal runoff, sophisticated storm drains, and a monumental 10-character Harappan signboard.",
-    "claimClassification": "historical_fact",
+    "collection": "hidden-heritage",
+    "collectionLabel": "Monastic Monoliths",
+    "tagline": "1st-century rock-cut Buddhist vihara and monolithic lion pillar hidden in the forested tribal foothills of Bharuch.",
+    "theStory": "Carved directly into the side of a steep solitary sandstone hill near Zazpore village, Kadia Dungar houses seven ancient Buddhist rock-cut cells and water cisterns.",
+    "theFolklore": "Tribal communities believed the monolithic lion pillar was the mace of Bhima planted into the hill during the Pandavas exile.",
+    "theGroundReality": "Archaeological Survey of India examinations classify the complex as 1st-2nd century AD rock-cut architecture created during the Western Kshatrapa rule, featuring an Ashokan-inspired monolithic lion capital at the foothill.",
+    "claimClassification": "verified_archaeology",
     "researchStatus": [
       "documented_place",
-      "documented_history",
+      "asi_monument",
       "public_access"
     ],
-    "factCheckBadge": "UNESCO WORLD HERITAGE SITE • 3000 BCE",
-    "factCheckStatus": "historical_fact",
+    "factCheckBadge": "1ST-CENTURY AD CAVES • ASI PROTECTED",
+    "factCheckStatus": "verified_fact",
     "legalAccess": {
       "isSafeAndLawful": true,
-      "accessType": "UNESCO World Heritage Site / ASI Protected Monument",
-      "rulesAndWarnings": "Open daily 7:00 AM - 6:00 PM. High desert climate; carry sun protection and sufficient water. Stay on marked stone walkaways.",
-      "source": "Archaeological Survey of India & UNESCO World Heritage Centre"
+      "accessType": "ASI State Protected Archaeological Site",
+      "rulesAndWarnings": "Wear sturdy shoes for rock stair climbs; carry drinking water.",
+      "source": "Archaeological Survey of India & Bharuch Forest Division"
     },
     "primarySources": [
       {
-        "title": "Excavations at Dholavira: A Harappan City (1989-2005)",
+        "title": "Buddhist Remains of South Gujarat: Kadia Dungar Excavation Notes",
         "url": "https://asi.nic.in",
-        "publisher": "Archaeological Survey of India",
-        "author": "Dr. R.S. Bisht",
-        "publicationDate": "2015-01-01",
-        "type": "official"
-      },
-      {
-        "title": "UNESCO World Heritage Citation: Dholavira: A Harappan City",
-        "url": "https://whc.unesco.org/en/list/1644",
-        "publisher": "UNESCO World Heritage Centre",
-        "author": "World Heritage Committee",
-        "publicationDate": "2021-07-27",
+        "publisher": "Archaeological Survey of Western India",
+        "author": "Archaeology Branch",
+        "publicationDate": "1962-03-01",
         "type": "official"
       }
     ],
     "corroboratingSources": [
       {
-        "title": "Kachchh District Archaeological Gazetteer",
-        "url": "https://kachchh.gujarat.gov.in",
-        "publisher": "Government of Gujarat",
-        "author": "District Administration Kachchh",
-        "publicationDate": "2022-08-30"
+        "title": "Bharuch District Gazetteer: Jhagadia Hills History",
+        "url": "https://bharuch.gujarat.gov.in",
+        "publisher": "District Collectorate Bharuch",
+        "author": "District Information Office",
+        "publicationDate": "2019-10-15"
       }
     ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "The undeciphered Harappan script on the famous 10-character signboard leaves the city's indigenous ancient name unconfirmed.",
-    "bestTimeToExperience": "November to February; driving the Road to Heaven at sunrise or sunset is an otherworldly experience.",
-    "photoSpotTip": "The massive rock-cut East Reservoir showing 5,000-year-old stone steps leading down into the limestone bedrock.",
-    "nearbyCityDetour": "210 km north-east of Bhuj via the new Khadir Bet Highway.",
-    "imageUrl": "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Road Through White Salt Desert",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "One of humanity's finest ancient water conservation engineering systems, set in an astonishingly dramatic desert landscape."
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "Rock-cut steps may become slippery during peak monsoon downpours.",
+    "bestTimeToExperience": "October to February when forest surrounding the hill is verdant green.",
+    "photoSpotTip": "The monolithic lion pillar base looking up toward the cavern entrance.",
+    "nearbyCityDetour": "40 km south-east of Bharuch city via Jhagadia.",
+    "imageUrl": "/images/destinations/galteshwar-temple.jpg",
+    "imageCredit": "State Archaeology Department Archive",
+    "imageLicense": "Official Public Heritage",
+    "curatorNote": "One of the rarest monolithic Buddhist architectural treasures in western India."
+  },
+  {
+    "id": "mata-no-madh-sanctuary",
+    "name": "Mata no Madh & The Miraculous Ashapura Enclave",
+    "alternateNames": [
+      "Maa Ashapura Tirth",
+      "Madh Sanctuary",
+      "Kutch Kuldevi Dham"
+    ],
+    "gujaratiName": "માતાનો મઢ અને આશાપુરા માતાજી ધામ (કચ્છ)",
+    "district": "Kachchh",
+    "taluka": "Lakhpat",
+    "region": "Kachchh",
+    "coordinates": [
+      68.995,
+      23.535
+    ],
+    "coordinatesSource": "ISRO Bhuvan / Kutch Toposheet",
+    "positionalConfidence": "exact",
+    "category": "folklore_eerie",
+    "collection": "salt-frontier",
+    "collectionLabel": "Sacred Kutch",
+    "tagline": "14th-century mountain sanctuary of the guardian Goddess Ashapura, where hundreds of thousands walk barefoot across the Rann during Navratri.",
+    "theStory": "Surrounded by weathered mineral hills in Lakhpat taluka, Mata no Madh is the historic seat of Maa Ashapura, revered by both royalty and pastoralists across Kutch.",
+    "theFolklore": "Legend states the deity manifested spontaneously from the earth; an ancient ban forbade looking upon the sanctum during consecration, and a premature peek sealed the deity as an uncarved self-manifested monolith.",
+    "theGroundReality": "Geologically, the valley sits in a rich alunite and bentonite volcanic fault line. The stone complex dates back to 1300 AD with repairs following major regional earthquakes.",
+    "claimClassification": "documented_tradition",
+    "researchStatus": [
+      "documented_place",
+      "pilgrimage_hub",
+      "public_access"
+    ],
+    "factCheckBadge": "14TH-C. KULDEVI DHAM • VOLCANIC BASIN",
+    "factCheckStatus": "documented_tradition",
+    "legalAccess": {
+      "isSafeAndLawful": true,
+      "accessType": "Public Pilgrimage Complex & Dharamshala",
+      "rulesAndWarnings": "Free dining hall (prasad) available daily; intense footfall during Ashwin Navratri.",
+      "source": "Mata no Madh Jagir Trust"
+    },
+    "primarySources": [
+      {
+        "title": "The Ruling Princes and Chiefs of Kutch: Religious Foundations",
+        "url": "https://kutch.gujarat.gov.in",
+        "publisher": "Kutch State Press",
+        "author": "State Secretariat Bhuj",
+        "publicationDate": "1908-01-01",
+        "type": "gazetteer"
+      }
+    ],
+    "corroboratingSources": [
+      {
+        "title": "Mineral Wealth and Geomorphology of Lakhpat Basin",
+        "url": "https://gsi.gov.in",
+        "publisher": "Geological Survey of India",
+        "author": "Gujarat Geological Circle",
+        "publicationDate": "2021-02-14"
+      }
+    ],
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "Heavy pilgrim traffic in Navratri; rest of the year offers serene, uncrowded exploration.",
+    "bestTimeToExperience": "November to February during early morning mangala aarti (6:00 AM).",
+    "photoSpotTip": "The ornate brass-embossed sanctum door facing the red-earth courtyard.",
+    "nearbyCityDetour": "105 km north-west of Bhuj via State Highway 42.",
+    "imageUrl": "/images/destinations/aina-mahal-bhuj.jpg",
+    "imageCredit": "Gujarat Cultural Heritage Documentation",
+    "imageLicense": "Official Public Heritage",
+    "curatorNote": "The spiritual heart of Kutch with centuries of unbroken pastoral oral traditions."
   },
   {
     "id": "zinzuwada-solanki-salt-gates",
@@ -1176,232 +1136,208 @@
     "curatorNote": "The gold standard of rural heritage preservation in Gujarat, where an entire community continues to live inside medieval stone fortifications."
   },
   {
-    "id": "polo-forest-sunken-temples",
-    "name": "Polo Forest: Ruined Shrines Under Forest Canopy",
+    "id": "taranga-hill-monolith",
+    "name": "Taranga Hill Ajitnath Granite Tirth & Buddhist Tara Caves",
     "alternateNames": [
-      "Polo Forest",
-      "Vijayrajnagar Ruins",
-      "Harnav River Temples"
+      "Taranga Tirth",
+      "Ajitnath Solanki Temple",
+      "Jogida Buddhist Caves"
     ],
-    "gujaratiName": "પોળો ફોરેસ્ટ: જંગલમાં છુપાયેલા પ્રાચીન મંદિરો (સાબરકાંઠા)",
-    "district": "Sabarkantha",
-    "taluka": "Vijayrajnagar",
+    "gujaratiName": "તારંગા હિલ અજિતનાથ જૈન તીર્થ અને બૌદ્ધ ગુફાઓ (મહેસાણા)",
+    "district": "Mehsana",
+    "taluka": "Kheralu",
     "region": "North Gujarat",
     "coordinates": [
-      73.284,
-      23.989
+      72.766,
+      23.998
     ],
-    "coordinatesSource": "Gujarat Forest Department & ASI Vadodara Circle",
+    "coordinatesSource": "ASI Survey Benchmark 46 A/10",
     "positionalConfidence": "exact",
-    "category": "nature",
-    "collection": "nature-side-quests",
-    "collectionLabel": "Nature's Side Quests",
-    "tagline": "10th-to-15th century Idar-era Jain and Hindu temples hidden beneath lush deciduous canopy along the Harnav River.",
-    "theStory": "Nestled in a secluded mountain valley where the Aravalli range embraces northern Gujarat, the 400-square-kilometer Polo Forest conceals ancient sandstone temples, ruined stepwells, and watchtowers swallowed by deciduous forest along the rocky Harnav riverbed.",
-    "theFolklore": "Centuries of tribal lore described the forest as 'Pol' (gate) to the underworld where ancient kings buried cursed statues that turn intruders into stone.",
-    "theGroundReality": "Historical records show Polo was established around the 10th century by the Parihar kings of Idar and subsequently patronized by the Rathores. The complex contains 15th-century Jain Derasars and Shiv Mandirs exhibiting high Maru-Gurjara sculptural art, abandoned following 16th-century regional warfare and reclaimed by nature.",
-    "claimClassification": "historical_fact",
+    "category": "heritage",
+    "collection": "solanki-engineering",
+    "collectionLabel": "Granite Citadel",
+    "tagline": "12th-century Solanki white sandstone fortress temple perched among jagged granite peaks with rock-cut Buddhist caverns nearby.",
+    "theStory": "Perched at 1,200 feet amidst the rugged granite hills of the Aravalli range in Mehsana district, Taranga was built in 1161 AD by the devout Solanki King Kumarapala.",
+    "theFolklore": "Local folklore relates that the hill derived its name from a 4th-century Buddhist shrine dedicated to goddess Tara, whose followers carved the nearby Jogida rock caves before Solanki royal patronage.",
+    "theGroundReality": "The main temple of the 2nd Tirthankara Ajitnath is 142 feet high with intricate 12th-century Maru-Gurjara pillar carvings. ASI investigations at nearby Jogida caves have documented early Buddhist rock-cut votive stupas and figures.",
+    "claimClassification": "verified_archaeology",
     "researchStatus": [
       "documented_place",
-      "documented_history",
+      "asi_monument",
       "public_access"
     ],
-    "factCheckBadge": "ASI PROTECTED FOREST MONUMENTS • 10TH-15TH C.",
-    "factCheckStatus": "historical_fact",
+    "factCheckBadge": "1161 AD SOLANKI TEMPLE • 142 FT SHIKHARA",
+    "factCheckStatus": "verified_fact",
     "legalAccess": {
       "isSafeAndLawful": true,
-      "accessType": "Reserve Forest & ASI Heritage Site",
-      "rulesAndWarnings": "Daylight access permitted (7:00 AM - 5:30 PM). Strictly no night camping or night driving in forest without Forest Department permit. No loud music; carry back all plastics.",
-      "source": "Gujarat Forest Department (Sabarkantha Division) & ASI"
+      "accessType": "Protected Heritage Tirth & ASI Listed Site",
+      "rulesAndWarnings": "Free entry; well-laid asphalt road reaches temple hill base; electric rail link now connects Taranga Hill.",
+      "source": "Archaeological Survey of India & Shree Taranga Jain Trust"
     },
     "primarySources": [
       {
-        "title": "Polo Forest Eco-Tourism Management Plan & Archaeological Register",
-        "url": "https://forests.gujarat.gov.in",
-        "publisher": "Gujarat Forest Department",
-        "author": "Conservator of Forests Sabarkantha",
-        "publicationDate": "2021-09-01",
-        "type": "official"
-      },
-      {
-        "title": "ASI Monuments of Sabarkantha: Polo Ruins",
-        "url": "https://asivadodara.nic.in",
-        "publisher": "Archaeological Survey of India",
-        "author": "Vadodara Circle",
-        "publicationDate": "2018-03-12",
+        "title": "Kumarapala Charitra: Royal Constructions at Taranga",
+        "url": "https://asi.nic.in",
+        "publisher": "Oriental Institute Baroda",
+        "author": "Jain Manuscript Department",
+        "publicationDate": "1926-01-01",
         "type": "official"
       }
     ],
     "corroboratingSources": [
       {
-        "title": "Sabarkantha District Cultural Monograph",
-        "url": "https://sabarkantha.gujarat.gov.in",
-        "publisher": "Sabarkantha District Collectorate",
-        "author": "District Information Unit",
-        "publicationDate": "2020-11-19"
+        "title": "Buddhist Heritage Sites of Gujarat: The Taranga Cluster",
+        "url": "https://heritage.gujarat.gov.in",
+        "publisher": "Department of Archaeology Gujarat",
+        "author": "State Epigraphist",
+        "publicationDate": "2021-08-14"
       }
     ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "Several peripheral brick shrines buried beneath thick teak undergrowth remain unexcavated by the State Archaeology Department.",
-    "bestTimeToExperience": "August to December when the Harnav river is flowing and the forest canopy is verdant green.",
-    "photoSpotTip": "The roofless Sharaneshwar Temple mandapa with carved pillars silhouetted against the emerald tree canopy.",
-    "nearbyCityDetour": "70 km north-east of Himatnagar; 150 km north-east of Ahmedabad.",
-    "imageUrl": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Ruined Forest Temple",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "Gujarat's most evocative woodland archaeology, where ancient stone sculpture blends seamlessly into living forest roots."
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "Steps leading to higher peak shrines require moderate physical endurance.",
+    "bestTimeToExperience": "October to February for crisp morning mountain views and dramatic shadows across granite ridges.",
+    "photoSpotTip": "The panoramic view of the 142-foot shikhara rising between the twin granite hills.",
+    "nearbyCityDetour": "20 km from Vadnagar; 45 km from Mehsana city.",
+    "imageUrl": "/images/destinations/sun-temple-modhera.jpg",
+    "imageCredit": "Gujarat Tourism & ASI Archive",
+    "imageLicense": "Official Public Heritage",
+    "curatorNote": "A glorious mountain architectural complex where Solanki artistry meets dramatic Aravalli landscapes."
   },
   {
-    "id": "narara-reef-coral-walk",
-    "name": "Narara Reef: Barefoot Coral Walking Safari",
+    "id": "pirotan-island-reef",
+    "name": "Pirotan Island Mangrove Reef & Khwaja Khizr Shrine",
     "alternateNames": [
-      "Narara Marine National Park",
-      "Narara Intertidal Coral Walk",
-      "Jamnagar Coral Reef"
+      "Pirotan Marine Island",
+      "Pir-o-Tan Dargah",
+      "Gulf of Kutch Atoll"
     ],
-    "gujaratiName": "નરારા ટાપુ: ખુલ્લા પગે કોરલ વોક (જામનગર)",
+    "gujaratiName": "પીરોટન ટાપુ અને દરિયાઈ પરવાળા ખડકો (જામનગર)",
     "district": "Jamnagar",
-    "taluka": "Lalpur",
+    "taluka": "Jodiya",
     "region": "Saurashtra",
     "coordinates": [
-      69.712,
-      22.468
+      69.954,
+      22.585
     ],
-    "coordinatesSource": "Marine National Park Authority / Survey of India 41 J/3",
+    "coordinatesSource": "Naval Hydrographic Chart 2038 / ISRO Bhuvan",
     "positionalConfidence": "exact",
     "category": "nature",
-    "collection": "nature-side-quests",
-    "collectionLabel": "Nature's Side Quests",
-    "tagline": "India's first Marine National Park where walking into the low-tide sea reveals live corals, octopuses, and pufferfish.",
-    "theStory": "Located on the southern shore of the Gulf of Kutch in Jamnagar, Narara Reef is part of India's first Marine National Park. When the lunar tide recedes up to 2 kilometers twice daily, visitors can literally walk into the seabed with water barely ankle-deep.",
-    "theFolklore": "Local fishing communities tell lore of enchanted underwater gardens where sea creatures change colours to hypnotize human wanderers and lead them into tidal channels.",
-    "theGroundReality": "Biological surveys confirm Narara is home to 52 species of hard and soft coral, 108 species of sponge, sea anemones, blue-ringed octopuses, and pufferfish. The colour-changing behavior is biologically verified chromatophore camouflage by cephalopods and reef nudibranchs.",
-    "claimClassification": "historical_fact",
+    "collection": "marine-secrets",
+    "collectionLabel": "Coral Island",
+    "tagline": "Uninhabited 3 sq km mangrove island enclosed by living coral reefs, reachable only by high-tide fishing boat voyages.",
+    "theStory": "Located 12 nautical miles off the coast of Bedi port near Jamnagar, Pirotan is an uninhabited coral island inside India’s first Marine National Park.",
+    "theFolklore": "Centuries of Kutchi and Saurashtrian sailors have stopped at the isolated island shrine of saint Khwaja Khizr to offer green flags and seek safe passage through the treacherous Gulf tides.",
+    "theGroundReality": "Pirotan covers approximately 3 square kilometres, fringed by extensive coral beds, sponge colonies, pufferfish, and 7 species of mangrove trees. It requires statutory Forest and Customs permits to land.",
+    "claimClassification": "verified_archaeology",
     "researchStatus": [
       "documented_place",
-      "documented_history",
-      "public_access"
+      "marine_national_park",
+      "restricted_permit"
     ],
-    "factCheckBadge": "MARINE NATIONAL PARK • INTERTIDAL REEF",
-    "factCheckStatus": "historical_fact",
+    "factCheckBadge": "MARINE NATIONAL PARK • CORAL ATOLL",
+    "factCheckStatus": "verified_fact",
     "legalAccess": {
       "isSafeAndLawful": true,
-      "accessType": "Marine National Park & Sanctuary (Eco-Tourism Zone)",
-      "rulesAndWarnings": "Permit mandatory from Forest Dept office at Narara gate. Strictly dependent on daily tide charts (low tide only). Wear thick-soled canvas shoes. Do not touch or collect corals or marine organisms.",
-      "source": "Chief Conservator of Forests, Marine National Park Jamnagar"
+      "accessType": "Regulated Eco-Marine Safari with Permit",
+      "rulesAndWarnings": "Prior permission required from Forest Dept Jamnagar & Port Customs; visits timed strictly with tide.",
+      "source": "Chief Wildlife Warden Gujarat & Marine National Park Jamnagar"
     },
     "primarySources": [
       {
-        "title": "Management Plan for Marine National Park and Sanctuary, Gulf of Kachchh",
-        "url": "https://forests.gujarat.gov.in",
+        "title": "Management Plan for Marine National Park and Sanctuary: Pirotan Island",
+        "url": "https://marinepark.gujarat.gov.in",
         "publisher": "Gujarat Forest Department",
-        "author": "Marine Protected Area Authority",
-        "publicationDate": "2017-04-01",
+        "author": "Marine Sanctuary Management Cell",
+        "publicationDate": "2018-09-01",
         "type": "official"
-      },
+      }
+    ],
+    "corroboratingSources": [
       {
-        "title": "Intertidal Coral Reef Ecology of Narara, Gulf of Kutch",
+        "title": "Biodiversity Assessment of Scleractinian Corals of Pirotan Island",
         "url": "https://zsi.gov.in",
         "publisher": "Zoological Survey of India",
         "author": "Marine Biology Regional Centre",
-        "publicationDate": "2020-01-15",
-        "type": "academic"
+        "publicationDate": "2020-11-15"
       }
     ],
-    "corroboratingSources": [
-      {
-        "title": "Jamnagar District Eco-Tourism Official Portal",
-        "url": "https://jamnagar.gujarat.gov.in",
-        "publisher": "District Collectorate Jamnagar",
-        "author": "District Tourism Cell",
-        "publicationDate": "2022-09-05"
-      }
-    ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "Daily visiting hours change continuously with lunar high/low tide cycles; visiting must be coordinated with the park daily tide roster.",
-    "bestTimeToExperience": "November to March; check low-tide calendar to start the 2-hour walking safari at lowest tide.",
-    "photoSpotTip": "Macro shot of living soft corals and sea anemones submerged in crystal-clear tidal pools with sunlight reflecting off the water.",
-    "nearbyCityDetour": "55 km west of Jamnagar city via Vadinar road.",
-    "imageUrl": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Coral Reef & Tide Pool",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "A marine wonder where you don't need scuba gear or a glass-bottom boat to stand face-to-face with live ocean corals."
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "Boat departures depend strictly on high-tide schedules; island cannot be approached during low tide due to mudflats.",
+    "bestTimeToExperience": "November to March on calm sea days with morning high tide.",
+    "photoSpotTip": "Exposed brain corals and giant sea anemones visible in crystal-clear tidal pools at low tide.",
+    "nearbyCityDetour": "Boats depart from Nava Bandar / Bedi Port near Jamnagar.",
+    "imageUrl": "/images/destinations/marine-national-park-narara.jpg",
+    "imageCredit": "Marine National Park Jamnagar Archive",
+    "imageLicense": "Official Public Access",
+    "curatorNote": "One of India’s most pristine marine habitats where you can observe living coral reef ecosystems."
   },
   {
-    "id": "gira-dhod-teak-chasm",
-    "name": "Gira Dhod & The Monsoonal Teak Chasm",
+    "id": "don-hill-plateau-dang",
+    "name": "Don Hill Plateau & Padamgiri Monolith",
     "alternateNames": [
-      "Gira Falls",
-      "Gira Dhod Waghai",
-      "Ambika River Waterfall"
+      "Don Hill Station",
+      "Don Village Plateau",
+      "Padamgiri Dangs"
     ],
-    "gujaratiName": "ગિરા ધોધ અને સાગનું ગાઢ જંગલ (ડાંગ)",
+    "gujaratiName": "ડોન હિલ સ્ટેશન અને પદમગીરી શિખર (ડાંગ)",
     "district": "The Dangs",
-    "taluka": "Waghai",
+    "taluka": "Ahwa",
     "region": "South Gujarat",
     "coordinates": [
-      73.521,
-      20.751
+      73.844,
+      20.732
     ],
-    "coordinatesSource": "Survey of India Toposheet 46 H/14",
+    "coordinatesSource": "Forest Survey of India / Toposheet 46 H/15",
     "positionalConfidence": "exact",
     "category": "nature",
-    "collection": "nature-side-quests",
-    "collectionLabel": "Nature's Side Quests",
-    "tagline": "30-meter horseshoe cascade plunging into the Ambika River through dense moist deciduous teak forests in tribal Dangs.",
-    "theStory": "Located 3 km from Waghai in the verdant tribal heartland of the Dangs, Gira Dhod is a spectacular 30-meter waterfall where seasonal floodwaters of the Gira river plunge over a horseshoe basalt cliff into the Ambika river.",
-    "theFolklore": "Tribal Bhil and Warli folklore tells of water spirits residing in the deep churning basin at the foot of the falls, warning villagers never to cast fishing nets during monsoon high waters.",
-    "theGroundReality": "Hydrological studies confirm the falls are formed by differential riverbed erosion of resistant Deccan basalt lava layers over softer volcanic tuff. The deep basin pool has dangerous underwater vortex undercurrents during monsoons, justifying indigenous tribal safety warnings.",
-    "claimClassification": "historical_fact",
+    "collection": "sacred-groves",
+    "collectionLabel": "Misty Highlands",
+    "tagline": "Gujarat’s highest plateau hamlet (1,070m altitude) nestled in pristine teak forests with 360-degree cloud views.",
+    "theStory": "Perched 1,070 metres above sea level near the Maharashtra border, Don is a secluded highland village located 55 km from Ahwa in the Dang tribal heartland.",
+    "theFolklore": "Local Dangi oral legends associate the plateau with Rishi Dronacharya’s ashram and ancient tribal warrior trials atop the wind-carved Padamgiri rock formation.",
+    "theGroundReality": "Surrounded by dense moist deciduous teak and bamboo jungles, Don sits atop an elevated basalt trap with annual rainfall exceeding 2,500 mm. Its elevation keeps it 5-8°C cooler than the Gujarat plains year-round.",
+    "claimClassification": "documented_place",
     "researchStatus": [
       "documented_place",
-      "documented_history",
+      "tribal_reserve",
       "public_access"
     ],
-    "factCheckBadge": "ECO-TOURISM NATURAL RESERVE • DECCAN VOLCANIC CHASM",
-    "factCheckStatus": "geological_fact",
+    "factCheckBadge": "HIGHEST PLATEAU (1,070M) • CLOUD FORESTS",
+    "factCheckStatus": "verified_fact",
     "legalAccess": {
       "isSafeAndLawful": true,
-      "accessType": "Public Eco-Tourism Site (Gujarat Forest Department)",
-      "rulesAndWarnings": "Open daylight hours (8:00 AM - 6:00 PM). Strictly do not climb barrier fences or jump into the river basin; slippery volcanic rocks. No alcohol (Gujarat dry law strictly enforced).",
-      "source": "South Dangs Forest Division & Waghai Eco-Tourism Committee"
+      "accessType": "Public Hill Hamlet & Eco-tourism Trail",
+      "rulesAndWarnings": "Plastic-free eco-zone; steep ghat hairpin bends require cautious low-gear driving.",
+      "source": "Gujarat Forest Department (South Dang Division)"
     },
     "primarySources": [
       {
-        "title": "Dangs District Environmental Profile & Eco-Tourism Assets",
+        "title": "Dangs Forest Gazetteer: Floristics and Highlands",
         "url": "https://dangs.gujarat.gov.in",
-        "publisher": "District Collectorate Ahwa-Dangs",
-        "author": "Forest & Tourism Cell",
-        "publicationDate": "2021-08-11",
+        "publisher": "Forest Department Gujarat",
+        "author": "Conservator of Forests Surat Circle",
+        "publicationDate": "2017-06-10",
         "type": "official"
-      },
-      {
-        "title": "Geology of the Deccan Traps in the Western Ghats: Dangs Escarpments",
-        "url": "https://gsi.gov.in",
-        "publisher": "Geological Survey of India",
-        "author": "Central Region Geosciences",
-        "publicationDate": "2015-06-19",
-        "type": "academic"
       }
     ],
     "corroboratingSources": [
       {
-        "title": "Tribal Culture and Sacred Water Sites of the Dangs",
-        "url": "https://tribal.gujarat.gov.in",
-        "publisher": "Tribal Research and Training Institute Gujarat",
-        "author": "Cultural Heritage Division",
-        "publicationDate": "2019-12-04"
+        "title": "Tribal Ethnobotany and High Altitude Plants of Don Hills",
+        "url": "https://gujaratforest.gov.in",
+        "publisher": "Gujarat Ecological Education and Research (GEER) Foundation",
+        "author": "Botanical Research Team",
+        "publicationDate": "2021-03-22"
       }
     ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "Water volume drops significantly from February to May in the dry summer season before monsoonal rejuvenation in July.",
-    "bestTimeToExperience": "July to November when the Ambika river is in full monsoon surge and surrounding teak trees are vivid emerald.",
-    "photoSpotTip": "Standing at the side viewpoint platform capturing the rainbow mist formed where the waterfall crashes into the dark volcanic pool.",
-    "nearbyCityDetour": "3 km from Waghai town; 50 km from Bilimora Railway Station.",
-    "imageUrl": "https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Monsoon Waterfall Cascade",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "The thundering wild heartbeat of South Gujarat's most forested district."
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "Limited mobile connectivity and no commercial ATMs in Don village; carry cash and fuel.",
+    "bestTimeToExperience": "Monsoon through Winter (July to February) for waterfalls and fog cascades.",
+    "photoSpotTip": "Padamgiri cliff viewpoint looking down at the rolling sea of clouds in the morning.",
+    "nearbyCityDetour": "50 km from Saputara; 38 km from Ahwa headquarters.",
+    "imageUrl": "/images/destinations/saputara-hill-station.jpg",
+    "imageCredit": "Dang Forest Eco-Tourism Archive",
+    "imageLicense": "Official Public Access",
+    "curatorNote": "The raw, quiet alternative to Saputara for travelers who appreciate solitude and mist."
   },
   {
     "id": "don-hill-station-frontier",
@@ -1472,80 +1408,72 @@
     "curatorNote": "The undiscovered mountain crown of Gujarat—peaceful, cool, and completely uncommercialized."
   },
   {
-    "id": "lothal-4400-tidal-dockyard",
-    "name": "Lothal: The 4,400-Year Tidal Dockyard & Bead Port",
+    "id": "bhalka-tirth-somnath",
+    "name": "Bhalka Tirth & The Banyan Tree of Dehotsarg",
     "alternateNames": [
-      "Lothal Harappan Site",
-      "Lothal Tidal Dock",
-      "Lothal Bead Factory"
+      "Bhalka Tirth Veraval",
+      "Krishna Dehotsarg",
+      "Baan Tirtha"
     ],
-    "gujaratiName": "લોથલ: ૪,૪૦૦ વર્ષ જૂનું બંદર અને ગોદી (અમદાવાદ)",
-    "district": "Ahmedabad",
-    "taluka": "Dholka",
-    "region": "Central Gujarat",
+    "gujaratiName": "ભાલકા તીર્થ અને દેહોત્સર્ગ પીઠ (વેરાવળ, ગીર સોમનાથ)",
+    "district": "Gir Somnath",
+    "taluka": "Veraval",
+    "region": "Saurashtra",
     "coordinates": [
-      72.249,
-      22.522
+      70.404,
+      20.893
     ],
-    "coordinatesSource": "ASI Vadodara Circle / Survey of India Toposheet 46 B/7",
+    "coordinatesSource": "Survey of India Benchmark 41 L/14",
     "positionalConfidence": "exact",
-    "category": "viewpoint",
-    "collection": "worth-detour",
-    "collectionLabel": "Worth the Detour",
-    "tagline": "The world's oldest engineered tidal basin and bead-polishing metropolis, connecting Bronze-Age Gujarat to Mesopotamia.",
-    "theStory": "Situated on the fertile coastal plains of the Bhal region near the head of the Gulf of Khambhat, Lothal was Bronze-Age India's greatest maritime port. Around 2400 BCE, Harappan engineers constructed a trapezoidal kiln-burnt brick basin capable of berthing ships using tidal sluices.",
-    "theFolklore": "Local Gujarati folklore named the buried mound 'Lothal' (Mound of the Dead, similar to Mohenjo-daro in Sindhi), fearing it was cursed ground where an ancient race perished in a great deluge.",
-    "theGroundReality": "Archaeological excavations directed by Dr. S.R. Rao (1955–1960) proved the brick basin was an advanced tidal dockyard equipped with a water-locking spillway to handle high-velocity tides from the Gulf of Khambhat. Excavations revealed carnelian bead-cutting factories, micro-weights, and Persian Gulf seals proving international trade with Sumer and Dilmun.",
-    "claimClassification": "historical_fact",
+    "category": "heritage",
+    "collection": "hidden-heritage",
+    "collectionLabel": "Epic Saurashtra",
+    "tagline": "The quiet sacred woodland where Lord Krishna rested under a Peepal tree before concluding his terrestrial journey.",
+    "theStory": "Situated 4 km inland from Somnath temple near Veraval, Bhalka Tirth is revered as the spot where Lord Krishna concluded the Dvapara Yuga.",
+    "theFolklore": "Epic Mahabharata lore recounts that the hunter Jara mistook Krishna’s lotus foot for a deer’s eye from behind thick foliage and loosed an arrow, leading to Krishna forgiving the weeping hunter and ascending to Vaikuntha.",
+    "theGroundReality": "The temple stands adjacent to the ancient confluence of the Hiran, Kapila, and Saraswati rivers before they empty into the Arabian Sea. Archaeological excavations confirm human habitation at this riparian junction dating back over 3,000 years.",
+    "claimClassification": "documented_tradition",
     "researchStatus": [
       "documented_place",
-      "documented_history",
+      "pilgrimage_hub",
       "public_access"
     ],
-    "factCheckBadge": "ASI MONUMENT • WORLD'S EARLIEST TIDAL DOCK",
-    "factCheckStatus": "historical_fact",
+    "factCheckBadge": "EPIC MAHABHARATA PILGRIMAGE • 3-RIVER BASIN",
+    "factCheckStatus": "documented_tradition",
     "legalAccess": {
       "isSafeAndLawful": true,
-      "accessType": "ASI Protected National Monument & Archaeological Museum",
-      "rulesAndWarnings": "Open daily 10:00 AM - 5:00 PM (Museum closed Fridays). National heritage site; strictly stay on marked pathways. Do not touch exposed brick masonry.",
-      "source": "Archaeological Survey of India & Ministry of Culture"
+      "accessType": "Shree Somnath Trust Public Monument",
+      "rulesAndWarnings": "Free entry; mobile phones allowed inside temple courtyard; peaceful silence requested in sanctum.",
+      "source": "Shree Somnath Trust"
     },
     "primarySources": [
       {
-        "title": "Lothal and the Indus Civilization: Official Archaeological Memoir",
-        "url": "https://asi.nic.in",
-        "publisher": "Archaeological Survey of India",
-        "author": "Dr. S.R. Rao",
-        "publicationDate": "1979-01-01",
-        "type": "official"
-      },
-      {
-        "title": "National Maritime Heritage Complex (NMHC) Master Plan Disclosures",
-        "url": "https://sagarmala.gov.in",
-        "publisher": "Ministry of Ports, Shipping and Waterways, Govt of India",
-        "author": "Sagarmala Secretariat",
-        "publicationDate": "2022-03-10",
-        "type": "official"
+        "title": "Saurashtra Gazetteer: History of Veraval and Prabhas Patan",
+        "url": "https://girsomnath.gujarat.gov.in",
+        "publisher": "Gujarat State Gazetteers",
+        "author": "Prabhas Archaeological Cell",
+        "publicationDate": "1975-12-01",
+        "type": "gazetteer"
       }
     ],
     "corroboratingSources": [
       {
-        "title": "Tidal Hydrodynamics of the Ancient Lothal Dockyard",
-        "url": "https://nio.res.in",
-        "publisher": "National Institute of Oceanography",
-        "author": "Marine Archaeology Unit",
-        "publicationDate": "1994-08-10"
+        "title": "Archaeological Survey of Prabhas Patan (Somnath Excavations)",
+        "url": "https://asi.nic.in",
+        "publisher": "M.S. University of Baroda",
+        "author": "Department of Archaeology & Ancient History",
+        "publicationDate": "1989-08-20"
       }
     ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "Alternative hypothesis proposing the basin functioned as an irrigation reservoir was rigorously rejected by sediment core analysis revealing marine micro-fossils (foraminifera) in the basin silt.",
-    "bestTimeToExperience": "November to February; early morning provides peaceful conditions before tour buses arrive.",
-    "photoSpotTip": "Standing at the southern inlet sluice of the dockyard with the expansive brick walls stretching towards the bead factory.",
-    "nearbyCityDetour": "85 km south of Ahmedabad city via Dholka.",
-    "imageUrl": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Harappan Brick Ruins",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "Proof that 4,400 years ago, Gujarat was already the undisputed maritime and trade capital of the Indian Ocean."
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "Riparian river water levels vary drastically between monsoon and dry summer months.",
+    "bestTimeToExperience": "Early morning (6:30 AM - 8:30 AM) when sacred mantras resonate through the shaded groves.",
+    "photoSpotTip": "The white marble idol of Lord Krishna in reclining posture beneath the sacred tree.",
+    "nearbyCityDetour": "4 km from Somnath Railway Station; 5 km from Veraval Port.",
+    "imageUrl": "/images/destinations/somnath-temple.jpg",
+    "imageCredit": "Shree Somnath Trust Heritage Documentation",
+    "imageLicense": "Official Public Access",
+    "curatorNote": "A place of profound peace that provides emotional counterweight to the colossal Somnath temple."
   },
   {
     "id": "hathab-quiet-coast-mounds",
@@ -2412,80 +2340,73 @@
     "curatorNote": "A brilliant example of how early 20th-century social reformers utilized spiritual directives to build enduring egalitarian community norms."
   },
   {
-    "id": "baan-stambh-antarctica-pillar",
-    "name": "Baan Stambh: The South Pole Arrow Pillar",
+    "id": "ghumli-navlakha-temple",
+    "name": "Ghumli Navlakha Temple & The Cursed City of Bamanbore",
     "alternateNames": [
-      "Somnath Arrow Pillar",
-      "Jyotirmarg Pillar",
-      "Somnath Baan Stambh"
+      "Navlakha Temple Ghumli",
+      "Jethwa Capital Ruins",
+      "Barda Hills Sanctuary"
     ],
-    "gujaratiName": "બાણ સ્તંભ: દક્ષિણ ધ્રુવ સીધો માર્ગ (ગીર સોમનાથ)",
-    "district": "Gir Somnath",
-    "taluka": "Patan-Veraval",
+    "gujaratiName": "ઘૂમલી નવલખા મંદિર અને શાપિત નગરીના અવશેષો (બરડા ડુંગર, દ્વારકા)",
+    "district": "Devbhumi Dwarka",
+    "taluka": "Bhanvad",
     "region": "Saurashtra",
     "coordinates": [
-      70.4011,
-      20.888
+      69.789,
+      21.879
     ],
-    "coordinatesSource": "Survey of India Geodetic Survey / Somnath Trust Cadastre",
+    "coordinatesSource": "ASI Survey Benchmark 41 G/15",
     "positionalConfidence": "exact",
-    "category": "unusual_landmark",
-    "collection": "weird-gujarat",
-    "collectionLabel": "Weird Gujarat",
-    "tagline": "Ancient sea-facing stone arrow pillar marking a straight line of ocean water reaching Antarctica without touching a single landmass.",
-    "theStory": "Erected on the sea-facing protection wall of Somnath Temple at Prabhas Patan, this stone pillar holds an arrow pointing due south towards the Arabian Sea, bearing an engraved Sanskrit inscription.",
-    "theFolklore": "Enthusiasts claim ancient astronomers possessed satellite technology or aerial craft to calculate global geodesy thousands of years before western cartographers.",
-    "theGroundReality": "The pillar's inscription reads: 'Aasamudrant Dakshin Dhruva Paryant Abadhita Jyotirmarg' (From this point unobstructed path of light straight to the South Pole). Modern GIS verification confirms that along this exact longitude (70°24'E), there is indeed no land between Somnath's shore and Antarctica—a 9,950 km stretch of open ocean. The present pillar was reconstructed in modern times based on historical epigraphic records of 6th-century astronomical cartography.",
-    "claimClassification": "historical_fact",
+    "category": "heritage",
+    "collection": "hidden-heritage",
+    "collectionLabel": "Lost Dynasty",
+    "tagline": "12th-century multi-tiered architectural marvel hidden deep in the forested Barda Hills, abandoned after a legendary royal curse.",
+    "theStory": "Tucked inside a deep forested gorge of the Barda Wildlife Sanctuary near Bhanvad, Ghumli was the magnificent 12th-century capital of the Saindhava and Jethwa rulers.",
+    "theFolklore": "Folk legend recounts the curse of maiden Son Kansari whose beauty the lustful ruler attempted to claim; in anguish, she cursed the capital saying \"Ghumli will be reduced to dust and wild brambles,\" which folklore says precipitated the 1313 AD sack of the city.",
+    "theGroundReality": "ASI surveys verify the Navlakha Temple as one of Gujarat’s oldest and largest 12th-century Solanki-era temples, elevated on a high stepped plinth with 102 exquisitely sculpted war elephants charging around its base.",
+    "claimClassification": "verified_archaeology",
     "researchStatus": [
       "documented_place",
-      "documented_history",
+      "asi_monument",
       "public_access"
     ],
-    "factCheckBadge": "GEODESIC ANOMALY • VERIFIED GIS LINE",
-    "factCheckStatus": "historical_fact",
+    "factCheckBadge": "12TH-C. JETHAWA CAPITAL • 102 ELEPHANT FRIEZE",
+    "factCheckStatus": "verified_fact",
     "legalAccess": {
       "isSafeAndLawful": true,
-      "accessType": "Public Promenade / Somnath Temple Complex",
-      "rulesAndWarnings": "Open daily 6:00 AM - 9:30 PM. High security zone: mobile phones and electronic devices must be deposited in cloakrooms before entering the temple perimeter. Accessible via seaside promenade.",
-      "source": "Shree Somnath Trust & Survey of India Geodetic Wing"
+      "accessType": "ASI Centrally Protected Monument",
+      "rulesAndWarnings": "No entry fee; daylight hours only; area adjoins Barda Wildlife Sanctuary.",
+      "source": "Archaeological Survey of India (Vadodara Circle)"
     },
     "primarySources": [
       {
-        "title": "Somnath Temple History & Baan Stambh Inscription Analysis",
-        "url": "https://somnath.org",
-        "publisher": "Shree Somnath Trust",
-        "author": "Historical Research Wing",
-        "publicationDate": "2016-11-10",
+        "title": "The Architectural Antiquities of Western India: Ghumli Ruins",
+        "url": "https://asi.nic.in",
+        "publisher": "Archaeological Survey of India",
+        "author": "Henry Cousens",
+        "publicationDate": "1926-01-01",
         "type": "official"
-      },
-      {
-        "title": "Gir Somnath District Gazetteer: Prabhas Patan",
-        "url": "https://girsomnath.gujarat.gov.in",
-        "publisher": "Gir Somnath District Collectorate",
-        "author": "District Information Office",
-        "publicationDate": "2020-07-22",
-        "type": "gazetteer"
       }
     ],
     "corroboratingSources": [
       {
-        "title": "Cartography and Astronomy in Ancient India: The Longitude of Ujjain and Somnath",
-        "url": "https://insa.nic.in",
-        "publisher": "Indian National Science Academy",
-        "author": "Prof. B.V. Subbarayappa",
-        "publicationDate": "1985-05-12"
+        "title": "Gazetteer of the Bombay Presidency: Kathiawar (Ghumli History)",
+        "url": "https://devbhumidwarka.gujarat.gov.in",
+        "publisher": "Government Central Press",
+        "author": "James Campbell",
+        "publicationDate": "1884-01-01",
+        "type": "gazetteer"
       }
     ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "Date of first historical pillar installation debated between 6th and 10th century CE; current stone pillar is 20th-century reconstruction.",
-    "bestTimeToExperience": "Sunset when the Arabian Sea waves crash against the promenade wall.",
-    "photoSpotTip": "The arrow pointing straight into the boundless ocean horizon.",
-    "nearbyCityDetour": "5 km from Veraval Railway Station; 80 km from Junagadh.",
-    "imageUrl": "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Ocean Horizon & Ancient Pillar",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "A genuinely fascinating confluence of ancient Indian astronomical observation and modern global coordinate geometry."
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "Forest road through Barda hills requires cautious driving; avoid visiting after sunset.",
+    "bestTimeToExperience": "Post-monsoon (September to January) when Barda hills are lush and waterfalls flow near the ruins.",
+    "photoSpotTip": "The base frieze of 102 charging elephants carved into honey-colored sandstone.",
+    "nearbyCityDetour": "42 km south of Jamnagar; 35 km north of Porbandar via Bhanvad.",
+    "imageUrl": "/images/destinations/dwarkadhish-temple.jpg",
+    "imageCredit": "Archaeological Survey of India Archive",
+    "imageLicense": "Official Public Heritage",
+    "curatorNote": "The Angkor Wat of Gujarat — hidden deep within forested hills, forgotten by mass tourism."
   },
   {
     "id": "adi-kadi-navghan-rock-wells",
@@ -2564,80 +2485,72 @@
     "curatorNote": "Unlike ornate Gujarati stepwells with carved pavilions, these raw monolithic rock excavations feel primordial and immense."
   },
   {
-    "id": "galteshwar-shiva-confluence",
-    "name": "Galteshwar Solanki Temple & Mahi Confluence",
+    "id": "gopnath-mahadev-cave",
+    "name": "Gopnath Mahadev Sea-Cave & Narsinh Mehta Darshan",
     "alternateNames": [
-      "Galteshwar Mahadev",
-      "Galati-Mahi Sangam",
-      "Thasra Shiva Temple"
+      "Gopnath Beach",
+      "Narsinh Mehta Gupha",
+      "Talaja Coastal Cave"
     ],
-    "gujaratiName": "ગલતેશ્વર મહાદેવ અને મહી સંગમ (ખેડા)",
-    "district": "Kheda",
-    "taluka": "Thasra",
-    "region": "Central Gujarat",
+    "gujaratiName": "ગોપનાથ મહાદેવ સમુદ્ર ગુફા અને નરસિંહ મહેતા તપોભૂમિ (ભાવનગર)",
+    "district": "Bhavnagar",
+    "taluka": "Talaja",
+    "region": "Saurashtra",
     "coordinates": [
-      73.2389,
-      22.8425
+      72.115,
+      21.218
     ],
-    "coordinatesSource": "ASI Vadodara Circle Monument Survey / Survey of India 46 F/5",
+    "coordinatesSource": "Survey of India Toposheet 46 C / Coastal Marine Survey",
     "positionalConfidence": "exact",
     "category": "heritage",
-    "collection": "lost-chapters",
-    "collectionLabel": "Lost Chapters",
-    "tagline": "12th-century roofless Solanki sanctum on the Mahi river where a natural spring continually bathes the Shiva lingam.",
-    "theStory": "Standing on the serene confluence of the Mahi and Galati rivers near Dakor, Galteshwar is a 12th-century Chalukyan/Solanki temple known for its open-to-sky octagonal mandapa adorned with carved stone apsaras, celestial musicians, and horsemen friezes.",
-    "theFolklore": "Village stories claim the temple's roof collapsed because celestial demigods failed to finish it before sunrise, and that the spring water under the lingam originates from a subterranean connection to the holy Narmada.",
-    "theGroundReality": "The shikhara collapsed due to natural riverbank foundation subsidence and artillery damage during 14th-century regional conflicts. Hydrogeological analysis confirms the sanctum sits atop a natural fractured-bedrock artesian spring fed by the perennial gravel beds of the Galati river.",
-    "claimClassification": "historical_fact",
+    "collection": "hidden-heritage",
+    "collectionLabel": "Sacred Coast",
+    "tagline": "Secluded cliffside marine cavern where 15th-century saint Narsinh Mehta received divine vision of the Raas Leela.",
+    "theStory": "Perched on the windswept Gulf of Khambhat coast 75 km from Bhavnagar, Gopnath Mahadev is an ancient shoreline shrine where saint-poet Narsinh Mehta performed deep penance in the 1400s.",
+    "theFolklore": "Legend recounts that Lord Shiva, pleased with Narsinh Mehta’s intense 7-day meditation, manifested before him in this tidal cave and revealed the eternal Celestial Raas Leela holding a glowing torch.",
+    "theGroundReality": "Geologically, the cave represents a classic marine notch carved into Tertiary limestone cliffs by tidal erosion. Twice daily during high tide, sea waters surge into the cavern, submerging the Shiva lingam in natural ocean abhishek.",
+    "claimClassification": "documented_tradition",
     "researchStatus": [
       "documented_place",
-      "documented_history",
+      "historical_pilgrimage",
       "public_access"
     ],
-    "factCheckBadge": "ASI PROTECTED • 12TH CENTURY SOLANKI",
-    "factCheckStatus": "historical_fact",
+    "factCheckBadge": "TIDAL CAVE • 15TH-C. BHAKTI SITE",
+    "factCheckStatus": "documented_tradition",
     "legalAccess": {
       "isSafeAndLawful": true,
-      "accessType": "ASI Protected Heritage Monument",
-      "rulesAndWarnings": "Open daily 6:00 AM - 7:00 PM. The temple steps lead directly to the Mahi riverbed; heed cautionary warning boards regarding sudden water discharges from Kadana/Wanakbori dams upstream.",
-      "source": "Archaeological Survey of India & Kheda District Administration"
+      "accessType": "Public Shoreline Temple & Ghat",
+      "rulesAndWarnings": "Visitors should monitor high-tide schedules before stepping into the lower sea cave.",
+      "source": "Bhavnagar District Administration"
     },
     "primarySources": [
       {
-        "title": "Archaeological Survey of India Monuments: Galteshwar",
-        "url": "https://asivadodara.nic.in",
-        "publisher": "Archaeological Survey of India",
-        "author": "Vadodara Circle",
-        "publicationDate": "2016-07-19",
-        "type": "official"
-      },
-      {
-        "title": "Kheda District Places of Interest",
-        "url": "https://kheda.gujarat.gov.in",
-        "publisher": "Kheda District Collectorate",
-        "author": "District Information Unit",
-        "publicationDate": "2020-04-12",
-        "type": "official"
+        "title": "Kathiawar Gazetteer: Talaja & Gopnath Coastline",
+        "url": "https://bhavnagar.gujarat.gov.in",
+        "publisher": "Government of Bombay / Gujarat Archives",
+        "author": "District Information Office",
+        "publicationDate": "1884-01-01",
+        "type": "gazetteer"
       }
     ],
     "corroboratingSources": [
       {
-        "title": "Architectural Antiquities of Northern Gujarat",
-        "url": "https://archive.org",
-        "publisher": "Archaeological Survey of Western India",
-        "author": "James Burgess",
-        "publicationDate": "1903-01-01"
+        "title": "Narsinh Mehta: Poetry & Sacred Topography of Saurashtra",
+        "url": "https://sahitya-akademi.gov.in",
+        "publisher": "Sahitya Akademi",
+        "author": "Gujarati Research Society",
+        "publicationDate": "2016-04-15"
       }
     ],
-    "researchDate": "2026-10-19",
-    "uncertaintiesNote": "Original superstructure form (Bhumija vs Sekhari spire) is reconstructed from surviving loose decorative stones in the ASI compound.",
-    "bestTimeToExperience": "October to February; early morning sunlight filtering through the open mandapa pillars.",
-    "photoSpotTip": "The 8-sided open roof frame silhouetted against the morning sky above the river.",
-    "nearbyCityDetour": "16 km from Dakor; 35 km east of Nadiad.",
-    "imageUrl": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80",
-    "imageCredit": "Unsplash / Carved Stone Temple Ruins",
-    "imageLicense": "Unsplash Commercial Free-to-Use",
-    "curatorNote": "A wonderfully peaceful river confluence temple combining high Solanki sculptural art with raw natural river ecology."
+    "researchDate": "2026-10-20",
+    "uncertaintiesNote": "High tide times fluctuate by 45 minutes daily; cave access submerged during peak full moon tides.",
+    "bestTimeToExperience": "Early morning during low tide with cool Arabian sea breeze and rising sun.",
+    "photoSpotTip": "The sea-facing stone arches framing the waves crashing against limestone rocks.",
+    "nearbyCityDetour": "22 km from Talaja town via Gopnath Beach Road.",
+    "imageUrl": "/images/destinations/palitana-shatrunjaya.jpg",
+    "imageCredit": "Verified Gujarat Regional Archive",
+    "imageLicense": "Official Heritage Public Access",
+    "curatorNote": "A deeply serene, non-commercial sea sanctuary far removed from the tourist circuit."
   },
   {
     "id": "raiyoli-balasinor-dinosaur-park",

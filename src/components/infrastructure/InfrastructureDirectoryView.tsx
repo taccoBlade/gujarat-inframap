@@ -137,23 +137,23 @@ export const InfrastructureDirectoryView: React.FC = () => {
   });
 
   return (
-    <div className={`max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 transition-colors duration-200 ${
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 transition-colors duration-200 ${
       theme === 'dark' ? 'text-[#F1E8D7]' : 'text-[#101827]'
     }`}>
       
       {/* Header */}
-      <div className={`relative border-2 rounded-2xl p-5 sm:p-8 mb-6 sm:mb-8 shadow-[4px_4px_0px_#101827] overflow-hidden transition-colors ${
+      <div className={`relative border-2 rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8 shadow-[4px_4px_0px_#101827] overflow-hidden transition-colors ${
         theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
       }`}>
-        <ToranOrnamentalBorder className="rounded-t mb-4 -mt-5 -mx-5 sm:-mt-8 sm:-mx-8" height={10} />
+        <ToranOrnamentalBorder className="rounded-t mb-4 -mt-6 -mx-6 sm:-mt-8 sm:-mx-8" height={10} />
 
         <div className="space-y-2 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold font-mono uppercase tracking-wider bg-[#1C6555]/15 text-[#1C6555] border border-[#1C6555]/40">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-[11px] font-bold font-mono uppercase tracking-wider bg-[#1C6555]/15 text-[#1C6555] border border-[#1C6555]/40">
             <Zap className="w-3.5 h-3.5" />
             <span>STATUTORY PUBLIC INFRASTRUCTURE REGISTRY • ૩,૩૩૭ ઇન્ફ્રા પ્રોજેક્ટ્સ</span>
           </div>
 
-          <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight font-editorial ${
+          <h1 className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight font-editorial ${
             theme === 'dark' ? 'text-white' : 'text-[#101827]'
           }`}>
             Gujarat <span className="text-[#FF9418]">Infrastructure Directory</span>

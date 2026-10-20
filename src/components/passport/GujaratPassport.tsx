@@ -75,7 +75,7 @@ export const GujaratPassport: React.FC = () => {
   ];
 
   return (
-    <div className={`max-w-6xl mx-auto px-3 sm:px-6 py-6 sm:py-8 relative transition-colors duration-200 ${
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative transition-colors duration-200 ${
       theme === 'dark' ? 'text-[#F1E8D7]' : 'text-[#101827]'
     }`}>
       
@@ -94,66 +94,16 @@ export const GujaratPassport: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Cloud Sync & Auth Explanation Banner */}
-      <div className="mb-6">
-        {!userProfile.isLoggedIn ? (
-          <div className={`p-4 sm:p-5 rounded-2xl border-2 shadow-[3px_3px_0px_#101827] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
-            theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
-          }`}>
-            <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#FF9418]/15 border-2 border-[#FF9418] flex items-center justify-center text-[#FF9418] flex-shrink-0 mt-0.5">
-                <CloudOff className="w-4 h-4" />
-              </div>
-              <div className="space-y-0.5">
-                <p className="text-xs font-black text-[#FF9418] uppercase tracking-wider font-mono">
-                  GUEST PASSPORT ACTIVE • LOCAL CACHE SECURE
-                </p>
-                <p className="text-xs text-[#8F9CAE] leading-relaxed">
-                  Your stamps are preserved locally in this browser. When you sign in, all existing guest stamps safely merge with your cloud account without loss.
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => setAuthModalOpen(true)}
-              className="px-4 py-2 rounded-xl bg-[#FF9418] hover:bg-[#e07f10] text-[#101827] font-black text-xs flex items-center gap-1.5 shadow-[2px_2px_0px_#101827] border-2 border-[#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all flex-shrink-0"
-            >
-              <LogIn className="w-3.5 h-3.5" />
-              <span>Claim Cloud Passport</span>
-            </button>
-          </div>
-        ) : (
-          <div className={`p-3.5 rounded-2xl border-2 shadow-[2px_2px_0px_#101827] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs ${
-            theme === 'dark' ? 'bg-[#1C6555]/15 border-[#1C6555]' : 'bg-[#FAF6ED] border-[#1C6555]'
-          }`}>
-            <div className="flex items-center gap-2 text-[#1C6555] font-bold">
-              <Cloud className="w-4 h-4" />
-              <span>
-                Passport Synced: <strong className="text-white dark:text-white">{userProfile.name}</strong> ({userProfile.handle})
-              </span>
-              <span className="text-[10px] px-2 py-0.2 bg-[#1C6555] text-white rounded font-mono">
-                Cloud Active
-              </span>
-            </div>
-            <button
-              onClick={() => setOnboardingOpen(true)}
-              className="text-xs text-[#FF9418] hover:underline font-mono font-bold flex items-center gap-1"
-            >
-              <span>Change Home District ({userProfile.homeDistrict})</span>
-            </button>
-          </div>
-        )}
-      </div>
-
       {/* Hero Header: Official Solanki Gujarat Cultural Passport */}
-      <div className={`border-2 rounded-2xl p-5 sm:p-8 mb-6 sm:mb-8 shadow-[4px_4px_0px_#101827] relative overflow-hidden transition-colors ${
+      <div className={`border-2 rounded-2xl p-6 sm:p-8 mb-6 sm:mb-8 shadow-[4px_4px_0px_#101827] relative overflow-hidden transition-colors ${
         theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
       }`}>
         {/* Toran Border Trim on Top */}
-        <ToranOrnamentalBorder className="rounded-t mb-4 -mt-5 -mx-5 sm:-mt-8 sm:-mx-8" height={10} />
+        <ToranOrnamentalBorder className="rounded-t mb-4 -mt-6 -mx-6 sm:-mt-8 sm:-mx-8" height={10} />
 
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider font-mono bg-[#FF9418]/15 text-[#FF9418] border border-[#FF9418]/40">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider font-mono bg-[#FF9418]/15 text-[#FF9418] border border-[#FF9418]/40">
               <Trophy className="w-3.5 h-3.5" />
               <span>OFFICIAL CULTURAL PASSPORT • ગુજરાત પાસપોર્ટ</span>
             </div>
@@ -169,6 +119,24 @@ export const GujaratPassport: React.FC = () => {
             }`}>
               ગુજરાતના તમામ ૩૪ જિલ્લાઓની મુલાકાત લો, ડિજિટલ મોહર (Stamp) સંગ્રહિત કરો અને તમારો યાત્રા સ્કોર મિત્રો સાથે શેર કરો.
             </p>
+
+            {/* Sync Badge */}
+            <div className="pt-2 flex items-center gap-3">
+              {!userProfile.isLoggedIn ? (
+                <button
+                  onClick={() => setAuthModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FF9418]/15 hover:bg-[#FF9418]/25 text-[#FF9418] border border-[#FF9418]/40 text-xs font-bold transition-all"
+                >
+                  <LogIn className="w-3.5 h-3.5" />
+                  <span>Guest Passport (Click to Sync Cloud)</span>
+                </button>
+              ) : (
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1C6555]/15 text-[#1C6555] border border-[#1C6555]/40 text-xs font-bold">
+                  <Cloud className="w-3.5 h-3.5" />
+                  <span>Synced: {userProfile.name}</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* User Score & Share Card Button */}

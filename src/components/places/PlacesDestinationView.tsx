@@ -83,7 +83,7 @@ export const PlacesDestinationView: React.FC = () => {
   };
 
   return (
-    <div className={`max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 transition-colors duration-200 ${
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 transition-colors duration-200 ${
       theme === 'dark' ? 'text-[#F1E8D7]' : 'text-[#101827]'
     }`}>
       
@@ -103,20 +103,20 @@ export const PlacesDestinationView: React.FC = () => {
       </AnimatePresence>
 
       {/* Editorial Header in Gen Z Neo-Brutalist Frame */}
-      <div className={`rounded-2xl border-2 p-5 sm:p-8 mb-6 sm:mb-8 transition-all relative overflow-hidden shadow-[4px_4px_0px_#101827] ${
+      <div className={`rounded-2xl border-2 p-6 sm:p-8 mb-6 sm:mb-8 transition-all relative overflow-hidden shadow-[4px_4px_0px_#101827] ${
         theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
       }`}>
         {/* Toran Border Accent */}
-        <ToranOrnamentalBorder className="rounded-t mb-4 -mt-5 -mx-5 sm:-mt-8 sm:-mx-8" height={10} />
+        <ToranOrnamentalBorder className="rounded-t mb-4 -mt-6 -mx-6 sm:-mt-8 sm:-mx-8" height={10} />
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2 max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold tracking-wider uppercase font-mono bg-[#FF9418]/15 text-[#FF9418] border border-[#FF9418]/40">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-[11px] font-bold tracking-wider uppercase font-mono bg-[#FF9418]/15 text-[#FF9418] border border-[#FF9418]/40">
               <Compass className="w-3.5 h-3.5" />
               <span>GUJARAT DARSHAN • ૩૭ સાંસ્કૃતિક પ્રવાસ સ્થળો</span>
             </div>
 
-            <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight font-editorial ${
+            <h1 className={`text-2xl sm:text-3xl md:text-4xl font-black tracking-tight font-editorial ${
               theme === 'dark' ? 'text-white' : 'text-[#101827]'
             }`}>
               Verified Destinations <span className="text-[#FF9418]">of Gujarat</span>
