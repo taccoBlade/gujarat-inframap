@@ -38,7 +38,13 @@ export const Header: React.FC = () => {
   const [showSavedLocations, setShowSavedLocations] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Reset img error if photoURL changes
+  useEffect(() => {
+    setImgError(false);
+  }, [userProfile.photoURL]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -70,7 +76,7 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className={`sticky top-0 z-40 backdrop-blur-md border-b-2 transition-all duration-200 shadow-sm ${
+    <header className={`sticky top-0 z-[1200] backdrop-blur-md border-b-2 transition-all duration-200 shadow-sm ${
       theme === 'dark' 
         ? 'bg-[#101827]/95 border-[#25324A] text-[#F1E8D7]' 
         : 'bg-[#FAF6ED]/95 border-[#25324A] text-[#101827]'
@@ -196,15 +202,16 @@ export const Header: React.FC = () => {
                     : 'bg-[#F1E8D7] border-[#25324A] hover:border-[#FF9418]'
                 }`}
               >
-                {userProfile.photoURL ? (
+                {userProfile.photoURL && !imgError ? (
                   <img
                     src={userProfile.photoURL}
                     alt={userProfile.name}
+                    onError={() => setImgError(true)}
                     className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg object-cover border border-[#FF9418]"
                   />
                 ) : (
                   <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-[#FF9418] text-[#101827] font-black text-xs flex items-center justify-center">
-                    {userProfile.name.slice(0, 1)}
+                    {userProfile.name ? userProfile.name.slice(0, 1).toUpperCase() : 'U'}
                   </div>
                 )}
 
@@ -222,7 +229,7 @@ export const Header: React.FC = () => {
 
               {/* Profile Dropdown Menu */}
               {profileDropdownOpen && (
-                <div className={`absolute right-0 mt-2 w-64 border-2 rounded-2xl shadow-[4px_4px_0px_#101827] py-2 z-50 overflow-hidden ${
+                <div className={`absolute right-0 mt-2 w-64 border-2 rounded-2xl shadow-[4px_4px_0px_#101827] py-2 z-[1250] overflow-hidden ${
                   theme === 'dark' 
                     ? 'bg-[#151F30] border-[#25324A] text-[#F1E8D7]' 
                     : 'bg-[#FAF6ED] border-[#25324A] text-[#101827]'

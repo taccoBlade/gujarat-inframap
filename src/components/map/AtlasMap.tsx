@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import L from 'leaflet';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { GUJARAT_34_DISTRICTS } from '../../data/passport-districts';
+import { DistrictPassportStamp } from '../../types/atlas';
 import { VERIFIED_TOURIST_DESTINATIONS, TouristDestination } from '../../data/tourist-destinations';
 import { GUJARAT_HIGHWAY_EV_STATIONS } from '../../data/ev-stations';
 import { getRegionalCulture } from '../../utils/cultural-regions';
@@ -999,15 +1000,34 @@ export const AtlasMap: React.FC = () => {
     map?.flyTo([22.40, 71.80], 7.4, { duration: 1.4 });
   };
 
-  // Re-center Map to Gujarat State Overview
+  // Re-center Map to Gujarat State Overview & Reset Filters
   const handleRecenterState = () => {
     const map = mapInstanceRef.current;
     if (!map) return;
-    map.flyTo([22.40, 71.80], 7.4, { duration: 1.0 });
+    
+    // 1. Cancel any active map animation or glide
+    map.stop();
+    
+    // 2. Stop 3D tours and reset tilt
+    if (activeTour || isTourPlaying) {
+      exitTour();
+    }
+    setIs3DTilted(false);
+    setIsPinDropMode(false);
+    
+    // 3. Clear search query and local input so all pins reappear
+    setLocalSearch('');
+    setSearchQuery('');
+    
+    // 4. Dismiss open cards & popups
     setSelectedAsset(null);
     setSelectedParcel(null);
     if (selectedDistrict) setSelectedDistrict(null);
     map.closePopup();
+    
+    // 5. Smooth fly back to full Gujarat overview
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+    map.flyTo([22.40, 71.80], isMobile ? 6.9 : 7.4, { duration: 0.8 });
   };
 
   // Auto-advance waypoints when 3D guided tour is playing (Glide mechanic)
@@ -1028,16 +1048,182 @@ export const AtlasMap: React.FC = () => {
     return () => clearInterval(interval);
   }, [activeTour, isTourPlaying]);
 
-  // Matching localities for 1-click pin drop from search bar
-  const matchingLocalities = useMemo(() => {
-    if (!localSearch.trim() || localSearch.trim().length < 2) return [];
+  // Unified Search Results across Destinations, Districts, Infra Localities, and Stories
+  const searchResults = useMemo(() => {
     const q = localSearch.trim().toLowerCase();
-    return TRENDING_PIN_LOCALITIES.filter(loc => 
-      loc.name.toLowerCase().includes(q) || 
-      loc.city.toLowerCase().includes(q) ||
-      loc.tag.toLowerCase().includes(q)
-    );
-  }, [localSearch]);
+    if (!q || q.length < 2) return [];
+
+    const results: Array<{
+      id: string;
+      type: 'destination' | 'district' | 'locality' | 'story';
+      title: string;
+      gujaratiTitle?: string;
+      subtitle: string;
+      tag: string;
+      icon: string;
+      coordinates: [number, number];
+      zoomLevel: number;
+      data: any;
+    }> = [];
+
+    // 1. Match Tourist Destinations (Top Priority)
+    for (const d of VERIFIED_TOURIST_DESTINATIONS) {
+      if (
+        d.name.toLowerCase().includes(q) ||
+        d.district.toLowerCase().includes(q) ||
+        d.category.toLowerCase().includes(q)
+      ) {
+        results.push({
+          id: `dest-${d.id}`,
+          type: 'destination',
+          title: d.name,
+          subtitle: `${d.district} • ${d.category}`,
+          tag: 'Landmark',
+          icon: '🏛️',
+          coordinates: d.coordinates,
+          zoomLevel: 13,
+          data: d
+        });
+      }
+      if (results.length >= 6) break;
+    }
+
+    // 2. Match Districts
+    for (const dist of GUJARAT_34_DISTRICTS) {
+      if (
+        dist.name.toLowerCase().includes(q) ||
+        dist.gujaratiName.includes(q) ||
+        dist.landmark.toLowerCase().includes(q)
+      ) {
+        results.push({
+          id: `dist-${dist.id}`,
+          type: 'district',
+          title: dist.name,
+          gujaratiTitle: dist.gujaratiName,
+          subtitle: `${dist.landmark} (${dist.region})`,
+          tag: 'District',
+          icon: '📍',
+          coordinates: dist.coordinates,
+          zoomLevel: 10,
+          data: dist
+        });
+      }
+      if (results.length >= 8) break;
+    }
+
+    // 3. Match Trending Pin / Infra Localities
+    for (const loc of TRENDING_PIN_LOCALITIES) {
+      if (
+        loc.name.toLowerCase().includes(q) ||
+        loc.city.toLowerCase().includes(q) ||
+        loc.tag.toLowerCase().includes(q)
+      ) {
+        results.push({
+          id: `loc-${loc.name}`,
+          type: 'locality',
+          title: loc.name,
+          subtitle: `${loc.city} • ${loc.tag}`,
+          tag: '5km Score',
+          icon: '⚡',
+          coordinates: loc.coords,
+          zoomLevel: 13,
+          data: loc
+        });
+      }
+      if (results.length >= 10) break;
+    }
+
+    // 4. Match Stories
+    for (const s of stories) {
+      if (!s.coordinates) continue;
+      if (
+        s.name.toLowerCase().includes(q) ||
+        s.district.toLowerCase().includes(q) ||
+        (s.tagline && s.tagline.toLowerCase().includes(q))
+      ) {
+        results.push({
+          id: `story-${s.id}`,
+          type: 'story',
+          title: s.name,
+          subtitle: `${s.tagline} (${s.district})`,
+          tag: 'Folklore',
+          icon: '📜',
+          coordinates: s.coordinates,
+          zoomLevel: 12,
+          data: s
+        });
+      }
+      if (results.length >= 12) break;
+    }
+
+    return results;
+  }, [localSearch, stories]);
+
+  // Handle Search Result Selection (Fly directly to asset & open dossier)
+  const handleSelectSearchResult = (item: (typeof searchResults)[0]) => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    if (activeTour || isTourPlaying) {
+      exitTour();
+    }
+    map.stop();
+
+    map.flyTo(item.coordinates, item.zoomLevel, { duration: 1.0 });
+
+    if (item.type === 'destination') {
+      const d = item.data as TouristDestination;
+      const culture = getRegionalCulture(d.district || d.region);
+      setSelectedAsset({
+        id: d.id,
+        type: 'destination',
+        name: d.name,
+        gujaratiTitle: d.significance || culture.gujaratiTitle,
+        district: d.district,
+        image: d.image || getDistrictPhoto(d.district),
+        categoryLabel: `${d.categoryLabel || d.category} • ${d.timings ? d.timings.split('(')[0].trim() : 'Open Daily'}`,
+        summary: `${d.summary} Entry fee: ${d.entryFee || 'Free/ASI'}. Verified ASI coordinates.`,
+        coordinates: d.coordinates,
+        culture
+      });
+    } else if (item.type === 'district') {
+      const dist = item.data as DistrictPassportStamp;
+      const culture = getRegionalCulture(dist.region || dist.name);
+      setSelectedDistrict(dist.name);
+      setSelectedAsset({
+        id: dist.id,
+        type: 'destination',
+        name: `${dist.name} (${dist.gujaratiName})`,
+        gujaratiTitle: culture.gujaratiTitle,
+        district: dist.name,
+        image: getDistrictPhoto(dist.name),
+        categoryLabel: `District Centroid • ${dist.region}`,
+        summary: `${dist.name} District Centroid. Landmark: ${dist.landmark}. Regional culture: ${culture.culturalTag}.`,
+        coordinates: dist.coordinates,
+        culture
+      });
+    } else if (item.type === 'locality') {
+      handleExecutePinDrop(item.coordinates, `${item.title}, ${item.subtitle}`);
+    } else if (item.type === 'story') {
+      const s = item.data as StoryItem;
+      const culture = getRegionalCulture(s.district);
+      setSelectedAsset({
+        id: s.id,
+        type: 'story',
+        name: s.name,
+        gujaratiTitle: s.gujaratiName || culture.gujaratiTitle,
+        district: s.district,
+        image: s.imageUrl || getDistrictPhoto(s.district),
+        categoryLabel: `Folklore Dispatch • ${s.category || 'Cultural Story'}`,
+        summary: `${s.tagline} ${s.theFolklore}`,
+        coordinates: s.coordinates || [22.40, 71.80],
+        culture
+      });
+    }
+
+    setLocalSearch('');
+    setSearchQuery('');
+  };
 
   return (
     <div className={`relative w-full h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)] bg-[#101827] overflow-hidden select-none ${
@@ -1060,7 +1246,7 @@ export const AtlasMap: React.FC = () => {
 
       {/* Floating Map Controls & Quick Search (Top Left HUD) */}
       {!isAuthModalOpen && (
-        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[100] flex flex-col gap-2 max-w-xs sm:max-w-md w-[calc(100%-1.5rem)] sm:w-full select-none pointer-events-none">
+        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[90] flex flex-col gap-2 w-[calc(100%-1.5rem)] sm:w-full max-w-md select-none pointer-events-none">
         
         {/* 1. Search Bar + Re-center State Button Row */}
         <div className="flex items-center gap-2 w-full pointer-events-auto">
@@ -1076,12 +1262,23 @@ export const AtlasMap: React.FC = () => {
                 setLocalSearch(e.target.value);
                 setSearchQuery(e.target.value);
               }}
-              className="w-full bg-transparent text-xs font-semibold focus:outline-none placeholder:text-[#8F9CAE]"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  if (searchResults.length > 0) {
+                    handleSelectSearchResult(searchResults[0]);
+                    (e.target as HTMLInputElement).blur();
+                  }
+                } else if (e.key === 'Escape') {
+                  setLocalSearch('');
+                  setSearchQuery('');
+                }
+              }}
+              className="w-full bg-transparent text-xs font-semibold focus:outline-none placeholder:text-[#8F9CAE] select-text"
             />
             {localSearch && (
               <button 
                 onClick={() => { setLocalSearch(''); setSearchQuery(''); }}
-                className="p-1 text-[#8F9CAE] hover:text-white"
+                className="p-1 text-[#8F9CAE] hover:text-[#FF9418] transition-colors"
                 aria-label="Clear search"
               >
                 <X className="w-3.5 h-3.5" />
@@ -1092,9 +1289,9 @@ export const AtlasMap: React.FC = () => {
           {/* Re-center State Button (Top Bar) */}
           <button
             onClick={handleRecenterState}
-            title="Re-center Gujarat State (Reset Overview)"
+            title="Re-center Gujarat State (Reset Overview & Filters)"
             aria-label="Re-center Gujarat State"
-            className={`px-3 py-2 rounded-xl border-2 shadow-[3px_3px_0px_#101827] backdrop-blur-md flex items-center gap-1.5 font-black text-xs transition-all pointer-events-auto active:translate-x-0.5 active:translate-y-0.5 flex-shrink-0 cursor-pointer ${
+            className={`px-3 py-2.5 rounded-xl border-2 shadow-[3px_3px_0px_#101827] backdrop-blur-md flex items-center gap-1.5 font-black text-xs transition-all pointer-events-auto active:translate-x-0.5 active:translate-y-0.5 flex-shrink-0 cursor-pointer ${
               theme === 'dark'
                 ? 'bg-[#151F30]/95 hover:bg-[#101827] border-[#25324A] hover:border-[#FF9418] text-[#FF9418]'
                 : 'bg-[#FAF6ED]/95 hover:bg-white border-[#25324A] hover:border-[#FF9418] text-[#101827]'
@@ -1106,33 +1303,58 @@ export const AtlasMap: React.FC = () => {
           </button>
         </div>
 
-        {/* Locality Search Dropdown Suggestions (e.g. Shela, Bopal, Adajan, Vesu) */}
-        {matchingLocalities.length > 0 && (
-          <div className={`p-1.5 rounded-xl border-2 shadow-[4px_4px_0px_#101827] backdrop-blur-xl pointer-events-auto flex flex-col gap-1 max-h-48 overflow-y-auto animate-in fade-in duration-150 ${
+        {/* Live Search Results Dropdown (Destinations, Districts, Stories, Localities) */}
+        {searchResults.length > 0 && (
+          <div className={`p-1.5 rounded-xl border-2 shadow-[4px_4px_0px_#101827] backdrop-blur-xl pointer-events-auto flex flex-col gap-1 max-h-64 overflow-y-auto animate-in fade-in duration-150 ${
             theme === 'dark' ? 'bg-[#151F30]/98 border-[#25324A]' : 'bg-[#FAF6ED]/98 border-[#25324A]'
           }`}>
-            <span className="text-[10px] font-mono font-bold text-[#FF9418] px-2 py-0.5">
-              📍 1-CLICK PIN DROP (5 KM IMPACT SCORE):
-            </span>
-            {matchingLocalities.map((loc) => (
+            <div className="flex items-center justify-between px-2 py-0.5 border-b border-[#25324A]/40 mb-1">
+              <span className="text-[10px] font-mono font-bold text-[#FF9418]">
+                SEARCH RESULTS ({searchResults.length}):
+              </span>
+              <span className="text-[9px] font-mono text-[#8F9CAE]">
+                Press Enter or Tap to Fly
+              </span>
+            </div>
+            {searchResults.map((item) => (
               <button
-                key={loc.name}
-                onClick={() => {
-                  setLocalSearch('');
-                  setSearchQuery('');
-                  handleExecutePinDrop(loc.coords, `${loc.name}, ${loc.city}`);
-                }}
-                className="text-left px-2.5 py-1.5 rounded-lg hover:bg-[#FF9418]/20 text-xs flex items-center justify-between group transition-colors border border-transparent hover:border-[#FF9418]"
+                key={item.id}
+                onClick={() => handleSelectSearchResult(item)}
+                className="text-left px-2.5 py-1.5 rounded-lg hover:bg-[#FF9418]/15 text-xs flex items-center justify-between group transition-colors border border-transparent hover:border-[#FF9418]"
               >
-                <div>
-                  <span className="font-bold text-white group-hover:text-[#FF9418]">{loc.name}</span>
-                  <span className="text-[10px] text-[#8F9CAE] ml-1.5">({loc.city}) • {loc.tag}</span>
+                <div className="flex items-center gap-2 min-w-0 pr-2">
+                  <span className="text-sm flex-shrink-0">{item.icon}</span>
+                  <div className="truncate">
+                    <span className={`font-bold group-hover:text-[#FF9418] truncate block ${
+                      theme === 'dark' ? 'text-white' : 'text-[#101827]'
+                    }`}>
+                      {item.title} {item.gujaratiTitle && <span className="font-['Noto_Sans_Gujarati'] font-normal text-xs text-[#FF9418]">({item.gujaratiTitle})</span>}
+                    </span>
+                    <span className="text-[10px] text-[#8F9CAE] truncate block">
+                      {item.subtitle}
+                    </span>
+                  </div>
                 </div>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#10B981]/20 text-[#10B981] font-bold">
-                  Drop Pin →
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FF9418]/20 text-[#FF9418] font-bold flex-shrink-0">
+                  {item.type === 'locality' ? 'Drop Pin →' : 'Fly To →'}
                 </span>
               </button>
             ))}
+          </div>
+        )}
+
+        {/* No Matches Found State */}
+        {localSearch.trim().length >= 2 && searchResults.length === 0 && (
+          <div className={`p-3 rounded-xl border-2 shadow-[4px_4px_0px_#101827] backdrop-blur-xl pointer-events-auto flex items-center justify-between gap-2 text-xs ${
+            theme === 'dark' ? 'bg-[#151F30]/98 border-[#25324A] text-[#8F9CAE]' : 'bg-[#FAF6ED]/98 border-[#25324A] text-[#606F7B]'
+          }`}>
+            <span>No landmarks or stories match "{localSearch.trim()}".</span>
+            <button
+              onClick={() => { setLocalSearch(''); setSearchQuery(''); }}
+              className="px-2 py-0.5 rounded bg-[#FF9418] text-[#101827] font-bold text-[10px]"
+            >
+              Reset
+            </button>
           </div>
         )}
 
