@@ -307,13 +307,13 @@ export const AtlasMap: React.FC = () => {
           geojsonBoundaryRef.current = L.geoJSON(geojsonData, {
             style: {
               color: '#FF9418',
-              weight: 1.5,
-              opacity: 0.8,
+              weight: 2,
+              opacity: 0.85,
               fillColor: '#FF9418',
-              fillOpacity: 0.04,
+              fillOpacity: 0.05,
               dashArray: '3 3'
             },
-            onEachFeature: (feature, layer) => {
+            onEachFeature: (feature, layer: any) => {
               const dName = feature.properties?.district || 'District';
               const dGu = feature.properties?.district_gu || '';
               layer.bindTooltip(`
@@ -321,6 +321,31 @@ export const AtlasMap: React.FC = () => {
                   ${dName} ${dGu ? `(${dGu})` : ''}
                 </div>
               `, { sticky: true });
+
+              // Interactive District Boundary Highlighting
+              layer.on({
+                mouseover: (e: any) => {
+                  e.target.setStyle({
+                    weight: 3.5,
+                    color: '#FF9418',
+                    fillColor: '#FF9418',
+                    fillOpacity: 0.20,
+                    dashArray: ''
+                  });
+                  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                    e.target.bringToFront();
+                  }
+                },
+                mouseout: (e: any) => {
+                  geojsonBoundaryRef.current?.resetStyle(e.target);
+                },
+                click: () => {
+                  const dObj = GUJARAT_34_DISTRICTS.find(d => d.name.toLowerCase() === dName.toLowerCase());
+                  if (dObj) {
+                    setSelectedDistrict(dObj.id);
+                  }
+                }
+              });
             }
           }).addTo(mapInstanceRef.current);
         })
@@ -446,62 +471,35 @@ export const AtlasMap: React.FC = () => {
     setImpactModalOpen(true);
   };
 
-  // 2. Render Blueprint Parcels & Town Planning Schemes
+  // 2. Blueprint Parcels Cleaned for Pure Tourist Orientation
   useEffect(() => {
-    const map = mapInstanceRef.current;
-    if (!map || !mapReady || !blueprintParcelLayerRef.current) return;
-
-    blueprintParcelLayerRef.current.clearLayers();
-
-    if (showParcels) {
-      INDUSTRIAL_BLUEPRINT_PARCELS.forEach(parcel => {
-        const polygon = L.polygon(parcel.coordinates, {
-          color: '#00F0FF',
-          weight: 1.5,
-          opacity: 0.85,
-          fillColor: '#00F0FF',
-          fillOpacity: 0.12,
-          dashArray: '4 4'
-        }).addTo(blueprintParcelLayerRef.current!);
-
-        polygon.on('mouseover', (e: any) => {
-          polygon.setStyle({
-            color: '#00F0FF',
-            weight: 3,
-            fillOpacity: 0.35,
-            dashArray: ''
-          });
-          const pathEl = (polygon as any)._path;
-          if (pathEl) pathEl.classList.add('parcel-glow-pulse');
-          setHoveredParcel(parcel);
-          setHoveredParcelPos({ x: e.originalEvent?.clientX || 200, y: e.originalEvent?.clientY || 200 });
-        });
-
-        polygon.on('mousemove', (e: any) => {
-          setHoveredParcelPos({ x: e.originalEvent?.clientX || 200, y: e.originalEvent?.clientY || 200 });
-        });
-
-        polygon.on('mouseout', () => {
-          polygon.setStyle({
-            color: '#00F0FF',
-            weight: 1.5,
-            opacity: 0.85,
-            fillColor: '#00F0FF',
-            fillOpacity: 0.12,
-            dashArray: '4 4'
-          });
-          const pathEl = (polygon as any)._path;
-          if (pathEl) pathEl.classList.remove('parcel-glow-pulse');
-          setHoveredParcel(null);
-        });
-
-        polygon.on('click', () => {
-          map.flyTo(parcel.center, Math.max(map.getZoom(), 12), { duration: 0.8 });
-          setSelectedParcel(parcel);
-        });
-      });
+    if (blueprintParcelLayerRef.current) {
+      blueprintParcelLayerRef.current.clearLayers();
     }
-  }, [mapReady, showParcels]);
+  }, [mapReady]);
+
+  // Dynamically highlight selected district polygon on map
+  useEffect(() => {
+    if (!geojsonBoundaryRef.current) return;
+    geojsonBoundaryRef.current.eachLayer((layer: any) => {
+      const dName = layer.feature?.properties?.district;
+      const isSelected = selectedDistrict && dName && dName.toLowerCase() === selectedDistrict.toLowerCase();
+      if (isSelected) {
+        layer.setStyle({
+          weight: 4,
+          color: '#FF9418',
+          fillColor: '#FF9418',
+          fillOpacity: 0.25,
+          dashArray: ''
+        });
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+          layer.bringToFront();
+        }
+      } else {
+        geojsonBoundaryRef.current?.resetStyle(layer);
+      }
+    });
+  }, [selectedDistrict]);
 
   // 3. Render Markers with Re-centering & Density Control
   useEffect(() => {
@@ -798,7 +796,10 @@ export const AtlasMap: React.FC = () => {
         });
 
         filteredStories.forEach((story) => {
-          const coords = story.coordinates || [22.3, 71.5];
+          const rawCoords = story.coordinates || [22.3, 71.5];
+          const coords: [number, number] = (rawCoords[0] > 50 && rawCoords[1] < 40)
+            ? [rawCoords[1], rawCoords[0]]
+            : [rawCoords[0], rawCoords[1]];
           const icon = L.divIcon({
             className: 'story-pin map-marker-pin',
             html: `
@@ -1107,7 +1108,7 @@ export const AtlasMap: React.FC = () => {
             <Search className="w-4 h-4 text-[#FF9418] flex-shrink-0" />
             <input
               type="text"
-              placeholder="Search landmarks, stories, industrial hubs..."
+              placeholder="Search landmarks, heritage, and stories..."
               value={localSearch}
               onChange={(e) => {
                 setLocalSearch(e.target.value);
@@ -1248,21 +1249,6 @@ export const AtlasMap: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <input 
                     type="checkbox" 
-                    checked={showParcels} 
-                    onChange={(e) => setShowParcels(e.target.checked)} 
-                    className="accent-[#00F0FF] rounded"
-                  />
-                  <span className="font-bold text-[#00F0FF]">📐 Industrial Blueprint Parcels</span>
-                </div>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border border-[#00F0FF]/40 text-[#00F0FF]">
-                  5 SEZs
-                </span>
-              </label>
-
-              <label className="flex items-center justify-between p-1 rounded hover:bg-black/10 cursor-pointer">
-                <div className="flex items-center gap-2">
-                  <input 
-                    type="checkbox" 
                     checked={showTourist} 
                     onChange={(e) => setShowTourist(e.target.checked)} 
                     className="accent-[#FF9418] rounded"
@@ -1323,68 +1309,6 @@ export const AtlasMap: React.FC = () => {
         )}
 
       </div>
-      )}
-
-      {/* Floating Blueprint Parcel HUD (Appears on Hover or Selection) */}
-      {(hoveredParcel || selectedParcel) && (
-        <div 
-          className="absolute top-20 right-4 z-[1060] max-w-xs sm:max-w-sm w-full p-4 rounded-2xl border-2 border-[#00F0FF] bg-[#151F30]/95 backdrop-blur-xl shadow-[0_0_20px_rgba(0,240,255,0.3)] animate-in fade-in duration-200 pointer-events-auto"
-        >
-          <div className="flex items-center justify-between gap-2 mb-1.5 pb-1 border-b border-[#00F0FF]/30">
-            <span className="text-[10px] font-mono font-black text-[#00F0FF] uppercase tracking-wider">
-              📐 BLUEPRINT PARCEL • {(hoveredParcel || selectedParcel)?.schemeId}
-            </span>
-            {selectedParcel && (
-              <button 
-                onClick={() => setSelectedParcel(null)}
-                className="p-1 rounded text-[#8F9CAE] hover:text-[#00F0FF]"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
-          </div>
-
-          <h3 className="font-editorial text-sm sm:text-base font-black text-white leading-snug">
-            {(hoveredParcel || selectedParcel)?.name}
-          </h3>
-          <span className="font-['Noto_Sans_Gujarati'] text-xs text-[#00F0FF] font-semibold block mb-2">
-            {(hoveredParcel || selectedParcel)?.gujaratiName}
-          </span>
-
-          {/* CapEx & Completion Progress Bar */}
-          <div className="p-2 rounded-lg bg-[#101827] border border-[#25324A] my-2 text-xs font-mono">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[#8F9CAE]">CapEx:</span>
-              <span className="font-bold text-[#FF9418]">{(hoveredParcel || selectedParcel)?.capex}</span>
-            </div>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[#8F9CAE]">Completion:</span>
-              <span className="font-bold text-[#10B981]">{(hoveredParcel || selectedParcel)?.completion}%</span>
-            </div>
-            <div className="w-full bg-[#25324A] h-1.5 rounded-full overflow-hidden">
-              <div 
-                style={{ width: `${(hoveredParcel || selectedParcel)?.completion}%` }}
-                className="bg-gradient-to-r from-[#00F0FF] to-[#10B981] h-full rounded-full"
-              />
-            </div>
-          </div>
-
-          <div className="text-[11px] text-[#8F9CAE] space-y-1">
-            <p><span className="text-[#00F0FF] font-bold">Executing Agency:</span> {(hoveredParcel || selectedParcel)?.executingAgency}</p>
-            <p><span className="text-[#00F0FF] font-bold">Focus:</span> {(hoveredParcel || selectedParcel)?.focus}</p>
-          </div>
-
-          <div className="mt-2 pt-2 border-t border-[#25324A]">
-            <span className="text-[10px] font-mono text-[#8F9CAE] block font-bold mb-1">KEY ANCHOR TENANTS:</span>
-            <div className="flex flex-wrap gap-1">
-              {(hoveredParcel || selectedParcel)?.anchorTenants.slice(0, 3).map((tenant, i) => (
-                <span key={i} className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-white truncate max-w-[150px]">
-                  {tenant}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
       )}
 
       {/* Embedded Highway EV Corridor Radar Slide-Out Panel (Top Right) */}
@@ -1518,10 +1442,10 @@ export const AtlasMap: React.FC = () => {
         />
       )}
 
-      {/* Modern Slide-Up / Docked Asset Detail Panel */}
+      {/* Modern Slide-Up / Docked Asset Detail Panel (Safe from mobile bottom nav clipping) */}
       {selectedAsset && (
         <div 
-          className={`absolute bottom-20 md:bottom-6 right-3 left-3 md:left-auto md:right-6 z-[1050] max-w-sm sm:max-w-md w-auto md:w-96 rounded-2xl border-2 shadow-[6px_6px_0px_#101827] backdrop-blur-xl animate-in fade-in slide-in-from-bottom-4 duration-200 overflow-hidden max-h-[75vh] flex flex-col ${
+          className={`absolute bottom-[5.25rem] sm:bottom-20 md:bottom-6 right-3 left-3 md:left-auto md:right-6 z-[1050] max-w-sm sm:max-w-md w-auto md:w-96 rounded-2xl border-2 shadow-[6px_6px_0px_#101827] backdrop-blur-xl animate-in fade-in slide-in-from-bottom-4 duration-200 overflow-hidden max-h-[calc(100dvh-10rem)] md:max-h-[75vh] flex flex-col ${
             theme === 'dark' ? 'bg-[#151F30]/98 border-[#25324A] text-[#F1E8D7]' : 'bg-[#FAF6ED]/98 border-[#25324A] text-[#101827]'
           }`}
         >

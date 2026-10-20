@@ -47,7 +47,7 @@ export const App: React.FC = () => {
       <OfflineBanner />
 
       {/* Main View Container with Fluid Transitions & Safe Area Mobile Spacing */}
-      <main className={`relative ${isMapMode ? 'pb-16 lg:pb-0' : 'pb-24 lg:pb-12'}`}>
+      <main className={`relative ${isMapMode ? 'pb-20 lg:pb-0' : 'pb-28 lg:pb-12'}`}>
         {/* Persistent Atlas Map View (Preserves Leaflet Instance & Camera Pan/Zoom) */}
         <div className={isMapMode ? 'block' : 'hidden'} aria-hidden={!isMapMode}>
           <AtlasMap />

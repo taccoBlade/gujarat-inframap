@@ -18,7 +18,7 @@ export const CulturalFooter: React.FC = () => {
   }
 
   return (
-    <footer className={`mt-16 border-t-2 transition-colors select-none ${
+    <footer className={`mt-16 border-t-2 pb-24 md:pb-8 transition-colors select-none ${
       theme === 'dark' 
         ? 'bg-[#101827] border-[#25324A] text-[#F1E8D7]' 
         : 'bg-[#FAF6ED] border-[#25324A] text-[#101827]'

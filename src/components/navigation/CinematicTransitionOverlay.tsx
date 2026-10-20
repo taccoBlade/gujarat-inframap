@@ -95,13 +95,13 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
     )
   },
   infrastructure: {
-    code: 'ENG-05 // CYBER-CORRIDOR & MEGAPROJECTS',
-    badge: 'INDUSTRIAL ENGINE OF INDIA',
-    title: 'GIFT City & High-Speed Viaducts',
-    gujarati: 'ઇન્ફ્રાસ્ટ્રક્ચર અને ઔદ્યોગિક કોરિડોર',
+    code: 'TRAIL-05 // SCENIC TRAVEL CORRIDORS',
+    badge: 'EXPEDITION & PILGRIM HIGHWAYS',
+    title: 'Heritage Trails & Scenic Highways',
+    gujarati: 'પ્રવાસન હાઈવે અને યાત્રા માર્ગો',
     accent: '#10B981',
     glowColor: 'rgba(16, 185, 129, 0.4)',
-    subtext: '350 km/h Bullet Train • Dholera SIR • 30 GW Khavda Hybrid Grid',
+    subtext: 'Coastal Dwarka Highway • Gir Forest Safari Route • Kutch Road to Heaven',
     iconSvg: (
       <svg className="w-10 h-10 sm:w-14 sm:h-14 stroke-[#10B981] fill-none stroke-[2]" viewBox="0 0 100 100">
         <path d="M 34 86 L 34 30 L 45 15 L 56 30 L 56 86" strokeWidth="2" />
