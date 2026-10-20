@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { getRegionalCulture } from '../../utils/cultural-regions';
 import unfilteredData from '../../../data/gujarat_unfiltered.json';
-import { Sparkles, Bookmark, BookmarkCheck, Search, ShieldAlert, Eye, Info, Compass } from 'lucide-react';
+import { ToranOrnamentalBorder, AjrakhStarPattern } from '../cultural/GujaratiPatterns';
+import { Sparkles, Bookmark, BookmarkCheck, Search, ShieldAlert, Eye, Info, Compass, BookOpen, CheckCircle } from 'lucide-react';
 
 interface StoryItem {
   id: string;
@@ -57,71 +58,66 @@ export const UnfilteredStoriesView: React.FC = () => {
   };
 
   return (
-    <div className={`max-w-7xl mx-auto px-4 py-8 transition-colors duration-200 ${theme === 'dark' ? 'text-slate-100' : 'text-[#282823]'}`}>
+    <div className={`max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 transition-colors duration-200 ${
+      theme === 'dark' ? 'text-[#F1E8D7]' : 'text-[#101827]'
+    }`}>
       
-      {/* Editorial Header in Traditional Gujarati Heritage Style */}
-      <div className={`relative border rounded-3xl p-6 sm:p-8 mb-6 sm:mb-8 shadow-sm overflow-hidden transition-colors ${
-        theme === 'dark'
-          ? 'bg-gradient-to-br from-[#121c2e] via-[#0f172a] to-[#090d16] border-amber-500/20'
-          : 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F4EC] to-[#EFE7D8] border-[#D8C3A5]'
+      {/* Editorial Header in Gen Z Neo-Brutalist Frame */}
+      <div className={`relative border-2 rounded-2xl p-5 sm:p-8 mb-6 sm:mb-8 shadow-[4px_4px_0px_#101827] overflow-hidden transition-colors ${
+        theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
       }`}>
-        
         {/* Toran Border Trim on Top */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500" />
+        <ToranOrnamentalBorder className="rounded-t mb-4 -mt-5 -mx-5 sm:-mt-8 sm:-mx-8" height={10} />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2 max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold font-mono uppercase tracking-wider bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold font-mono uppercase tracking-wider bg-[#9D233B]/15 text-[#9D233B] border border-[#9D233B]/40">
               <Sparkles className="w-3.5 h-3.5" />
               <span>EDITORIAL ARCHIVE • ૪૫ અજાણી વાતો (45 DOSSIERS)</span>
             </div>
 
-            <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif tracking-tight ${
-              theme === 'dark' ? 'text-white' : 'text-[#1c1917]'
+            <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-black font-editorial tracking-tight ${
+              theme === 'dark' ? 'text-white' : 'text-[#101827]'
             }`}>
-              Gujarat <span className="text-amber-500 font-serif italic">Unfiltered</span>
+              Gujarat <span className="text-[#FF9418] italic font-serif">Unfiltered</span>
             </h1>
 
             <p className={`text-xs sm:text-sm font-['Noto_Sans_Gujarati',sans-serif] leading-relaxed ${
-              theme === 'dark' ? 'text-slate-300' : 'text-[#57534e]'
+              theme === 'dark' ? 'text-[#8F9CAE]' : 'text-[#606F7B]'
             }`}>
               ગુજરાતની રહસ્યમય જગ્યાઓ, સદીઓ જૂની લોકવાયકાઓ (Oral Folklore) અને વિજ્ઞાન તેમજ સરકારી ગેઝેટિયર્સ આધારિત ફોરેન્સિક વાસ્તવિકતા (Ground Reality).
             </p>
           </div>
 
-          <div className={`px-4 py-2.5 rounded-2xl border text-center shadow-sm flex-shrink-0 ${
-            theme === 'dark'
-              ? 'bg-slate-900/80 border-slate-700/80'
-              : 'bg-white/80 border-[#D8C3A5]'
+          <div className={`px-4 py-2.5 rounded-xl border-2 text-center shadow-[2px_2px_0px_#101827] flex-shrink-0 ${
+            theme === 'dark' ? 'bg-[#101827] border-[#25324A]' : 'bg-white border-[#25324A]'
           }`}>
-            <span className={`text-2xl font-black font-mono block ${theme === 'dark' ? 'text-amber-400' : 'text-[#9a3412]'}`}>45</span>
-            <span className={`text-[10px] font-medium uppercase tracking-wider ${theme === 'dark' ? 'text-slate-400' : 'text-[#78716c]'}`}>Oral Folklore vs Reality</span>
+            <span className="text-2xl font-black font-mono block text-[#FF9418]">45</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#8F9CAE]">Folklore vs Reality</span>
           </div>
         </div>
 
-        {/* Filter controls */}
-        <div className={`pt-5 mt-5 border-t flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 ${
-          theme === 'dark' ? 'border-slate-800' : 'border-stone-200'
-        }`}>
+        {/* Filter Toolbar */}
+        <div className="pt-5 mt-5 border-t-2 border-[#25324A] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           
           {/* Search box */}
           <div className="relative flex-grow max-w-md">
-            <Search className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 ${theme === 'dark' ? 'text-slate-400' : 'text-stone-400'}`} />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8F9CAE]" />
             <input
               type="text"
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
               placeholder="Search Dumas Beach, Shamlaji, Uparkot..."
-              className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-xs outline-none border transition-all ${
+              className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-xs font-semibold outline-none border-2 transition-all ${
                 theme === 'dark'
-                  ? 'bg-slate-900/90 border-slate-700/80 text-white placeholder-slate-500 focus:border-amber-400'
-                  : 'bg-white/90 border-[#D8C3A5] text-[#282823] placeholder-stone-400 focus:border-amber-600'
+                  ? 'bg-[#101827] border-[#25324A] text-white placeholder-[#8F9CAE] focus:border-[#FF9418]'
+                  : 'bg-white border-[#25324A] text-[#101827] placeholder-[#8F9CAE] focus:border-[#FF9418]'
               }`}
             />
           </div>
 
-          {/* Category Chips with authentic mineral dye tones */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+          {/* Category Chips with Ajrakh & Mineral Dye Tones */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
             {[
               { id: 'all', label: 'All Dossiers (45)' },
               { id: 'folklore_eerie', label: '👁️ Eerie Folklore' },
@@ -132,12 +128,12 @@ export const UnfilteredStoriesView: React.FC = () => {
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border whitespace-nowrap ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border-2 whitespace-nowrap ${
                   selectedCategory === cat.id
-                    ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-sm'
+                    ? 'bg-[#FF9418] text-[#101827] border-[#101827] shadow-[2px_2px_0px_#101827]'
                     : theme === 'dark'
-                      ? 'bg-slate-900/60 text-slate-300 border-slate-800 hover:text-white hover:border-slate-700'
-                      : 'bg-white/60 text-stone-700 border-[#D8C3A5] hover:border-amber-600'
+                      ? 'bg-[#101827] text-[#8F9CAE] border-[#25324A] hover:border-[#FF9418] hover:text-white'
+                      : 'bg-white text-[#25324A] border-[#25324A] hover:border-[#FF9418]'
                 }`}
               >
                 {cat.label}
@@ -148,7 +144,7 @@ export const UnfilteredStoriesView: React.FC = () => {
         </div>
       </div>
 
-      {/* Stories Grid with Authentic Gujarati Motifs */}
+      {/* Stories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence>
           {filteredStories.map((story) => {
@@ -160,15 +156,13 @@ export const UnfilteredStoriesView: React.FC = () => {
               <motion.article
                 key={story.id}
                 layout
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.25 }}
-                className={`rounded-2xl border overflow-hidden shadow-sm hover:shadow-xl flex flex-col justify-between transition-all duration-300 group ${
-                  theme === 'dark'
-                    ? 'bg-[#121926] border-slate-800/90 hover:border-amber-500/50'
-                    : 'bg-[#FDFBF7] border-[#DFD3C3] hover:border-amber-600 text-[#282823]'
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.2 }}
+                className={`rounded-2xl border-2 overflow-hidden shadow-[4px_4px_0px_#101827] hover:shadow-[6px_6px_0px_#9D233B] flex flex-col justify-between transition-all duration-200 group ${
+                  theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
                 }`}
               >
                 {/* Regional Cultural Toran Trim */}
@@ -176,119 +170,122 @@ export const UnfilteredStoriesView: React.FC = () => {
 
                 {/* Media Image Header */}
                 <div 
-                  className="h-52 w-full bg-cover relative p-3 flex flex-col justify-between overflow-hidden"
+                  className="h-48 w-full bg-cover relative p-3 flex flex-col justify-between overflow-hidden border-b-2 border-[#25324A]"
                   style={{ backgroundImage: `url('${story.imageUrl}')`, backgroundPosition: 'center 20%' }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/60 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/60 pointer-events-none" />
 
                   {/* Top Badges */}
                   <div className="relative z-10 flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md bg-black/80 backdrop-blur text-amber-200 border border-amber-500/40">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#101827]/90 text-[#FF9418] border border-[#25324A]">
                       📍 {story.district}
                     </span>
 
                     <button
                       onClick={() => toggleBookmark(story.id)}
-                      className={`p-1.5 rounded-md backdrop-blur border transition-all ${
+                      className={`p-1.5 rounded-lg border-2 transition-all ${
                         isBookmarked 
-                          ? 'bg-amber-500 text-slate-950 border-amber-400 shadow' 
-                          : 'bg-black/70 text-slate-300 border-white/20 hover:text-white'
+                          ? 'bg-[#FF9418] text-[#101827] border-[#101827] shadow-[2px_2px_0px_#101827]' 
+                          : 'bg-[#101827]/80 text-[#8F9CAE] border-[#25324A] hover:text-white'
                       }`}
+                      aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark story'}
                     >
-                      {isBookmarked ? <BookmarkCheck className="w-4 h-4 text-slate-950" /> : <Bookmark className="w-4 h-4" />}
+                      {isBookmarked ? <BookmarkCheck className="w-4 h-4 text-[#101827]" /> : <Bookmark className="w-4 h-4" />}
                     </button>
                   </div>
 
                   {/* Bottom Header: Region Name & Fact-check Badge */}
                   <div className="relative z-10 flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded bg-amber-500 text-slate-950 border border-black shadow-sm font-mono">
+                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#FF9418] text-[#101827] border border-[#101827] shadow-sm font-mono">
                       {story.factCheckBadge || 'Documented Lore'}
                     </span>
-                    <span className="text-[10px] font-mono text-amber-200 bg-black/60 px-2 py-0.5 rounded border border-white/20">
+                    <span className="text-[10px] font-mono text-[#F1E8D7] bg-[#101827]/90 px-2 py-0.5 rounded border border-[#25324A]">
                       {culture.primaryIcon} {culture.regionName}
                     </span>
                   </div>
                 </div>
 
                 {/* Content Body */}
-                <div className="p-5 flex-1 flex flex-col">
+                <div className="p-4 sm:p-5 flex-1 flex flex-col">
                   
-                  <div className="mb-3">
-                    <span className="text-xs font-bold text-amber-500 font-['Noto_Sans_Gujarati']">
+                  <div className="mb-2">
+                    <span className="text-xs font-bold text-[#FF9418] font-['Noto_Sans_Gujarati']">
                       {story.gujaratiName}
                     </span>
-                    <h3 className={`text-lg font-black font-['Lora',serif] leading-snug transition-colors ${
-                      theme === 'dark' ? 'text-white group-hover:text-amber-300' : 'text-[#1c1917] group-hover:text-[#9a3412]'
+                    <h3 className={`text-lg font-black font-editorial leading-snug transition-colors line-clamp-1 ${
+                      theme === 'dark' ? 'text-white group-hover:text-[#FF9418]' : 'text-[#101827] group-hover:text-[#9D233B]'
                     }`}>
                       {story.name}
                     </h3>
 
                     {/* Regional Folk Tag */}
-                    <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono mt-1.5 ${culture.badgeBg} ${culture.textColor} border ${culture.badgeBorder}`}>
-                      <span>{culture.culturalTag}</span>
+                    <div className="mt-1">
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold ${culture.badgeBg} ${culture.textColor} border ${culture.badgeBorder}`}>
+                        {culture.culturalTag}
+                      </span>
                     </div>
 
                     <p className={`text-xs mt-2 line-clamp-2 leading-relaxed ${
-                      theme === 'dark' ? 'text-slate-300' : 'text-[#57534e]'
+                      theme === 'dark' ? 'text-[#8F9CAE]' : 'text-[#606F7B]'
                     }`}>
                       {story.tagline}
                     </p>
                   </div>
 
                   {/* Myth vs Reality Tab Switcher */}
-                  <div className={`grid grid-cols-2 gap-1 p-1 rounded-lg border text-xs font-bold my-3 ${
-                    theme === 'dark' ? 'bg-[#09101c] border-amber-600/30' : 'bg-[#EDE5D8] border-[#D8C3A5]'
-                  }`}>
+                  <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl border-2 border-[#25324A] bg-[#101827] text-xs font-bold my-3" role="tablist">
                     <button
+                      role="tab"
+                      aria-selected={activeTab === 'folklore'}
                       onClick={() => toggleTab(story.id, 'folklore')}
-                      className={`py-1 rounded text-center transition-all ${
+                      className={`py-1 rounded-lg text-center transition-all ${
                         activeTab === 'folklore'
-                          ? 'bg-rose-900 text-amber-100 shadow-sm border border-rose-700/60'
-                          : theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-[#57534e] hover:text-[#1c1917]'
+                          ? 'bg-[#9D233B] text-white shadow-[2px_2px_0px_#101827] font-black'
+                          : 'text-[#8F9CAE] hover:text-white'
                       }`}
                     >
                       📜 Oral Folklore
                     </button>
                     <button
+                      role="tab"
+                      aria-selected={activeTab === 'reality'}
                       onClick={() => toggleTab(story.id, 'reality')}
-                      className={`py-1 rounded text-center transition-all ${
+                      className={`py-1 rounded-lg text-center transition-all ${
                         activeTab === 'reality'
-                          ? 'bg-amber-600 text-slate-950 shadow-sm border border-amber-400'
-                          : theme === 'dark' ? 'text-slate-400 hover:text-white' : 'text-[#57534e] hover:text-[#1c1917]'
+                          ? 'bg-[#1C6555] text-white shadow-[2px_2px_0px_#101827] font-black'
+                          : 'text-[#8F9CAE] hover:text-white'
                       }`}
                     >
                       🔬 Ground Reality
                     </button>
                   </div>
 
-                  {/* Dynamic Tab Body */}
-                  <div className={`text-xs p-3.5 rounded-lg border min-h-[95px] flex items-center ${
+                  {/* Dynamic Tab Body with persistent stable layout */}
+                  <div className={`text-xs p-3.5 rounded-xl border-2 min-h-[100px] flex items-center ${
                     theme === 'dark' 
-                      ? 'bg-[#09101c]/80 text-slate-200 border-amber-600/20' 
-                      : 'bg-[#F7F2E8] text-[#282823] border-[#DFD3C3]'
+                      ? 'bg-[#101827] text-[#F1E8D7] border-[#25324A]' 
+                      : 'bg-white text-[#101827] border-[#25324A]'
                   }`}>
-                    <p className="line-clamp-4 leading-relaxed font-['Lora',serif]">
+                    <p className="line-clamp-4 leading-relaxed font-sans">
                       {activeTab === 'folklore' ? story.theFolklore : story.theGroundReality}
                     </p>
                   </div>
 
                 </div>
 
-                {/* Card Footer: Legal Access */}
-                <div className={`px-5 py-3 border-t flex items-center justify-between text-[11px] ${
-                  theme === 'dark' 
-                    ? 'border-amber-600/20 bg-[#09101c]/60 text-slate-300' 
-                    : 'border-[#D8C3A5] bg-[#EDE5D8]/60 text-[#57534e]'
+                {/* Card Footer: Legal Access & Archival Provenance */}
+                <div className={`px-4 sm:px-5 py-3 border-t-2 border-[#25324A] flex items-center justify-between text-[11px] ${
+                  theme === 'dark' ? 'bg-[#101827] text-[#8F9CAE]' : 'bg-[#F1E8D7] text-[#606F7B]'
                 }`}>
-                  <span className="flex items-center gap-1 font-mono text-[10px]">
-                    <ShieldAlert className="w-3.5 h-3.5 text-amber-500" />
+                  <span className="flex items-center gap-1 font-mono text-[10px] font-bold">
+                    <ShieldAlert className="w-3.5 h-3.5 text-[#FF9418]" />
                     {typeof story.legalAccess === 'string'
                       ? story.legalAccess.replace(/_/g, ' ').toUpperCase()
-                      : (story.legalAccess?.accessType || 'PUBLIC OPEN')}
+                      : (story.legalAccess?.accessType || 'PUBLIC ACCESS')}
                   </span>
 
-                  <span className="text-amber-600 font-bold hover:underline cursor-pointer">
-                    Read Investigation →
+                  <span className="text-[#FF9418] font-bold hover:underline cursor-pointer">
+                    Source Verified ↗
                   </span>
                 </div>
 

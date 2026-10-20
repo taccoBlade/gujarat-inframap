@@ -1,57 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  /* Core Gujarati Heritage Palette */
-  --color-ivory-paper: #F7F2E8;
-  --color-ivory-elevated: #FDFBF7;
-  --color-warm-sandstone: #D8C3A5;
-  --color-sandstone-muted: #E8DCCB;
-  --color-deep-indigo: #243B53;
-  --color-indigo-hover: #1B2D40;
-  --color-indigo-subtle: #EBF0F5;
-  --color-madder-red: #A64036;
-  --color-madder-subtle: #F9ECEA;
-  --color-neem-green: #52664B;
-  --color-neem-subtle: #EDF2EB;
-  --color-turmeric-gold: #C49A45;
-  --color-turmeric-subtle: #FAF3E3;
-  --color-ink-charcoal: #282823;
-  --color-muted-stone: #777269;
+  /* Gen Z Neo-Brutalist & Gujarati Cultural Travel Atlas Palette */
+  --color-midnight-navy: #101827;
+  --color-dark-surface: #151F30;
+  --color-saffron-orange: #FF9418;
+  --color-warm-ivory: #F1E8D7;
+  --color-ivory-elevated: #FAF6ED;
+  --color-ajrakh-red: #9D233B;
+  --color-deep-green: #1C6555;
+  --color-slate-blue: #25324A;
+  --color-muted-grey: #8F9CAE;
+  --color-light-muted: #606F7B;
 
-  /* Semantic Surface & Border Assignments */
-  --bg-canvas: var(--color-ivory-paper);
-  --bg-surface: var(--color-ivory-elevated);
-  --bg-subtle: var(--color-sandstone-muted);
-  --border-hairline: #DFD3C3;
-  --border-architectural: var(--color-warm-sandstone);
-  --border-focus: var(--color-deep-indigo);
-
-  /* Semantic Map Category Colours */
-  --map-water-dams: #243B53;        /* Deep Indigo */
-  --map-water-transfer: #3B6978;    /* Stepwell Slate Blue */
-  --map-energy-re: #C49A45;         /* Turmeric Gold */
-  --map-transport-road: #A64036;    /* Madder Red */
-  --map-transport-rail: #5C4D42;    /* Earth Timber */
-  --map-nature-ecology: #52664B;    /* Neem Green */
-  --map-heritage-places: #8C3B32;   /* Terracotta Madder */
+  /* Semantic Variables (Dark Default) */
+  --bg-canvas: var(--color-midnight-navy);
+  --bg-surface: var(--color-dark-surface);
+  --border-color: var(--color-slate-blue);
+  --accent-primary: var(--color-saffron-orange);
 
   /* Typography Families */
-  --font-serif: 'Lora', 'DM Serif Display', Georgia, serif;
-  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-editorial: 'Outfit', 'DM Serif Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
   --font-gujarati: 'Noto Sans Gujarati', sans-serif;
 
+  /* Neo-brutalist Shadow Tokens */
+  --shadow-brutal-sm: 2px 2px 0px #101827;
+  --shadow-brutal-md: 4px 4px 0px #101827;
+  --shadow-brutal-lg: 6px 6px 0px #101827;
+  --shadow-brutal-saffron: 3px 3px 0px #FF9418;
+
   /* Motion Timing Tokens */
-  --duration-immediate: 130ms;
-  --duration-micro: 200ms;
-  --duration-panel: 280ms;
-  --duration-editorial: 450ms;
+  --duration-immediate: 120ms;
+  --duration-micro: 180ms;
+  --duration-panel: 260ms;
   --ease-architectural: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 body {
-  background-color: #0c1524;
-  color: #f7f2e8;
+  background-color: #101827;
+  color: #F1E8D7;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   margin: 0;
@@ -60,17 +50,27 @@ body {
 }
 
 body.theme-light {
-  background-color: var(--bg-canvas, #f7f2e8);
-  color: var(--color-ink-charcoal, #282823);
+  background-color: #F1E8D7;
+  color: #101827;
 }
 
-h1, h2, .font-editorial {
-  font-family: var(--font-serif);
-  letter-spacing: -0.015em;
+h1, h2, h3, .font-editorial {
+  font-family: var(--font-editorial);
+  letter-spacing: -0.02em;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
 }
 
 .lang-gu {
   font-family: var(--font-gujarati);
+  line-height: 1.4;
+}
+
+/* Safe area insets for mobile devices */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* Leaflet Custom Marker & DivIcon Reset */
@@ -81,7 +81,7 @@ h1, h2, .font-editorial {
 
 /* Traditional Gujarati Ethnic Motifs & Accents */
 .ethnic-toran-trim {
-  background: linear-gradient(90deg, #9a3412 0%, #d97706 25%, #991b1b 50%, #d97706 75%, #9a3412 100%);
+  background: linear-gradient(90deg, #9D233B 0%, #FF9418 25%, #1C6555 50%, #FF9418 75%, #9D233B 100%);
   height: 4px;
 }
 
@@ -95,133 +95,101 @@ h1, h2, .font-editorial {
   display: inline-block;
 }
 
-.solanki-corner-bracket {
-  position: relative;
+/* Neo-Brutalist Map Pin Micro-Styles */
+.map-marker-pin {
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease;
 }
-.solanki-corner-bracket::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 10px;
-  height: 10px;
-  border-top: 2px solid #d97706;
-  border-left: 2px solid #d97706;
+.map-marker-pin:hover {
+  transform: translate(-50%, -50%) scale(1.18);
+  z-index: 1000 !important;
 }
-.solanki-corner-bracket::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 10px;
-  height: 10px;
-  border-bottom: 2px solid #d97706;
-  border-right: 2px solid #d97706;
+.map-marker-pin.active-marker {
+  transform: translate(-50%, -50%) scale(1.25);
+  box-shadow: 0 0 0 3px #FF9418, 4px 4px 0px #101827 !important;
+  z-index: 1050 !important;
 }
 
-/* ==========================================================================
-   SUB-REGIONAL GUJARATI CULTURAL PATTERNS
-   ========================================================================== */
+/* Cluster Marker */
+.map-cluster-pin {
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.map-cluster-pin:hover {
+  transform: translate(-50%, -50%) scale(1.14);
+}
 
-/* 1. Kutch & Bhuj: Ajrakh Star Block-Print & Lippan Kaam */
+/* Sub-Regional Cultural Textures (Restrained & Subtle) */
 .pattern-kutch-ajrakh {
-  background-color: rgba(153, 27, 27, 0.05);
+  background-color: rgba(157, 35, 59, 0.05);
   background-image: 
-    radial-gradient(circle at 50% 50%, rgba(180, 83, 9, 0.22) 2px, transparent 3px),
-    radial-gradient(circle at 0% 0%, rgba(153, 27, 27, 0.18) 2px, transparent 3px),
-    radial-gradient(circle at 100% 100%, rgba(30, 58, 138, 0.2) 2px, transparent 3px);
+    radial-gradient(circle at 50% 50%, rgba(255, 148, 24, 0.16) 1.5px, transparent 2.5px),
+    radial-gradient(circle at 0% 0%, rgba(157, 35, 59, 0.14) 1.5px, transparent 2.5px);
   background-size: 20px 20px;
 }
 
-/* 2. Saurashtra & Kathiawad: Jamnagar Bandhani Tie-Dye */
 .pattern-saurashtra-bandhani {
-  background-color: rgba(217, 119, 6, 0.04);
+  background-color: rgba(255, 148, 24, 0.03);
   background-image: 
-    radial-gradient(circle, rgba(217, 119, 6, 0.35) 1.5px, transparent 1.5px),
-    radial-gradient(circle, rgba(220, 38, 38, 0.25) 1px, transparent 1px);
+    radial-gradient(circle, rgba(255, 148, 24, 0.25) 1px, transparent 1px),
+    radial-gradient(circle, rgba(157, 35, 59, 0.18) 1px, transparent 1px);
   background-size: 16px 16px, 8px 8px;
   background-position: 0 0, 4px 4px;
 }
 
-/* 3. Gir & Junagadh: Teak & Lion Sanctuary */
-.pattern-gir-lion {
-  background-color: rgba(82, 102, 75, 0.05);
-  background-image:
-    radial-gradient(ellipse at 50% 50%, rgba(82, 102, 75, 0.28) 2.5px, transparent 3.5px),
-    radial-gradient(circle at 25% 75%, rgba(196, 154, 69, 0.2) 1.5px, transparent 2px);
-  background-size: 24px 24px;
-}
-
-/* 4. North Gujarat & Patan: Patan Patola Double-Ikat */
 .pattern-patola-ikkat {
-  background-color: rgba(166, 64, 54, 0.05);
+  background-color: rgba(157, 35, 59, 0.04);
   background-image:
-    linear-gradient(45deg, rgba(166, 64, 54, 0.15) 25%, transparent 25%),
-    linear-gradient(-45deg, rgba(166, 64, 54, 0.15) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, rgba(196, 154, 69, 0.2) 75%),
-    linear-gradient(-45deg, transparent 75%, rgba(196, 154, 69, 0.2) 75%);
+    linear-gradient(45deg, rgba(157, 35, 59, 0.12) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(157, 35, 59, 0.12) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 148, 24, 0.14) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 148, 24, 0.14) 75%);
   background-size: 18px 18px;
   background-position: 0 0, 9px 0, 9px -9px, 0px 9px;
 }
 
-/* 5. South Gujarat & Dang: Warli Tribal Art */
-.pattern-dang-warli {
-  background-color: rgba(21, 128, 61, 0.04);
-  background-image:
-    radial-gradient(circle at 50% 50%, rgba(21, 128, 61, 0.25) 2px, transparent 2.5px),
-    linear-gradient(60deg, rgba(154, 52, 18, 0.12) 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-
-/* 6. Solanki Stepwell Architecture */
 .pattern-solanki-stepwell {
-  background-color: rgba(196, 154, 69, 0.04);
+  background-color: rgba(37, 50, 74, 0.04);
   background-image:
-    linear-gradient(45deg, rgba(196, 154, 69, 0.12) 25%, transparent 25%, transparent 75%, rgba(196, 154, 69, 0.12) 75%),
-    linear-gradient(45deg, rgba(196, 154, 69, 0.12) 25%, transparent 25%, transparent 75%, rgba(196, 154, 69, 0.12) 75%);
+    linear-gradient(45deg, rgba(255, 148, 24, 0.1) 25%, transparent 25%, transparent 75%, rgba(255, 148, 24, 0.1) 75%),
+    linear-gradient(45deg, rgba(255, 148, 24, 0.1) 25%, transparent 25%, transparent 75%, rgba(255, 148, 24, 0.1) 75%);
   background-size: 14px 14px;
   background-position: 0 0, 7px 7px;
 }
 
 /* ==========================================================================
-   ETHNIC LEAFLET POPUP REFINEMENT & PROPORTIONS
+   GEN Z NEO-BRUTALIST LEAFLET POPUP
    ========================================================================== */
 .ethnic-leaflet-popup .leaflet-popup-content-wrapper {
-  background: #FDFBF7 !important;
-  color: #282823 !important;
-  border: 1.5px solid #D8C3A5 !important;
-  border-radius: 12px !important;
+  background: #151F30 !important;
+  color: #F1E8D7 !important;
+  border: 2px solid #25324A !important;
+  border-radius: 14px !important;
   padding: 0 !important;
   overflow: hidden !important;
-  box-shadow: 0 14px 35px -4px rgba(40, 40, 35, 0.22), 0 4px 10px -2px rgba(40, 40, 35, 0.1) !important;
+  box-shadow: 4px 4px 0px #101827 !important;
 }
 
-body:not(.theme-light) .ethnic-leaflet-popup .leaflet-popup-content-wrapper {
-  background: #121926 !important;
-  color: #f7f2e8 !important;
-  border: 1.5px solid #9a3412 !important;
-  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.75), 0 0 14px rgba(245, 158, 11, 0.18) !important;
+body.theme-light .ethnic-leaflet-popup .leaflet-popup-content-wrapper {
+  background: #FAF6ED !important;
+  color: #101827 !important;
+  border: 2px solid #25324A !important;
+  box-shadow: 4px 4px 0px #25324A !important;
 }
 
 body:not(.theme-light) .ethnic-leaflet-popup h3 {
-  color: #fef3c7 !important;
+  color: #FFFFFF !important;
 }
 
 body:not(.theme-light) .ethnic-leaflet-popup p {
-  color: #cbd5e1 !important;
+  color: #8F9CAE !important;
 }
 
-body:not(.theme-light) .ethnic-leaflet-popup div {
-  color: inherit;
+body.theme-light .ethnic-leaflet-popup h3 {
+  color: #101827 !important;
 }
 
-body:not(.theme-light) .ethnic-leaflet-popup div[style*="background: #f5f0e6"],
-body:not(.theme-light) .ethnic-leaflet-popup div[style*="background: rgb(245, 240, 230)"],
-body:not(.theme-light) .ethnic-leaflet-popup div[style*="background: #fdfbf7"],
-body:not(.theme-light) .ethnic-leaflet-popup div[style*="background: rgb(253, 251, 247)"] {
-  background: #1e293b !important;
-  color: #f1f5f9 !important;
-  border-color: #334155 !important;
+body.theme-light .ethnic-leaflet-popup p {
+  color: #5A677B !important;
 }
 
 .ethnic-leaflet-popup .leaflet-popup-content {
@@ -230,37 +198,34 @@ body:not(.theme-light) .ethnic-leaflet-popup div[style*="background: rgb(253, 25
 }
 
 .ethnic-leaflet-popup .leaflet-popup-tip {
-  background: #FDFBF7 !important;
-  border: 1px solid #D8C3A5 !important;
+  background: #151F30 !important;
+  border: 2px solid #25324A !important;
 }
 
-body:not(.theme-light) .ethnic-leaflet-popup .leaflet-popup-tip {
-  background: #121926 !important;
-  border: 1px solid #9a3412 !important;
+body.theme-light .ethnic-leaflet-popup .leaflet-popup-tip {
+  background: #FAF6ED !important;
+  border: 2px solid #25324A !important;
 }
 
 .ethnic-leaflet-popup .leaflet-popup-close-button {
-  top: 10px !important;
-  right: 10px !important;
-  width: 26px !important;
-  height: 26px !important;
-  border-radius: 50% !important;
-  background: rgba(15, 23, 42, 0.75) !important;
-  color: #f8fafc !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 8px !important;
+  background: #101827 !important;
+  color: #F1E8D7 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 16px !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  backdrop-filter: blur(4px) !important;
-  transition: all 0.2s ease !important;
+  font-size: 14px !important;
+  border: 1.5px solid #25324A !important;
+  box-shadow: 1px 1px 0px #000 !important;
+  transition: all 0.15s ease !important;
   z-index: 30 !important;
 }
 
 .ethnic-leaflet-popup .leaflet-popup-close-button:hover {
-  background: #9a3412 !important;
-  color: #ffffff !important;
-  transform: scale(1.08) !important;
+  background: #FF9418 !important;
+  color: #101827 !important;
 }
-
-

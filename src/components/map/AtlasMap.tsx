@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import L from 'leaflet';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { GUJARAT_34_DISTRICTS } from '../../data/passport-districts';
-import { VERIFIED_TOURIST_DESTINATIONS } from '../../data/tourist-destinations';
+import { VERIFIED_TOURIST_DESTINATIONS, TouristDestination } from '../../data/tourist-destinations';
 import { GUJARAT_HIGHWAY_EV_STATIONS } from '../../data/ev-stations';
 import { getRegionalCulture } from '../../utils/cultural-regions';
 import unfilteredStoriesRaw from '../../../data/gujarat_unfiltered.json';
@@ -20,10 +20,10 @@ import {
   ShieldCheck,
   AlertTriangle,
   X,
-  BatteryCharging,
-  Sun,
-  Coffee,
-  HelpCircle
+  Search,
+  Filter,
+  ChevronRight,
+  Maximize2
 } from 'lucide-react';
 
 interface StoryItem {
@@ -34,9 +34,8 @@ interface StoryItem {
   tagline: string;
   theGroundReality: string;
   theFolklore: string;
-  factCheckBadge?: string;
-  coordinates: [number, number]; // [lng, lat]
-  imageUrl: string;
+  category?: string;
+  coordinates?: [number, number];
 }
 
 function escapeHtml(str: any): string {
@@ -60,10 +59,20 @@ export const AtlasMap: React.FC = () => {
   const evLayerRef = useRef<L.LayerGroup | null>(null);
   const geojsonBoundaryRef = useRef<L.GeoJSON | null>(null);
 
-  const { theme, userProfile, claimDistrictStamp, setMode } = useAtlasStore();
+  const { 
+    theme, 
+    userProfile, 
+    claimDistrictStamp, 
+    setMode,
+    searchQuery,
+    setSearchQuery,
+    selectedDistrict,
+    setSelectedDistrict
+  } = useAtlasStore();
 
-  // Map readiness state ensures markers populate cleanly without race condition
+  // Map readiness & current zoom
   const [mapReady, setMapReady] = useState(false);
+  const [currentZoom, setCurrentZoom] = useState(7.4);
 
   // Layer Visibility State
   const [showDistricts, setShowDistricts] = useState(true);
@@ -71,14 +80,19 @@ export const AtlasMap: React.FC = () => {
   const [showStories, setShowStories] = useState(true);
   const [showEV, setShowEV] = useState(true);
 
+  // Responsive Layer Panel & Filter Drawer State
+  const [layerPanelOpen, setLayerPanelOpen] = useState(true);
+  const [localSearch, setLocalSearch] = useState(searchQuery || '');
+
   // Embedded EV Highway Radar Drawer State
   const [evRadarOpen, setEvRadarOpen] = useState(false);
   const [evFilterDgOnly, setEvFilterDgOnly] = useState(false);
   const [evFilterFastOnly, setEvFilterFastOnly] = useState(false);
   const [evSelectedCorridor, setEvSelectedCorridor] = useState<string>('all');
-  const [troubleshootStationId, setTroubleshootStationId] = useState<string | null>(null);
 
-  const stories: StoryItem[] = (unfilteredStoriesRaw as any).stories || (unfilteredStoriesRaw as unknown as StoryItem[]);
+  const stories: StoryItem[] = useMemo(() => {
+    return (unfilteredStoriesRaw as any).stories || (unfilteredStoriesRaw as unknown as StoryItem[]);
+  }, []);
 
   const corridors = [
     { id: 'all', label: 'All Corridors', center: [22.40, 71.80] as [number, number], zoom: 7.4 },
@@ -98,11 +112,23 @@ export const AtlasMap: React.FC = () => {
     }
   };
 
+  const handleDistrictSelect = (districtId: string) => {
+    setSelectedDistrict(districtId === 'all' ? null : districtId);
+    if (districtId === 'all') {
+      mapInstanceRef.current?.flyTo([22.40, 71.80], 7.4, { duration: 1 });
+    } else {
+      const target = GUJARAT_34_DISTRICTS.find(d => d.id === districtId);
+      if (target && mapInstanceRef.current) {
+        mapInstanceRef.current.flyTo(target.coordinates, 9.5, { duration: 1.2 });
+      }
+    }
+  };
+
+  // 1. Leaflet Map Initialization
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
     if (!mapInstanceRef.current) {
-      // 1. Strict Boundary Locking to Gujarat (Survey of India Alignment)
       const gujaratBounds = L.latLngBounds(
         L.latLng(19.8, 67.5),
         L.latLng(24.9, 74.8)
@@ -127,6 +153,11 @@ export const AtlasMap: React.FC = () => {
         maxZoom: 19,
       }).addTo(map);
 
+      // Track zoom level for clustering
+      map.on('zoomend', () => {
+        setCurrentZoom(map.getZoom());
+      });
+
       // Initialize Layer Groups
       districtLayerRef.current = L.layerGroup().addTo(map);
       touristLayerRef.current = L.layerGroup().addTo(map);
@@ -135,25 +166,25 @@ export const AtlasMap: React.FC = () => {
 
       mapInstanceRef.current = map;
 
-      // 2. Load and render official Gujarat Administrative District Polygons
+      // Load official administrative district boundaries
       fetch('/data/gujarat_districts.geojson')
         .then(res => res.json())
         .then(geojsonData => {
           if (!mapInstanceRef.current) return;
           geojsonBoundaryRef.current = L.geoJSON(geojsonData, {
             style: {
-              color: '#9a3412',
-              weight: 1.8,
-              opacity: 0.85,
-              fillColor: '#d97706',
-              fillOpacity: 0.04,
+              color: '#FF9418',
+              weight: 1.5,
+              opacity: 0.8,
+              fillColor: '#FF9418',
+              fillOpacity: 0.03,
               dashArray: '3 3'
             },
             onEachFeature: (feature, layer) => {
               const dName = feature.properties?.district || 'District';
               const dGu = feature.properties?.district_gu || '';
               layer.bindTooltip(`
-                <div style="font-family: 'Noto Sans Gujarati', sans-serif; font-weight: bold; font-size: 11px; color: #1e293b;">
+                <div style="font-family: 'Noto Sans Gujarati', sans-serif; font-weight: bold; font-size: 11px; color: #101827;">
                   ${dName} ${dGu ? `(${dGu})` : ''}
                 </div>
               `, { sticky: true });
@@ -162,7 +193,7 @@ export const AtlasMap: React.FC = () => {
         })
         .catch(err => console.warn('District boundary polygon load note:', err));
 
-      // Global callbacks for popups
+      // Global callbacks for popup actions
       (window as unknown as { claimFromMap: (id: string) => void }).claimFromMap = (id: string) => {
         claimDistrictStamp(id);
       };
@@ -182,69 +213,83 @@ export const AtlasMap: React.FC = () => {
     }
   }, [claimDistrictStamp, setMode]);
 
-  // Update Pins when state changes
+  // 2. Render Markers with Smart Density Control & Clustering at lower zooms
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map || !mapReady) return;
 
-    // --- 1. District Passport Hubs Layer ---
+    const query = localSearch.trim().toLowerCase();
+    const shouldCluster = currentZoom < 8.2;
+
+    // Helper to zoom to cluster location
+    const zoomToCluster = (lat: number, lng: number) => {
+      map.flyTo([lat, lng], Math.min(map.getZoom() + 2, 11), { duration: 0.8 });
+    };
+
+    // --- 1. District Hubs Layer ---
     if (districtLayerRef.current) {
       districtLayerRef.current.clearLayers();
       if (showDistricts) {
-        GUJARAT_34_DISTRICTS.forEach((d) => {
+        const matchingDistricts = GUJARAT_34_DISTRICTS.filter(d => {
+          if (selectedDistrict && d.id !== selectedDistrict) return false;
+          if (query && !d.name.toLowerCase().includes(query) && !d.gujaratiName.includes(query)) return false;
+          return true;
+        });
+
+        matchingDistricts.forEach((d) => {
           const isStamped = userProfile.collectedStampIds.includes(d.id);
           const icon = L.divIcon({
-            className: 'passport-pin',
+            className: 'passport-pin map-marker-pin',
             html: `
               <div style="
-                width: 36px;
-                height: 36px;
-                background: ${isStamped ? '#9a3412' : '#1e293b'};
-                color: #ffffff;
-                border: 2px solid ${isStamped ? '#f59e0b' : '#64748b'};
-                border-radius: 10px;
+                width: 28px;
+                height: 28px;
+                background: ${isStamped ? '#1C6555' : '#25324A'};
+                color: #FFFFFF;
+                border: 2px solid ${isStamped ? '#FF9418' : '#8F9CAE'};
+                border-radius: 8px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 17px;
-                box-shadow: 2px 2px 0px rgba(0,0,0,0.6);
+                font-size: 14px;
+                box-shadow: 2px 2px 0px #101827;
                 cursor: pointer;
                 transform: translate(-50%, -50%);
               ">
                 ${d.icon}
               </div>
             `,
-            iconSize: [36, 36],
-            iconAnchor: [18, 18],
+            iconSize: [28, 28],
+            iconAnchor: [14, 14],
           });
 
           const culture = getRegionalCulture(d.region || d.name);
           const m = L.marker(d.coordinates, { icon }).addTo(districtLayerRef.current!);
           m.bindPopup(`
-            <div style="font-family: 'Manrope', -apple-system, sans-serif; min-width: 260px; max-width: 300px; color: #1c1917; overflow: hidden; border-radius: 10px;">
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 260px; max-width: 300px; overflow: hidden; border-radius: 12px;">
               <div style="height: 4px; background: ${culture.borderTrimStyle}; width: 100%;"></div>
               <div style="padding: 12px 14px 14px 14px;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                  <span style="font-size: 10px; font-weight: 800; color: #9a3412; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
+                  <span style="font-size: 10px; font-weight: 800; color: #FF9418; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
                     ${culture.primaryIcon} ${escapeHtml(d.region)} • ${isStamped ? '✓ STAMPED' : 'UNVISITED'}
                   </span>
-                  <span style="font-size: 9px; font-weight: 600; color: #78716c; font-family: 'Noto Sans Gujarati', sans-serif;">
+                  <span style="font-size: 9px; font-weight: 600; color: #8F9CAE; font-family: 'Noto Sans Gujarati', sans-serif;">
                     ${escapeHtml(culture.gujaratiTitle)}
                   </span>
                 </div>
-                <h3 style="margin: 2px 0 3px 0; font-size: 16px; font-weight: 800; color: #0f172a; font-family: 'Lora', serif;">
-                  ${escapeHtml(d.name)} <span style="font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600; color: #b45309; font-size: 14px;">(${escapeHtml(d.gujaratiName)})</span>
+                <h3 style="margin: 2px 0 3px 0; font-size: 16px; font-weight: 800; font-family: 'Outfit', serif;">
+                  ${escapeHtml(d.name)} <span style="font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600; color: #FF9418; font-size: 14px;">(${escapeHtml(d.gujaratiName)})</span>
                 </h3>
-                <p style="margin: 2px 0 8px 0; font-size: 11px; font-weight: 600; color: #57534e; line-height: 1.35;">
+                <p style="margin: 2px 0 8px 0; font-size: 11px; font-weight: 600; line-height: 1.35;">
                   📍 ${escapeHtml(d.landmark)}
                 </p>
-                <div style="font-size: 10px; color: #78716c; background: #f5f0e6; padding: 4px 8px; border-radius: 5px; border: 1px solid #e7dfd3; margin-bottom: 10px; font-family: monospace;">
+                <div style="font-size: 10px; padding: 4px 8px; border-radius: 6px; border: 1px solid #25324A; margin-bottom: 10px; font-family: monospace; background: rgba(0,0,0,0.15);">
                   ${escapeHtml(culture.culturalTag)}
                 </div>
                 <button onclick="window.claimFromMap('${escapeHtml(d.id)}')" style="
-                  width: 100%; padding: 8px; background: ${isStamped ? '#15803d' : 'linear-gradient(135deg, #d97706 0%, #b45309 100%)'};
-                  color: #fff; font-weight: 800; font-size: 11px; border: 1px solid ${isStamped ? '#14532d' : '#78350f'};
-                  border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+                  width: 100%; padding: 8px; background: ${isStamped ? '#1C6555' : '#FF9418'};
+                  color: ${isStamped ? '#FFFFFF' : '#101827'}; font-weight: 800; font-size: 11px; border: 1.5px solid #101827;
+                  border-radius: 8px; cursor: pointer; box-shadow: 2px 2px 0px #101827;
                 ">
                   ${isStamped ? '✓ Stamped in Digital Passport' : '★ Stamp This District in Passport'}
                 </button>
@@ -255,426 +300,509 @@ export const AtlasMap: React.FC = () => {
       }
     }
 
-    // --- 2. 🏛️ Tourist Destinations Layer ---
+    // --- 2. Tourist Destinations Layer ---
     if (touristLayerRef.current) {
       touristLayerRef.current.clearLayers();
       if (showTourist) {
-        VERIFIED_TOURIST_DESTINATIONS.forEach((place) => {
-          const icon = L.divIcon({
-            className: 'tourist-pin',
-            html: `
-              <div style="
-                width: 36px;
-                height: 36px;
-                background: linear-gradient(135deg, #b45309 0%, #9a3412 100%);
-                color: #fef3c7;
-                border: 2px solid #f59e0b;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 2px 3px 0px rgba(0,0,0,0.6);
-                font-size: 17px;
-                cursor: pointer;
-                transform: translate(-50%, -50%);
-              ">
-                🏛️
-              </div>
-            `,
-            iconSize: [36, 36],
-            iconAnchor: [18, 18],
+        const filteredPlaces = VERIFIED_TOURIST_DESTINATIONS.filter(place => {
+          if (selectedDistrict && place.district.toLowerCase() !== selectedDistrict.toLowerCase()) return false;
+          if (query && !place.name.toLowerCase().includes(query) && !place.district.toLowerCase().includes(query)) return false;
+          return true;
+        });
+
+        // Group into clusters if at low zoom
+        if (shouldCluster && filteredPlaces.length > 15) {
+          const grid: Record<string, TouristDestination[]> = {};
+          filteredPlaces.forEach(p => {
+            const gridKey = `${Math.floor(p.coordinates[0] * 1.5)}_${Math.floor(p.coordinates[1] * 1.5)}`;
+            if (!grid[gridKey]) grid[gridKey] = [];
+            grid[gridKey].push(p);
           });
 
-          const culture = getRegionalCulture(place.district || place.region);
-          const isDeadZone = place.district.toLowerCase() === 'kachchh' || place.district.toLowerCase() === 'the dangs';
-          const timingsDisplay = place.timings ? place.timings.split('(')[0].trim() : '08:00 – 18:00';
-          const feeDisplay = place.entryFee ? place.entryFee.split(';')[0].replace('Basic Entry: ', '').trim() : 'Free / ASI';
+          Object.values(grid).forEach(group => {
+            if (group.length > 1) {
+              const avgLat = group.reduce((s, p) => s + p.coordinates[0], 0) / group.length;
+              const avgLng = group.reduce((s, p) => s + p.coordinates[1], 0) / group.length;
 
-          const m = L.marker(place.coordinates, { icon }).addTo(touristLayerRef.current!);
-          m.bindPopup(`
-            <div style="font-family: 'Manrope', -apple-system, sans-serif; min-width: 285px; max-width: 325px; color: #1c1917; overflow: hidden; border-radius: 10px;">
-              <div style="height: 4px; background: ${culture.borderTrimStyle}; width: 100%;"></div>
-              
-              <div style="padding: 10px 14px 12px 14px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                  <span style="font-size: 10px; font-weight: 800; color: #9a3412; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
-                    ${culture.primaryIcon} ${escapeHtml(place.district)} • ASI &amp; Tourism
-                  </span>
-                  <span style="font-size: 9px; font-weight: 600; color: #78716c; font-family: 'Noto Sans Gujarati', sans-serif;">
-                    ${escapeHtml(culture.gujaratiTitle)}
-                  </span>
-                </div>
-
-                <h3 style="margin: 0 0 4px 0; font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.25; font-family: 'Lora', serif;">
-                  ${escapeHtml(place.name)}
-                </h3>
-
-                ${place.image ? `
-                  <div style="position: relative; width: 100%; height: 155px; overflow: hidden; border-radius: 8px; margin: 6px 0; background: #1c1917; border: 1px solid #e7dfd3;">
-                    <img 
-                      src="${place.image}" 
-                      alt="${escapeHtml(place.name)}" 
-                      referrerpolicy="no-referrer"
-                      style="width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block;" 
-                      onerror="this.onerror=null; this.src='/images/destinations/statue-of-unity.jpg';"
-                    />
-                    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, transparent 40%, rgba(0,0,0,0.65) 100%); pointer-events: none;"></div>
-                    <div style="position: absolute; bottom: 6px; left: 8px; right: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 10px; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">
-                      <span>🏛️ ${escapeHtml(place.district)}</span>
-                      <span style="background: rgba(0,0,0,0.65); padding: 1.5px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.25); font-size: 9px; font-family: monospace;">${escapeHtml(place.categoryLabel || 'Heritage')}</span>
-                    </div>
+              const clusterIcon = L.divIcon({
+                className: 'tourist-pin map-cluster-pin',
+                html: `
+                  <div style="
+                    width: 32px;
+                    height: 32px;
+                    background: #151F30;
+                    color: #FF9418;
+                    border: 2px solid #FF9418;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 11px;
+                    font-weight: 900;
+                    box-shadow: 2px 2px 0px #101827;
+                    cursor: pointer;
+                    transform: translate(-50%, -50%);
+                  ">
+                    🏛️${group.length}
                   </div>
-                ` : ''}
+                `,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16]
+              });
 
-                <p style="margin: 4px 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
-                  ${escapeHtml(place.summary.slice(0, 115))}...
-                </p>
-
-                <!-- Key Logistics Chips -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; font-size: 10px; font-family: monospace;">
-                  <div style="background: #f5f0e6; padding: 4px 6px; border-radius: 5px; border: 1px solid #e7dfd3; color: #44403c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    🕒 ${escapeHtml(timingsDisplay)}
-                  </div>
-                  <div style="background: #f5f0e6; padding: 4px 6px; border-radius: 5px; border: 1px solid #e7dfd3; color: #44403c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    🎟️ ${escapeHtml(feeDisplay)}
-                  </div>
-                </div>
-
-                <!-- EV Reachability Status -->
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 3px 7px; border-radius: 5px; background: ${isDeadZone ? '#fef2f2' : '#f0fdf4'}; border: 1px solid ${isDeadZone ? '#fecaca' : '#bbf7d0'}; font-size: 10px; font-family: monospace; margin-bottom: 8px;">
-                  <span style="color: ${isDeadZone ? '#991b1b' : '#166534'}; font-weight: 700;">
-                    ${isDeadZone ? '⚠️ Remote Dead Zone: Top-up battery' : '⚡ EV Ready: Fast Charger < 45km'}
-                  </span>
-                  <span style="font-size: 9px; color: #64748b;">${isDeadZone ? 'Remote' : '60-180kW'}</span>
-                </div>
-
-                <button onclick="window.viewDestinationsFromMap()" style="
-                  width: 100%; padding: 8px; background: linear-gradient(135deg, #b45309 0%, #9a3412 100%);
-                  color: #fff; font-weight: 800; font-size: 11px; border: 1px solid #78350f;
-                  border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-                  display: flex; align-items: center; justify-content: center; gap: 4px;
-                ">
-                  <span>Explore Destination Details</span> <span>→</span>
-                </button>
-              </div>
-            </div>
-          `, { className: 'ethnic-leaflet-popup', maxWidth: 325, minWidth: 285 });
-        });
+              const clusterMarker = L.marker([avgLat, avgLng], { icon: clusterIcon }).addTo(touristLayerRef.current!);
+              clusterMarker.on('click', () => zoomToCluster(avgLat, avgLng));
+            } else {
+              renderSingleTouristPin(group[0]);
+            }
+          });
+        } else {
+          filteredPlaces.forEach(p => renderSingleTouristPin(p));
+        }
       }
     }
 
-    // --- 3. 📜 Unfiltered Stories Layer ---
+    function renderSingleTouristPin(place: TouristDestination) {
+      const icon = L.divIcon({
+        className: 'tourist-pin map-marker-pin',
+        html: `
+          <div style="
+            width: 28px;
+            height: 28px;
+            background: #151F30;
+            color: #FF9418;
+            border: 2px solid #FF9418;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 0px #101827;
+            font-size: 13px;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+          ">
+            🏛️
+          </div>
+        `,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+      });
+
+      const culture = getRegionalCulture(place.district || place.region);
+      const isDeadZone = place.district.toLowerCase() === 'kachchh' || place.district.toLowerCase() === 'the dangs';
+      const timingsDisplay = place.timings ? place.timings.split('(')[0].trim() : '08:00 – 18:00';
+      const feeDisplay = place.entryFee ? place.entryFee.split(';')[0].replace('Basic Entry: ', '').trim() : 'Free / ASI';
+
+      const m = L.marker(place.coordinates, { icon }).addTo(touristLayerRef.current!);
+      m.bindPopup(`
+        <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 285px; max-width: 320px; overflow: hidden; border-radius: 12px;">
+          <div style="height: 4px; background: ${culture.borderTrimStyle}; width: 100%;"></div>
+          
+          <div style="padding: 12px 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+              <span style="font-size: 10px; font-weight: 800; color: #FF9418; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
+                ${culture.primaryIcon} ${escapeHtml(place.district)} • ASI &amp; Tourism
+              </span>
+              <span style="font-size: 9px; font-weight: 600; color: #8F9CAE; font-family: 'Noto Sans Gujarati', sans-serif;">
+                ${escapeHtml(culture.gujaratiTitle)}
+              </span>
+            </div>
+
+            <h3 style="margin: 0 0 4px 0; font-size: 15px; font-weight: 800; line-height: 1.25; font-family: 'Outfit', serif;">
+              ${escapeHtml(place.name)}
+            </h3>
+
+            ${place.image ? `
+              <div style="position: relative; width: 100%; height: 145px; overflow: hidden; border-radius: 8px; margin: 6px 0; background: #101827; border: 1.5px solid #25324A;">
+                <img 
+                  src="${place.image}" 
+                  alt="${escapeHtml(place.name)}" 
+                  referrerpolicy="no-referrer"
+                  style="width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;" 
+                  onerror="this.onerror=null; this.src='/images/destinations/statue-of-unity.jpg';"
+                />
+                <div style="position: absolute; bottom: 6px; left: 8px; right: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 10px; font-weight: 700; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">
+                  <span>🏛️ ${escapeHtml(place.district)}</span>
+                  <span style="background: rgba(16,24,39,0.85); padding: 1.5px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); font-size: 9px; font-family: monospace;">${escapeHtml(place.categoryLabel || 'Heritage')}</span>
+                </div>
+              </div>
+            ` : ''}
+
+            <p style="margin: 4px 0 6px 0; font-size: 11px; line-height: 1.35;">
+              ${escapeHtml(place.summary.slice(0, 110))}...
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; font-size: 10px; font-family: monospace;">
+              <div style="padding: 4px 6px; border-radius: 6px; border: 1px solid #25324A; background: rgba(0,0,0,0.15); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                🕒 ${escapeHtml(timingsDisplay)}
+              </div>
+              <div style="padding: 4px 6px; border-radius: 6px; border: 1px solid #25324A; background: rgba(0,0,0,0.15); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                🎟️ ${escapeHtml(feeDisplay)}
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 4px 8px; border-radius: 6px; background: ${isDeadZone ? 'rgba(157,35,59,0.15)' : 'rgba(28,101,85,0.15)'}; border: 1px solid ${isDeadZone ? '#9D233B' : '#1C6555'}; font-size: 10px; font-family: monospace; margin-bottom: 8px;">
+              <span style="color: ${isDeadZone ? '#9D233B' : '#1C6555'}; font-weight: 700;">
+                ${isDeadZone ? '⚠️ Remote Dead Zone: Top-up' : '⚡ EV Ready: Fast Charger < 45km'}
+              </span>
+              <span style="font-size: 9px; color: #8F9CAE;">${isDeadZone ? 'Remote' : '60-180kW'}</span>
+            </div>
+
+            <button onclick="window.viewDestinationsFromMap()" style="
+              width: 100%; padding: 8px; background: #FF9418;
+              color: #101827; font-weight: 800; font-size: 11px; border: 1.5px solid #101827;
+              border-radius: 8px; cursor: pointer; box-shadow: 2px 2px 0px #101827;
+              display: flex; align-items: center; justify-content: center; gap: 4px;
+            ">
+              <span>Explore Destination Details</span> <span>→</span>
+            </button>
+          </div>
+        </div>
+      `, { className: 'ethnic-leaflet-popup', maxWidth: 320, minWidth: 285 });
+    }
+
+    // --- 3. Unfiltered Stories Layer ---
     if (storyLayerRef.current) {
       storyLayerRef.current.clearLayers();
       if (showStories) {
-        stories.forEach((story) => {
-          const coords: [number, number] = [story.coordinates[1], story.coordinates[0]];
+        const filteredStories = stories.filter(s => {
+          if (selectedDistrict && s.district.toLowerCase() !== selectedDistrict.toLowerCase()) return false;
+          if (query && !s.name.toLowerCase().includes(query) && !s.district.toLowerCase().includes(query)) return false;
+          return true;
+        });
+
+        filteredStories.forEach((story) => {
+          const coords = story.coordinates || [22.3, 71.5];
           const icon = L.divIcon({
-            className: 'story-pin',
+            className: 'story-pin map-marker-pin',
             html: `
               <div style="
-                width: 36px;
-                height: 36px;
-                background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-                color: #fde047;
-                border: 2px solid #991b1b;
+                width: 28px;
+                height: 28px;
+                background: #151F30;
+                color: #9D233B;
+                border: 2px solid #9D233B;
                 border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 2px 3px 0px rgba(0,0,0,0.6);
-                font-size: 17px;
+                box-shadow: 2px 2px 0px #101827;
+                font-size: 13px;
                 cursor: pointer;
                 transform: translate(-50%, -50%);
               ">
                 📜
               </div>
             `,
-            iconSize: [36, 36],
-            iconAnchor: [18, 18],
+            iconSize: [28, 28],
+            iconAnchor: [14, 14],
           });
 
-          const culture = getRegionalCulture(story.district);
           const m = L.marker(coords, { icon }).addTo(storyLayerRef.current!);
           m.bindPopup(`
-            <div style="font-family: 'Manrope', -apple-system, sans-serif; min-width: 285px; max-width: 325px; color: #1c1917; overflow: hidden; border-radius: 10px;">
-              <div style="height: 4px; background: ${culture.borderTrimStyle}; width: 100%;"></div>
-
-              <div style="padding: 10px 14px 12px 14px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                  <span style="font-size: 10px; font-weight: 800; color: #991b1b; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
-                    ${culture.primaryIcon} ${escapeHtml(story.district)} • Unfiltered Dossier
-                  </span>
-                  <span style="font-size: 9px; font-weight: 600; color: #78716c; font-family: 'Noto Sans Gujarati', sans-serif;">
-                    ${escapeHtml(culture.gujaratiTitle)}
-                  </span>
-                </div>
-
-                <h3 style="margin: 0 0 2px 0; font-size: 15px; font-weight: 800; color: #0f172a; font-family: 'Lora', serif;">
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 270px; max-width: 310px; overflow: hidden; border-radius: 12px;">
+              <div style="height: 4px; background: #9D233B; width: 100%;"></div>
+              <div style="padding: 12px 14px;">
+                <span style="font-size: 10px; font-weight: 800; color: #9D233B; text-transform: uppercase; font-family: monospace;">
+                  📜 UNFILTERED DOSSIER • ${escapeHtml(story.district)}
+                </span>
+                <h3 style="margin: 3px 0 4px 0; font-size: 15px; font-weight: 800; font-family: 'Outfit', serif;">
                   ${escapeHtml(story.name)}
                 </h3>
-                ${story.gujaratiName ? `<div style="font-size: 11px; color: #b45309; margin-bottom: 4px; font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600;">${escapeHtml(story.gujaratiName)}</div>` : ''}
-
-                ${story.imageUrl ? `
-                  <div style="position: relative; width: 100%; height: 145px; overflow: hidden; border-radius: 8px; margin: 6px 0; background: #1c1917; border: 1px solid #e7dfd3;">
-                    <img 
-                      src="${escapeHtml(story.imageUrl)}" 
-                      alt="${escapeHtml(story.name)}" 
-                      referrerpolicy="no-referrer"
-                      style="width: 100%; height: 100%; object-fit: cover; object-position: center 25%; display: block;" 
-                      onerror="this.onerror=null; this.src='/images/destinations/statue-of-unity.jpg';"
-                    />
-                    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.65) 100%); pointer-events: none;"></div>
-                    <div style="position: absolute; bottom: 6px; left: 8px; font-size: 9px; font-family: monospace; background: rgba(0,0,0,0.7); color: #fde047; padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(253,224,71,0.3);">
-                      ⚖️ Forensic Ground Reality
-                    </div>
-                  </div>
-                ` : ''}
-
-                <p style="margin: 4px 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
-                  ${escapeHtml(story.tagline)}
+                <p style="margin: 0 0 6px 0; font-size: 11px; line-height: 1.35;">
+                  ${escapeHtml(story.tagline || story.theGroundReality.slice(0, 100))}...
                 </p>
-
-                <div style="padding: 6px 8px; background: #fdfbf7; border-left: 3px solid #991b1b; border: 1px solid #e7dfd3; border-left-width: 3px; font-size: 10px; color: #1c1917; margin-bottom: 8px; border-radius: 4px;">
-                  <strong style="color: #991b1b;">Ground Reality:</strong> ${escapeHtml(story.theGroundReality ? story.theGroundReality.slice(0, 95) : '')}...
-                </div>
-
                 <button onclick="window.viewStoriesFromMap()" style="
-                  width: 100%; padding: 8px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-                  color: #fde047; font-weight: 800; font-size: 11px; border: 1px solid #991b1b;
-                  border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                  display: flex; align-items: center; justify-content: center; gap: 4px;
+                  width: 100%; padding: 7px; background: #9D233B;
+                  color: #FFFFFF; font-weight: 800; font-size: 11px; border: 1.5px solid #101827;
+                  border-radius: 8px; cursor: pointer; box-shadow: 2px 2px 0px #101827; margin-top: 4px;
                 ">
-                  <span>Read Full Folklore vs Reality</span> <span>→</span>
+                  Read Full Unfiltered Dossier →
                 </button>
               </div>
             </div>
-          `, { className: 'ethnic-leaflet-popup', maxWidth: 325, minWidth: 285 });
+          `, { className: 'ethnic-leaflet-popup', maxWidth: 310, minWidth: 270 });
         });
       }
     }
 
-    // --- 4. ⚡ EV Highway Fast Chargers Layer (with Dynamic Filter) ---
+    // --- 4. EV Fast Chargers Layer ---
     if (evLayerRef.current) {
       evLayerRef.current.clearLayers();
       if (showEV) {
-        const filteredStations = GUJARAT_HIGHWAY_EV_STATIONS.filter((st) => {
+        const filteredEV = GUJARAT_HIGHWAY_EV_STATIONS.filter(st => {
           if (evFilterDgOnly && !st.hasDgBackup) return false;
           if (evFilterFastOnly && st.totalPowerKw < 120) return false;
           if (evSelectedCorridor !== 'all' && !st.corridor.toLowerCase().includes(evSelectedCorridor.toLowerCase())) return false;
+          if (query && !st.name.toLowerCase().includes(query) && !st.district.toLowerCase().includes(query)) return false;
           return true;
         });
 
-        filteredStations.forEach((station) => {
+        filteredEV.forEach((station) => {
           const icon = L.divIcon({
-            className: 'ev-pin',
+            className: 'ev-pin map-marker-pin',
             html: `
               <div style="
-                width: 34px;
-                height: 34px;
-                background: linear-gradient(135deg, #14532d 0%, #166534 100%);
-                color: #fef08a;
-                border: 2px solid #ca8a04;
-                border-radius: 50%;
+                width: 28px;
+                height: 28px;
+                background: #151F30;
+                color: #1C6555;
+                border: 2px solid #1C6555;
+                border-radius: 8px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                box-shadow: 2px 3px 0px rgba(0,0,0,0.6);
-                font-size: 16px;
+                box-shadow: 2px 2px 0px #101827;
+                font-size: 13px;
                 cursor: pointer;
                 transform: translate(-50%, -50%);
               ">
                 ⚡
               </div>
             `,
-            iconSize: [34, 34],
-            iconAnchor: [17, 17],
+            iconSize: [28, 28],
+            iconAnchor: [14, 14],
           });
 
           const m = L.marker(station.coordinates, { icon }).addTo(evLayerRef.current!);
           m.bindPopup(`
-            <div style="font-family: 'Manrope', -apple-system, sans-serif; min-width: 275px; max-width: 310px; color: #1c1917; overflow: hidden; border-radius: 10px;">
-              <div style="height: 4px; background: linear-gradient(90deg, #15803d 0%, #ca8a04 50%, #166534 100%); width: 100%;"></div>
-
-              <div style="padding: 10px 14px 12px 14px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
-                  <span style="font-size: 10px; font-weight: 800; color: #15803d; text-transform: uppercase; font-family: monospace; letter-spacing: 0.05em;">
-                    ⚡ ${escapeHtml(station.network)} • ${station.totalPowerKw} kW DC Fast
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 270px; max-width: 310px; overflow: hidden; border-radius: 12px;">
+              <div style="height: 4px; background: #1C6555; width: 100%;"></div>
+              <div style="padding: 12px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                  <span style="font-size: 10px; font-weight: 800; color: #1C6555; font-family: monospace;">
+                    ⚡ ${escapeHtml(station.network)} • ${station.totalPowerKw} kW
                   </span>
-                  <span style="font-size: 9px; font-weight: 700; color: #854d0e; background: #fef9c3; padding: 1px 5px; border-radius: 3px; border: 1px solid #fde047;">
-                    ${escapeHtml(station.corridor)}
+                  <span style="font-size: 9px; padding: 2px 6px; border-radius: 4px; background: rgba(28,101,85,0.15); color: #1C6555; font-weight: bold;">
+                    ${station.hasDgBackup ? '✓ DG Backup' : 'Grid'}
                   </span>
                 </div>
-
-                <h3 style="margin: 0 0 2px 0; font-size: 14px; font-weight: 800; color: #0f172a; font-family: 'Lora', serif;">
+                <h3 style="margin: 3px 0 4px 0; font-size: 15px; font-weight: 800; font-family: 'Outfit', serif;">
                   ${escapeHtml(station.name)}
                 </h3>
-                <p style="margin: 0 0 4px 0; font-size: 11px; color: #b45309; font-family: 'Noto Sans Gujarati', sans-serif; font-weight: 600;">
-                  ${escapeHtml(station.gujaratiName)}
+                <p style="margin: 0 0 6px 0; font-size: 11px;">
+                  📍 ${escapeHtml(station.locationDesc)} (${escapeHtml(station.district)})
                 </p>
-                <p style="margin: 0 0 6px 0; font-size: 11px; color: #44403c; line-height: 1.35;">
-                  📍 ${escapeHtml(station.locationDesc)}
-                </p>
-
-                <div style="font-size: 10px; color: #15803d; font-weight: bold; margin-bottom: 6px; background: #f0fdf4; padding: 4px 6px; border-radius: 4px; border: 1px solid #bbf7d0;">
-                  ✓ ${station.reliabilityScore}% Gun Reliability • ${station.hasDgBackup ? '⚡ DG Generator Backup' : '⚠️ No DG Backup'}
-                </div>
-
-                ${station.criticalRoadtripWarning ? `
-                  <div style="padding: 4px 6px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 4px; font-size: 10px; color: #991b1b; margin-bottom: 6px;">
-                    ⚠️ ${escapeHtml(station.criticalRoadtripWarning)}
-                  </div>
-                ` : ''}
-
-                <div style="font-size: 10px; color: #57534e; margin-bottom: 8px; font-family: monospace;">
-                  Tariff: <strong>${escapeHtml(station.tariffPerKwh)}</strong> | Food: ${escapeHtml(station.amenities ? station.amenities.food : '')}
-                </div>
-
                 <a href="https://www.google.com/maps/dir/?api=1&destination=${station.coordinates[0]},${station.coordinates[1]}" target="_blank" rel="noopener noreferrer" style="
-                  display: flex; align-items: center; justify-content: center; gap: 4px;
-                  width: 100%; box-sizing: border-box; padding: 8px;
-                  background: linear-gradient(135deg, #15803d 0%, #166534 100%);
-                  color: #fff; font-weight: 800; font-size: 11px; text-decoration: none;
-                  border-radius: 6px; border: 1px solid #14532d; box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+                  display: block; text-align: center; width: 100%; padding: 7px; background: #1C6555;
+                  color: #FFFFFF; font-weight: 800; font-size: 11px; border: 1.5px solid #101827;
+                  border-radius: 8px; text-decoration: none; box-shadow: 2px 2px 0px #101827; margin-top: 4px;
                 ">
-                  <span>Open in Google Maps Navigation</span> <span>↗</span>
+                  Navigate via Google Maps ↗
                 </a>
               </div>
             </div>
-          `, { className: 'ethnic-leaflet-popup', maxWidth: 300, minWidth: 260 });
+          `, { className: 'ethnic-leaflet-popup', maxWidth: 310, minWidth: 270 });
         });
       }
     }
 
-  }, [mapReady, showDistricts, showTourist, showStories, showEV, evFilterDgOnly, evFilterFastOnly, evSelectedCorridor, userProfile.collectedStampIds, stories]);
+  }, [
+    mapReady, 
+    currentZoom, 
+    showDistricts, 
+    showTourist, 
+    showStories, 
+    showEV, 
+    evFilterDgOnly, 
+    evFilterFastOnly, 
+    evSelectedCorridor, 
+    selectedDistrict, 
+    localSearch, 
+    userProfile.collectedStampIds, 
+    stories
+  ]);
 
   return (
-    <div className="relative w-full h-[calc(100vh-4.25rem)] bg-[#0c1524] overflow-hidden">
+    <div className="relative w-full h-[calc(100vh-4rem)] bg-[#101827] overflow-hidden">
       
-      {/* Floating Layer Control Panel (Traditional Gujarati Ethnic Styling) */}
-      <div className="absolute top-4 left-4 z-[1050] bg-[#0c1524]/95 backdrop-blur-md border-2 border-amber-600/60 p-3.5 sm:p-4 rounded-xl shadow-2xl text-slate-100 max-w-sm select-none">
+      {/* Floating Map Controls & Quick Search (Top Left) */}
+      <div className="absolute top-4 left-4 z-[1040] flex flex-col gap-2 max-w-xs sm:max-w-sm w-full select-none">
         
-        {/* Decorative Gujarati Toran Border */}
-        <ToranOrnamentalBorder className="rounded-t mb-2 -mt-1.5 -mx-1.5" height={10} />
+        {/* Search & District Filter Bar */}
+        <div className={`p-2 rounded-xl border-2 shadow-[3px_3px_0px_#101827] backdrop-blur-md flex items-center gap-2 ${
+          theme === 'dark' ? 'bg-[#151F30]/95 border-[#25324A]' : 'bg-[#FAF6ED]/95 border-[#25324A]'
+        }`}>
+          <Search className="w-4 h-4 text-[#FF9418] flex-shrink-0" />
+          <input
+            type="text"
+            placeholder="Search landmarks, stories, cities..."
+            value={localSearch}
+            onChange={(e) => {
+              setLocalSearch(e.target.value);
+              setSearchQuery(e.target.value);
+            }}
+            className="w-full bg-transparent text-xs font-semibold focus:outline-none placeholder:text-[#8F9CAE]"
+          />
+          {localSearch && (
+            <button 
+              onClick={() => { setLocalSearch(''); setSearchQuery(''); }}
+              className="p-1 text-[#8F9CAE] hover:text-white"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
 
-        <div className="flex items-center justify-between gap-3 mb-2.5 pb-2 border-b border-amber-600/30">
-          <div className="flex items-center gap-2">
-            <AjrakhStarPattern size={22} className="flex-shrink-0" />
-            <div>
-              <span className="text-xs font-bold font-['Outfit'] text-white block">
-                Atlas Map Layers
-              </span>
-              <span className="text-[10px] text-amber-300/80 font-['Noto_Sans_Gujarati']">
-                નકશા સ્તરો
-              </span>
-            </div>
-          </div>
-          <span className="text-[10px] font-mono font-bold text-amber-400">
-            {userProfile.collectedStampIds.length}/34 Stamped
-          </span>
-        </div>
-
-        {/* Layer Checkbox Buttons */}
-        <div className="space-y-1.5 text-xs">
-          <label className="flex items-center justify-between p-1.5 rounded hover:bg-amber-950/30 cursor-pointer">
-            <div className="flex items-center gap-2">
-              <input 
-                type="checkbox" 
-                checked={showTourist} 
-                onChange={(e) => setShowTourist(e.target.checked)} 
-                className="accent-amber-500 rounded"
-              />
-              <span className="font-bold text-slate-200">🏛️ Tourist Spots</span>
-            </div>
-            <span className="text-[10px] font-mono px-1.5 py-0.2 bg-amber-950/80 text-amber-300 rounded border border-amber-600/50">
-              37 Sites
-            </span>
-          </label>
-
-          <label className="flex items-center justify-between p-1.5 rounded hover:bg-amber-950/30 cursor-pointer">
-            <div className="flex items-center gap-2">
-              <input 
-                type="checkbox" 
-                checked={showStories} 
-                onChange={(e) => setShowStories(e.target.checked)} 
-                className="accent-amber-500 rounded"
-              />
-              <span className="font-bold text-slate-200">📜 Unfiltered Stories</span>
-            </div>
-            <span className="text-[10px] font-mono px-1.5 py-0.2 bg-rose-950/80 text-rose-300 rounded border border-rose-700/50">
-              45 Dossiers
-            </span>
-          </label>
-
-          <label className="flex items-center justify-between p-1.5 rounded hover:bg-amber-950/30 cursor-pointer">
-            <div className="flex items-center gap-2">
-              <input 
-                type="checkbox" 
-                checked={showEV} 
-                onChange={(e) => setShowEV(e.target.checked)} 
-                className="accent-amber-500 rounded"
-              />
-              <span className="font-bold text-slate-200">⚡ EV Fast Chargers</span>
-            </div>
-            <span className="text-[10px] font-mono px-1.5 py-0.2 bg-emerald-950/80 text-emerald-300 rounded border border-emerald-700/50">
-              12 Hubs
-            </span>
-          </label>
-
-          <label className="flex items-center justify-between p-1.5 rounded hover:bg-amber-950/30 cursor-pointer">
-            <div className="flex items-center gap-2">
-              <input 
-                type="checkbox" 
-                checked={showDistricts} 
-                onChange={(e) => setShowDistricts(e.target.checked)} 
-                className="accent-amber-500 rounded"
-              />
-              <span className="font-bold text-slate-200">🛂 34 District Hubs</span>
-            </div>
-            <span className="text-[10px] font-mono px-1.5 py-0.2 bg-amber-900/60 text-amber-300 rounded border border-amber-600/50">
-              34 Districts
-            </span>
-          </label>
-        </div>
-
-        {/* Embedded EV Highway Corridor Radar Quick Toggle */}
-        <div className="mt-3 pt-2.5 border-t border-amber-600/30">
-          <button
-            onClick={() => setEvRadarOpen(!evRadarOpen)}
-            className="w-full py-1.5 px-3 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-xs flex items-center justify-between shadow-[2px_2px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          {/* District Selector Quick Dropdown */}
+          <select
+            value={selectedDistrict || 'all'}
+            onChange={(e) => handleDistrictSelect(e.target.value)}
+            className={`text-[11px] font-bold px-2 py-1 rounded-lg border focus:outline-none max-w-[110px] truncate ${
+              theme === 'dark' ? 'bg-[#101827] border-[#25324A] text-[#F1E8D7]' : 'bg-[#F1E8D7] border-[#25324A] text-[#101827]'
+            }`}
           >
-            <div className="flex items-center gap-1.5">
-              <Zap className="w-3.5 h-3.5" />
-              <span>{evRadarOpen ? 'Close EV Corridor Radar' : '⚡ EV Highway Corridor Radar'}</span>
-            </div>
-            <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/25 text-black font-mono">
-              60-180kW
-            </span>
-          </button>
+            <option value="all">34 Districts</option>
+            {GUJARAT_34_DISTRICTS.map(d => (
+              <option key={d.id} value={d.id}>{d.name}</option>
+            ))}
+          </select>
         </div>
+
+        {/* Dismissible / Collapsible Layer Control Panel */}
+        {layerPanelOpen ? (
+          <div className={`p-3.5 rounded-xl border-2 shadow-[4px_4px_0px_#101827] backdrop-blur-md transition-all ${
+            theme === 'dark' ? 'bg-[#151F30]/95 border-[#25324A] text-[#F1E8D7]' : 'bg-[#FAF6ED]/95 border-[#25324A] text-[#101827]'
+          }`}>
+            <ToranOrnamentalBorder className="rounded-t mb-2 -mt-1.5 -mx-1.5" height={8} />
+
+            <div className="flex items-center justify-between gap-2 mb-2 pb-1.5 border-b-2 border-[#25324A]">
+              <div className="flex items-center gap-1.5">
+                <AjrakhStarPattern size={18} className="flex-shrink-0" />
+                <span className="text-xs font-black font-editorial tracking-tight">
+                  Map Layers • સ્તરો
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] font-mono font-bold text-[#FF9418]">
+                  {userProfile.collectedStampIds.length}/34 Stamped
+                </span>
+                <button
+                  onClick={() => setLayerPanelOpen(false)}
+                  className="p-1 rounded text-[#8F9CAE] hover:text-[#FF9418]"
+                  title="Collapse Layer Panel"
+                  aria-label="Collapse layer panel"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Layer Checkbox Options */}
+            <div className="space-y-1 text-xs">
+              <label className="flex items-center justify-between p-1 rounded hover:bg-black/10 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
+                    checked={showTourist} 
+                    onChange={(e) => setShowTourist(e.target.checked)} 
+                    className="accent-[#FF9418] rounded"
+                  />
+                  <span className="font-bold">🏛️ Destinations</span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border border-[#25324A] text-[#FF9418]">
+                  37
+                </span>
+              </label>
+
+              <label className="flex items-center justify-between p-1 rounded hover:bg-black/10 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
+                    checked={showStories} 
+                    onChange={(e) => setShowStories(e.target.checked)} 
+                    className="accent-[#FF9418] rounded"
+                  />
+                  <span className="font-bold">📜 Unfiltered Stories</span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border border-[#25324A] text-[#9D233B]">
+                  45
+                </span>
+              </label>
+
+              <label className="flex items-center justify-between p-1 rounded hover:bg-black/10 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
+                    checked={showEV} 
+                    onChange={(e) => setShowEV(e.target.checked)} 
+                    className="accent-[#FF9418] rounded"
+                  />
+                  <span className="font-bold">⚡ EV Chargers</span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border border-[#25324A] text-[#1C6555]">
+                  12
+                </span>
+              </label>
+
+              <label className="flex items-center justify-between p-1 rounded hover:bg-black/10 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
+                    checked={showDistricts} 
+                    onChange={(e) => setShowDistricts(e.target.checked)} 
+                    className="accent-[#FF9418] rounded"
+                  />
+                  <span className="font-bold">🛂 District Centroids</span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border border-[#25324A] text-[#8F9CAE]">
+                  34
+                </span>
+              </label>
+            </div>
+
+            {/* Embedded EV Highway Corridor Toggle Button */}
+            <div className="mt-2.5 pt-2 border-t-2 border-[#25324A]">
+              <button
+                onClick={() => setEvRadarOpen(!evRadarOpen)}
+                className="w-full py-1.5 px-2.5 rounded-lg bg-[#FF9418] hover:bg-[#e07f10] text-[#101827] font-black text-xs flex items-center justify-between shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+              >
+                <div className="flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5" />
+                  <span>{evRadarOpen ? 'Close EV Corridor Radar' : '⚡ EV Highway Corridor Radar'}</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#101827] text-[#FF9418] font-mono">
+                  180kW
+                </span>
+              </button>
+            </div>
+
+          </div>
+        ) : (
+          <button
+            onClick={() => setLayerPanelOpen(true)}
+            className={`px-3 py-1.5 rounded-xl border-2 shadow-[2px_2px_0px_#101827] font-bold text-xs flex items-center gap-2 backdrop-blur-md w-fit ${
+              theme === 'dark' ? 'bg-[#151F30] border-[#25324A] text-[#F1E8D7]' : 'bg-[#FAF6ED] border-[#25324A] text-[#101827]'
+            }`}
+          >
+            <Layers className="w-4 h-4 text-[#FF9418]" />
+            <span>Map Layers</span>
+          </button>
+        )}
 
       </div>
 
-      {/* Embedded Highway EV Corridor Radar Slide-Out Panel */}
+      {/* Embedded Highway EV Corridor Radar Slide-Out Panel (Top Right) */}
       {evRadarOpen && (
-        <div className="absolute top-4 right-4 z-[1050] bg-[#0c1524]/95 backdrop-blur-md border-2 border-amber-600/60 p-4 rounded-xl shadow-2xl text-slate-100 max-w-sm w-full select-none animate-in fade-in slide-in-from-right duration-200">
-          <ToranOrnamentalBorder className="rounded-t mb-2.5 -mt-2 -mx-2" height={10} />
+        <div className={`absolute top-3 right-3 z-[1050] border-2 p-3.5 sm:p-4 rounded-xl shadow-[6px_6px_0px_#101827] backdrop-blur-md max-w-sm w-full select-none animate-in fade-in slide-in-from-right duration-200 ${
+          theme === 'dark' ? 'bg-[#151F30]/98 border-[#25324A] text-[#F1E8D7]' : 'bg-[#FAF6ED]/98 border-[#25324A] text-[#101827]'
+        }`}>
+          <ToranOrnamentalBorder className="rounded-t mb-2 -mt-2 -mx-2" height={8} />
           
-          <div className="flex items-center justify-between gap-3 mb-2 pb-2 border-b border-amber-600/30">
+          <div className="flex items-center justify-between gap-3 mb-2 pb-2 border-b-2 border-[#25324A]">
             <div className="flex items-center gap-2">
-              <StepwellGeometryPattern size={22} className="flex-shrink-0" />
+              <StepwellGeometryPattern size={20} className="flex-shrink-0" />
               <div>
-                <h4 className="text-xs font-black text-white font-['Outfit']">
+                <h4 className="text-xs font-black font-editorial text-[#FF9418]">
                   Highway EV Radar Lifeline
                 </h4>
-                <span className="text-[10px] text-amber-300/80 font-['Noto_Sans_Gujarati']">
+                <span className="text-[10px] text-[#8F9CAE] font-['Noto_Sans_Gujarati']">
                   ઈ-વ્હીકલ હાઈવે નેટવર્ક
                 </span>
               </div>
             </div>
             <button 
               onClick={() => setEvRadarOpen(false)}
-              className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800"
+              className="p-1 rounded text-[#8F9CAE] hover:text-white"
             >
               <X className="w-4 h-4" />
             </button>
@@ -682,71 +810,71 @@ export const AtlasMap: React.FC = () => {
 
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 gap-2 my-2 text-center font-mono">
-            <div className="p-1.5 rounded bg-[#121c2e] border border-amber-600/20">
-              <span className="text-base font-black text-amber-400 block font-['Outfit']">180 kW</span>
-              <span className="text-[9px] text-slate-400 uppercase">Hypercharger Peak</span>
+            <div className="p-1.5 rounded-lg bg-[#101827] border border-[#25324A]">
+              <span className="text-base font-black text-[#FF9418] block font-editorial">180 kW</span>
+              <span className="text-[9px] text-[#8F9CAE] uppercase">Hypercharger Peak</span>
             </div>
-            <div className="p-1.5 rounded bg-[#121c2e] border border-amber-600/20">
-              <span className="text-base font-black text-emerald-400 block font-['Outfit']">98.2%</span>
-              <span className="text-[9px] text-slate-400 uppercase">Gun Reliability</span>
+            <div className="p-1.5 rounded-lg bg-[#101827] border border-[#25324A]">
+              <span className="text-base font-black text-[#1C6555] block font-editorial">98.2%</span>
+              <span className="text-[9px] text-[#8F9CAE] uppercase">Gun Reliability</span>
             </div>
           </div>
 
-          {/* Critical Corridor Dead Zone Warning */}
-          <div className="p-2.5 rounded-lg bg-rose-950/60 border border-rose-500/50 text-[11px] text-rose-200 mb-2.5">
-            <div className="flex items-center gap-1.5 font-bold text-rose-300 mb-0.5">
+          {/* Dead Zone Warning */}
+          <div className="p-2.5 rounded-lg bg-[#9D233B]/15 border-2 border-[#9D233B] text-[11px] mb-2.5">
+            <div className="flex items-center gap-1.5 font-bold text-[#9D233B] mb-0.5">
               <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
               <span>Dead Zone Alert: Kutch &amp; Dang</span>
             </div>
-            <p className="text-[10px] text-slate-300 leading-tight">
+            <p className="text-[10px] leading-tight text-[#8F9CAE]">
               Zero DC fast chargers exist between Khavda &amp; Dholavira in Kutch, or inside Saputara Teak Forest. Charge to 100% at Bhuj or Waghai before crossing!
             </p>
           </div>
 
           {/* Feature Filters */}
-          <div className="space-y-1.5 pt-1 border-t border-amber-600/20 text-xs">
-            <span className="text-[10px] font-mono text-slate-400 block font-bold">
+          <div className="space-y-1.5 pt-1 border-t-2 border-[#25324A] text-xs">
+            <span className="text-[10px] font-mono text-[#8F9CAE] block font-bold">
               SOLVED ROADTRIP PAIN POINTS:
             </span>
 
             <button
               onClick={() => setEvFilterDgOnly(!evFilterDgOnly)}
-              className={`w-full p-2 rounded text-left transition-colors flex items-center justify-between border ${
+              className={`w-full p-2 rounded-lg text-left transition-colors flex items-center justify-between border-2 ${
                 evFilterDgOnly 
-                  ? 'bg-emerald-950/80 text-emerald-200 border-emerald-500' 
-                  : 'bg-[#121c2e] text-slate-300 border-slate-700 hover:text-white'
+                  ? 'bg-[#1C6555]/20 text-[#1C6555] border-[#1C6555] font-bold' 
+                  : 'bg-[#101827] text-[#8F9CAE] border-[#25324A]'
               }`}
             >
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="font-semibold text-[11px]">Generator (DG) Backup Only</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-[#1C6555]" />
+                <span className="text-[11px]">Generator (DG) Backup Only</span>
               </div>
-              <span className="text-[9px] px-1 py-0.2 rounded font-mono bg-black/40 text-emerald-300">
+              <span className="text-[9px] px-1.5 py-0.2 rounded font-mono bg-[#101827] text-[#1C6555] border border-[#25324A]">
                 Blackout-Proof
               </span>
             </button>
 
             <button
               onClick={() => setEvFilterFastOnly(!evFilterFastOnly)}
-              className={`w-full p-2 rounded text-left transition-colors flex items-center justify-between border ${
+              className={`w-full p-2 rounded-lg text-left transition-colors flex items-center justify-between border-2 ${
                 evFilterFastOnly 
-                  ? 'bg-amber-950/80 text-amber-200 border-amber-500' 
-                  : 'bg-[#121c2e] text-slate-300 border-slate-700 hover:text-white'
+                  ? 'bg-[#FF9418]/20 text-[#FF9418] border-[#FF9418] font-bold' 
+                  : 'bg-[#101827] text-[#8F9CAE] border-[#25324A]'
               }`}
             >
               <div className="flex items-center gap-2">
-                <Zap className="w-3.5 h-3.5 text-amber-400" />
-                <span className="font-semibold text-[11px]">120kW+ Hyperchargers Only</span>
+                <Zap className="w-3.5 h-3.5 text-[#FF9418]" />
+                <span className="text-[11px]">120kW+ Hyperchargers Only</span>
               </div>
-              <span className="text-[9px] px-1 py-0.2 rounded font-mono bg-black/40 text-amber-300">
+              <span className="text-[9px] px-1.5 py-0.2 rounded font-mono bg-[#101827] text-[#FF9418] border border-[#25324A]">
                 Ultra-Fast
               </span>
             </button>
           </div>
 
-          {/* Fly-to Corridor Quick Jump */}
-          <div className="mt-3 pt-2 border-t border-amber-600/20">
-            <span className="text-[10px] font-mono text-slate-400 block font-bold mb-1.5">
+          {/* Fast Focus Corridor Quick Jump */}
+          <div className="mt-2.5 pt-2 border-t-2 border-[#25324A]">
+            <span className="text-[10px] font-mono text-[#8F9CAE] block font-bold mb-1.5">
               FAST-FOCUS HIGHWAY CORRIDOR:
             </span>
             <div className="grid grid-cols-2 gap-1.5 text-[10px]">
@@ -754,10 +882,10 @@ export const AtlasMap: React.FC = () => {
                 <button
                   key={c.id}
                   onClick={() => flyToCorridor(c.id)}
-                  className={`p-1.5 rounded text-left font-semibold truncate transition-colors border ${
+                  className={`p-1.5 rounded-lg text-left font-bold truncate transition-colors border-2 ${
                     evSelectedCorridor === c.id
-                      ? 'bg-amber-500 text-slate-950 font-bold border-amber-400'
-                      : 'bg-[#121c2e] text-slate-300 border-slate-700 hover:text-white'
+                      ? 'bg-[#FF9418] text-[#101827] border-[#101827]'
+                      : 'bg-[#101827] text-[#8F9CAE] border-[#25324A] hover:border-[#FF9418]'
                   }`}
                 >
                   📍 {c.label}

@@ -34,7 +34,7 @@ export const ShareableStoryCardModal: React.FC = () => {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9 }}
-          className="bg-slate-900 border-2 border-slate-700 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative flex flex-col items-center"
+          className="bg-[#151F30] border-2 border-[#25324A] rounded-2xl max-w-sm w-full p-6 shadow-[6px_6px_0px_#101827] relative flex flex-col items-center"
         >
           {/* Close button */}
           <button
@@ -56,7 +56,7 @@ export const ShareableStoryCardModal: React.FC = () => {
           {/* The 9:16 Preview Card */}
           <div 
             ref={cardRef}
-            className="w-full aspect-[9/14] bg-gradient-to-b from-amber-950/80 via-slate-900 to-black rounded-xl border-3 border-amber-500 p-5 shadow-2xl flex flex-col justify-between relative overflow-hidden text-slate-100 select-none"
+            className="w-full aspect-[9/14] bg-[#101827] rounded-xl border-2 border-[#FF9418] p-5 shadow-[4px_4px_0px_#101827] flex flex-col justify-between relative overflow-hidden text-[#F1E8D7] select-none"
           >
             {/* Background seal */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">

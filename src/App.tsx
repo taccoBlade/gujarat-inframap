@@ -37,15 +37,15 @@ export const App: React.FC = () => {
   const isMapMode = currentMode === 'explore' || currentMode === 'ev';
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#0c1524] text-[#f7f2e8]' : 'bg-[#f7f2e8] text-[#282823]'} font-sans`}>
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#101827] text-[#F1E8D7]' : 'bg-[#F1E8D7] text-[#101827]'} font-sans`}>
       {/* Sticky Navigation Header */}
       <Header />
 
       {/* PWA & Offline Roadtrip Status Banner (Only appears when cellular drops) */}
       <OfflineBanner />
 
-      {/* Main View Container with Fluid Transitions */}
-      <main className={`relative ${isMapMode ? 'pb-16 md:pb-0' : 'pb-24 md:pb-8'}`}>
+      {/* Main View Container with Fluid Transitions & Safe Area Mobile Spacing */}
+      <main className={`relative ${isMapMode ? 'pb-16 lg:pb-0' : 'pb-24 lg:pb-12'}`}>
         <AnimatePresence mode="wait">
           {isMapMode && (
             <motion.div

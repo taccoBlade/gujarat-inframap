@@ -4,16 +4,18 @@ import { useAtlasStore } from '../../stores/useAtlasStore';
 import { VERIFIED_TOURIST_DESTINATIONS, TouristDestination } from '../../data/tourist-destinations';
 import { GUJARAT_34_DISTRICTS } from '../../data/passport-districts';
 import { getRegionalCulture } from '../../utils/cultural-regions';
+import { ToranOrnamentalBorder, BandhaniDotsPattern } from '../cultural/GujaratiPatterns';
 import { 
   MapPin, 
   Clock, 
   Ticket, 
   Search, 
   Sparkles,
-  Award,
   Zap,
   CheckCircle2,
-  Compass
+  Compass,
+  ArrowRight,
+  RotateCcw
 } from 'lucide-react';
 
 export const PlacesDestinationView: React.FC = () => {
@@ -21,6 +23,7 @@ export const PlacesDestinationView: React.FC = () => {
     userProfile, 
     claimDistrictStamp, 
     setMode, 
+    setSelectedDistrict,
     theme
   } = useAtlasStore();
 
@@ -51,7 +54,7 @@ export const PlacesDestinationView: React.FC = () => {
       (selectedCategory === 'coastal' && (place.name.includes('Beach') || place.name.includes('Coast') || place.name.includes('Marine') || place.name.includes('Mandvi') || place.name.includes('Shivrajpur') || place.name.includes('Dumas'))) ||
       (selectedCategory === 'nature' && (place.name.includes('Saputara') || place.name.includes('Polo') || place.name.includes('Hills') || place.name.includes('Waterfall')));
 
-    const matchesDistrict = selectedDistrictFilter === 'all' || place.district === selectedDistrictFilter;
+    const matchesDistrict = selectedDistrictFilter === 'all' || place.district.toLowerCase() === selectedDistrictFilter.toLowerCase();
 
     return matchesSearch && matchesCategory && matchesDistrict;
   });
@@ -65,13 +68,23 @@ export const PlacesDestinationView: React.FC = () => {
     }
   };
 
-  const handleViewOnMap = (_place: TouristDestination) => {
+  const handleViewOnMap = (place: TouristDestination) => {
+    const districtObj = GUJARAT_34_DISTRICTS.find(d => d.name.toLowerCase() === place.district.toLowerCase());
+    if (districtObj) {
+      setSelectedDistrict(districtObj.id);
+    }
     setMode('explore');
   };
 
+  const resetAllFilters = () => {
+    setSearch('');
+    setSelectedCategory('all');
+    setSelectedDistrictFilter('all');
+  };
+
   return (
-    <div className={`max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 transition-colors duration-200 ${
-      theme === 'dark' ? 'text-slate-100' : 'text-[#282823]'
+    <div className={`max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 transition-colors duration-200 ${
+      theme === 'dark' ? 'text-[#F1E8D7]' : 'text-[#101827]'
     }`}>
       
       {/* Toast Notification */}
@@ -81,63 +94,57 @@ export const PlacesDestinationView: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-amber-500 text-slate-950 font-bold px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-2 text-xs border border-amber-400"
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-[#FF9418] text-[#101827] font-black px-5 py-2.5 rounded-xl shadow-[4px_4px_0px_#101827] flex items-center gap-2 text-xs border-2 border-[#101827]"
           >
-            <Sparkles className="w-4 h-4 text-slate-950" />
+            <Sparkles className="w-4 h-4 text-[#101827]" />
             <span>{toastMsg}</span>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Unified Luxury Editorial Header */}
-      <div className={`rounded-3xl border p-6 sm:p-8 mb-6 sm:mb-8 transition-all relative overflow-hidden shadow-sm ${
-        theme === 'dark'
-          ? 'bg-gradient-to-br from-[#121c2e] via-[#0f172a] to-[#090d16] border-amber-500/20'
-          : 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F4EC] to-[#EFE7D8] border-[#D8C3A5]'
+      {/* Editorial Header in Gen Z Neo-Brutalist Frame */}
+      <div className={`rounded-2xl border-2 p-5 sm:p-8 mb-6 sm:mb-8 transition-all relative overflow-hidden shadow-[4px_4px_0px_#101827] ${
+        theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
       }`}>
-        {/* Subtle decorative cultural hairline */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500" />
+        {/* Toran Border Accent */}
+        <ToranOrnamentalBorder className="rounded-t mb-4 -mt-5 -mx-5 sm:-mt-8 sm:-mx-8" height={10} />
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2 max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase font-mono bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-bold tracking-wider uppercase font-mono bg-[#FF9418]/15 text-[#FF9418] border border-[#FF9418]/40">
               <Compass className="w-3.5 h-3.5" />
-              <span>Gujarat Darshan • ૩૭ સાંસ્કૃતિક પ્રવાસ સ્થળો</span>
+              <span>GUJARAT DARSHAN • ૩૭ સાંસ્કૃતિક પ્રવાસ સ્થળો</span>
             </div>
 
-            <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight font-serif ${
-              theme === 'dark' ? 'text-white' : 'text-[#1c1917]'
+            <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight font-editorial ${
+              theme === 'dark' ? 'text-white' : 'text-[#101827]'
             }`}>
-              Verified Destinations <span className="text-amber-500">of Gujarat</span>
+              Verified Destinations <span className="text-[#FF9418]">of Gujarat</span>
             </h1>
 
             <p className={`text-xs sm:text-sm leading-relaxed ${
-              theme === 'dark' ? 'text-slate-300' : 'text-[#57534e]'
+              theme === 'dark' ? 'text-[#8F9CAE]' : 'text-[#606F7B]'
             }`}>
               Solanki Stepwells, Harappan Citadels, Jyotirlinga Shrines, Asiatic Lion Reserves, and Blue Flag Coastlines with official ASI &amp; Gujarat Tourism coordinates.
             </p>
           </div>
 
-          {/* Clean Quick Metric Badge */}
+          {/* Quick Metrics */}
           <div className="flex items-center gap-3 self-start lg:self-auto">
-            <div className={`px-4 py-2.5 rounded-2xl border text-center shadow-sm ${
-              theme === 'dark' 
-                ? 'bg-slate-900/80 border-slate-700/80' 
-                : 'bg-white/80 border-[#D8C3A5]'
+            <div className={`px-4 py-2.5 rounded-xl border-2 text-center shadow-[2px_2px_0px_#101827] ${
+              theme === 'dark' ? 'bg-[#101827] border-[#25324A]' : 'bg-white border-[#25324A]'
             }`}>
-              <div className="text-2xl font-black font-mono text-amber-500 leading-none">37</div>
-              <div className="text-[10px] font-medium uppercase tracking-wider text-stone-500 dark:text-slate-400 mt-0.5">
+              <div className="text-2xl font-black font-mono text-[#FF9418] leading-none">37</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-[#8F9CAE] mt-0.5">
                 Verified Sites
               </div>
             </div>
 
-            <div className={`px-4 py-2.5 rounded-2xl border text-center shadow-sm ${
-              theme === 'dark' 
-                ? 'bg-slate-900/80 border-slate-700/80' 
-                : 'bg-white/80 border-[#D8C3A5]'
+            <div className={`px-4 py-2.5 rounded-xl border-2 text-center shadow-[2px_2px_0px_#101827] ${
+              theme === 'dark' ? 'bg-[#101827] border-[#25324A]' : 'bg-white border-[#25324A]'
             }`}>
-              <div className="text-2xl font-black font-mono text-emerald-500 leading-none">100%</div>
-              <div className="text-[10px] font-medium uppercase tracking-wider text-stone-500 dark:text-slate-400 mt-0.5">
+              <div className="text-2xl font-black font-mono text-[#1C6555] leading-none">100%</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-[#8F9CAE] mt-0.5">
                 ASI Coordinates
               </div>
             </div>
@@ -145,36 +152,34 @@ export const PlacesDestinationView: React.FC = () => {
         </div>
 
         {/* Integrated Filter & Search Toolbar */}
-        <div className="mt-6 pt-5 border-t border-stone-200/60 dark:border-slate-800/80 flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+        <div className="mt-6 pt-5 border-t-2 border-[#25324A] flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
           
           {/* Search Box */}
           <div className="relative flex-grow max-w-lg">
-            <Search className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 ${
-              theme === 'dark' ? 'text-slate-400' : 'text-stone-400'
-            }`} />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8F9CAE]" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search Rani ki Vav, Somnath, Gir, Dholavira..."
-              className={`w-full rounded-xl pl-10 pr-4 py-2.5 text-xs outline-none border transition-all ${
+              className={`w-full rounded-xl pl-10 pr-4 py-2.5 text-xs outline-none border-2 transition-all font-semibold ${
                 theme === 'dark'
-                  ? 'bg-slate-900/90 border-slate-700/80 text-white placeholder-slate-500 focus:border-amber-400'
-                  : 'bg-white/90 border-[#D8C3A5] text-[#282823] placeholder-stone-400 focus:border-amber-600'
+                  ? 'bg-[#101827] border-[#25324A] text-white placeholder-[#8F9CAE] focus:border-[#FF9418]'
+                  : 'bg-white border-[#25324A] text-[#101827] placeholder-[#8F9CAE] focus:border-[#FF9418]'
               }`}
             />
           </div>
 
           {/* District Selector */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <span className="text-xs font-medium text-stone-500 dark:text-slate-400 hidden sm:inline">District:</span>
+            <span className="text-xs font-bold text-[#8F9CAE] hidden sm:inline">District:</span>
             <select
               value={selectedDistrictFilter}
               onChange={(e) => setSelectedDistrictFilter(e.target.value)}
-              className={`rounded-xl px-3 py-2.5 text-xs outline-none border transition-all ${
+              className={`rounded-xl px-3 py-2 text-xs font-bold outline-none border-2 transition-all ${
                 theme === 'dark'
-                  ? 'bg-slate-900/90 border-slate-700/80 text-amber-300 focus:border-amber-400'
-                  : 'bg-white/90 border-[#D8C3A5] text-[#9a3412] focus:border-amber-600'
+                  ? 'bg-[#101827] border-[#25324A] text-[#FF9418] focus:border-[#FF9418]'
+                  : 'bg-white border-[#25324A] text-[#9D233B] focus:border-[#FF9418]'
               }`}
             >
               <option value="all">All 34 Districts</option>
@@ -186,24 +191,24 @@ export const PlacesDestinationView: React.FC = () => {
 
         </div>
 
-        {/* Category Pills Row */}
-        <div className="mt-4 flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+        {/* Category Filter Pills */}
+        <div className="mt-4 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
           {categories.map((c) => (
             <button
               key={c.id}
               onClick={() => setSelectedCategory(c.id)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all border-2 ${
                 selectedCategory === c.id
-                  ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-sm'
+                  ? 'bg-[#FF9418] text-[#101827] border-[#101827] shadow-[2px_2px_0px_#101827]'
                   : theme === 'dark'
-                    ? 'bg-slate-900/60 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white'
-                    : 'bg-white/60 text-stone-700 border-[#D8C3A5] hover:border-amber-600'
+                    ? 'bg-[#101827] text-[#8F9CAE] border-[#25324A] hover:border-[#FF9418] hover:text-white'
+                    : 'bg-white text-[#25324A] border-[#25324A] hover:border-[#FF9418]'
               }`}
             >
               {c.label}
             </button>
           ))}
-          <span className="ml-auto text-xs font-mono text-stone-400 dark:text-slate-500 whitespace-nowrap hidden lg:inline">
+          <span className="ml-auto text-xs font-mono text-[#8F9CAE] whitespace-nowrap hidden lg:inline">
             Showing {filteredPlaces.length} destinations
           </span>
         </div>
@@ -211,169 +216,184 @@ export const PlacesDestinationView: React.FC = () => {
       </div>
 
       {/* Destinations Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPlaces.map((place) => {
-          const districtObj = GUJARAT_34_DISTRICTS.find(d => d.name.toLowerCase() === place.district.toLowerCase());
-          const isDistrictStamped = districtObj && userProfile.collectedStampIds.includes(districtObj.id);
-          const culture = getRegionalCulture(place.district || place.region);
+      {filteredPlaces.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPlaces.map((place) => {
+            const districtObj = GUJARAT_34_DISTRICTS.find(d => d.name.toLowerCase() === place.district.toLowerCase());
+            const isDistrictStamped = districtObj && userProfile.collectedStampIds.includes(districtObj.id);
+            const culture = getRegionalCulture(place.district || place.region);
 
-          return (
-            <motion.div
-              key={place.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.25 }}
-              className={`rounded-2xl border overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group ${
-                theme === 'dark'
-                  ? 'bg-[#121926] border-slate-800/90 hover:border-amber-500/50'
-                  : 'bg-[#FDFBF7] border-[#DFD3C3] hover:border-amber-600 text-[#282823]'
-              }`}
-            >
-              {/* Cultural Toran Line */}
-              <div style={{ height: '3px', background: culture.borderTrimStyle }} className="w-full" />
+            return (
+              <motion.div
+                key={place.id}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.2 }}
+                className={`rounded-2xl border-2 overflow-hidden shadow-[4px_4px_0px_#101827] hover:shadow-[6px_6px_0px_#FF9418] transition-all duration-200 flex flex-col justify-between group ${
+                  theme === 'dark'
+                    ? 'bg-[#151F30] border-[#25324A]'
+                    : 'bg-[#FAF6ED] border-[#25324A]'
+                }`}
+              >
+                {/* Cultural Toran Accent Line */}
+                <div style={{ height: '3px', background: culture.borderTrimStyle }} className="w-full" />
 
-              {/* Photo Area with 16:10 Aspect Ratio */}
-              <div>
-                <div className="relative aspect-[16/10] overflow-hidden bg-slate-950">
-                  <img
-                    src={place.image || '/images/destinations/statue-of-unity.jpg'}
-                    alt={place.name}
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/destinations/statue-of-unity.jpg';
-                    }}
-                  />
+                {/* 1. Image Area with stable 16:10 aspect ratio and reliable fallback */}
+                <div>
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#101827] border-b-2 border-[#25324A]">
+                    <img
+                      src={place.image || '/images/destinations/statue-of-unity.jpg'}
+                      alt={place.name}
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/images/destinations/statue-of-unity.jpg';
+                      }}
+                    />
 
-                  {/* Gradient overlay for text contrast */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/25 pointer-events-none" />
 
-                  {/* District & Category badges */}
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                    <span className="px-2.5 py-1 rounded-full bg-black/65 backdrop-blur-md text-amber-300 border border-amber-500/30 text-xs font-mono font-bold uppercase tracking-wider">
-                      {place.district}
-                    </span>
-                    {place.categoryLabel && (
-                      <span className="px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md text-slate-200 text-xs font-sans font-medium">
-                        {place.categoryLabel}
+                    {/* 2. District & Category Badges */}
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                      <span className="px-2 py-0.5 rounded-md bg-[#101827]/90 text-[#FF9418] border border-[#25324A] text-xs font-mono font-bold uppercase tracking-wider">
+                        {place.district}
                       </span>
-                    )}
-                  </div>
-
-                  {/* Cultural Region Tag on Photo Footer */}
-                  <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-xs text-amber-200 font-medium drop-shadow">
-                    <span className="truncate">{culture.primaryIcon} {culture.regionName}</span>
-                    <span className="font-['Noto_Sans_Gujarati'] text-amber-100">{culture.gujaratiTitle}</span>
-                  </div>
-                </div>
-
-                {/* Content body */}
-                <div className="p-5">
-                  <h3 className={`font-bold text-lg font-serif transition-colors tracking-tight line-clamp-1 ${
-                    theme === 'dark' ? 'text-white group-hover:text-amber-400' : 'text-[#1c1917] group-hover:text-amber-700'
-                  }`}>
-                    {place.name}
-                  </h3>
-
-                  {/* Regional Craft Pill */}
-                  <div className="mt-2">
-                    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono ${culture.badgeBg} ${culture.textColor} border ${culture.badgeBorder}`}>
-                      {culture.culturalTag}
-                    </span>
-                  </div>
-
-                  <p className={`text-xs line-clamp-2 mt-2.5 leading-relaxed ${
-                    theme === 'dark' ? 'text-slate-300' : 'text-[#57534e]'
-                  }`}>
-                    {place.summary}
-                  </p>
-
-                  {/* Key Visitor Logistics */}
-                  <div className={`mt-4 pt-3 border-t grid grid-cols-2 gap-2 text-xs ${
-                    theme === 'dark' ? 'border-slate-800/80 text-slate-300' : 'border-stone-200 text-stone-600'
-                  }`}>
-                    <div className="flex items-center gap-1.5 truncate">
-                      <Clock className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
-                      <span className="truncate">{place.timings || '08:00 - 18:00'}</span>
+                      {place.categoryLabel && (
+                        <span className="px-2 py-0.5 rounded-md bg-[#101827]/80 text-[#F1E8D7] text-xs font-sans font-semibold border border-white/10">
+                          {place.categoryLabel}
+                        </span>
+                      )}
                     </div>
 
-                    <div className="flex items-center gap-1.5 truncate">
-                      <Ticket className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
-                      <span className="truncate">{place.entryFee || 'Free / ASI'}</span>
+                    {/* Cultural Region Tag on Photo Footer */}
+                    <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-xs text-[#FF9418] font-bold drop-shadow">
+                      <span className="truncate">{culture.primaryIcon} {culture.regionName}</span>
+                      <span className="font-['Noto_Sans_Gujarati'] text-[#F1E8D7] text-[11px]">{culture.gujaratiTitle}</span>
                     </div>
                   </div>
 
-                  {/* EV Roadtrip Status */}
-                  <div className={`mt-2.5 pt-2 border-t flex items-center justify-between text-xs ${
-                    theme === 'dark' ? 'border-slate-800/80' : 'border-stone-200'
-                  }`}>
-                    <span className={`flex items-center gap-1.5 truncate ${
-                      place.district.toLowerCase() === 'kachchh' || place.district.toLowerCase() === 'the dangs'
-                        ? 'text-rose-500'
-                        : 'text-emerald-500'
+                  {/* 3. Destination Title & 4. Concise Description */}
+                  <div className="p-4 sm:p-5">
+                    <h3 className={`font-black text-lg font-editorial transition-colors tracking-tight line-clamp-1 ${
+                      theme === 'dark' ? 'text-white group-hover:text-[#FF9418]' : 'text-[#101827] group-hover:text-[#9D233B]'
                     }`}>
-                      <Zap className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span className="truncate">
-                        {place.district.toLowerCase() === 'kachchh' || place.name.includes('Dholavira') || place.name.includes('Rann')
-                          ? 'Remote Zone (Top-up Bhuj)'
-                          : place.district.toLowerCase() === 'the dangs' || place.name.includes('Saputara')
-                          ? 'Forest Zone (Top-up Waghai)'
-                          : 'EV Ready (< 45km)'}
+                      {place.name}
+                    </h3>
+
+                    {/* Regional Craft & Heritage Tag */}
+                    <div className="mt-1.5">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#FF9418]/10 text-[#FF9418] border border-[#FF9418]/30">
+                        {culture.culturalTag}
                       </span>
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-mono">
-                      {place.district.toLowerCase() === 'kachchh' || place.district.toLowerCase() === 'the dangs' ? 'Dead Zone' : '60-180kW'}
-                    </span>
+                    </div>
+
+                    <p className={`text-xs line-clamp-2 mt-2 leading-relaxed ${
+                      theme === 'dark' ? 'text-[#8F9CAE]' : 'text-[#606F7B]'
+                    }`}>
+                      {place.summary}
+                    </p>
+
+                    {/* 5. Two or Three Useful Logistics Facts */}
+                    <div className="mt-3.5 pt-3 border-t-2 border-[#25324A] grid grid-cols-2 gap-2 text-xs">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <Clock className="w-3.5 h-3.5 text-[#FF9418] flex-shrink-0" />
+                        <span className="truncate text-[#8F9CAE] font-medium">{place.timings || '08:00 - 18:00'}</span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 truncate">
+                        <Ticket className="w-3.5 h-3.5 text-[#1C6555] flex-shrink-0" />
+                        <span className="truncate text-[#8F9CAE] font-medium">{place.entryFee || 'Free / ASI'}</span>
+                      </div>
+                    </div>
+
+                    {/* EV Roadtrip Reachability Status */}
+                    <div className="mt-2 pt-2 border-t border-[#25324A]/60 flex items-center justify-between text-xs">
+                      <span className={`flex items-center gap-1.5 truncate font-bold text-[11px] ${
+                        place.district.toLowerCase() === 'kachchh' || place.district.toLowerCase() === 'the dangs'
+                          ? 'text-[#9D233B]'
+                          : 'text-[#1C6555]'
+                      }`}>
+                        <Zap className="w-3.5 h-3.5 flex-shrink-0" />
+                        <span className="truncate">
+                          {place.district.toLowerCase() === 'kachchh' || place.name.includes('Dholavira') || place.name.includes('Rann')
+                            ? '⚠️ Remote Dead Zone: Top-up 100% at Bhuj'
+                            : place.district.toLowerCase() === 'the dangs' || place.name.includes('Saputara')
+                            ? '⚠️ Forest Dead Zone: Top-up at Waghai'
+                            : '⚡ EV Ready: Fast Charger < 45km'}
+                        </span>
+                      </span>
+                      <span className="text-[10px] px-2 py-0.2 rounded font-mono font-bold bg-[#101827] text-[#8F9CAE] border border-[#25324A]">
+                        {place.district.toLowerCase() === 'kachchh' || place.district.toLowerCase() === 'the dangs' ? 'Remote Dead Zone' : '60-180kW'}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Card Footer Actions */}
-              <div className={`p-4 border-t flex items-center justify-between gap-2.5 ${
-                theme === 'dark' ? 'bg-slate-950/60 border-slate-800' : 'bg-[#F8F5EE] border-stone-200'
-              }`}>
-                <button
-                  onClick={() => handleViewOnMap(place)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 border ${
-                    theme === 'dark'
-                      ? 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700'
-                      : 'bg-white hover:bg-stone-50 text-stone-800 border-[#D8C3A5]'
-                  }`}
-                >
-                  <MapPin className="w-3.5 h-3.5 text-amber-500" />
-                  <span>View on Map</span>
-                </button>
-
-                {districtObj && (
+                {/* 6. Primary Action Buttons */}
+                <div className={`p-3.5 border-t-2 border-[#25324A] flex items-center justify-between gap-2 ${
+                  theme === 'dark' ? 'bg-[#101827]' : 'bg-[#F1E8D7]'
+                }`}>
                   <button
-                    onClick={() => handleClaimDistrict(place.district)}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                      isDistrictStamped
-                        ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
-                        : 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-sm active:translate-y-0.5'
-                    }`}
+                    onClick={() => handleViewOnMap(place)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border-2 border-[#25324A] hover:border-[#FF9418] bg-transparent"
                   >
-                    {isDistrictStamped ? (
-                      <>
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Stamped ✓</span>
-                      </>
-                    ) : (
-                      <>
-                        <Award className="w-3.5 h-3.5" />
-                        <span>Stamp District</span>
-                      </>
-                    )}
+                    <MapPin className="w-3.5 h-3.5 text-[#FF9418]" />
+                    <span>View on Map</span>
                   </button>
-                )}
-              </div>
 
-            </motion.div>
-          );
-        })}
-      </div>
+                  {districtObj && (
+                    <button
+                      onClick={() => handleClaimDistrict(place.district)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 border-2 ${
+                        isDistrictStamped
+                          ? 'bg-[#1C6555]/20 text-[#1C6555] border-[#1C6555]'
+                          : 'bg-[#FF9418] text-[#101827] border-[#101827] shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5'
+                      }`}
+                    >
+                      {isDistrictStamped ? (
+                        <>
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Stamped</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Stamp District</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      ) : (
+        /* Empty State with Bandhani Dot Pattern */
+        <div className={`rounded-2xl border-2 p-12 text-center shadow-[4px_4px_0px_#101827] relative overflow-hidden ${
+          theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
+        }`}>
+          <div className="flex justify-center mb-4">
+            <BandhaniDotsPattern size={48} primaryColor="#FF9418" />
+          </div>
+          <h3 className="text-lg font-black font-editorial mb-1">
+            No destinations found matching your filter
+          </h3>
+          <p className="text-xs text-[#8F9CAE] max-w-sm mx-auto mb-6">
+            Try resetting your search query or choosing "All 34 Districts" to explore verified monuments across Gujarat.
+          </p>
+          <button
+            onClick={resetAllFilters}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FF9418] text-[#101827] font-black text-xs border-2 border-[#101827] shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Reset All Filters</span>
+          </button>
+        </div>
+      )}
 
     </div>
   );

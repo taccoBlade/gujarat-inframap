@@ -42,7 +42,7 @@ export const OnboardingModal: React.FC = () => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-3xl max-h-[90vh] flex flex-col bg-[#0f172a] border-2 border-amber-500 rounded-2xl shadow-[0_25px_70px_rgba(245,158,11,0.25)] overflow-hidden text-slate-100"
+          className="relative w-full max-w-3xl max-h-[90vh] flex flex-col bg-[#151F30] border-2 border-[#25324A] rounded-2xl shadow-[6px_6px_0px_#101827] overflow-hidden text-[#F1E8D7]"
         >
           {/* Folk pattern ribbon header */}
           <div className="h-2 bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500 flex-shrink-0" />

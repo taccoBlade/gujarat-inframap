@@ -11,12 +11,13 @@ import {
 } from '../../lib/firebase';
 import { ConfirmationResult, RecaptchaVerifier } from 'firebase/auth';
 import { X, Smartphone, Sparkles, CheckCircle2, ShieldCheck, ArrowRight, Loader2, RotateCw } from 'lucide-react';
+import { ToranOrnamentalBorder } from '../cultural/GujaratiPatterns';
 
 const OTP_COOLDOWN_SECONDS = 60;
 const MAX_OTP_ATTEMPTS = 5;
 
 export const AuthModal: React.FC = () => {
-  const { isAuthModalOpen, setAuthModalOpen, setLoggedInUser, setOnboardingOpen } = useAtlasStore();
+  const { isAuthModalOpen, setAuthModalOpen, setLoggedInUser, setOnboardingOpen, userProfile } = useAtlasStore();
   const [authMethod, setAuthMethod] = useState<'options' | 'phone'>('options');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [otpCode, setOtpCode] = useState('');
@@ -77,7 +78,14 @@ export const AuthModal: React.FC = () => {
     try {
       const res = await loginWithGoogle();
       if (res.success && res.user) {
-        setLoggedInUser(res.user);
+        const mergedStamps = Array.from(new Set([...(res.user.collectedStampIds || []), ...(userProfile.collectedStampIds || ['ahmedabad'])]));
+        const mergedBookmarks = Array.from(new Set([...(res.user.bookmarkedStoryIds || []), ...(userProfile.bookmarkedStoryIds || [])]));
+        setLoggedInUser({
+          ...res.user,
+          collectedStampIds: mergedStamps,
+          bookmarkedStoryIds: mergedBookmarks,
+          homeDistrict: res.user.homeDistrict || userProfile.homeDistrict || 'ahmedabad'
+        });
         setAuthModalOpen(false);
         setOnboardingOpen(true);
       } else {
@@ -161,7 +169,14 @@ export const AuthModal: React.FC = () => {
     try {
       const res = await verifyPhoneOtp(cleanCode, confirmationResult || undefined, formattedPhone);
       if (res.success && res.user) {
-        setLoggedInUser(res.user);
+        const mergedStamps = Array.from(new Set([...(res.user.collectedStampIds || []), ...(userProfile.collectedStampIds || ['ahmedabad'])]));
+        const mergedBookmarks = Array.from(new Set([...(res.user.bookmarkedStoryIds || []), ...(userProfile.bookmarkedStoryIds || [])]));
+        setLoggedInUser({
+          ...res.user,
+          collectedStampIds: mergedStamps,
+          bookmarkedStoryIds: mergedBookmarks,
+          homeDistrict: res.user.homeDistrict || userProfile.homeDistrict || 'ahmedabad'
+        });
         setAuthModalOpen(false);
         setOnboardingOpen(true);
       } else {
@@ -183,8 +198,8 @@ export const AuthModal: React.FC = () => {
       handle: `@explorer_${Math.random().toString(36).substring(2, 6)}`,
       authProvider: 'demo' as const,
       homeDistrict: 'ahmedabad',
-      collectedStampIds: ['ahmedabad'],
-      bookmarkedStoryIds: ['story-signature-farm'],
+      collectedStampIds: Array.from(new Set([...userProfile.collectedStampIds, 'ahmedabad'])),
+      bookmarkedStoryIds: Array.from(new Set([...userProfile.bookmarkedStoryIds])),
       visitedPlaceIds: ['ahmedabad'],
       badges: ['solanki_explorer'],
       joinedDate: new Date().toISOString().split('T')[0],
@@ -214,10 +229,10 @@ export const AuthModal: React.FC = () => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-md bg-[#0f172a] border-2 border-amber-500/60 rounded-2xl shadow-[0_20px_60px_rgba(245,158,11,0.2)] overflow-hidden text-slate-100"
+          className="relative w-full max-w-md bg-[#151F30] border-2 border-[#25324A] rounded-2xl shadow-[6px_6px_0px_#101827] overflow-hidden text-[#F1E8D7]"
         >
           {/* Top Decorative Folk Header Bar */}
-          <div className="h-2 bg-gradient-to-r from-amber-500 via-rose-500 to-amber-500" />
+          <ToranOrnamentalBorder height={10} />
 
           {/* Close Button */}
           <button

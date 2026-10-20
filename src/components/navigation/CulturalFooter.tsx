@@ -20,8 +20,8 @@ export const CulturalFooter: React.FC = () => {
   return (
     <footer className={`mt-16 border-t-2 transition-colors select-none ${
       theme === 'dark' 
-        ? 'bg-[#090e1a] border-amber-500/20 text-slate-300' 
-        : 'bg-[#F4ECE1] border-[#D8C3A5] text-[#282823]'
+        ? 'bg-[#101827] border-[#25324A] text-[#F1E8D7]' 
+        : 'bg-[#FAF6ED] border-[#25324A] text-[#101827]'
     }`}>
       {/* Auspicious Toran Border Trim */}
       <ToranOrnamentalBorder height={12} />
@@ -32,20 +32,20 @@ export const CulturalFooter: React.FC = () => {
           {/* Brand & Regional Roots */}
           <div className="space-y-3 md:col-span-1">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-600 via-amber-700 to-amber-900 border border-amber-400/50 flex items-center justify-center font-bold text-amber-100 text-lg shadow-sm">
+              <div className="w-9 h-9 rounded-xl bg-[#151F30] border-2 border-[#FF9418] flex items-center justify-center font-bold text-[#FF9418] text-lg shadow-[2px_2px_0px_#101827]">
                 <span className="font-['Noto_Sans_Gujarati']">ગૂ</span>
               </div>
               <div>
-                <span className={`font-bold font-serif text-lg tracking-tight block leading-none ${theme === 'dark' ? 'text-white' : 'text-[#1c1917]'}`}>
+                <span className={`font-bold font-editorial text-lg tracking-tight block leading-none ${theme === 'dark' ? 'text-white' : 'text-[#101827]'}`}>
                   Gujarat Pravas
                 </span>
-                <span className="text-[11px] font-['Noto_Sans_Gujarati'] text-amber-600 dark:text-amber-400">
+                <span className="text-[11px] font-['Noto_Sans_Gujarati'] text-[#FF9418]">
                   ગુજરાત ડિજિટલ સાંસ્કૃતિક એટલાસ
                 </span>
               </div>
             </div>
 
-            <p className="text-xs leading-relaxed text-stone-600 dark:text-slate-400">
+            <p className="text-xs leading-relaxed text-[#8F9CAE]">
               A contemporary digital twin honoring 5,000 years of Gujarati civilization — from Harappan Dholavira and Solanki stepwells to 30 GW clean energy mega-grids.
             </p>
 
@@ -59,52 +59,52 @@ export const CulturalFooter: React.FC = () => {
 
           {/* Core Portals */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-amber-600 dark:text-amber-400">
+            <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#FF9418]">
               Cultural Portals
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
                 <button 
                   onClick={() => { setMode('explore'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-amber-500 transition-colors flex items-center gap-1.5"
+                  className="hover:text-[#FF9418] transition-colors flex items-center gap-1.5"
                 >
-                  <Map className="w-3.5 h-3.5 text-amber-500" />
+                  <Map className="w-3.5 h-3.5 text-[#FF9418]" />
                   <span>Interactive Atlas Map</span>
                 </button>
               </li>
               <li>
                 <button 
                   onClick={() => { setMode('places'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-amber-500 transition-colors flex items-center gap-1.5"
+                  className="hover:text-[#FF9418] transition-colors flex items-center gap-1.5"
                 >
-                  <Compass className="w-3.5 h-3.5 text-amber-500" />
+                  <Compass className="w-3.5 h-3.5 text-[#FF9418]" />
                   <span>37 Verified Destinations</span>
                 </button>
               </li>
               <li>
                 <button 
                   onClick={() => { setMode('passport'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-amber-500 transition-colors flex items-center gap-1.5"
+                  className="hover:text-[#FF9418] transition-colors flex items-center gap-1.5"
                 >
-                  <Award className="w-3.5 h-3.5 text-amber-500" />
+                  <Award className="w-3.5 h-3.5 text-[#FF9418]" />
                   <span>34 Districts Travel Passport</span>
                 </button>
               </li>
               <li>
                 <button 
                   onClick={() => { setMode('unfiltered'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-amber-500 transition-colors flex items-center gap-1.5"
+                  className="hover:text-[#FF9418] transition-colors flex items-center gap-1.5"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-rose-400" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#9D233B]" />
                   <span>45 Unfiltered Folklore Dossiers</span>
                 </button>
               </li>
               <li>
                 <button 
                   onClick={() => { setMode('infrastructure'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-amber-500 transition-colors flex items-center gap-1.5"
+                  className="hover:text-[#FF9418] transition-colors flex items-center gap-1.5"
                 >
-                  <Zap className="w-3.5 h-3.5 text-amber-500" />
+                  <Zap className="w-3.5 h-3.5 text-[#1C6555]" />
                   <span>3,337 Public Infrastructure Assets</span>
                 </button>
               </li>
@@ -113,10 +113,10 @@ export const CulturalFooter: React.FC = () => {
 
           {/* Regional Heritage Lineage */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-amber-600 dark:text-amber-400">
+            <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#FF9418]">
               Living Craft Heritage
             </h4>
-            <div className="space-y-1.5 text-xs text-stone-600 dark:text-slate-400">
+            <div className="space-y-1.5 text-xs text-[#8F9CAE]">
               <p>• <strong>Patan</strong>: Double-Ikat Silk Patola</p>
               <p>• <strong>Kachchh</strong>: Ajrakh Block-Print &amp; Lippan Mud-Art</p>
               <p>• <strong>Jamnagar</strong>: Fine Knotted Bandhej Dyeing</p>
@@ -125,20 +125,22 @@ export const CulturalFooter: React.FC = () => {
             </div>
           </div>
 
-          {/* Statutary Standards & Cartography */}
+          {/* Cartographic Standards */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-amber-600 dark:text-amber-400">
+            <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-[#FF9418]">
               Cartographic Alignment
             </h4>
-            <div className="p-3 rounded-xl border text-[11px] leading-relaxed space-y-1.5 bg-white/50 dark:bg-slate-900/50 border-stone-200 dark:border-slate-800">
-              <div className="flex items-center gap-1.5 font-bold text-emerald-600 dark:text-emerald-400">
+            <div className={`p-3 rounded-xl border-2 text-[11px] leading-relaxed space-y-1.5 ${
+              theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
+            }`}>
+              <div className="flex items-center gap-1.5 font-bold text-[#1C6555]">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>Survey of India Aligned</span>
               </div>
-              <p className="text-stone-500 dark:text-slate-400">
+              <p className="text-[#8F9CAE]">
                 Administrative boundaries match official Government of Gujarat Survey of India demarcations across all 34 districts.
               </p>
-              <p className="text-[10px] font-mono text-stone-400 dark:text-slate-500">
+              <p className="text-[10px] font-mono text-[#8F9CAE]">
                 Coordinates: WGS84 EPSG:4326 • 100% Statutorily Verified
               </p>
             </div>
@@ -147,10 +149,10 @@ export const CulturalFooter: React.FC = () => {
         </div>
 
         {/* Bottom Baseline Bar */}
-        <div className="pt-6 border-t border-stone-200/80 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-stone-500 dark:text-slate-400">
+        <div className="pt-6 border-t-2 border-[#25324A] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#8F9CAE]">
           <div className="flex items-center gap-1">
             <span>Crafted with</span>
-            <Heart className="w-3 h-3 text-rose-500 fill-rose-500" />
+            <Heart className="w-3 h-3 text-[#9D233B] fill-[#9D233B]" />
             <span>for Gujarat • ગુજરાત ડિજિટલ ટ્વિન</span>
           </div>
 

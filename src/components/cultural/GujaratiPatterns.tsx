@@ -24,8 +24,8 @@ export const PatolaIkatPattern: React.FC<{
 }> = ({
   className = '',
   size = 48,
-  color = '#9B2226',      // Madder Red
-  accentColor = '#DDA15E' // Turmeric Gold
+  color = '#9D233B',      // Ajrakh Red
+  accentColor = '#FF9418' // Saffron Orange
 }) => (
   <svg
     width={size}
@@ -81,9 +81,9 @@ export const AjrakhStarPattern: React.FC<{
 }> = ({
   className = '',
   size = 48,
-  indigo = '#1A2E40',   // Deep Patan Indigo
-  madder = '#9B2226',   // Terracotta Madder
-  turmeric = '#DDA15E' // Warm Turmeric
+  indigo = '#25324A',   // Slate Blue
+  madder = '#9D233B',   // Ajrakh Red
+  turmeric = '#FF9418' // Saffron Orange
 }) => (
   <svg
     width={size}
@@ -140,8 +140,8 @@ export const BandhaniDotsPattern: React.FC<{
 }> = ({
   className = '',
   size = 40,
-  primaryColor = '#9B2226',
-  dotColor = '#FAF3E3'
+  primaryColor = '#9D233B',
+  dotColor = '#F1E8D7'
 }) => (
   <svg
     width={size}
@@ -196,8 +196,8 @@ export const StepwellGeometryPattern: React.FC<{
 }> = ({
   className = '',
   size = 48,
-  color = '#1A2E40',
-  accentColor = '#DDA15E'
+  color = '#25324A',
+  accentColor = '#FF9418'
 }) => (
   <svg
     width={size}
@@ -266,21 +266,21 @@ export const ToranOrnamentalBorder: React.FC<{
       <defs>
         <pattern id="toran-unit" width="32" height="14" patternUnits="userSpaceOnUse">
           {/* Top Auspicious Ribbon */}
-          <rect x="0" y="0" width="32" height="3" fill="#9B2226" />
-          <rect x="0" y="2" width="32" height="1" fill="#DDA15E" />
+          <rect x="0" y="0" width="32" height="3" fill="#9D233B" />
+          <rect x="0" y="2" width="32" height="1" fill="#FF9418" />
           
           {/* Asopalav Triangular Mango Leaf */}
-          <path d="M4 3 L16 13 L28 3 Z" fill="#2A9D8F" fillOpacity="0.85" stroke="#1D3557" strokeWidth="0.8" />
+          <path d="M4 3 L16 13 L28 3 Z" fill="#1C6555" fillOpacity="0.9" stroke="#101827" strokeWidth="0.8" />
           
           {/* Golden Marigold Drop */}
-          <circle cx="16" cy="11" r="2.2" fill="#E9C46A" stroke="#9B2226" strokeWidth="0.6" />
+          <circle cx="16" cy="11" r="2.2" fill="#FF9418" stroke="#9D233B" strokeWidth="0.6" />
           
           {/* Mirrorwork (Lippan Abhla) Dot */}
-          <circle cx="16" cy="6" r="1.5" fill="#FFFFFF" stroke="#64748B" strokeWidth="0.5" />
+          <circle cx="16" cy="6" r="1.5" fill="#FFFFFF" stroke="#8F9CAE" strokeWidth="0.5" />
           
           {/* Side Floral Beads */}
-          <circle cx="3" cy="4" r="1.2" fill="#DDA15E" />
-          <circle cx="29" cy="4" r="1.2" fill="#DDA15E" />
+          <circle cx="3" cy="4" r="1.2" fill="#FF9418" />
+          <circle cx="29" cy="4" r="1.2" fill="#FF9418" />
         </pattern>
       </defs>
       <rect width="100%" height="14" fill="url(#toran-unit)" />
@@ -408,13 +408,13 @@ export const CulturalCardFrame: React.FC<{
   className = ''
 }) => {
   return (
-    <div className={`relative border-2 border-[#18181B] bg-[#FDFBF7] dark:bg-[#121926] dark:border-amber-500/40 rounded-2xl shadow-[4px_4px_0px_#18181B] dark:shadow-[4px_4px_0px_rgba(245,158,11,0.35)] overflow-hidden transition-all duration-200 ${className}`}>
+    <div className={`relative border-2 border-[#25324A] bg-[#FAF6ED] dark:bg-[#151F30] rounded-2xl shadow-[4px_4px_0px_#25324A] dark:shadow-[4px_4px_0px_#101827] overflow-hidden transition-all duration-200 ${className}`}>
       {/* Top Toran Ornamental Trim */}
       <ToranOrnamentalBorder height={10} />
 
       {/* Header bar if title or badge provided */}
       {(title || badge) && (
-        <div className="px-4 py-2.5 border-b-2 border-[#18181B] dark:border-slate-800 flex items-center justify-between gap-2 bg-[#F8F4EC] dark:bg-slate-900/80">
+        <div className="px-4 py-2.5 border-b-2 border-[#25324A] flex items-center justify-between gap-2 bg-[#F1E8D7] dark:bg-[#101827]">
           <div className="flex items-center gap-2">
             {motif === 'patola' && <PatolaIkatPattern size={22} />}
             {motif === 'ajrakh' && <AjrakhStarPattern size={22} />}
@@ -423,13 +423,13 @@ export const CulturalCardFrame: React.FC<{
             {motif === 'pol' && <PolWoodCarvingPattern size={22} />}
             {motif === 'pithora' && <PithoraEditorialMotif size={22} />}
             {title && (
-              <span className="font-bold font-serif text-sm text-[#18181B] dark:text-white">
+              <span className="font-bold font-editorial text-sm text-[#101827] dark:text-[#F1E8D7]">
                 {title}
               </span>
             )}
           </div>
           {badge && (
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 border border-[#18181B]">
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#FF9418] text-[#101827] border border-[#25324A]">
               {badge}
             </span>
           )}
