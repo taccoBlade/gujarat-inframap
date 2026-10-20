@@ -7,7 +7,8 @@ import {
   verifyPhoneOtp, 
   setupRecaptcha, 
   clearRecaptcha, 
-  isValidIndianPhoneNumber 
+  isValidIndianPhoneNumber,
+  sendFirebasePasswordResetEmail
 } from '../../lib/firebase';
 import { ConfirmationResult, RecaptchaVerifier } from 'firebase/auth';
 import { 
@@ -286,16 +287,30 @@ export const AuthModal: React.FC = () => {
 
     setLoading(true);
 
-    setTimeout(() => {
-      // Generate 6-digit email OTP
-      const code = String(Math.floor(100000 + Math.random() * 900000));
-      setGeneratedResetOtp(code);
-      setResetOtpInput(code); // Pre-fill convenience
-      setCooldown(OTP_COOLDOWN_SECONDS);
-      setResetStep('verify');
-      setLoading(false);
-      setSuccessMsg(`Reset code generated for ${cleanEmail}. Verification code: ${code}`);
-    }, 450);
+    sendFirebasePasswordResetEmail(cleanEmail)
+      .then((res: { success: boolean; message: string }) => {
+        // Generate 6-digit email OTP
+        const code = String(Math.floor(100000 + Math.random() * 900000));
+        setGeneratedResetOtp(code);
+        setResetOtpInput(''); // Must remain empty so the user types it in manually
+        setCooldown(OTP_COOLDOWN_SECONDS);
+        setResetStep('verify');
+        setLoading(false);
+        if (res.success) {
+          setSuccessMsg(`Official reset link dispatched to ${cleanEmail}. Enter verification code below.`);
+        } else {
+          setSuccessMsg(`Reset code generated for ${cleanEmail}. Verification code: ${code}`);
+        }
+      })
+      .catch(() => {
+        const code = String(Math.floor(100000 + Math.random() * 900000));
+        setGeneratedResetOtp(code);
+        setResetOtpInput(''); // Must remain empty
+        setCooldown(OTP_COOLDOWN_SECONDS);
+        setResetStep('verify');
+        setLoading(false);
+        setSuccessMsg(`Reset code generated for ${cleanEmail}. Verification code: ${code}`);
+      });
   };
 
   // 4. Reset Password with OTP Verification

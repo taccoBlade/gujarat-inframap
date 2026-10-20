@@ -44,7 +44,8 @@ import {
   Play,
   Building,
   Eye,
-  CheckCircle2
+  CheckCircle2,
+  Bookmark
 } from 'lucide-react';
 
 interface AssetDetail {
@@ -114,6 +115,8 @@ export const AtlasMap: React.FC = () => {
     selectedDistrict,
     setSelectedDistrict,
     setActiveDossierAsset,
+    saveLocation,
+    removeSavedLocation,
     isAuthModalOpen
   } = useAtlasStore();
 
@@ -1033,6 +1036,17 @@ export const AtlasMap: React.FC = () => {
     map?.flyTo([22.40, 71.80], 7.4, { duration: 1.4 });
   };
 
+  // Re-center Map to Gujarat State Overview
+  const handleRecenterState = () => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+    map.flyTo([22.40, 71.80], 7.4, { duration: 1.0 });
+    setSelectedAsset(null);
+    setSelectedParcel(null);
+    if (selectedDistrict) setSelectedDistrict(null);
+    map.closePopup();
+  };
+
   // Auto-advance waypoints when 3D guided tour is playing (Glide mechanic)
   useEffect(() => {
     if (!activeTour || !isTourPlaying) return;
@@ -1085,29 +1099,48 @@ export const AtlasMap: React.FC = () => {
       {!isAuthModalOpen && (
         <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[100] flex flex-col gap-2 max-w-xs sm:max-w-md w-[calc(100%-1.5rem)] sm:w-full select-none pointer-events-none">
         
-        {/* 1. Search Bar (District Dropdown Removed for Clean Pin Selection) */}
-        <div className={`p-2 rounded-xl border-2 shadow-[3px_3px_0px_#101827] backdrop-blur-md flex items-center gap-2 pointer-events-auto ${
-          theme === 'dark' ? 'bg-[#151F30]/95 border-[#25324A]' : 'bg-[#FAF6ED]/95 border-[#25324A]'
-        }`}>
-          <Search className="w-4 h-4 text-[#FF9418] flex-shrink-0" />
-          <input
-            type="text"
-            placeholder="Search landmarks, stories, industrial hubs..."
-            value={localSearch}
-            onChange={(e) => {
-              setLocalSearch(e.target.value);
-              setSearchQuery(e.target.value);
-            }}
-            className="w-full bg-transparent text-xs font-semibold focus:outline-none placeholder:text-[#8F9CAE]"
-          />
-          {localSearch && (
-            <button 
-              onClick={() => { setLocalSearch(''); setSearchQuery(''); }}
-              className="p-1 text-[#8F9CAE] hover:text-white"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          )}
+        {/* 1. Search Bar + Re-center State Button Row */}
+        <div className="flex items-center gap-2 w-full pointer-events-auto">
+          <div className={`flex-1 p-2 rounded-xl border-2 shadow-[3px_3px_0px_#101827] backdrop-blur-md flex items-center gap-2 ${
+            theme === 'dark' ? 'bg-[#151F30]/95 border-[#25324A]' : 'bg-[#FAF6ED]/95 border-[#25324A]'
+          }`}>
+            <Search className="w-4 h-4 text-[#FF9418] flex-shrink-0" />
+            <input
+              type="text"
+              placeholder="Search landmarks, stories, industrial hubs..."
+              value={localSearch}
+              onChange={(e) => {
+                setLocalSearch(e.target.value);
+                setSearchQuery(e.target.value);
+              }}
+              className="w-full bg-transparent text-xs font-semibold focus:outline-none placeholder:text-[#8F9CAE]"
+            />
+            {localSearch && (
+              <button 
+                onClick={() => { setLocalSearch(''); setSearchQuery(''); }}
+                className="p-1 text-[#8F9CAE] hover:text-white"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Re-center State Button (Top Bar) */}
+          <button
+            onClick={handleRecenterState}
+            title="Re-center Gujarat State (Reset Overview)"
+            aria-label="Re-center Gujarat State"
+            className={`px-3 py-2 rounded-xl border-2 shadow-[3px_3px_0px_#101827] backdrop-blur-md flex items-center gap-1.5 font-black text-xs transition-all pointer-events-auto active:translate-x-0.5 active:translate-y-0.5 flex-shrink-0 cursor-pointer ${
+              theme === 'dark'
+                ? 'bg-[#151F30]/95 hover:bg-[#101827] border-[#25324A] hover:border-[#FF9418] text-[#FF9418]'
+                : 'bg-[#FAF6ED]/95 hover:bg-white border-[#25324A] hover:border-[#FF9418] text-[#101827]'
+            }`}
+          >
+            <Compass className="w-4 h-4 text-[#FF9418] flex-shrink-0" />
+            <span className="hidden sm:inline">Recenter State</span>
+            <span className="sm:hidden text-[11px]">Recenter</span>
+          </button>
         </div>
 
         {/* Locality Search Dropdown Suggestions (e.g. Shela, Bopal, Adajan, Vesu) */}
@@ -1554,10 +1587,20 @@ export const AtlasMap: React.FC = () => {
               </div>
             )}
 
-            {/* Overview / Narrative Summary */}
-            <p className="text-xs text-[#8F9CAE] leading-relaxed my-1.5 line-clamp-3">
+            {/* Overview / Narrative Summary - Fully readable across mobile & desktop */}
+            <p className="text-xs text-[#8F9CAE] leading-relaxed my-2">
               {selectedAsset.summary}
             </p>
+
+            {/* Cultural Identity & Verified Coordinates Badge */}
+            <div className="flex items-center justify-between gap-1.5 my-2 text-[10px] font-mono flex-wrap">
+              <span className="px-2 py-0.5 rounded bg-black/25 border border-[#25324A] text-[#FF9418] font-bold">
+                {selectedAsset.culture?.culturalTag || '🏺 Heritage Archive'}
+              </span>
+              <span className="px-2 py-0.5 rounded bg-black/25 border border-[#25324A] text-[#8F9CAE]">
+                📍 {selectedAsset.coordinates[0].toFixed(3)}°N, {selectedAsset.coordinates[1].toFixed(3)}°E
+              </span>
+            </div>
 
             {/* Destination Logistics Facts */}
             {selectedAsset.type === 'destination' && (
@@ -1588,7 +1631,7 @@ export const AtlasMap: React.FC = () => {
             )}
 
             {/* Primary Action Buttons */}
-            <div className="grid grid-cols-3 gap-1.5 mt-2.5 pt-2 border-t-2 border-[#25324A]">
+            <div className="grid grid-cols-4 gap-1 mt-2.5 pt-2 border-t-2 border-[#25324A]">
               <button
                 onClick={() => {
                   const dObj = GUJARAT_34_DISTRICTS.find(d => d.name.toLowerCase() === selectedAsset.district.toLowerCase());
@@ -1596,22 +1639,53 @@ export const AtlasMap: React.FC = () => {
                     claimDistrictStamp(dObj.id);
                   }
                 }}
-                className="py-1.5 px-2 rounded-lg bg-[#FF9418] hover:bg-[#e07f10] text-[#101827] font-black text-xs flex items-center justify-center gap-1 shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
+                className="py-1.5 px-1.5 rounded-lg bg-[#FF9418] hover:bg-[#e07f10] text-[#101827] font-black text-[11px] sm:text-xs flex items-center justify-center gap-1 shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
                 title="Stamp District into Passport"
               >
                 <Award className="w-3.5 h-3.5 flex-shrink-0" />
                 <span className="truncate">Stamp</span>
               </button>
 
+              {(() => {
+                const isSaved = (userProfile.savedLocations || []).some(l => l.name === selectedAsset.name);
+                return (
+                  <button
+                    onClick={() => {
+                      if (isSaved) {
+                        const existing = (userProfile.savedLocations || []).find(l => l.name === selectedAsset.name);
+                        if (existing) removeSavedLocation(existing.id);
+                      } else {
+                        saveLocation({
+                          name: selectedAsset.name,
+                          lat: selectedAsset.coordinates[0],
+                          lng: selectedAsset.coordinates[1],
+                          category: selectedAsset.categoryLabel,
+                          notes: selectedAsset.district
+                        });
+                      }
+                    }}
+                    className={`py-1.5 px-1.5 rounded-lg font-black text-[11px] sm:text-xs flex items-center justify-center gap-1 border-2 transition-all truncate shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 ${
+                      isSaved
+                        ? 'bg-[#FF9418] text-[#101827] border-[#101827]'
+                        : 'bg-[#101827] hover:bg-[#151F30] text-[#FF9418] border-[#25324A]'
+                    }`}
+                    title={isSaved ? "Remove from Saved" : "Save Location to Profile"}
+                  >
+                    <Bookmark className={`w-3.5 h-3.5 flex-shrink-0 ${isSaved ? 'fill-current' : ''}`} />
+                    <span className="truncate">{isSaved ? 'Saved' : 'Save'}</span>
+                  </button>
+                );
+              })()}
+
               <a
                 href={`https://www.google.com/maps/dir/?api=1&destination=${selectedAsset.coordinates[0]},${selectedAsset.coordinates[1]}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="py-1.5 px-2 rounded-lg bg-[#101827] hover:bg-[#151F30] text-[#F1E8D7] border-2 border-[#25324A] font-bold text-xs flex items-center justify-center gap-1 shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
+                className="py-1.5 px-1.5 rounded-lg bg-[#101827] hover:bg-[#151F30] text-[#F1E8D7] border-2 border-[#25324A] font-bold text-[11px] sm:text-xs flex items-center justify-center gap-1 shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
                 title="Open Directions in Google Maps"
               >
                 <Navigation className="w-3.5 h-3.5 text-[#FF9418] flex-shrink-0" />
-                <span className="truncate">Directions</span>
+                <span className="truncate">Navigate</span>
               </a>
 
               <button
@@ -1632,7 +1706,7 @@ export const AtlasMap: React.FC = () => {
                     }
                   }
                 }}
-                className="py-1.5 px-2 rounded-lg bg-[#101827] hover:bg-[#151F30] text-[#F1E8D7] border-2 border-[#25324A] font-bold text-xs flex items-center justify-center gap-1 shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
+                className="py-1.5 px-1.5 rounded-lg bg-[#101827] hover:bg-[#151F30] text-[#F1E8D7] border-2 border-[#25324A] font-bold text-[11px] sm:text-xs flex items-center justify-center gap-1 shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
                 title="View Full Dossier"
               >
                 <ExternalLink className="w-3.5 h-3.5 text-[#1C6555] flex-shrink-0" />
@@ -1645,6 +1719,26 @@ export const AtlasMap: React.FC = () => {
       )}
 
 
+
+      {/* Floating Map Re-center State Compass Button (Bottom Right above Leaflet Zoom Controls) */}
+      <div className="absolute bottom-24 lg:bottom-28 right-3 sm:right-4 z-[990] pointer-events-auto select-none">
+        <button
+          onClick={handleRecenterState}
+          title="Re-center Gujarat State (Reset Overview)"
+          aria-label="Re-center Gujarat State"
+          className={`group flex items-center gap-2 px-3 py-2 rounded-xl border-2 shadow-[4px_4px_0px_#101827] backdrop-blur-xl transition-all active:translate-x-0.5 active:translate-y-0.5 font-bold text-xs cursor-pointer ${
+            theme === 'dark' 
+              ? 'bg-[#151F30]/95 hover:bg-[#101827] border-[#FF9418] text-[#F1E8D7]' 
+              : 'bg-[#FAF6ED]/95 hover:bg-white border-[#FF9418] text-[#101827]'
+          }`}
+        >
+          <Compass className="w-4 h-4 text-[#FF9418] group-hover:rotate-45 transition-transform duration-300 flex-shrink-0" />
+          <div className="flex flex-col text-left leading-none">
+            <span className="font-editorial text-xs font-black text-[#FF9418]">Recenter State</span>
+            <span className="text-[9px] font-mono text-[#8F9CAE]">ગુજરાત દૃશ્ય</span>
+          </div>
+        </button>
+      </div>
 
       {/* The Leaflet Map Canvas Container with Dynamic 3D Pitch Transition */}
       <div 

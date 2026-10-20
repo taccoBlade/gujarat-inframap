@@ -22,9 +22,9 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
     gujarati: 'સચિત્ર ડિજિટલ ટ્વીન નકશો',
     accent: '#00F0FF',
     glowColor: 'rgba(0, 240, 255, 0.4)',
-    subtext: 'Survey of India GPS Aligned • 34 Districts • Real-Time Infrastructure Corridors',
+    subtext: 'Survey of India GPS Aligned • 34 Districts • Real-Time Corridors',
     iconSvg: (
-      <svg className="w-24 h-24 stroke-[#00F0FF] fill-none stroke-[2]" viewBox="0 0 100 100">
+      <svg className="w-10 h-10 sm:w-14 sm:h-14 stroke-[#00F0FF] fill-none stroke-[2]" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="42" strokeDasharray="4 4" className="animate-spin" style={{ animationDuration: '10s' }} />
         <circle cx="50" cy="50" r="28" strokeOpacity="0.7" />
         <circle cx="50" cy="50" r="14" strokeOpacity="0.9" fill="#00F0FF" fillOpacity="0.1" />
@@ -42,9 +42,9 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
     gujarati: '૩૭ સાંસ્કૃતિક પ્રવાસ સ્થળો',
     accent: '#FF9418',
     glowColor: 'rgba(255, 148, 24, 0.4)',
-    subtext: 'Solanki Stepwells • Harappan Metropolis • Coastal Mokshapuris • Asiatic Reserves',
+    subtext: 'Solanki Stepwells • Harappan Metropolis • Coastal Mokshapuris',
     iconSvg: (
-      <svg className="w-24 h-24 stroke-[#FF9418] fill-none stroke-[2]" viewBox="0 0 100 100">
+      <svg className="w-10 h-10 sm:w-14 sm:h-14 stroke-[#FF9418] fill-none stroke-[2]" viewBox="0 0 100 100">
         <path d="M 12 86 L 88 86" strokeOpacity="0.4" />
         <path d="M 22 86 L 22 66 L 78 66 L 78 86" />
         <path d="M 32 66 L 32 48 L 68 48 L 68 66" />
@@ -64,9 +64,9 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
     gujarati: 'રાજવી સોલંકી ડિજિટલ પાસપોર્ટ',
     accent: '#F59E0B',
     glowColor: 'rgba(245, 158, 11, 0.4)',
-    subtext: 'Verified Territorial Stamps • Architectural Lineage • State Rank Milestones',
+    subtext: 'Verified Territorial Stamps • Architectural Lineage • State Rank',
     iconSvg: (
-      <svg className="w-24 h-24 stroke-[#F59E0B] fill-none stroke-[2]" viewBox="0 0 100 100">
+      <svg className="w-10 h-10 sm:w-14 sm:h-14 stroke-[#F59E0B] fill-none stroke-[2]" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="44" strokeDasharray="3 3" strokeOpacity="0.6" />
         <rect x="22" y="22" width="56" height="56" rx="6" stroke="#1C6555" strokeWidth="2" />
         <rect x="22" y="22" width="56" height="56" rx="6" stroke="#F59E0B" strokeWidth="2" transform="rotate(45 50 50)" />
@@ -84,7 +84,7 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
     glowColor: 'rgba(239, 68, 68, 0.4)',
     subtext: 'Ground Reality • Oral Folklore • Geological Anomalies • Uncensored Truth',
     iconSvg: (
-      <svg className="w-24 h-24 stroke-[#EF4444] fill-none stroke-[2]" viewBox="0 0 100 100">
+      <svg className="w-10 h-10 sm:w-14 sm:h-14 stroke-[#EF4444] fill-none stroke-[2]" viewBox="0 0 100 100">
         <path d="M 16 26 L 44 26 L 52 34 L 84 34 L 84 82 L 16 82 Z" strokeWidth="2" />
         <path d="M 16 38 L 84 38" strokeOpacity="0.5" />
         <ellipse cx="50" cy="58" rx="20" ry="12" stroke="#FF9418" />
@@ -101,9 +101,9 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
     gujarati: 'ઇન્ફ્રાસ્ટ્રક્ચર અને ઔદ્યોગિક કોરિડોર',
     accent: '#10B981',
     glowColor: 'rgba(16, 185, 129, 0.4)',
-    subtext: '350 km/h Bullet Train • Dholera SIR • 30 GW Khavda Hybrid Renewable Grid',
+    subtext: '350 km/h Bullet Train • Dholera SIR • 30 GW Khavda Hybrid Grid',
     iconSvg: (
-      <svg className="w-24 h-24 stroke-[#10B981] fill-none stroke-[2]" viewBox="0 0 100 100">
+      <svg className="w-10 h-10 sm:w-14 sm:h-14 stroke-[#10B981] fill-none stroke-[2]" viewBox="0 0 100 100">
         <path d="M 34 86 L 34 30 L 45 15 L 56 30 L 56 86" strokeWidth="2" />
         <line x1="34" y1="42" x2="56" y2="42" strokeOpacity="0.6" />
         <line x1="34" y1="58" x2="56" y2="58" strokeOpacity="0.6" />
@@ -124,12 +124,15 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
     glowColor: 'rgba(16, 185, 129, 0.4)',
     subtext: 'Blackout-Proof DG Generators • Remote Saurashtra & Kutch Dead Zone Warnings',
     iconSvg: (
-      <svg className="w-24 h-24 stroke-[#10B981] fill-none stroke-[2]" viewBox="0 0 100 100">
+      <svg className="w-10 h-10 sm:w-14 sm:h-14 stroke-[#10B981] fill-none stroke-[2]" viewBox="0 0 100 100">
         <path d="M 52 14 L 32 52 L 48 52 L 44 86 L 68 45 L 52 45 Z" fill="#10B981" fillOpacity="0.2" strokeWidth="2.5" />
       </svg>
     )
   }
 };
+
+// Fast, snappy, mobile-optimized duration (520ms)
+const TRANSITION_DURATION_MS = 540;
 
 export const CinematicTransitionOverlay: React.FC = () => {
   const { currentMode } = useAtlasStore();
@@ -143,10 +146,9 @@ export const CinematicTransitionOverlay: React.FC = () => {
       setPreset(PRESETS[currentMode] || PRESETS.explore);
       setIsTransitioning(true);
 
-      // AAA 820ms duration: 0.18s slam in, 0.42s hold & charge, 0.22s hydraulic part
       const timer = setTimeout(() => {
         setIsTransitioning(false);
-      }, 820);
+      }, TRANSITION_DURATION_MS);
 
       return () => clearTimeout(timer);
     }
@@ -155,114 +157,89 @@ export const CinematicTransitionOverlay: React.FC = () => {
   return (
     <AnimatePresence>
       {isTransitioning && (
-        <div className="fixed inset-0 z-[3000] pointer-events-none overflow-hidden select-none flex items-center justify-center">
-          {/* Top Heavy Obsidian Gate */}
-          <motion.div
-            initial={{ y: '-100%' }}
-            animate={{ y: '0%' }}
-            exit={{ y: '-100%' }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute top-0 inset-x-0 h-1/2 bg-[#060A14] border-b-2 border-[#FF9418]/60 shadow-[0_15px_30px_rgba(0,0,0,0.9)] overflow-hidden"
-          >
-            {/* Ancient Cartographic Grid Watermark */}
-            <div className="absolute inset-0 bg-[radial-gradient(#FF9418_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
-            <div className="absolute bottom-2 inset-x-0 flex justify-between px-6 text-[9px] font-mono text-[#FF9418]/60 uppercase tracking-widest">
-              <span>GUJARAT PRAVAS ATLAS</span>
-              <span>GEO-REF: 22.40N 71.80E</span>
-            </div>
-          </motion.div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+          className="fixed inset-0 z-[3000] pointer-events-none select-none flex items-center justify-center p-4 overflow-hidden"
+        >
+          {/* 1. Backdrop Glass Veil with Soft Radial Darkness */}
+          <div className="absolute inset-0 bg-[#060913]/90 backdrop-blur-xl" />
 
-          {/* Bottom Heavy Obsidian Gate */}
-          <motion.div
-            initial={{ y: '100%' }}
-            animate={{ y: '0%' }}
-            exit={{ y: '100%' }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute bottom-0 inset-x-0 h-1/2 bg-[#060A14] border-t-2 border-[#FF9418]/60 shadow-[0_-15px_30px_rgba(0,0,0,0.9)] overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-[radial-gradient(#FF9418_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
-            <div className="absolute top-2 inset-x-0 flex justify-between px-6 text-[9px] font-mono text-[#FF9418]/60 uppercase tracking-widest">
-              <span>AUTHENTIC CULTURAL SPATIAL ENGINE</span>
-              <span>SURVEY OF INDIA ALIGNED</span>
-            </div>
-          </motion.div>
-
-          {/* High-Velocity Horizontal Laser Conduit Seam */}
+          {/* 2. Top Precision Scan Conduit (Never cuts through text) */}
           <motion.div
             initial={{ scaleX: 0, opacity: 0 }}
-            animate={{ scaleX: 1, opacity: 1 }}
-            exit={{ scaleX: 1.5, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            style={{ backgroundColor: preset.accent, boxShadow: `0 0 35px ${preset.accent}` }}
-            className="absolute inset-x-0 h-[3px] z-30"
+            animate={{ scaleX: [0, 1, 1], opacity: [0, 1, 0.8] }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            style={{ 
+              backgroundColor: preset.accent, 
+              boxShadow: `0 0 20px ${preset.accent}, 0 0 40px ${preset.accent}` 
+            }}
+            className="absolute top-0 inset-x-0 h-[3px] origin-left z-20"
           />
 
-          {/* Center Royal Seal Shockwave Flare */}
-          <motion.div
-            initial={{ scale: 0.2, opacity: 0, rotate: -35 }}
-            animate={{ scale: 1, opacity: 1, rotate: 0 }}
-            exit={{ scale: 1.25, opacity: 0 }}
-            transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-40 flex flex-col items-center justify-center text-center p-6 sm:p-8"
-          >
-            {/* Glowing Radiant Aura Ring */}
-            <motion.div
-              initial={{ scale: 0.6, opacity: 1 }}
-              animate={{ scale: 1.5, opacity: 0 }}
-              transition={{ duration: 0.6, repeat: Infinity, ease: 'easeOut' }}
-              style={{ borderColor: preset.accent }}
-              className="absolute w-44 h-44 rounded-full border-2 pointer-events-none"
-            />
+          {/* 3. Subtle Cartographic Watermark Pattern */}
+          <div className="absolute inset-0 bg-[radial-gradient(#FF9418_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
 
-            {/* Central Icon Pod */}
-            <div 
-              style={{ 
-                borderColor: preset.accent, 
-                boxShadow: `0 0 60px ${preset.glowColor}, inset 0 0 25px ${preset.glowColor}` 
-              }}
-              className="p-5 sm:p-6 rounded-3xl border-2 backdrop-blur-2xl bg-black/80 mb-4"
-            >
-              {preset.iconSvg}
+          {/* 4. Cohesive Central Holographic Card - Strict Non-Overlapping Layout */}
+          <motion.div
+            initial={{ scale: 0.92, opacity: 0, y: 10 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 1.04, opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-30 flex flex-col items-center justify-center text-center max-w-sm sm:max-w-md w-full px-5 py-6 sm:py-8 rounded-3xl border-2 border-white/10 bg-[#0A0F1D]/85 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85)]"
+          >
+            {/* Holographic Glowing Icon Pod */}
+            <div className="relative mb-3 sm:mb-4">
+              <div 
+                style={{ borderColor: preset.accent, animationDuration: '8s' }}
+                className="absolute -inset-2 rounded-2xl border border-dashed animate-spin opacity-30 pointer-events-none"
+              />
+              <div 
+                style={{ 
+                  borderColor: preset.accent, 
+                  boxShadow: `0 0 35px ${preset.glowColor}, inset 0 0 15px ${preset.glowColor}` 
+                }}
+                className="p-3.5 sm:p-4 rounded-2xl border-2 bg-black/70 flex items-center justify-center"
+              >
+                {preset.iconSvg}
+              </div>
             </div>
 
-            {/* Code Badge */}
-            <motion.div 
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.1, duration: 0.25 }}
-              style={{ color: preset.accent, borderColor: `${preset.accent}60`, backgroundColor: `${preset.accent}15` }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] sm:text-xs font-mono font-black uppercase tracking-widest border mb-2 shadow-lg"
+            {/* Territorial Technical Code Pill */}
+            <div
+              style={{ 
+                color: preset.accent, 
+                borderColor: `${preset.accent}50`, 
+                backgroundColor: `${preset.accent}15` 
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-mono font-black uppercase tracking-wider border mb-2 shadow-sm"
             >
-              <span className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: preset.accent }} />
+              <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: preset.accent }} />
               <span>{preset.code}</span>
-            </motion.div>
+            </div>
 
-            {/* Main Typographic Blast */}
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.15, duration: 0.3 }}
-              className="space-y-1"
-            >
-              <span className="text-sm sm:text-base font-['Noto_Sans_Gujarati'] font-black text-[#FF9418] drop-shadow-[0_2px_12px_rgba(255,148,24,0.6)] block">
+            {/* Gujarati Script - Clear spacing, no collisions */}
+            <div className="mb-1">
+              <span className="text-xs sm:text-sm font-['Noto_Sans_Gujarati'] font-black text-[#FF9418] drop-shadow-[0_1px_8px_rgba(255,148,24,0.6)] tracking-wide block">
                 {preset.gujarati}
               </span>
-              <h1 className="text-3xl sm:text-4xl font-black text-white font-editorial tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
-                {preset.title}
-              </h1>
-            </motion.div>
+            </div>
 
-            {/* Subtitle */}
-            <motion.p
-              initial={{ y: 8, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.25 }}
-              className="text-xs sm:text-sm text-slate-300 font-mono max-w-md mx-auto mt-2 leading-relaxed"
-            >
+            {/* English Hero Title */}
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white font-editorial tracking-tight drop-shadow-md leading-tight mb-2">
+              {preset.title}
+            </h2>
+
+            {/* Editorial Subtext */}
+            <p className="text-[11px] sm:text-xs text-slate-300 font-mono max-w-xs sm:max-w-sm mx-auto leading-relaxed opacity-90">
               {preset.subtext}
-            </motion.p>
+            </p>
           </motion.div>
-        </div>
+
+        </motion.div>
       )}
     </AnimatePresence>
   );

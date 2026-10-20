@@ -31,7 +31,7 @@ interface StoryItem {
 }
 
 export const UnfilteredStoriesView: React.FC = () => {
-  const { userProfile, toggleBookmark, theme } = useAtlasStore();
+  const { userProfile, toggleBookmark, theme, setActiveDossierAsset } = useAtlasStore();
   const [activeTabMap, setActiveTabMap] = useState<Record<string, 'folklore' | 'reality'>>({});
   const [filterQuery, setFilterQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -273,13 +273,13 @@ export const UnfilteredStoriesView: React.FC = () => {
                     </button>
                   </div>
 
-                  {/* Dynamic Tab Body with persistent stable layout */}
-                  <div className={`text-xs p-3.5 rounded-xl border-2 min-h-[100px] flex items-center ${
+                  {/* Dynamic Tab Body with persistent stable layout - Fully readable */}
+                  <div className={`text-xs p-3.5 rounded-xl border-2 min-h-[110px] flex items-start ${
                     theme === 'dark' 
                       ? 'bg-[#101827] text-[#F1E8D7] border-[#25324A]' 
                       : 'bg-white text-[#101827] border-[#25324A]'
                   }`}>
-                    <p className="line-clamp-4 leading-relaxed font-sans">
+                    <p className="leading-relaxed font-sans max-h-36 overflow-y-auto pr-1">
                       {activeTab === 'folklore' ? story.theFolklore : story.theGroundReality}
                     </p>
                   </div>
@@ -297,9 +297,12 @@ export const UnfilteredStoriesView: React.FC = () => {
                       : (story.legalAccess?.accessType || 'PUBLIC ACCESS')}
                   </span>
 
-                  <span className="text-[#FF9418] font-bold hover:underline cursor-pointer">
-                    Source Verified ↗
-                  </span>
+                  <button
+                    onClick={() => setActiveDossierAsset({ ...story, type: 'story' })}
+                    className="text-[#FF9418] font-bold hover:underline cursor-pointer flex items-center gap-1 text-xs"
+                  >
+                    <span>Full Dossier ↗</span>
+                  </button>
                 </div>
 
               </motion.article>

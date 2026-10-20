@@ -317,7 +317,7 @@ export const PlacesDestinationView: React.FC = () => {
                       </span>
                     </div>
 
-                    <p className={`text-xs line-clamp-2 mt-2 leading-relaxed ${
+                    <p className={`text-xs mt-2 leading-relaxed line-clamp-3 sm:line-clamp-none ${
                       theme === 'dark' ? 'text-[#8F9CAE]' : 'text-[#606F7B]'
                     }`}>
                       {place.summary}
