@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { useAtlasStore } from './stores/useAtlasStore';
 import { Header } from './components/navigation/Header';
 import { GujaratPassport } from './components/passport/GujaratPassport';
@@ -85,6 +86,9 @@ export const App: React.FC = () => {
       <AuthModal />
       <OnboardingModal />
       <ShareableStoryCardModal />
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 };
