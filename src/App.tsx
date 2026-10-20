@@ -15,6 +15,7 @@ import { OnboardingModal } from './components/auth/OnboardingModal';
 import { AssetDossierModal } from './components/common/AssetDossierModal';
 import { CinematicTransitionOverlay } from './components/navigation/CinematicTransitionOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Analytics } from '@vercel/analytics/react';
 
 const fluidPageVariants = {
   initial: { opacity: 0, y: 16, scale: 0.99 },
@@ -85,6 +86,9 @@ export const App: React.FC = () => {
       <AuthModal />
       <OnboardingModal />
       <ShareableStoryCardModal />
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
     </div>
   );
 };
