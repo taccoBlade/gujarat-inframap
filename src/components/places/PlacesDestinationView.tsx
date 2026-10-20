@@ -16,7 +16,8 @@ import {
   Compass,
   ArrowRight,
   RotateCcw,
-  ExternalLink
+  ExternalLink,
+  Bookmark
 } from 'lucide-react';
 
 export const PlacesDestinationView: React.FC = () => {
@@ -26,7 +27,9 @@ export const PlacesDestinationView: React.FC = () => {
     setMode, 
     setSelectedDistrict,
     theme,
-    setActiveDossierAsset
+    setActiveDossierAsset,
+    saveLocation,
+    removeSavedLocation
   } = useAtlasStore();
 
   const [search, setSearch] = useState('');
@@ -243,20 +246,29 @@ export const PlacesDestinationView: React.FC = () => {
 
                 {/* 1. Image Area with stable 16:10 aspect ratio and reliable fallback */}
                 <div>
-                  <div className="relative aspect-[16/10] overflow-hidden bg-[#101827] border-b-2 border-[#25324A]">
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#0A0F1D] border-b-2 border-[#25324A] flex items-center justify-center">
+                    {/* Ambient Blurred Backdrop - preserves background color harmony without clipping */}
+                    <img
+                      src={place.image || '/images/destinations/statue-of-unity.jpg'}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute inset-0 w-full h-full object-cover filter blur-md opacity-35 scale-110 pointer-events-none"
+                    />
+
+                    {/* Uncropped Landmark Image - 100% complete view from head to base */}
                     <img
                       src={place.image || '/images/destinations/statue-of-unity.jpg'}
                       alt={place.name}
                       loading="lazy"
                       referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-300"
+                      className="relative z-10 w-full h-full object-contain filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/images/destinations/statue-of-unity.jpg';
                       }}
                     />
 
-                    {/* Gradient Overlay (Lightened for crisp image clarity) */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none z-10" />
 
                     {/* 2. District & Category Badges */}
                     <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
@@ -359,17 +371,37 @@ export const PlacesDestinationView: React.FC = () => {
                       <MapPin className="w-3.5 h-3.5 text-[#FF9418]" />
                       <span>Map</span>
                     </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveDossierAsset({ ...place, type: 'destination' });
-                      }}
-                      className="px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border-2 border-[#25324A] hover:border-[#1C6555] bg-transparent text-[#1C6555] dark:text-[#10B981]"
-                      title="Open Full Landmark Photo & Heritage Dossier"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      <span>Dossier</span>
-                    </button>
+                    {(() => {
+                      const isSaved = (userProfile.savedLocations || []).some(l => l.name === place.name);
+                      return (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (isSaved) {
+                              const existing = (userProfile.savedLocations || []).find(l => l.name === place.name);
+                              if (existing) removeSavedLocation(existing.id);
+                            } else {
+                              saveLocation({
+                                name: place.name,
+                                lat: place.coordinates[0],
+                                lng: place.coordinates[1],
+                                category: place.categoryLabel,
+                                notes: place.district
+                              });
+                            }
+                          }}
+                          className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border-2 ${
+                            isSaved
+                              ? 'bg-[#FF9418] text-[#101827] border-[#101827] shadow-[1px_1px_0px_#101827]'
+                              : 'border-[#25324A] hover:border-[#FF9418] bg-transparent text-[#FF9418]'
+                          }`}
+                          title={isSaved ? "Remove from Saved Places" : "Save Location to My Profile"}
+                        >
+                          <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-current' : ''}`} />
+                          <span>{isSaved ? 'Saved' : 'Save'}</span>
+                        </button>
+                      );
+                    })()}
                   </div>
 
                   {districtObj && (

@@ -2,123 +2,130 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { AtlasMode } from '../../types/atlas';
-import { ToranOrnamentalBorder } from '../cultural/GujaratiPatterns';
 
-interface TransitionMeta {
+interface TransitionPreset {
   code: string;
+  badge: string;
   title: string;
   gujarati: string;
-  subtitle: string;
   accent: string;
-  bgGradient: string;
+  glowColor: string;
+  subtext: string;
   iconSvg: React.ReactNode;
 }
 
-const TRANSITION_PRESETS: Record<AtlasMode, TransitionMeta> = {
+const PRESETS: Record<AtlasMode, TransitionPreset> = {
   explore: {
-    code: 'GEO-01 // SPATIAL RADAR & DIGITAL TWIN',
-    title: 'Living Digital Twin Atlas',
-    gujarati: 'ગુજરાત ડિજિટલ ટ્વીન નકશો',
-    subtitle: 'Survey of India Aligned GIS Coordinates • 34 Districts • Infrastructure Corridors',
+    code: 'GEO-01 // SPATIAL RADAR',
+    badge: 'LIVING DIGITAL TWIN',
+    title: 'Surveillance Digital Twin Atlas',
+    gujarati: 'સચિત્ર ડિજિટલ ટ્વીન નકશો',
     accent: '#00F0FF',
-    bgGradient: 'from-[#060B14] via-[#0A1222] to-[#040810]',
+    glowColor: 'rgba(0, 240, 255, 0.4)',
+    subtext: 'Survey of India GPS Aligned • 34 Districts • Real-Time Infrastructure Corridors',
     iconSvg: (
-      <svg className="w-24 h-24 sm:w-28 sm:h-28 stroke-[#00F0FF] fill-none stroke-[1.5]" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" strokeOpacity="0.3" strokeDasharray="4 4" />
-        <circle cx="50" cy="50" r="30" strokeOpacity="0.5" />
-        <circle cx="50" cy="50" r="15" strokeOpacity="0.8" />
-        <line x1="5" y1="50" x2="95" y2="50" strokeOpacity="0.6" />
-        <line x1="50" y1="5" x2="50" y2="95" strokeOpacity="0.6" />
-        <circle cx="65" cy="35" r="3" fill="#00F0FF" />
-        <circle cx="40" cy="68" r="2.5" fill="#FF9418" />
-        <circle cx="70" cy="62" r="2.5" fill="#00F0FF" />
+      <svg className="w-24 h-24 stroke-[#00F0FF] fill-none stroke-[2]" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="42" strokeDasharray="4 4" className="animate-spin" style={{ animationDuration: '10s' }} />
+        <circle cx="50" cy="50" r="28" strokeOpacity="0.7" />
+        <circle cx="50" cy="50" r="14" strokeOpacity="0.9" fill="#00F0FF" fillOpacity="0.1" />
+        <line x1="8" y1="50" x2="92" y2="50" strokeOpacity="0.6" />
+        <line x1="50" y1="8" x2="50" y2="92" strokeOpacity="0.6" />
+        <circle cx="68" cy="32" r="3.5" fill="#00F0FF" />
+        <circle cx="36" cy="66" r="3" fill="#FF9418" />
       </svg>
     )
   },
   places: {
-    code: 'ARCH-02 // HERITAGE REPOSITORIES',
-    title: '37 Verified Heritage Destinations',
+    code: 'ARCH-02 // HERITAGE CITADELS',
+    badge: '37 VERIFIED REPOSITORIES',
+    title: 'Ancient Cultural Repositories',
     gujarati: '૩૭ સાંસ્કૃતિક પ્રવાસ સ્થળો',
-    subtitle: 'Solanki Stepwells • Harappan Citadels • Jyotirlinga Shrines • Lion Reserves',
     accent: '#FF9418',
-    bgGradient: 'from-[#1A0E05] via-[#241408] to-[#120903]',
+    glowColor: 'rgba(255, 148, 24, 0.4)',
+    subtext: 'Solanki Stepwells • Harappan Metropolis • Coastal Mokshapuris • Asiatic Reserves',
     iconSvg: (
-      <svg className="w-24 h-24 sm:w-28 sm:h-28 stroke-[#FF9418] fill-none stroke-[1.5]" viewBox="0 0 100 100">
-        <path d="M 10 85 L 90 85" strokeOpacity="0.4" />
-        <path d="M 20 85 L 20 65 L 80 65 L 80 85" />
-        <path d="M 30 65 L 30 48 L 70 48 L 70 65" />
-        <path d="M 40 48 L 40 32 L 60 32 L 60 48" />
-        <circle cx="50" cy="18" r="8" stroke="#FF9418" />
-        <path d="M 50 6 L 50 10 M 50 26 L 50 30 M 38 18 L 42 18 M 58 18 L 62 18" stroke="#FF9418" />
+      <svg className="w-24 h-24 stroke-[#FF9418] fill-none stroke-[2]" viewBox="0 0 100 100">
+        <path d="M 12 86 L 88 86" strokeOpacity="0.4" />
+        <path d="M 22 86 L 22 66 L 78 66 L 78 86" />
+        <path d="M 32 66 L 32 48 L 68 48 L 68 66" />
+        <path d="M 42 48 L 42 32 L 58 32 L 58 48" />
+        <circle cx="50" cy="18" r="9" stroke="#FF9418" fill="#FF9418" fillOpacity="0.2" />
+        <line x1="50" y1="5" x2="50" y2="10" stroke="#FF9418" strokeWidth="2.5" />
+        <line x1="50" y1="26" x2="50" y2="31" stroke="#FF9418" strokeWidth="2.5" />
+        <line x1="37" y1="18" x2="42" y2="18" stroke="#FF9418" strokeWidth="2.5" />
+        <line x1="58" y1="18" x2="63" y2="18" stroke="#FF9418" strokeWidth="2.5" />
       </svg>
     )
   },
   passport: {
     code: 'SEAL-03 // SOLANKI IMPERIAL LEDGER',
-    title: '34 Districts Explorer Challenge',
+    badge: '34 DISTRICTS CHALLENGE',
+    title: 'Royal Solanki Digital Passport',
     gujarati: 'રાજવી સોલંકી ડિજિટલ પાસપોર્ટ',
-    subtitle: 'Official Cultural Pilgrimage • Verified Geographic Stamps • Rank Milestones',
     accent: '#F59E0B',
-    bgGradient: 'from-[#061510] via-[#0B231B] to-[#040D0A]',
+    glowColor: 'rgba(245, 158, 11, 0.4)',
+    subtext: 'Verified Territorial Stamps • Architectural Lineage • State Rank Milestones',
     iconSvg: (
-      <svg className="w-24 h-24 sm:w-28 sm:h-28 stroke-[#F59E0B] fill-none stroke-[1.5]" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="42" strokeOpacity="0.4" strokeDasharray="3 3" />
-        <rect x="22" y="22" width="56" height="56" rx="6" stroke="#1C6555" strokeWidth="1.5" />
-        <rect x="22" y="22" width="56" height="56" rx="6" stroke="#F59E0B" strokeWidth="1.5" transform="rotate(45 50 50)" />
-        <circle cx="50" cy="50" r="16" fill="#F59E0B" fillOpacity="0.15" stroke="#F59E0B" />
+      <svg className="w-24 h-24 stroke-[#F59E0B] fill-none stroke-[2]" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="44" strokeDasharray="3 3" strokeOpacity="0.6" />
+        <rect x="22" y="22" width="56" height="56" rx="6" stroke="#1C6555" strokeWidth="2" />
+        <rect x="22" y="22" width="56" height="56" rx="6" stroke="#F59E0B" strokeWidth="2" transform="rotate(45 50 50)" />
+        <circle cx="50" cy="50" r="16" fill="#F59E0B" fillOpacity="0.2" stroke="#F59E0B" />
         <path d="M 46 44 Q 50 38 54 44 Q 56 52 50 56 Q 44 52 46 44 Z" fill="#F59E0B" />
       </svg>
     )
   },
   unfiltered: {
-    code: 'ARCHIVE-04 // CLASSIFIED FIELD DOSSIERS',
+    code: 'ARCHIVE-04 // FORENSIC DOSSIERS',
+    badge: '45 CLASSIFIED FIELD DISPATCHES',
     title: 'Gujarat Unfiltered Archive',
     gujarati: '૪૫ અજાણી વાતો અને લોકવાયકા',
-    subtitle: 'Forensic Ground Reality • Centuried Oral Folklore • Geological Anomalies',
-    accent: '#9D233B',
-    bgGradient: 'from-[#140609] via-[#1E090F] to-[#0A0305]',
+    accent: '#EF4444',
+    glowColor: 'rgba(239, 68, 68, 0.4)',
+    subtext: 'Ground Reality • Oral Folklore • Geological Anomalies • Uncensored Truth',
     iconSvg: (
-      <svg className="w-24 h-24 sm:w-28 sm:h-28 stroke-[#9D233B] fill-none stroke-[1.5]" viewBox="0 0 100 100">
-        <path d="M 15 25 L 42 25 L 50 33 L 85 33 L 85 82 L 15 82 Z" strokeWidth="1.5" />
-        <path d="M 15 37 L 85 37" strokeOpacity="0.5" />
+      <svg className="w-24 h-24 stroke-[#EF4444] fill-none stroke-[2]" viewBox="0 0 100 100">
+        <path d="M 16 26 L 44 26 L 52 34 L 84 34 L 84 82 L 16 82 Z" strokeWidth="2" />
+        <path d="M 16 38 L 84 38" strokeOpacity="0.5" />
         <ellipse cx="50" cy="58" rx="20" ry="12" stroke="#FF9418" />
-        <circle cx="50" cy="58" r="5" fill="#9D233B" stroke="#FF9418" />
+        <circle cx="50" cy="58" r="5" fill="#EF4444" stroke="#FF9418" />
         <line x1="22" y1="58" x2="28" y2="58" />
         <line x1="72" y1="58" x2="78" y2="58" />
       </svg>
     )
   },
   infrastructure: {
-    code: 'ENG-05 // CYBER-CORRIDOR & GIFT CITY',
-    title: 'Infrastructure & Megaprojects',
+    code: 'ENG-05 // CYBER-CORRIDOR & MEGAPROJECTS',
+    badge: 'INDUSTRIAL ENGINE OF INDIA',
+    title: 'GIFT City & High-Speed Viaducts',
     gujarati: 'ઇન્ફ્રાસ્ટ્રક્ચર અને ઔદ્યોગિક કોરિડોર',
-    subtitle: 'GIFT City • High-Speed Rail • Khavda Renewable Park • Dholera SIR',
-    accent: '#00F0FF',
-    bgGradient: 'from-[#050D17] via-[#091728] to-[#03080F]',
+    accent: '#10B981',
+    glowColor: 'rgba(16, 185, 129, 0.4)',
+    subtext: '350 km/h Bullet Train • Dholera SIR • 30 GW Khavda Hybrid Renewable Grid',
     iconSvg: (
-      <svg className="w-24 h-24 sm:w-28 sm:h-28 stroke-[#00F0FF] fill-none stroke-[1.5]" viewBox="0 0 100 100">
-        <path d="M 35 85 L 35 30 L 45 15 L 55 30 L 55 85" strokeWidth="1.8" />
-        <line x1="35" y1="42" x2="55" y2="42" strokeOpacity="0.5" />
-        <line x1="35" y1="56" x2="55" y2="56" strokeOpacity="0.5" />
-        <line x1="35" y1="70" x2="55" y2="70" strokeOpacity="0.5" />
-        <path d="M 60 85 L 60 40 L 72 40 L 72 85" strokeOpacity="0.7" />
-        <path d="M 10 75 Q 50 68 90 75" stroke="#10B981" strokeWidth="2" />
-        <line x1="25" y1="74" x2="25" y2="85" stroke="#10B981" />
-        <line x1="50" y1="71" x2="50" y2="85" stroke="#10B981" />
-        <line x1="75" y1="74" x2="75" y2="85" stroke="#10B981" />
+      <svg className="w-24 h-24 stroke-[#10B981] fill-none stroke-[2]" viewBox="0 0 100 100">
+        <path d="M 34 86 L 34 30 L 45 15 L 56 30 L 56 86" strokeWidth="2" />
+        <line x1="34" y1="42" x2="56" y2="42" strokeOpacity="0.6" />
+        <line x1="34" y1="58" x2="56" y2="58" strokeOpacity="0.6" />
+        <path d="M 62 86 L 62 42 L 74 42 L 74 86" strokeOpacity="0.8" />
+        <path d="M 10 74 Q 50 66 90 74" stroke="#00F0FF" strokeWidth="2.5" />
+        <line x1="25" y1="73" x2="25" y2="86" stroke="#00F0FF" />
+        <line x1="50" y1="70" x2="50" y2="86" stroke="#00F0FF" />
+        <line x1="75" y1="73" x2="75" y2="86" stroke="#00F0FF" />
       </svg>
     )
   },
   ev: {
     code: 'EV-06 // HIGHWAY POWER GRID',
-    title: 'EV Highway Radar',
+    badge: '180KW ULTRA-FAST RADAR',
+    title: 'EV Highway Supercharger Radar',
     gujarati: 'ઇવી હાઇવે રડાર',
-    subtitle: '180kW Fast Highway Chargers • Rural Dead Zone Alerts',
     accent: '#10B981',
-    bgGradient: 'from-[#051510] via-[#0A241B] to-[#040E0A]',
+    glowColor: 'rgba(16, 185, 129, 0.4)',
+    subtext: 'Blackout-Proof DG Generators • Remote Saurashtra & Kutch Dead Zone Warnings',
     iconSvg: (
-      <svg className="w-24 h-24 sm:w-28 sm:h-28 stroke-[#10B981] fill-none stroke-[1.5]" viewBox="0 0 100 100">
-        <path d="M 52 15 L 32 52 L 48 52 L 44 85 L 68 45 L 52 45 Z" fill="#10B981" fillOpacity="0.2" strokeWidth="2" />
+      <svg className="w-24 h-24 stroke-[#10B981] fill-none stroke-[2]" viewBox="0 0 100 100">
+        <path d="M 52 14 L 32 52 L 48 52 L 44 86 L 68 45 L 52 45 Z" fill="#10B981" fillOpacity="0.2" strokeWidth="2.5" />
       </svg>
     )
   }
@@ -127,21 +134,19 @@ const TRANSITION_PRESETS: Record<AtlasMode, TransitionMeta> = {
 export const CinematicTransitionOverlay: React.FC = () => {
   const { currentMode } = useAtlasStore();
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [activePreset, setActivePreset] = useState<TransitionMeta>(TRANSITION_PRESETS.explore);
+  const [preset, setPreset] = useState<TransitionPreset>(PRESETS.explore);
   const prevModeRef = useRef<AtlasMode>(currentMode);
 
   useEffect(() => {
-    // Only trigger when mode actually changes
     if (prevModeRef.current !== currentMode) {
       prevModeRef.current = currentMode;
-      const preset = TRANSITION_PRESETS[currentMode] || TRANSITION_PRESETS.explore;
-      setActivePreset(preset);
+      setPreset(PRESETS[currentMode] || PRESETS.explore);
       setIsTransitioning(true);
 
-      // Relaxed cinematic sweep (850ms) to allow visual appreciation
+      // AAA 820ms duration: 0.18s slam in, 0.42s hold & charge, 0.22s hydraulic part
       const timer = setTimeout(() => {
         setIsTransitioning(false);
-      }, 850);
+      }, 820);
 
       return () => clearTimeout(timer);
     }
@@ -150,97 +155,114 @@ export const CinematicTransitionOverlay: React.FC = () => {
   return (
     <AnimatePresence>
       {isTransitioning && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.28, ease: 'easeInOut' }}
-          className={`fixed inset-0 z-[1500] pointer-events-none flex flex-col items-center justify-center p-6 bg-gradient-to-b ${activePreset.bgGradient} backdrop-blur-2xl select-none`}
-        >
-          {/* Ornate Gujarati Toran Borders along top and bottom */}
-          <div className="absolute top-0 inset-x-0 h-3 opacity-70">
-            <ToranOrnamentalBorder className="w-full h-3" />
-          </div>
-          <div className="absolute bottom-0 inset-x-0 h-3 opacity-70 rotate-180">
-            <ToranOrnamentalBorder className="w-full h-3" />
-          </div>
+        <div className="fixed inset-0 z-[3000] pointer-events-none overflow-hidden select-none flex items-center justify-center">
+          {/* Top Heavy Obsidian Gate */}
+          <motion.div
+            initial={{ y: '-100%' }}
+            animate={{ y: '0%' }}
+            exit={{ y: '-100%' }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-0 inset-x-0 h-1/2 bg-[#060A14] border-b-2 border-[#FF9418]/60 shadow-[0_15px_30px_rgba(0,0,0,0.9)] overflow-hidden"
+          >
+            {/* Ancient Cartographic Grid Watermark */}
+            <div className="absolute inset-0 bg-[radial-gradient(#FF9418_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
+            <div className="absolute bottom-2 inset-x-0 flex justify-between px-6 text-[9px] font-mono text-[#FF9418]/60 uppercase tracking-widest">
+              <span>GUJARAT PRAVAS ATLAS</span>
+              <span>GEO-REF: 22.40N 71.80E</span>
+            </div>
+          </motion.div>
 
-          {/* Royal Cultural Atlas Header Watermark (Inspired by Image 3) */}
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 0.8, y: 0 }}
+          {/* Bottom Heavy Obsidian Gate */}
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: '0%' }}
+            exit={{ y: '100%' }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute bottom-0 inset-x-0 h-1/2 bg-[#060A14] border-t-2 border-[#FF9418]/60 shadow-[0_-15px_30px_rgba(0,0,0,0.9)] overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-[radial-gradient(#FF9418_1px,transparent_1px)] [background-size:24px_24px] opacity-10" />
+            <div className="absolute top-2 inset-x-0 flex justify-between px-6 text-[9px] font-mono text-[#FF9418]/60 uppercase tracking-widest">
+              <span>AUTHENTIC CULTURAL SPATIAL ENGINE</span>
+              <span>SURVEY OF INDIA ALIGNED</span>
+            </div>
+          </motion.div>
+
+          {/* High-Velocity Horizontal Laser Conduit Seam */}
+          <motion.div
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            exit={{ scaleX: 1.5, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="absolute top-6 flex flex-col items-center text-center"
-          >
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-['Noto_Sans_Gujarati'] font-black text-[#FF9418]">
-                ગુજરાત
-              </span>
-              <span className="text-xs font-mono font-bold tracking-widest text-slate-300">
-                GUJARAT PRAVAS • LAND OF LEGACY
-              </span>
-            </div>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-black/40 border border-[#FF9418]/30 text-[#FF9418]">
-                📍 INDIA // GUJARAT KEY PLAN
-              </span>
-              <span className="text-[10px] font-mono text-slate-400">
-                20°N-24°N • 68°E-74°E
-              </span>
-            </div>
-          </motion.div>
+            style={{ backgroundColor: preset.accent, boxShadow: `0 0 35px ${preset.accent}` }}
+            className="absolute inset-x-0 h-[3px] z-30"
+          />
 
-          {/* Central Line Art Graphic with pulse & draw animation */}
+          {/* Center Royal Seal Shockwave Flare */}
           <motion.div
-            initial={{ scale: 0.85, opacity: 0, rotate: -2 }}
+            initial={{ scale: 0.2, opacity: 0, rotate: -35 }}
             animate={{ scale: 1, opacity: 1, rotate: 0 }}
-            exit={{ scale: 1.05, opacity: 0 }}
-            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex items-center justify-center mb-6"
+            exit={{ scale: 1.25, opacity: 0 }}
+            transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-40 flex flex-col items-center justify-center text-center p-6 sm:p-8"
           >
-            <div 
-              style={{ borderColor: `${activePreset.accent}40`, boxShadow: `0 0 50px ${activePreset.accent}25` }}
-              className="p-6 sm:p-7 rounded-3xl border-2 backdrop-blur-md bg-black/50"
-            >
-              {activePreset.iconSvg}
-            </div>
-          </motion.div>
+            {/* Glowing Radiant Aura Ring */}
+            <motion.div
+              initial={{ scale: 0.6, opacity: 1 }}
+              animate={{ scale: 1.5, opacity: 0 }}
+              transition={{ duration: 0.6, repeat: Infinity, ease: 'easeOut' }}
+              style={{ borderColor: preset.accent }}
+              className="absolute w-44 h-44 rounded-full border-2 pointer-events-none"
+            />
 
-          {/* Text Identity Box */}
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -10, opacity: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            className="text-center space-y-2.5 max-w-lg"
-          >
+            {/* Central Icon Pod */}
             <div 
-              style={{ color: activePreset.accent, borderColor: `${activePreset.accent}50`, backgroundColor: `${activePreset.accent}15` }}
-              className="inline-flex items-center gap-2 px-3.5 py-1 rounded-md text-[10px] sm:text-xs font-mono font-bold uppercase tracking-widest border"
+              style={{ 
+                borderColor: preset.accent, 
+                boxShadow: `0 0 60px ${preset.glowColor}, inset 0 0 25px ${preset.glowColor}` 
+              }}
+              className="p-5 sm:p-6 rounded-3xl border-2 backdrop-blur-2xl bg-black/80 mb-4"
             >
-              <span>{activePreset.code}</span>
+              {preset.iconSvg}
             </div>
 
-            <div className="space-y-1">
-              <span className="text-xs sm:text-sm font-['Noto_Sans_Gujarati'] font-bold text-[#FF9418] block drop-shadow">
-                {activePreset.gujarati}
+            {/* Code Badge */}
+            <motion.div 
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.25 }}
+              style={{ color: preset.accent, borderColor: `${preset.accent}60`, backgroundColor: `${preset.accent}15` }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] sm:text-xs font-mono font-black uppercase tracking-widest border mb-2 shadow-lg"
+            >
+              <span className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: preset.accent }} />
+              <span>{preset.code}</span>
+            </motion.div>
+
+            {/* Main Typographic Blast */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.15, duration: 0.3 }}
+              className="space-y-1"
+            >
+              <span className="text-sm sm:text-base font-['Noto_Sans_Gujarati'] font-black text-[#FF9418] drop-shadow-[0_2px_12px_rgba(255,148,24,0.6)] block">
+                {preset.gujarati}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-white font-editorial tracking-tight drop-shadow-md">
-                {activePreset.title}
-              </h2>
-            </div>
+              <h1 className="text-3xl sm:text-4xl font-black text-white font-editorial tracking-tight drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+                {preset.title}
+              </h1>
+            </motion.div>
 
-            <p className="text-xs text-[#8F9CAE] font-mono leading-relaxed px-4">
-              {activePreset.subtitle}
-            </p>
-
-            {/* Poetic Couplet from Image 3 */}
-            <p className="text-[11px] font-['Noto_Sans_Gujarati'] text-[#FF9418]/80 italic pt-1">
-              "જ્યાં ધરતી ધીરજ રાખે, સમુદ્ર સાથે વાતો કરે..."
-            </p>
+            {/* Subtitle */}
+            <motion.p
+              initial={{ y: 8, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.25 }}
+              className="text-xs sm:text-sm text-slate-300 font-mono max-w-md mx-auto mt-2 leading-relaxed"
+            >
+              {preset.subtext}
+            </motion.p>
           </motion.div>
-
-        </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );

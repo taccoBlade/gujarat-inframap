@@ -254,6 +254,11 @@ body.theme-light .ethnic-leaflet-popup .leaflet-popup-tip {
   transition: transform 1.0s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+/* Ancient Solanki Royal Cartographic Parchment Shader (Inspired by Game Atlases) */
+.map-ancient-theme .leaflet-tile-pane {
+  filter: sepia(0.52) saturate(1.45) hue-rotate(-18deg) contrast(1.18) brightness(0.92);
+}
+
 /* Architectural Blueprint Map Aesthetic */
 .map-blueprint-theme .leaflet-tile-pane {
   filter: invert(1) hue-rotate(185deg) contrast(1.4) brightness(0.9);

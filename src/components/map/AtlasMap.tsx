@@ -20,7 +20,6 @@ import { BeforeAfterSplitSliderModal } from './BeforeAfterSplitSliderModal';
 import { BrandedSnapshotModal } from './BrandedSnapshotModal';
 import { InfraImpactModal } from './InfraImpactModal';
 import { CorridorFlythroughHUD } from './CorridorFlythroughHUD';
-import { CulturalParallaxMap } from './CulturalParallaxMap';
 import { 
   Award, 
   MapPin, 
@@ -133,7 +132,7 @@ export const AtlasMap: React.FC = () => {
   const [currentZoom, setCurrentZoom] = useState(7.4);
 
   // Map Aesthetic Theme: Default (OSM/Humanitarian), Blueprint (CAD Cyan), Engineering (Dark High-Contrast)
-  const [mapAesthetic, setMapAesthetic] = useState<'default' | 'blueprint' | 'engineering'>('default');
+  const [mapAesthetic, setMapAesthetic] = useState<'ancient' | 'blueprint' | 'engineering' | 'default'>('ancient');
 
   // Layer Visibility State
   const [showDistricts, setShowDistricts] = useState(true);
@@ -153,7 +152,6 @@ export const AtlasMap: React.FC = () => {
   const [currentWaypointIndex, setCurrentWaypointIndex] = useState(0);
   const [isTourPlaying, setIsTourPlaying] = useState(false);
   const [is3DTilted, setIs3DTilted] = useState(false);
-  const [activeMapView, setActiveMapView] = useState<'3d_illustrated' | 'precision_gis'>('3d_illustrated');
 
   // Blueprint Parcel Hover & Selection HUD State
   const [hoveredParcel, setHoveredParcel] = useState<BlueprintParcel | null>(null);
@@ -259,18 +257,57 @@ export const AtlasMap: React.FC = () => {
 
       mapInstanceRef.current = map;
 
-      // Load official administrative district boundaries
+      // Load official administrative district boundaries & build Game Fog-of-War Inverted Mask
       fetch('/data/gujarat_districts.geojson')
         .then(res => res.json())
         .then(geojsonData => {
           if (!mapInstanceRef.current) return;
+
+          // Game-Style Inverted Fog Mask: Other states fade out into ancient dark fog
+          try {
+            const worldRing: [number, number][] = [
+              [-90, -180],
+              [-90, 180],
+              [90, 180],
+              [90, -180]
+            ];
+            const holes: [number, number][][] = [];
+            if (geojsonData.features) {
+              geojsonData.features.forEach((feat: any) => {
+                if (feat.geometry?.type === 'Polygon') {
+                  const ring = feat.geometry.coordinates[0].map((coord: number[]) => [coord[1], coord[0]] as [number, number]);
+                  if (ring && ring.length > 2) holes.push(ring);
+                } else if (feat.geometry?.type === 'MultiPolygon') {
+                  feat.geometry.coordinates.forEach((poly: any) => {
+                    const ring = poly[0].map((coord: number[]) => [coord[1], coord[0]] as [number, number]);
+                    if (ring && ring.length > 2) holes.push(ring);
+                  });
+                }
+              });
+            }
+
+            if (holes.length > 0) {
+              L.polygon([worldRing, ...holes], {
+                stroke: true,
+                color: '#FF9418',
+                weight: 2.5,
+                opacity: 0.9,
+                fillColor: '#070D18', // Deep ancient fog over outer states (Rajasthan, MP, Maharashtra, sea)
+                fillOpacity: 0.74,
+                interactive: false
+              }).addTo(mapInstanceRef.current);
+            }
+          } catch (maskErr) {
+            console.warn('Game fog mask note:', maskErr);
+          }
+
           geojsonBoundaryRef.current = L.geoJSON(geojsonData, {
             style: {
               color: '#FF9418',
               weight: 1.5,
               opacity: 0.8,
               fillColor: '#FF9418',
-              fillOpacity: 0.03,
+              fillOpacity: 0.04,
               dashArray: '3 3'
             },
             onEachFeature: (feature, layer) => {
@@ -1027,7 +1064,7 @@ export const AtlasMap: React.FC = () => {
 
   return (
     <div className={`relative w-full h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)] bg-[#101827] overflow-hidden select-none ${
-      mapAesthetic === 'blueprint' ? 'map-blueprint-theme' : mapAesthetic === 'engineering' ? 'map-engineering-theme' : ''
+      mapAesthetic === 'ancient' ? 'map-ancient-theme' : mapAesthetic === 'blueprint' ? 'map-blueprint-theme' : mapAesthetic === 'engineering' ? 'map-engineering-theme' : ''
     }`}>
       
       {/* Pin Drop Crosshair Mode Banner */}
@@ -1607,35 +1644,7 @@ export const AtlasMap: React.FC = () => {
         </div>
       )}
 
-      {/* 3D Royal Illustrated Cultural Parallax Atlas (Image 3 Permanent Artwork) */}
-      {activeMapView === '3d_illustrated' && (
-        <div className="absolute inset-0 z-[1050]">
-          <CulturalParallaxMap
-            onSwitchToLeafletGis={(coords) => {
-              setActiveMapView('precision_gis');
-              setTimeout(() => {
-                mapInstanceRef.current?.invalidateSize();
-                if (coords) {
-                  mapInstanceRef.current?.flyTo(coords, 12, { duration: 1.2 });
-                }
-              }, 100);
-            }}
-          />
-        </div>
-      )}
 
-      {/* Floating Pill to Switch back to 3D Illustrated Atlas from GIS Mode */}
-      {activeMapView === 'precision_gis' && (
-        <button
-          onClick={() => setActiveMapView('3d_illustrated')}
-          className="fixed bottom-20 left-4 z-[990] flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#151F30]/95 border-2 border-[#FF9418] text-[#FF9418] font-black text-xs shadow-[3px_3px_0px_#101827] backdrop-blur-md hover:bg-[#FF9418] hover:text-[#101827] transition-all"
-          title="Return to 3D Royal Illustrated Cultural Atlas"
-        >
-          <span className="text-base">🎨</span>
-          <span className="hidden sm:inline">3D Royal Illustrated Atlas</span>
-          <span className="sm:hidden">3D Atlas</span>
-        </button>
-      )}
 
       {/* The Leaflet Map Canvas Container with Dynamic 3D Pitch Transition */}
       <div 
