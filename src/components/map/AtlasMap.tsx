@@ -20,7 +20,7 @@ import { BeforeAfterSplitSliderModal } from './BeforeAfterSplitSliderModal';
 import { BrandedSnapshotModal } from './BrandedSnapshotModal';
 import { InfraImpactModal } from './InfraImpactModal';
 import { CorridorFlythroughHUD } from './CorridorFlythroughHUD';
-import { CulturalAtlasOverlay } from './CulturalAtlasOverlay';
+import { CulturalParallaxMap } from './CulturalParallaxMap';
 import { 
   Award, 
   MapPin, 
@@ -153,7 +153,7 @@ export const AtlasMap: React.FC = () => {
   const [currentWaypointIndex, setCurrentWaypointIndex] = useState(0);
   const [isTourPlaying, setIsTourPlaying] = useState(false);
   const [is3DTilted, setIs3DTilted] = useState(false);
-  const [showCulturalOverlay, setShowCulturalOverlay] = useState(false);
+  const [activeMapView, setActiveMapView] = useState<'3d_illustrated' | 'precision_gis'>('3d_illustrated');
 
   // Blueprint Parcel Hover & Selection HUD State
   const [hoveredParcel, setHoveredParcel] = useState<BlueprintParcel | null>(null);
@@ -1607,16 +1607,35 @@ export const AtlasMap: React.FC = () => {
         </div>
       )}
 
-      {/* Royal Illustrated Cultural Atlas & Key Plan Overlay (Inspired by Image 3) */}
-      <CulturalAtlasOverlay
-        isOpen={showCulturalOverlay}
-        onToggle={() => setShowCulturalOverlay(!showCulturalOverlay)}
-        onFlyToCoords={(coords) => {
-          if (mapInstanceRef.current) {
-            mapInstanceRef.current.flyTo(coords, 12, { duration: 1.2 });
-          }
-        }}
-      />
+      {/* 3D Royal Illustrated Cultural Parallax Atlas (Image 3 Permanent Artwork) */}
+      {activeMapView === '3d_illustrated' && (
+        <div className="absolute inset-0 z-[1050]">
+          <CulturalParallaxMap
+            onSwitchToLeafletGis={(coords) => {
+              setActiveMapView('precision_gis');
+              setTimeout(() => {
+                mapInstanceRef.current?.invalidateSize();
+                if (coords) {
+                  mapInstanceRef.current?.flyTo(coords, 12, { duration: 1.2 });
+                }
+              }, 100);
+            }}
+          />
+        </div>
+      )}
+
+      {/* Floating Pill to Switch back to 3D Illustrated Atlas from GIS Mode */}
+      {activeMapView === 'precision_gis' && (
+        <button
+          onClick={() => setActiveMapView('3d_illustrated')}
+          className="fixed bottom-20 left-4 z-[990] flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#151F30]/95 border-2 border-[#FF9418] text-[#FF9418] font-black text-xs shadow-[3px_3px_0px_#101827] backdrop-blur-md hover:bg-[#FF9418] hover:text-[#101827] transition-all"
+          title="Return to 3D Royal Illustrated Cultural Atlas"
+        >
+          <span className="text-base">🎨</span>
+          <span className="hidden sm:inline">3D Royal Illustrated Atlas</span>
+          <span className="sm:hidden">3D Atlas</span>
+        </button>
+      )}
 
       {/* The Leaflet Map Canvas Container with Dynamic 3D Pitch Transition */}
       <div 
