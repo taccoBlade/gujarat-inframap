@@ -53,7 +53,7 @@ export const AuthModal: React.FC = () => {
   } = useAtlasStore();
 
   // Mode: email_login | email_register | forgot_password | phone
-  const [authMethod, setAuthMethod] = useState<'email_login' | 'email_register' | 'forgot_password' | 'phone'>('email_login');
+  const [authMethod, setAuthMethod] = useState<'email_login' | 'email_register' | 'forgot_password' | 'phone'>('phone');
   
   // Email & Password Fields
   const [email, setEmail] = useState('');
@@ -428,7 +428,7 @@ export const AuthModal: React.FC = () => {
     handleInstantExplorerLogin('Dev Tester');
   };
 
-  // 8. Phone Auth Handlers (Preserved for 100% test compatibility)
+  // 8. Phone Auth Handlers (Full Firebase Phone OTP Gateway)
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cooldown > 0) return;
@@ -437,19 +437,32 @@ export const AuthModal: React.FC = () => {
     const raw = phoneNumber.replace(/\D/g, '');
     const formatted = phoneNumber.startsWith('+91') ? phoneNumber.trim().replace(/\s+/g, '') : `+91${raw}`;
     if (!isValidIndianPhoneNumber(formatted)) {
-      setErrorMsg('Please enter a valid 10-digit Indian mobile number.');
+      setErrorMsg('Please enter a valid 10-digit Indian mobile number (+91).');
       return;
     }
 
     setLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
     try {
-      const res = await sendPhoneOtp(formatted, recaptchaVerifierRef.current || undefined);
-      setOtpSent(true);
-      setCooldown(OTP_COOLDOWN_SECONDS);
-      if (res.confirmationResult) setConfirmationResult(res.confirmationResult);
-      if (res.mockCode) setOtpCode(res.mockCode);
-    } catch {
-      handleInstantExplorerLogin(`Pravasi (+91 ${formatted.slice(-4)})`);
+      let v = recaptchaVerifierRef.current;
+      if (!v) {
+        v = setupRecaptcha('recaptcha-container');
+        recaptchaVerifierRef.current = v;
+      }
+      const res = await sendPhoneOtp(formatted, v || undefined);
+      if (res.success) {
+        setOtpSent(true);
+        setCooldown(OTP_COOLDOWN_SECONDS);
+        if (res.confirmationResult) setConfirmationResult(res.confirmationResult);
+        if (res.mockCode) setOtpCode(res.mockCode);
+        setSuccessMsg(`OTP sent to ${formatted}! Enter the 6-digit code below.`);
+      } else {
+        setErrorMsg(res.error || 'Unable to dispatch SMS. Please try again or use Google sign-in.');
+      }
+    } catch (err: any) {
+      console.warn('[Phone OTP dispatch note]', err);
+      setErrorMsg(err?.message || 'Error sending SMS OTP. Please check your mobile number.');
     } finally {
       setLoading(false);
     }
@@ -458,9 +471,43 @@ export const AuthModal: React.FC = () => {
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (failedAttempts >= MAX_OTP_ATTEMPTS) return;
+
+    const cleanCode = otpCode.trim();
+    if (!cleanCode || cleanCode.length !== 6) {
+      setErrorMsg('Please enter the 6-digit SMS verification code.');
+      return;
+    }
+
     setLoading(true);
-    handleInstantExplorerLogin('Pravasi Explorer');
-    setLoading(false);
+    setErrorMsg(null);
+    try {
+      if (confirmationResult) {
+        const res = await verifyPhoneOtp(cleanCode, confirmationResult, phoneNumber);
+        if (res.success && res.user) {
+          setLoggedInUser(res.user);
+          setAuthModalOpen(false);
+          return;
+        } else {
+          setFailedAttempts((prev) => prev + 1);
+          setErrorMsg(res.error || 'Invalid verification code. Please check and retry.');
+        }
+      } else {
+        const res = await verifyPhoneOtp(cleanCode, undefined, phoneNumber);
+        if (res.success && res.user) {
+          setLoggedInUser(res.user);
+          setAuthModalOpen(false);
+          return;
+        } else {
+          setFailedAttempts((prev) => prev + 1);
+          setErrorMsg(res.error || 'Verification session expired. Please request a new OTP.');
+        }
+      }
+    } catch (err: any) {
+      setFailedAttempts((prev) => prev + 1);
+      setErrorMsg(err?.message || 'Verification error. Please request a new code.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -553,30 +600,44 @@ export const AuthModal: React.FC = () => {
               </div>
             </div>
 
-            {/* Auth Tab Switcher: Log In vs Create Account */}
-            {authMethod !== 'forgot_password' && authMethod !== 'phone' && (
-              <div className="grid grid-cols-2 gap-1.5 p-1 rounded-xl border-2 border-[#25324A] bg-[#101827] text-xs font-bold mb-5">
+            {/* Auth Tab Switcher: Phone OTP vs Email Login vs Register */}
+            {authMethod !== 'forgot_password' && (
+              <div className="grid grid-cols-3 gap-1 p-1 rounded-xl border-2 border-[#25324A] bg-[#101827] text-xs font-bold mb-5">
                 <button
                   type="button"
-                  onClick={() => { setAuthMethod('email_login'); setErrorMsg(null); }}
-                  className={`py-1.5 rounded-lg text-center transition-all ${
+                  onClick={() => { setAuthMethod('phone'); setErrorMsg(null); setSuccessMsg(null); }}
+                  className={`py-1.5 rounded-lg text-center transition-all flex items-center justify-center gap-1 ${
+                    authMethod === 'phone'
+                      ? 'bg-[#FF9418] text-[#101827] font-black shadow-[2px_2px_0px_#101827]'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Smartphone className="w-3.5 h-3.5" />
+                  <span>Phone OTP</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setAuthMethod('email_login'); setErrorMsg(null); setSuccessMsg(null); }}
+                  className={`py-1.5 rounded-lg text-center transition-all flex items-center justify-center gap-1 ${
                     authMethod === 'email_login'
                       ? 'bg-[#FF9418] text-[#101827] font-black shadow-[2px_2px_0px_#101827]'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  Log In (Email)
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>Email</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setAuthMethod('email_register'); setErrorMsg(null); }}
-                  className={`py-1.5 rounded-lg text-center transition-all ${
+                  onClick={() => { setAuthMethod('email_register'); setErrorMsg(null); setSuccessMsg(null); }}
+                  className={`py-1.5 rounded-lg text-center transition-all flex items-center justify-center gap-1 ${
                     authMethod === 'email_register'
                       ? 'bg-[#FF9418] text-[#101827] font-black shadow-[2px_2px_0px_#101827]'
                       : 'text-slate-400 hover:text-white'
                   }`}
                 >
-                  Create Account
+                  <User className="w-3.5 h-3.5" />
+                  <span>Sign Up</span>
                 </button>
               </div>
             )}
@@ -806,58 +867,82 @@ export const AuthModal: React.FC = () => {
               </div>
             )}
 
-            {/* FORM 4: Phone Auth (Retained for Test Suite & Fallback Compatibility) */}
+            {/* FORM: Phone Auth with Indian +91 Number & SMS Code */}
             {authMethod === 'phone' && (
-              <form onSubmit={!otpSent ? handleSendOtp : handleVerifyOtp} className="space-y-3.5">
+              <form onSubmit={!otpSent ? handleSendOtp : handleVerifyOtp} className="space-y-4">
                 {!otpSent ? (
                   <div>
                     <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5 font-mono">
-                      Mobile Number
+                      Indian Mobile Number (+91)
                     </label>
-                    <div className="flex rounded-xl overflow-hidden border-2 border-slate-700">
-                      <span className="bg-slate-800 text-slate-400 px-3 py-2.5 text-xs font-bold border-r border-slate-700">+91</span>
+                    <div className="flex rounded-xl overflow-hidden border-2 border-[#25324A] focus-within:border-[#FF9418] bg-[#101827]">
+                      <span className="bg-slate-800 text-slate-300 px-3.5 py-2.5 text-xs font-bold border-r border-[#25324A] flex items-center gap-1">
+                        🇮🇳 +91
+                      </span>
                       <input
                         type="tel"
                         value={phoneNumber}
                         onChange={(e) => {
                           setPhoneNumber(e.target.value);
-                          setConfirmationResult(null); // Resets confirmationResult on change (required by test)
+                          setConfirmationResult(null);
                         }}
                         placeholder="98765 43210"
-                        className="w-full px-3 py-2 bg-[#101827] text-white text-xs font-bold focus:outline-none"
+                        maxLength={15}
+                        className="w-full px-3 py-2.5 bg-transparent text-white text-xs font-bold focus:outline-none"
                       />
                     </div>
+                    <p className="text-[10px] text-slate-400 font-mono mt-1">
+                      We will dispatch a 6-digit SMS verification code to your mobile device.
+                    </p>
                   </div>
                 ) : (
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5 font-mono">
-                      6-Digit SMS Code
-                    </label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider font-mono">
+                        6-Digit SMS Verification Code
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOtpSent(false);
+                          setConfirmationResult(null);
+                          setOtpCode('');
+                        }}
+                        className="text-[10px] text-[#FF9418] hover:underline font-mono"
+                      >
+                        Change Number
+                      </button>
+                    </div>
                     <input
                       type="text"
                       value={otpCode}
-                      onChange={(e) => setOtpCode(e.target.value)}
+                      onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
                       placeholder="123456"
-                      className="w-full px-3 py-2 bg-[#101827] border-2 border-slate-700 rounded-xl text-center font-mono font-bold text-white text-base"
+                      maxLength={6}
+                      className="w-full px-3 py-2.5 bg-[#101827] border-2 border-[#25324A] focus:border-[#FF9418] rounded-xl text-center font-mono font-black text-white text-lg tracking-widest"
                     />
                   </div>
                 )}
 
-                <button
-                  type="submit"
-                  disabled={loading || (!otpSent && (cooldown > 0 || failedAttempts >= MAX_OTP_ATTEMPTS)) || (otpSent && failedAttempts >= MAX_OTP_ATTEMPTS)}
-                  className="w-full py-2.5 rounded-xl bg-[#FF9418] text-[#101827] font-black text-xs"
-                >
-                  {!otpSent ? 'Send OTP Code' : 'Verify & Enter'}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setAuthMethod('email_login')}
-                  className="w-full text-center text-xs text-slate-400 hover:text-white pt-1 block font-mono"
-                >
-                  ← Use Email &amp; Password Instead
-                </button>
+                {!otpSent ? (
+                  <button
+                    type="submit"
+                    disabled={loading || cooldown > 0 || failedAttempts >= MAX_OTP_ATTEMPTS}
+                    className="w-full py-3 px-4 rounded-xl bg-[#FF9418] hover:bg-[#e07f10] text-[#101827] font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-[2px_2px_0px_#101827] transition-all disabled:opacity-60 cursor-pointer"
+                  >
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Smartphone className="w-4 h-4" />}
+                    <span>{cooldown > 0 ? `Resend OTP in ${cooldown}s` : 'Send OTP Code via SMS'}</span>
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={loading || failedAttempts >= MAX_OTP_ATTEMPTS}
+                    className="w-full py-3 px-4 rounded-xl bg-[#10B981] hover:bg-[#059669] text-[#101827] font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-[2px_2px_0px_#101827] transition-all disabled:opacity-60 cursor-pointer"
+                  >
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
+                    <span>Verify Code &amp; Enter Passport</span>
+                  </button>
+                )}
               </form>
             )}
 
