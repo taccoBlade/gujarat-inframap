@@ -15,7 +15,8 @@ import {
   CheckCircle2,
   Compass,
   ArrowRight,
-  RotateCcw
+  RotateCcw,
+  ExternalLink
 } from 'lucide-react';
 
 export const PlacesDestinationView: React.FC = () => {
@@ -24,7 +25,8 @@ export const PlacesDestinationView: React.FC = () => {
     claimDistrictStamp, 
     setMode, 
     setSelectedDistrict,
-    theme
+    theme,
+    setActiveDossierAsset
   } = useAtlasStore();
 
   const [search, setSearch] = useState('');
@@ -247,7 +249,7 @@ export const PlacesDestinationView: React.FC = () => {
                       alt={place.name}
                       loading="lazy"
                       referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/images/destinations/statue-of-unity.jpg';
                       }}
@@ -267,6 +269,19 @@ export const PlacesDestinationView: React.FC = () => {
                         </span>
                       )}
                     </div>
+
+                    {/* Top-Right Dossier Quick Action */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveDossierAsset({ ...place, type: 'destination' });
+                      }}
+                      className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-[#101827]/90 hover:bg-[#FF9418] hover:text-[#101827] text-white text-[10px] font-mono font-bold border border-white/20 backdrop-blur-sm transition-all flex items-center gap-1 shadow-md"
+                      title="View Uncropped Photo & Dossier"
+                    >
+                      <ExternalLink className="w-3 h-3 text-[#FF9418]" />
+                      <span>Dossier</span>
+                    </button>
 
                     {/* Cultural Region Tag on Photo Footer */}
                     <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-xs text-[#FF9418] font-bold drop-shadow">
@@ -336,13 +351,26 @@ export const PlacesDestinationView: React.FC = () => {
                 <div className={`p-3.5 border-t-2 border-[#25324A] flex items-center justify-between gap-2 ${
                   theme === 'dark' ? 'bg-[#101827]' : 'bg-[#F1E8D7]'
                 }`}>
-                  <button
-                    onClick={() => handleViewOnMap(place)}
-                    className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border-2 border-[#25324A] hover:border-[#FF9418] bg-transparent"
-                  >
-                    <MapPin className="w-3.5 h-3.5 text-[#FF9418]" />
-                    <span>View on Map</span>
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => handleViewOnMap(place)}
+                      className="px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border-2 border-[#25324A] hover:border-[#FF9418] bg-transparent"
+                    >
+                      <MapPin className="w-3.5 h-3.5 text-[#FF9418]" />
+                      <span>Map</span>
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveDossierAsset({ ...place, type: 'destination' });
+                      }}
+                      className="px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border-2 border-[#25324A] hover:border-[#1C6555] bg-transparent text-[#1C6555] dark:text-[#10B981]"
+                      title="Open Full Landmark Photo & Heritage Dossier"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Dossier</span>
+                    </button>
+                  </div>
 
                   {districtObj && (
                     <button

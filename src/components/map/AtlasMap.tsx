@@ -20,6 +20,7 @@ import { BeforeAfterSplitSliderModal } from './BeforeAfterSplitSliderModal';
 import { BrandedSnapshotModal } from './BrandedSnapshotModal';
 import { InfraImpactModal } from './InfraImpactModal';
 import { CorridorFlythroughHUD } from './CorridorFlythroughHUD';
+import { CulturalAtlasOverlay } from './CulturalAtlasOverlay';
 import { 
   Award, 
   MapPin, 
@@ -113,7 +114,8 @@ export const AtlasMap: React.FC = () => {
     setSearchQuery,
     selectedDistrict,
     setSelectedDistrict,
-    setActiveDossierAsset
+    setActiveDossierAsset,
+    isAuthModalOpen
   } = useAtlasStore();
 
   // Invalidate map size when switching back to explore mode
@@ -151,6 +153,7 @@ export const AtlasMap: React.FC = () => {
   const [currentWaypointIndex, setCurrentWaypointIndex] = useState(0);
   const [isTourPlaying, setIsTourPlaying] = useState(false);
   const [is3DTilted, setIs3DTilted] = useState(false);
+  const [showCulturalOverlay, setShowCulturalOverlay] = useState(false);
 
   // Blueprint Parcel Hover & Selection HUD State
   const [hoveredParcel, setHoveredParcel] = useState<BlueprintParcel | null>(null);
@@ -1042,7 +1045,8 @@ export const AtlasMap: React.FC = () => {
       )}
 
       {/* Floating Map Controls & Quick Search (Top Left HUD) */}
-      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[1040] flex flex-col gap-2 max-w-xs sm:max-w-md w-[calc(100%-1.5rem)] sm:w-full select-none pointer-events-none">
+      {!isAuthModalOpen && (
+        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[100] flex flex-col gap-2 max-w-xs sm:max-w-md w-[calc(100%-1.5rem)] sm:w-full select-none pointer-events-none">
         
         {/* 1. Search Bar (District Dropdown Removed for Clean Pin Selection) */}
         <div className={`p-2 rounded-xl border-2 shadow-[3px_3px_0px_#101827] backdrop-blur-md flex items-center gap-2 pointer-events-auto ${
@@ -1249,6 +1253,7 @@ export const AtlasMap: React.FC = () => {
         )}
 
       </div>
+      )}
 
       {/* Floating Blueprint Parcel HUD (Appears on Hover or Selection) */}
       {(hoveredParcel || selectedParcel) && (
@@ -1601,6 +1606,17 @@ export const AtlasMap: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Royal Illustrated Cultural Atlas & Key Plan Overlay (Inspired by Image 3) */}
+      <CulturalAtlasOverlay
+        isOpen={showCulturalOverlay}
+        onToggle={() => setShowCulturalOverlay(!showCulturalOverlay)}
+        onFlyToCoords={(coords) => {
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.flyTo(coords, 12, { duration: 1.2 });
+          }
+        }}
+      />
 
       {/* The Leaflet Map Canvas Container with Dynamic 3D Pitch Transition */}
       <div 

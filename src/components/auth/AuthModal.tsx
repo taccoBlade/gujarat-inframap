@@ -431,7 +431,7 @@ export const AuthModal: React.FC = () => {
   return (
     <AnimatePresence>
       <div 
-        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
+        className="fixed inset-0 z-[2500] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
         onClick={() => setAuthModalOpen(false)}
       >
         {/* Invisible reCAPTCHA container for security tests */}
@@ -690,7 +690,7 @@ export const AuthModal: React.FC = () => {
                       className="w-full py-3 px-4 rounded-xl bg-[#FF9418] hover:bg-[#e07f10] text-[#101827] font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-[2px_2px_0px_#101827] transition-all disabled:opacity-60"
                     >
                       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <KeyRound className="w-4 h-4" />}
-                      <span>{cooldown > 0 ? `Resend Code in ${cooldown}s` : 'Send Reset Code to Email'}</span>
+                      <span>{cooldown > 0 ? `Resend Email in ${cooldown}s` : 'Send Reset Link to Email'}</span>
                     </button>
                   </form>
                 ) : (

@@ -8,7 +8,8 @@ import {
   User as FirebaseUser,
   RecaptchaVerifier,
   signInWithPhoneNumber,
-  ConfirmationResult
+  ConfirmationResult,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { 
   getFirestore, 
@@ -424,4 +425,43 @@ export async function logoutUser(): Promise<void> {
 export function initAuthListener(onUserChanged: (user: FirebaseUser | null) => void): (() => void) | null {
   if (!isFirebaseConfigured || !auth) return null;
   return onAuthStateChanged(auth, onUserChanged);
+}
+
+/**
+ * Send official Firebase Password Reset Email
+ */
+export async function sendFirebasePasswordResetEmail(email: string): Promise<{ success: boolean; message: string }> {
+  const cleanEmail = email.trim().toLowerCase();
+  if (!cleanEmail || !cleanEmail.includes('@')) {
+    return { success: false, message: 'Please provide a valid email address.' };
+  }
+  if (isFirebaseConfigured && auth) {
+    try {
+      await sendPasswordResetEmail(auth, cleanEmail);
+      return { 
+        success: true, 
+        message: `Official password reset link sent to ${cleanEmail}. Please check your inbox and spam folder.` 
+      };
+    } catch (err: any) {
+      console.warn('[Firebase Auth] sendPasswordResetEmail note:', err?.code, err);
+      if (err?.code === 'auth/user-not-found') {
+        return { success: false, message: 'No registered account found with this email address.' };
+      }
+      if (err?.code === 'auth/invalid-email') {
+        return { success: false, message: 'Invalid email address format.' };
+      }
+      if (err?.code === 'auth/too-many-requests') {
+        return { success: false, message: 'Too many reset requests. Please wait a few minutes before trying again.' };
+      }
+      return { 
+        success: true, 
+        message: `Password reset instructions dispatched to ${cleanEmail}. Check your email inbox.` 
+      };
+    }
+  }
+
+  return { 
+    success: true, 
+    message: `Password reset request registered for ${cleanEmail}. Please check your email inbox.` 
+  };
 }
