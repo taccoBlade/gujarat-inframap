@@ -22,7 +22,7 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
     gujarati: 'સચિત્ર ડિજિટલ ટ્વીન નકશો',
     accent: '#00F0FF',
     glowColor: 'rgba(0, 240, 255, 0.4)',
-    subtext: 'Survey of India GPS Aligned • 34 Districts • Real-Time Corridors',
+    subtext: 'Cultural Spatial Atlas • 34 Districts • Real-Time Corridors',
     iconSvg: (
       <svg className="w-10 h-10 sm:w-14 sm:h-14 stroke-[#00F0FF] fill-none stroke-[2]" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="42" strokeDasharray="4 4" className="animate-spin" style={{ animationDuration: '10s' }} />
@@ -131,8 +131,8 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
   }
 };
 
-// Fast, snappy, mobile-optimized duration (520ms)
-const TRANSITION_DURATION_MS = 540;
+// Relaxed, cinematic, slower-paced duration (1100ms)
+const TRANSITION_DURATION_MS = 1100;
 
 export const CinematicTransitionOverlay: React.FC = () => {
   const { currentMode } = useAtlasStore();
@@ -161,7 +161,7 @@ export const CinematicTransitionOverlay: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.18 }}
+          transition={{ duration: 0.32, ease: 'easeInOut' }}
           className="fixed inset-0 z-[3000] pointer-events-none select-none flex items-center justify-center p-4 overflow-hidden"
         >
           {/* 1. Backdrop Glass Veil with Soft Radial Darkness */}
@@ -172,7 +172,7 @@ export const CinematicTransitionOverlay: React.FC = () => {
             initial={{ scaleX: 0, opacity: 0 }}
             animate={{ scaleX: [0, 1, 1], opacity: [0, 1, 0.8] }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
+            transition={{ duration: 0.65, ease: 'easeOut' }}
             style={{ 
               backgroundColor: preset.accent, 
               boxShadow: `0 0 20px ${preset.accent}, 0 0 40px ${preset.accent}` 
@@ -183,12 +183,12 @@ export const CinematicTransitionOverlay: React.FC = () => {
           {/* 3. Subtle Cartographic Watermark Pattern */}
           <div className="absolute inset-0 bg-[radial-gradient(#FF9418_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
 
-          {/* 4. Cohesive Central Holographic Card - Strict Non-Overlapping Layout */}
+          {/* 4. Cohesive Central Holographic Card - Stately Slow Presentation */}
           <motion.div
-            initial={{ scale: 0.92, opacity: 0, y: 10 }}
+            initial={{ scale: 0.90, opacity: 0, y: 16 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 1.04, opacity: 0, y: -8 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ scale: 1.03, opacity: 0, y: -10 }}
+            transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-30 flex flex-col items-center justify-center text-center max-w-sm sm:max-w-md w-full px-5 py-6 sm:py-8 rounded-3xl border-2 border-white/10 bg-[#0A0F1D]/85 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.85)]"
           >
             {/* Holographic Glowing Icon Pod */}

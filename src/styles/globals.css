@@ -80,6 +80,11 @@ h1, h2, h3, .font-editorial {
   }
 }
 
+/* Completely remove the Leaflet bottom attribution bar as requested */
+.leaflet-control-attribution {
+  display: none !important;
+}
+
 /* Leaflet Custom Marker & DivIcon Reset */
 .leaflet-div-icon {
   background: transparent !important;

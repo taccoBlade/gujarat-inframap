@@ -1644,26 +1644,6 @@ export const AtlasMap: React.FC = () => {
 
 
 
-      {/* Floating Map Re-center State Compass Button (Bottom Right above Leaflet Zoom Controls) */}
-      <div className="absolute bottom-24 lg:bottom-28 right-3 sm:right-4 z-[990] pointer-events-auto select-none">
-        <button
-          onClick={handleRecenterState}
-          title="Re-center Gujarat State (Reset Overview)"
-          aria-label="Re-center Gujarat State"
-          className={`group flex items-center gap-2 px-3 py-2 rounded-xl border-2 shadow-[4px_4px_0px_#101827] backdrop-blur-xl transition-all active:translate-x-0.5 active:translate-y-0.5 font-bold text-xs cursor-pointer ${
-            theme === 'dark' 
-              ? 'bg-[#151F30]/95 hover:bg-[#101827] border-[#FF9418] text-[#F1E8D7]' 
-              : 'bg-[#FAF6ED]/95 hover:bg-white border-[#FF9418] text-[#101827]'
-          }`}
-        >
-          <Compass className="w-4 h-4 text-[#FF9418] group-hover:rotate-45 transition-transform duration-300 flex-shrink-0" />
-          <div className="flex flex-col text-left leading-none">
-            <span className="font-editorial text-xs font-black text-[#FF9418]">Recenter State</span>
-            <span className="text-[9px] font-mono text-[#8F9CAE]">ગુજરાત દૃશ્ય</span>
-          </div>
-        </button>
-      </div>
-
       {/* The Leaflet Map Canvas Container with Dynamic 3D Pitch Transition */}
       <div 
         ref={mapContainerRef} 

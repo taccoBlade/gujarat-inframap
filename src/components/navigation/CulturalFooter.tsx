@@ -135,10 +135,10 @@ export const CulturalFooter: React.FC = () => {
             }`}>
               <div className="flex items-center gap-1.5 font-bold text-[#1C6555]">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Survey of India Aligned</span>
+                <span>Statutorily Aligned</span>
               </div>
               <p className="text-[#8F9CAE]">
-                Administrative boundaries match official Government of Gujarat Survey of India demarcations across all 34 districts.
+                Administrative boundaries match official Government of Gujarat demarcations across all 34 districts.
               </p>
               <p className="text-[10px] font-mono text-[#8F9CAE]">
                 Coordinates: WGS84 EPSG:4326 • 100% Statutorily Verified

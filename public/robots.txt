@@ -1,0 +1,33 @@
+# ======================================================================
+# GUJARAT PRAVAS ATLAS — PRODUCTION ROBOTS.TXT
+# Optimized for Googlebot, Bingbot, Applebot & Global Search Indexing
+# ======================================================================
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /scratch/
+Disallow: /node_modules/
+
+# Priority Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /images/
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Host & XML Sitemap
+Host: https://gujarat-inframap.vercel.app
+Sitemap: https://gujarat-inframap.vercel.app/sitemap.xml

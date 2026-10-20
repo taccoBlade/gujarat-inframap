@@ -33,6 +33,7 @@ ENV/
 lighthouse*.json
 *.log
 .system_generated/
+scratch/
 
 # Temporary GIS and editor locks
 *.qgz~

@@ -17,14 +17,14 @@ import { CinematicTransitionOverlay } from './components/navigation/CinematicTra
 import { motion, AnimatePresence } from 'framer-motion';
 
 const fluidPageVariants = {
-  initial: { opacity: 0, y: 10, scale: 0.995 },
+  initial: { opacity: 0, y: 16, scale: 0.99 },
   animate: { opacity: 1, y: 0, scale: 1 },
-  exit: { opacity: 0, y: -8, scale: 0.995 }
+  exit: { opacity: 0, y: -12, scale: 0.99 }
 };
 
 const fluidTransition = {
-  duration: 0.22,
-  ease: [0.22, 1, 0.36, 1] as const
+  duration: 0.45,
+  ease: [0.16, 1, 0.3, 1] as const
 };
 
 export const App: React.FC = () => {
