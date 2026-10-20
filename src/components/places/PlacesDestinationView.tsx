@@ -253,8 +253,8 @@ export const PlacesDestinationView: React.FC = () => {
                       }}
                     />
 
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/25 pointer-events-none" />
+                    {/* Gradient Overlay (Lightened for crisp image clarity) */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
 
                     {/* 2. District & Category Badges */}
                     <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">

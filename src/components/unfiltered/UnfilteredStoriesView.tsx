@@ -4,6 +4,7 @@ import { useAtlasStore } from '../../stores/useAtlasStore';
 import { getRegionalCulture } from '../../utils/cultural-regions';
 import unfilteredData from '../../../data/gujarat_unfiltered.json';
 import { ToranOrnamentalBorder, AjrakhStarPattern } from '../cultural/GujaratiPatterns';
+import { getDistrictPhoto } from '../../utils/district-photos';
 import { Sparkles, Bookmark, BookmarkCheck, Search, ShieldAlert, Eye, Info, Compass, BookOpen, CheckCircle } from 'lucide-react';
 
 interface StoryItem {
@@ -168,12 +169,12 @@ export const UnfilteredStoriesView: React.FC = () => {
                 {/* Regional Cultural Toran Trim */}
                 <div style={{ height: '3px', background: culture.borderTrimStyle }} className="w-full" />
 
-                {/* Media Image Header */}
+                {/* Media Image Header with district-accurate photo & clear visibility */}
                 <div 
                   className="h-48 w-full bg-cover relative p-3 flex flex-col justify-between overflow-hidden border-b-2 border-[#25324A]"
-                  style={{ backgroundImage: `url('${story.imageUrl}')`, backgroundPosition: 'center 20%' }}
+                  style={{ backgroundImage: `url('${story.imageUrl || getDistrictPhoto(story.district, story.id)}')`, backgroundPosition: 'center 20%' }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/60 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
 
                   {/* Top Badges */}
                   <div className="relative z-10 flex items-center justify-between gap-2">

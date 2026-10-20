@@ -236,3 +236,47 @@ body.theme-light .ethnic-leaflet-popup .leaflet-popup-tip {
   background: #FF9418 !important;
   color: #101827 !important;
 }
+
+/* ==========================================================================
+   3D CORRIDOR PERSPECTIVE & ARCHITECTURAL BLUEPRINT FILTER SHADERS
+   ========================================================================== */
+.tilt-3d-perspective {
+  perspective: 1200px;
+  transform: rotateX(55deg) scale(1.18);
+  transform-origin: 50% 80%;
+  transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tilt-2d-flat {
+  perspective: 1200px;
+  transform: rotateX(0deg) scale(1.0);
+  transform-origin: 50% 80%;
+  transition: transform 1.0s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Architectural Blueprint Map Aesthetic */
+.map-blueprint-theme .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(185deg) contrast(1.4) brightness(0.9);
+}
+
+/* High-Contrast Dark Engineering Map Aesthetic */
+.map-engineering-theme .leaflet-tile-pane {
+  filter: contrast(1.6) brightness(0.7) invert(0.9) hue-rotate(210deg);
+}
+
+/* Parcel Glow Soft Wash & Pulse */
+@keyframes parcelPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px #00F0FF);
+    opacity: 0.85;
+  }
+  50% {
+    filter: drop-shadow(0 0 16px #00F0FF) drop-shadow(0 0 24px rgba(0, 240, 255, 0.5));
+    opacity: 1;
+  }
+}
+
+.parcel-glow-pulse {
+  animation: parcelPulse 2.4s infinite ease-in-out;
+}
+

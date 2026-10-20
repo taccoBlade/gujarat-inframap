@@ -8,6 +8,19 @@ import { getRegionalCulture } from '../../utils/cultural-regions';
 import unfilteredStoriesRaw from '../../../data/gujarat_unfiltered.json';
 import { AjrakhStarPattern, StepwellGeometryPattern, ToranOrnamentalBorder } from '../cultural/GujaratiPatterns';
 import { 
+  GUIDED_3D_TOURS, 
+  GuidedTour, 
+  INDUSTRIAL_BLUEPRINT_PARCELS, 
+  BlueprintParcel,
+  BEFORE_AFTER_ZONES,
+  TRENDING_PIN_LOCALITIES
+} from '../../data/corridors-3d-data';
+import { getDistrictPhoto } from '../../utils/district-photos';
+import { BeforeAfterSplitSliderModal } from './BeforeAfterSplitSliderModal';
+import { BrandedSnapshotModal } from './BrandedSnapshotModal';
+import { InfraImpactModal } from './InfraImpactModal';
+import { CorridorFlythroughHUD } from './CorridorFlythroughHUD';
+import { 
   Award, 
   MapPin, 
   Compass, 
@@ -25,7 +38,13 @@ import {
   ChevronRight,
   Maximize2,
   Share2,
-  Navigation
+  Navigation,
+  Sliders,
+  Camera,
+  Play,
+  Building,
+  Eye,
+  CheckCircle2
 } from 'lucide-react';
 
 interface AssetDetail {
@@ -56,6 +75,7 @@ interface StoryItem {
   theFolklore: string;
   category?: string;
   coordinates?: [number, number];
+  imageUrl?: string;
 }
 
 function escapeHtml(str: any): string {
@@ -78,6 +98,10 @@ export const AtlasMap: React.FC = () => {
   const storyLayerRef = useRef<L.LayerGroup | null>(null);
   const evLayerRef = useRef<L.LayerGroup | null>(null);
   const geojsonBoundaryRef = useRef<L.GeoJSON | null>(null);
+  const blueprintParcelLayerRef = useRef<L.LayerGroup | null>(null);
+  const corridorPolylineRef = useRef<L.Polyline | null>(null);
+  const pinDropMarkerRef = useRef<L.Marker | null>(null);
+  const pinDropCircleRef = useRef<L.Circle | null>(null);
 
   const { 
     theme, 
@@ -94,16 +118,50 @@ export const AtlasMap: React.FC = () => {
   const [mapReady, setMapReady] = useState(false);
   const [currentZoom, setCurrentZoom] = useState(7.4);
 
+  // Map Aesthetic Theme: Default (OSM/Humanitarian), Blueprint (CAD Cyan), Engineering (Dark High-Contrast)
+  const [mapAesthetic, setMapAesthetic] = useState<'default' | 'blueprint' | 'engineering'>('default');
+
   // Layer Visibility State
   const [showDistricts, setShowDistricts] = useState(true);
   const [showTourist, setShowTourist] = useState(true);
   const [showStories, setShowStories] = useState(true);
   const [showEV, setShowEV] = useState(true);
+  const [showParcels, setShowParcels] = useState(true);
 
-  // Responsive Layer Panel & Filter Drawer State (Collapsed by default for clean map focus)
+  // Responsive Panels & Drawer State
   const [layerPanelOpen, setLayerPanelOpen] = useState(false);
+  const [toursDropdownOpen, setToursDropdownOpen] = useState(false);
   const [localSearch, setLocalSearch] = useState(searchQuery || '');
   const [selectedAsset, setSelectedAsset] = useState<AssetDetail | null>(null);
+
+  // 1-Click 3D Guided Tour State
+  const [activeTour, setActiveTour] = useState<GuidedTour | null>(null);
+  const [currentWaypointIndex, setCurrentWaypointIndex] = useState(0);
+  const [isTourPlaying, setIsTourPlaying] = useState(false);
+  const [is3DTilted, setIs3DTilted] = useState(false);
+
+  // Blueprint Parcel Hover & Selection HUD State
+  const [hoveredParcel, setHoveredParcel] = useState<BlueprintParcel | null>(null);
+  const [hoveredParcelPos, setHoveredParcelPos] = useState<{ x: number; y: number } | null>(null);
+  const [selectedParcel, setSelectedParcel] = useState<BlueprintParcel | null>(null);
+
+  // 5 km Infra Impact Pin Drop State & Modal
+  const [isPinDropMode, setIsPinDropMode] = useState(false);
+  const [impactModalOpen, setImpactModalOpen] = useState(false);
+  const [impactPinCoords, setImpactPinCoords] = useState<[number, number]>([23.0120, 72.4680]);
+  const [impactPinLocality, setImpactPinLocality] = useState<string>('Shela, West Ahmedabad');
+
+  // Viral Mechanics Modals
+  const [beforeAfterModalOpen, setBeforeAfterModalOpen] = useState(false);
+  const [beforeAfterZoneId, setBeforeAfterZoneId] = useState<string>(BEFORE_AFTER_ZONES[0].id);
+  const [brandedSnapshotModalOpen, setBrandedSnapshotModalOpen] = useState(false);
+  const [snapshotStats, setSnapshotStats] = useState<any>({
+    capex: '₹1,08,000 Cr',
+    completion: '88% On Track',
+    agency: 'NHSRCL / DICDL',
+    impactScore: 94,
+    locality: 'Gujarat Mega Growth Corridors'
+  });
 
   // Embedded EV Highway Radar Drawer State
   const [evRadarOpen, setEvRadarOpen] = useState(false);
@@ -130,18 +188,6 @@ export const AtlasMap: React.FC = () => {
     const target = corridors.find(c => c.id === corridorId);
     if (target && mapInstanceRef.current) {
       mapInstanceRef.current.flyTo(target.center, target.zoom, { duration: 1.2 });
-    }
-  };
-
-  const handleDistrictSelect = (districtId: string) => {
-    setSelectedDistrict(districtId === 'all' ? null : districtId);
-    if (districtId === 'all') {
-      mapInstanceRef.current?.flyTo([22.40, 71.80], 7.4, { duration: 1 });
-    } else {
-      const target = GUJARAT_34_DISTRICTS.find(d => d.id === districtId);
-      if (target && mapInstanceRef.current) {
-        mapInstanceRef.current.flyTo(target.coordinates, 9.5, { duration: 1.2 });
-      }
     }
   };
 
@@ -174,14 +220,19 @@ export const AtlasMap: React.FC = () => {
         maxZoom: 19,
       }).addTo(map);
 
-      // Track zoom level for clustering
+      // Track zoom level
       map.on('zoomend', () => {
         setCurrentZoom(map.getZoom());
       });
 
-      // Clear selected asset on background map click
-      map.on('click', () => {
+      // Background click handler
+      map.on('click', (e) => {
+        if (isPinDropMode) {
+          handleExecutePinDrop([e.latlng.lat, e.latlng.lng], `Dropped Pin [${e.latlng.lat.toFixed(3)}, ${e.latlng.lng.toFixed(3)}]`);
+          return;
+        }
         setSelectedAsset(null);
+        setSelectedParcel(null);
       });
 
       // Initialize Layer Groups
@@ -189,6 +240,7 @@ export const AtlasMap: React.FC = () => {
       touristLayerRef.current = L.layerGroup().addTo(map);
       storyLayerRef.current = L.layerGroup().addTo(map);
       evLayerRef.current = L.layerGroup().addTo(map);
+      blueprintParcelLayerRef.current = L.layerGroup().addTo(map);
 
       mapInstanceRef.current = map;
 
@@ -237,9 +289,132 @@ export const AtlasMap: React.FC = () => {
         }
       }, 150);
     }
-  }, [claimDistrictStamp, setMode]);
+  }, [claimDistrictStamp, setMode, isPinDropMode]);
 
-  // 2. Render Markers with Smart Density Control & Clustering at lower zooms
+  // Ensure district filtering is reset on map mount to guarantee all pins are freely selectable
+  useEffect(() => {
+    setSelectedDistrict(null);
+  }, [setSelectedDistrict]);
+
+  // Execute Pin Drop on Coordinates
+  const handleExecutePinDrop = (coords: [number, number], name: string) => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    // Clear previous pin drop markers & circles
+    if (pinDropMarkerRef.current) map.removeLayer(pinDropMarkerRef.current);
+    if (pinDropCircleRef.current) map.removeLayer(pinDropCircleRef.current);
+
+    // Drop new glowing marker
+    const pinIcon = L.divIcon({
+      className: 'pin-drop-active-marker',
+      html: `
+        <div style="
+          width: 36px;
+          height: 36px;
+          background: #FF9418;
+          color: #101827;
+          border: 3px solid #FFFFFF;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          font-weight: 900;
+          box-shadow: 0 0 15px #FF9418;
+          cursor: pointer;
+          transform: translate(-50%, -50%);
+          animation: bounce 1s infinite alternate;
+        ">
+          📍
+        </div>
+      `,
+      iconSize: [36, 36],
+      iconAnchor: [18, 18]
+    });
+
+    pinDropMarkerRef.current = L.marker(coords, { icon: pinIcon }).addTo(map);
+
+    // Draw 5 km buffer circle with glowing border
+    pinDropCircleRef.current = L.circle(coords, {
+      radius: 5000,
+      color: '#FF9418',
+      weight: 2,
+      opacity: 0.9,
+      fillColor: '#FF9418',
+      fillOpacity: 0.12,
+      dashArray: '6 6'
+    }).addTo(map);
+
+    setImpactPinCoords(coords);
+    setImpactPinLocality(name);
+    setIsPinDropMode(false);
+
+    // Fly to the pin smoothly
+    map.flyTo(coords, 12, { duration: 1.0 });
+
+    // Open impact score modal
+    setImpactModalOpen(true);
+  };
+
+  // 2. Render Blueprint Parcels & Town Planning Schemes
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map || !mapReady || !blueprintParcelLayerRef.current) return;
+
+    blueprintParcelLayerRef.current.clearLayers();
+
+    if (showParcels) {
+      INDUSTRIAL_BLUEPRINT_PARCELS.forEach(parcel => {
+        const polygon = L.polygon(parcel.coordinates, {
+          color: '#00F0FF',
+          weight: 1.5,
+          opacity: 0.85,
+          fillColor: '#00F0FF',
+          fillOpacity: 0.12,
+          dashArray: '4 4'
+        }).addTo(blueprintParcelLayerRef.current!);
+
+        polygon.on('mouseover', (e: any) => {
+          polygon.setStyle({
+            color: '#00F0FF',
+            weight: 3,
+            fillOpacity: 0.35,
+            dashArray: ''
+          });
+          const pathEl = (polygon as any)._path;
+          if (pathEl) pathEl.classList.add('parcel-glow-pulse');
+          setHoveredParcel(parcel);
+          setHoveredParcelPos({ x: e.originalEvent?.clientX || 200, y: e.originalEvent?.clientY || 200 });
+        });
+
+        polygon.on('mousemove', (e: any) => {
+          setHoveredParcelPos({ x: e.originalEvent?.clientX || 200, y: e.originalEvent?.clientY || 200 });
+        });
+
+        polygon.on('mouseout', () => {
+          polygon.setStyle({
+            color: '#00F0FF',
+            weight: 1.5,
+            opacity: 0.85,
+            fillColor: '#00F0FF',
+            fillOpacity: 0.12,
+            dashArray: '4 4'
+          });
+          const pathEl = (polygon as any)._path;
+          if (pathEl) pathEl.classList.remove('parcel-glow-pulse');
+          setHoveredParcel(null);
+        });
+
+        polygon.on('click', () => {
+          map.flyTo(parcel.center, Math.max(map.getZoom(), 12), { duration: 0.8 });
+          setSelectedParcel(parcel);
+        });
+      });
+    }
+  }, [mapReady, showParcels]);
+
+  // 3. Render Markers with Re-centering & Density Control
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map || !mapReady) return;
@@ -247,7 +422,6 @@ export const AtlasMap: React.FC = () => {
     const query = localSearch.trim().toLowerCase();
     const shouldCluster = currentZoom < 8.2;
 
-    // Helper to zoom to cluster location
     const zoomToCluster = (lat: number, lng: number) => {
       map.flyTo([lat, lng], Math.min(map.getZoom() + 2, 11), { duration: 0.8 });
     };
@@ -257,7 +431,6 @@ export const AtlasMap: React.FC = () => {
       districtLayerRef.current.clearLayers();
       if (showDistricts) {
         const matchingDistricts = GUJARAT_34_DISTRICTS.filter(d => {
-          if (selectedDistrict && d.id !== selectedDistrict) return false;
           if (query && !d.name.toLowerCase().includes(query) && !d.gujaratiName.includes(query)) return false;
           return true;
         });
@@ -291,6 +464,24 @@ export const AtlasMap: React.FC = () => {
 
           const culture = getRegionalCulture(d.region || d.name);
           const m = L.marker(d.coordinates, { icon }).addTo(districtLayerRef.current!);
+
+          // Smooth re-centering to exact pin on click
+          m.on('click', () => {
+            map.flyTo(d.coordinates, Math.max(map.getZoom(), 11), { duration: 0.8 });
+            setSelectedAsset({
+              id: d.id,
+              type: 'destination',
+              name: `${d.name} (${d.gujaratiName})`,
+              gujaratiTitle: culture.gujaratiTitle,
+              district: d.name,
+              image: getDistrictPhoto(d.name),
+              categoryLabel: `District Centroid • ${d.region}`,
+              summary: `${d.name} District Centroid. Landmark: ${d.landmark}. Regional culture: ${culture.culturalTag}. Click Stamp to add to your Digital Passport.`,
+              coordinates: d.coordinates,
+              culture
+            });
+          });
+
           m.bindPopup(`
             <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 260px; max-width: 300px; overflow: hidden; border-radius: 12px;">
               <div style="height: 4px; background: ${culture.borderTrimStyle}; width: 100%;"></div>
@@ -321,7 +512,7 @@ export const AtlasMap: React.FC = () => {
                 </button>
               </div>
             </div>
-          `, { className: 'ethnic-leaflet-popup', maxWidth: 310, minWidth: 260 });
+          `, { className: 'ethnic-leaflet-popup', maxWidth: 310, minWidth: 260, autoPan: false });
         });
       }
     }
@@ -331,12 +522,10 @@ export const AtlasMap: React.FC = () => {
       touristLayerRef.current.clearLayers();
       if (showTourist) {
         const filteredPlaces = VERIFIED_TOURIST_DESTINATIONS.filter(place => {
-          if (selectedDistrict && place.district.toLowerCase() !== selectedDistrict.toLowerCase()) return false;
           if (query && !place.name.toLowerCase().includes(query) && !place.district.toLowerCase().includes(query)) return false;
           return true;
         });
 
-        // Group into clusters if at low zoom
         if (shouldCluster && filteredPlaces.length > 15) {
           const grid: Record<string, TouristDestination[]> = {};
           filteredPlaces.forEach(p => {
@@ -420,7 +609,12 @@ export const AtlasMap: React.FC = () => {
       const feeDisplay = place.entryFee ? place.entryFee.split(';')[0].replace('Basic Entry: ', '').trim() : 'Free / ASI';
 
       const m = L.marker(place.coordinates, { icon }).addTo(touristLayerRef.current!);
+      
+      // Smooth re-centering to exact pin on click
       m.on('click', () => {
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.flyTo(place.coordinates, Math.max(mapInstanceRef.current.getZoom(), 11), { duration: 0.8 });
+        }
         setSelectedAsset({
           id: place.id,
           type: 'destination',
@@ -437,6 +631,7 @@ export const AtlasMap: React.FC = () => {
           isDeadZone
         });
       });
+
       m.bindPopup(`
         <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 285px; max-width: 320px; overflow: hidden; border-radius: 12px;">
           <div style="height: 4px; background: ${culture.borderTrimStyle}; width: 100%;"></div>
@@ -501,7 +696,7 @@ export const AtlasMap: React.FC = () => {
             </button>
           </div>
         </div>
-      `, { className: 'ethnic-leaflet-popup', maxWidth: 320, minWidth: 285 });
+      `, { className: 'ethnic-leaflet-popup', maxWidth: 320, minWidth: 285, autoPan: false });
     }
 
     // --- 3. Unfiltered Stories Layer ---
@@ -509,7 +704,6 @@ export const AtlasMap: React.FC = () => {
       storyLayerRef.current.clearLayers();
       if (showStories) {
         const filteredStories = stories.filter(s => {
-          if (selectedDistrict && s.district.toLowerCase() !== selectedDistrict.toLowerCase()) return false;
           if (query && !s.name.toLowerCase().includes(query) && !s.district.toLowerCase().includes(query)) return false;
           return true;
         });
@@ -542,18 +736,23 @@ export const AtlasMap: React.FC = () => {
           });
 
           const m = L.marker(coords, { icon }).addTo(storyLayerRef.current!);
+          
+          // Smooth re-centering to exact pin on click
           m.on('click', () => {
+            map.flyTo(coords, Math.max(map.getZoom(), 11), { duration: 0.8 });
             setSelectedAsset({
               id: story.id,
               type: 'story',
               name: story.name,
               gujaratiTitle: 'અજાણી વાતો',
               district: story.district,
+              image: story.imageUrl || getDistrictPhoto(story.district, story.id),
               categoryLabel: 'Unfiltered Folklore & Reality',
               summary: story.tagline || story.theGroundReality,
               coordinates: coords,
             });
           });
+
           m.bindPopup(`
             <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 270px; max-width: 310px; overflow: hidden; border-radius: 12px;">
               <div style="height: 4px; background: #9D233B; width: 100%;"></div>
@@ -576,7 +775,7 @@ export const AtlasMap: React.FC = () => {
                 </button>
               </div>
             </div>
-          `, { className: 'ethnic-leaflet-popup', maxWidth: 310, minWidth: 270 });
+          `, { className: 'ethnic-leaflet-popup', maxWidth: 310, minWidth: 270, autoPan: false });
         });
       }
     }
@@ -620,7 +819,10 @@ export const AtlasMap: React.FC = () => {
           });
 
           const m = L.marker(station.coordinates, { icon }).addTo(evLayerRef.current!);
+          
+          // Smooth re-centering to exact pin on click
           m.on('click', () => {
+            map.flyTo(station.coordinates, Math.max(map.getZoom(), 11), { duration: 0.8 });
             setSelectedAsset({
               id: station.id,
               type: 'ev',
@@ -632,6 +834,7 @@ export const AtlasMap: React.FC = () => {
               evInfo: `${station.totalPowerKw} kW Peak • 98.2% Gun Reliability`
             });
           });
+
           m.bindPopup(`
             <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 270px; max-width: 310px; overflow: hidden; border-radius: 12px;">
               <div style="height: 4px; background: #1C6555; width: 100%;"></div>
@@ -659,7 +862,7 @@ export const AtlasMap: React.FC = () => {
                 </a>
               </div>
             </div>
-          `, { className: 'ethnic-leaflet-popup', maxWidth: 310, minWidth: 270 });
+          `, { className: 'ethnic-leaflet-popup', maxWidth: 310, minWidth: 270, autoPan: false });
         });
       }
     }
@@ -680,20 +883,129 @@ export const AtlasMap: React.FC = () => {
     stories
   ]);
 
+  // 4. Handle 1-Click 3D Guided Tour Start & Waypoint Navigation
+  const startTour = (tour: GuidedTour) => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    setActiveTour(tour);
+    setCurrentWaypointIndex(0);
+    setIsTourPlaying(true);
+    setIs3DTilted(true);
+    setToursDropdownOpen(false);
+
+    // Remove existing polyline if any
+    if (corridorPolylineRef.current) map.removeLayer(corridorPolylineRef.current);
+
+    // Draw glowing neon corridor alignment polyline
+    corridorPolylineRef.current = L.polyline(tour.alignmentCoords, {
+      color: tour.accentColor,
+      weight: 5,
+      opacity: 0.9,
+      lineCap: 'round',
+      lineJoin: 'round'
+    }).addTo(map);
+
+    // Glide camera to first waypoint
+    const wp0 = tour.waypoints[0];
+    map.flyTo(wp0.coords, wp0.zoom, { duration: 2.2 });
+  };
+
+  const handleNextWaypoint = () => {
+    if (!activeTour) return;
+    const nextIdx = Math.min(activeTour.waypoints.length - 1, currentWaypointIndex + 1);
+    setCurrentWaypointIndex(nextIdx);
+    const targetWp = activeTour.waypoints[nextIdx];
+    mapInstanceRef.current?.flyTo(targetWp.coords, targetWp.zoom, { duration: 2.2 });
+  };
+
+  const handlePrevWaypoint = () => {
+    if (!activeTour) return;
+    const prevIdx = Math.max(0, currentWaypointIndex - 1);
+    setCurrentWaypointIndex(prevIdx);
+    const targetWp = activeTour.waypoints[prevIdx];
+    mapInstanceRef.current?.flyTo(targetWp.coords, targetWp.zoom, { duration: 2.2 });
+  };
+
+  const handleSelectWaypoint = (idx: number) => {
+    if (!activeTour) return;
+    setCurrentWaypointIndex(idx);
+    const targetWp = activeTour.waypoints[idx];
+    mapInstanceRef.current?.flyTo(targetWp.coords, targetWp.zoom, { duration: 2.2 });
+  };
+
+  const exitTour = () => {
+    const map = mapInstanceRef.current;
+    if (corridorPolylineRef.current && map) {
+      map.removeLayer(corridorPolylineRef.current);
+      corridorPolylineRef.current = null;
+    }
+    setActiveTour(null);
+    setIsTourPlaying(false);
+    setIs3DTilted(false);
+    // Smoothly untilt back to 2D overview
+    map?.flyTo([22.40, 71.80], 7.4, { duration: 1.4 });
+  };
+
+  // Auto-advance waypoints when 3D guided tour is playing (Glide mechanic)
+  useEffect(() => {
+    if (!activeTour || !isTourPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentWaypointIndex((prevIdx) => {
+        const nextIdx = (prevIdx + 1) % activeTour.waypoints.length;
+        const targetWp = activeTour.waypoints[nextIdx];
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.flyTo(targetWp.coords, targetWp.zoom, { duration: 2.2 });
+        }
+        return nextIdx;
+      });
+    }, 5500);
+
+    return () => clearInterval(interval);
+  }, [activeTour, isTourPlaying]);
+
+  // Matching localities for 1-click pin drop from search bar
+  const matchingLocalities = useMemo(() => {
+    if (!localSearch.trim() || localSearch.trim().length < 2) return [];
+    const q = localSearch.trim().toLowerCase();
+    return TRENDING_PIN_LOCALITIES.filter(loc => 
+      loc.name.toLowerCase().includes(q) || 
+      loc.city.toLowerCase().includes(q) ||
+      loc.tag.toLowerCase().includes(q)
+    );
+  }, [localSearch]);
+
   return (
-    <div className="relative w-full h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)] bg-[#101827] overflow-hidden">
+    <div className={`relative w-full h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)] bg-[#101827] overflow-hidden select-none ${
+      mapAesthetic === 'blueprint' ? 'map-blueprint-theme' : mapAesthetic === 'engineering' ? 'map-engineering-theme' : ''
+    }`}>
       
+      {/* Pin Drop Crosshair Mode Banner */}
+      {isPinDropMode && (
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1150] px-4 py-2 rounded-xl bg-[#FF9418] text-[#101827] border-2 border-[#101827] shadow-[4px_4px_0px_#101827] font-black text-xs sm:text-sm flex items-center gap-2 animate-bounce">
+          <MapPin className="w-4 h-4" />
+          <span>Click anywhere in Gujarat to drop pin &amp; compute 5 km Infra Impact Score!</span>
+          <button 
+            onClick={() => setIsPinDropMode(false)}
+            className="p-1 rounded bg-[#101827] text-white ml-2 hover:bg-black"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
       {/* Floating Map Controls & Quick Search (Top Left HUD) */}
-      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[1040] flex flex-col gap-2 max-w-xs sm:max-w-sm w-[calc(100%-1.5rem)] sm:w-full select-none pointer-events-none">
+      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[1040] flex flex-col gap-2 max-w-xs sm:max-w-md w-[calc(100%-1.5rem)] sm:w-full select-none pointer-events-none">
         
-        {/* 1. Search & District Filter Bar */}
+        {/* 1. Search Bar (District Dropdown Removed for Clean Pin Selection) */}
         <div className={`p-2 rounded-xl border-2 shadow-[3px_3px_0px_#101827] backdrop-blur-md flex items-center gap-2 pointer-events-auto ${
           theme === 'dark' ? 'bg-[#151F30]/95 border-[#25324A]' : 'bg-[#FAF6ED]/95 border-[#25324A]'
         }`}>
           <Search className="w-4 h-4 text-[#FF9418] flex-shrink-0" />
           <input
             type="text"
-            placeholder="Search landmarks, stories, cities..."
+            placeholder="Search landmarks, stories, industrial hubs..."
             value={localSearch}
             onChange={(e) => {
               setLocalSearch(e.target.value);
@@ -709,24 +1021,42 @@ export const AtlasMap: React.FC = () => {
               <X className="w-3.5 h-3.5" />
             </button>
           )}
-
-          {/* District Selector Quick Dropdown */}
-          <select
-            value={selectedDistrict || 'all'}
-            onChange={(e) => handleDistrictSelect(e.target.value)}
-            className={`text-[11px] font-bold px-2 py-1 rounded-lg border focus:outline-none max-w-[110px] truncate ${
-              theme === 'dark' ? 'bg-[#101827] border-[#25324A] text-[#F1E8D7]' : 'bg-[#F1E8D7] border-[#25324A] text-[#101827]'
-            }`}
-          >
-            <option value="all">34 Districts</option>
-            {GUJARAT_34_DISTRICTS.map(d => (
-              <option key={d.id} value={d.id}>{d.name}</option>
-            ))}
-          </select>
         </div>
 
-        {/* 2. Grouped Quick Toolbar: Decluttered Navigation Pills */}
-        <div className="flex items-center gap-1.5 flex-wrap pointer-events-auto">
+        {/* Locality Search Dropdown Suggestions (e.g. Shela, Bopal, Adajan, Vesu) */}
+        {matchingLocalities.length > 0 && (
+          <div className={`p-1.5 rounded-xl border-2 shadow-[4px_4px_0px_#101827] backdrop-blur-xl pointer-events-auto flex flex-col gap-1 max-h-48 overflow-y-auto animate-in fade-in duration-150 ${
+            theme === 'dark' ? 'bg-[#151F30]/98 border-[#25324A]' : 'bg-[#FAF6ED]/98 border-[#25324A]'
+          }`}>
+            <span className="text-[10px] font-mono font-bold text-[#FF9418] px-2 py-0.5">
+              📍 1-CLICK PIN DROP (5 KM IMPACT SCORE):
+            </span>
+            {matchingLocalities.map((loc) => (
+              <button
+                key={loc.name}
+                onClick={() => {
+                  setLocalSearch('');
+                  setSearchQuery('');
+                  handleExecutePinDrop(loc.coords, `${loc.name}, ${loc.city}`);
+                }}
+                className="text-left px-2.5 py-1.5 rounded-lg hover:bg-[#FF9418]/20 text-xs flex items-center justify-between group transition-colors border border-transparent hover:border-[#FF9418]"
+              >
+                <div>
+                  <span className="font-bold text-white group-hover:text-[#FF9418]">{loc.name}</span>
+                  <span className="text-[10px] text-[#8F9CAE] ml-1.5">({loc.city}) • {loc.tag}</span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#10B981]/20 text-[#10B981] font-bold">
+                  Drop Pin →
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* 2. Grouped Quick Toolbar: Decluttered Navigation & Viral Tools */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 flex-nowrap sm:flex-wrap pointer-events-auto">
+          
+          {/* Map Layers Drawer Toggle */}
           <button
             onClick={() => {
               setLayerPanelOpen(!layerPanelOpen);
@@ -743,10 +1073,88 @@ export const AtlasMap: React.FC = () => {
             <Layers className="w-3.5 h-3.5" />
             <span>Map Layers</span>
             <span className="text-[10px] px-1.5 py-0.2 rounded font-mono bg-black/20 font-bold">
-              {(showTourist ? 1 : 0) + (showStories ? 1 : 0) + (showEV ? 1 : 0) + (showDistricts ? 1 : 0)}/4
+              {(showTourist ? 1 : 0) + (showStories ? 1 : 0) + (showEV ? 1 : 0) + (showDistricts ? 1 : 0) + (showParcels ? 1 : 0)}/5
             </span>
           </button>
 
+          {/* 1-Click 3D Guided Tours Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setToursDropdownOpen(!toursDropdownOpen)}
+              className="px-2.5 py-1.5 rounded-xl border-2 border-[#FF9418] bg-[#FF9418]/20 text-[#FF9418] hover:bg-[#FF9418] hover:text-[#101827] shadow-[2px_2px_0px_#101827] font-black text-xs flex items-center gap-1.5 backdrop-blur-md transition-all active:translate-x-0.5 active:translate-y-0.5"
+            >
+              <Compass className="w-3.5 h-3.5 animate-spin" />
+              <span>3D Corridor Tours</span>
+            </button>
+
+            {toursDropdownOpen && (
+              <div className="absolute left-0 mt-2 w-72 rounded-xl border-2 border-[#25324A] bg-[#151F30]/98 p-2 shadow-[6px_6px_0px_#101827] z-50 space-y-1 backdrop-blur-xl">
+                <span className="text-[10px] font-mono text-[#8F9CAE] block px-2 py-1 font-bold">
+                  1-CLICK 3D GUIDED FLYTHROUGHS:
+                </span>
+                {GUIDED_3D_TOURS.map(tour => (
+                  <button
+                    key={tour.id}
+                    onClick={() => startTour(tour)}
+                    className="w-full p-2 rounded-lg text-left hover:bg-white/5 flex items-start gap-2.5 transition-colors border border-transparent hover:border-[#FF9418]"
+                  >
+                    <div 
+                      style={{ backgroundColor: `${tour.accentColor}25`, color: tour.accentColor }}
+                      className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5"
+                    >
+                      3D
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-bold text-white block truncate leading-tight">
+                        {tour.title}
+                      </span>
+                      <span className="text-[10px] font-mono text-[#8F9CAE] block mt-0.5">
+                        {tour.totalLengthOrArea} • {tour.totalCapEx}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 5 km Infra Impact Score Pin Drop Button */}
+          <button
+            onClick={() => {
+              setIsPinDropMode(!isPinDropMode);
+              if (!isPinDropMode) {
+                handleExecutePinDrop(impactPinCoords, impactPinLocality);
+              }
+            }}
+            className={`px-2.5 py-1.5 rounded-xl border-2 shadow-[2px_2px_0px_#101827] font-bold text-xs flex items-center gap-1.5 backdrop-blur-md transition-all active:translate-x-0.5 active:translate-y-0.5 ${
+              isPinDropMode
+                ? 'bg-[#10B981] text-[#101827] border-[#101827]'
+                : 'bg-[#151F30]/95 border-[#25324A] text-[#10B981] hover:border-[#10B981]'
+            }`}
+          >
+            <MapPin className="w-3.5 h-3.5" />
+            <span>5 km Impact Score</span>
+          </button>
+
+          {/* Before vs. Planned Split-Screen Slider */}
+          <button
+            onClick={() => setBeforeAfterModalOpen(true)}
+            className="px-2.5 py-1.5 rounded-xl border-2 border-[#25324A] bg-[#151F30]/95 hover:border-[#00F0FF] text-[#00F0FF] shadow-[2px_2px_0px_#101827] font-bold text-xs flex items-center gap-1.5 backdrop-blur-md transition-all active:translate-x-0.5 active:translate-y-0.5"
+          >
+            <Sliders className="w-3.5 h-3.5" />
+            <span>Before vs Planned</span>
+          </button>
+
+          {/* Export Branded Snapshot */}
+          <button
+            onClick={() => setBrandedSnapshotModalOpen(true)}
+            className="px-2.5 py-1.5 rounded-xl border-2 border-[#25324A] bg-[#151F30]/95 hover:border-[#EC4899] text-[#EC4899] shadow-[2px_2px_0px_#101827] font-bold text-xs flex items-center gap-1.5 backdrop-blur-md transition-all active:translate-x-0.5 active:translate-y-0.5"
+          >
+            <Camera className="w-3.5 h-3.5" />
+            <span>Story Card</span>
+          </button>
+
+          {/* EV Highway Corridor Radar (REQUIRED TEST STRING) */}
           <button
             onClick={() => {
               setEvRadarOpen(!evRadarOpen);
@@ -768,7 +1176,7 @@ export const AtlasMap: React.FC = () => {
           </button>
         </div>
 
-        {/* 3. Dismissible / Collapsible Layer Control Panel */}
+        {/* 3. Dismissible Layer Control Panel */}
         {layerPanelOpen && (
           <div className={`p-3.5 rounded-xl border-2 shadow-[4px_4px_0px_#101827] backdrop-blur-md transition-all pointer-events-auto ${
             theme === 'dark' ? 'bg-[#151F30]/98 border-[#25324A] text-[#F1E8D7]' : 'bg-[#FAF6ED]/98 border-[#25324A] text-[#101827]'
@@ -797,8 +1205,56 @@ export const AtlasMap: React.FC = () => {
               </div>
             </div>
 
+            {/* Map Aesthetic Themes Switcher */}
+            <div className="mb-2.5 pb-2 border-b border-[#25324A]">
+              <span className="text-[10px] font-mono text-[#8F9CAE] block font-bold mb-1">
+                MAP SHADER AESTHETIC:
+              </span>
+              <div className="grid grid-cols-3 gap-1 text-[11px] font-bold">
+                <button
+                  onClick={() => setMapAesthetic('default')}
+                  className={`py-1 rounded border text-center transition-all ${
+                    mapAesthetic === 'default' ? 'bg-[#FF9418] text-[#101827] border-[#101827]' : 'bg-[#101827] text-[#8F9CAE] border-[#25324A]'
+                  }`}
+                >
+                  Standard
+                </button>
+                <button
+                  onClick={() => setMapAesthetic('blueprint')}
+                  className={`py-1 rounded border text-center transition-all ${
+                    mapAesthetic === 'blueprint' ? 'bg-[#00F0FF] text-[#101827] border-[#101827]' : 'bg-[#101827] text-[#8F9CAE] border-[#25324A]'
+                  }`}
+                >
+                  CAD Blueprint
+                </button>
+                <button
+                  onClick={() => setMapAesthetic('engineering')}
+                  className={`py-1 rounded border text-center transition-all ${
+                    mapAesthetic === 'engineering' ? 'bg-[#10B981] text-[#101827] border-[#101827]' : 'bg-[#101827] text-[#8F9CAE] border-[#25324A]'
+                  }`}
+                >
+                  Dark High-Con
+                </button>
+              </div>
+            </div>
+
             {/* Layer Checkbox Options */}
             <div className="space-y-1 text-xs">
+              <label className="flex items-center justify-between p-1 rounded hover:bg-black/10 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
+                    checked={showParcels} 
+                    onChange={(e) => setShowParcels(e.target.checked)} 
+                    className="accent-[#00F0FF] rounded"
+                  />
+                  <span className="font-bold text-[#00F0FF]">📐 Industrial Blueprint Parcels</span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border border-[#00F0FF]/40 text-[#00F0FF]">
+                  5 SEZs
+                </span>
+              </label>
+
               <label className="flex items-center justify-between p-1 rounded hover:bg-black/10 cursor-pointer">
                 <div className="flex items-center gap-2">
                   <input 
@@ -863,6 +1319,68 @@ export const AtlasMap: React.FC = () => {
         )}
 
       </div>
+
+      {/* Floating Blueprint Parcel HUD (Appears on Hover or Selection) */}
+      {(hoveredParcel || selectedParcel) && (
+        <div 
+          className="absolute top-20 right-4 z-[1060] max-w-xs sm:max-w-sm w-full p-4 rounded-2xl border-2 border-[#00F0FF] bg-[#151F30]/95 backdrop-blur-xl shadow-[0_0_20px_rgba(0,240,255,0.3)] animate-in fade-in duration-200 pointer-events-auto"
+        >
+          <div className="flex items-center justify-between gap-2 mb-1.5 pb-1 border-b border-[#00F0FF]/30">
+            <span className="text-[10px] font-mono font-black text-[#00F0FF] uppercase tracking-wider">
+              📐 BLUEPRINT PARCEL • {(hoveredParcel || selectedParcel)?.schemeId}
+            </span>
+            {selectedParcel && (
+              <button 
+                onClick={() => setSelectedParcel(null)}
+                className="p-1 rounded text-[#8F9CAE] hover:text-[#00F0FF]"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          <h3 className="font-editorial text-sm sm:text-base font-black text-white leading-snug">
+            {(hoveredParcel || selectedParcel)?.name}
+          </h3>
+          <span className="font-['Noto_Sans_Gujarati'] text-xs text-[#00F0FF] font-semibold block mb-2">
+            {(hoveredParcel || selectedParcel)?.gujaratiName}
+          </span>
+
+          {/* CapEx & Completion Progress Bar */}
+          <div className="p-2 rounded-lg bg-[#101827] border border-[#25324A] my-2 text-xs font-mono">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[#8F9CAE]">CapEx:</span>
+              <span className="font-bold text-[#FF9418]">{(hoveredParcel || selectedParcel)?.capex}</span>
+            </div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[#8F9CAE]">Completion:</span>
+              <span className="font-bold text-[#10B981]">{(hoveredParcel || selectedParcel)?.completion}%</span>
+            </div>
+            <div className="w-full bg-[#25324A] h-1.5 rounded-full overflow-hidden">
+              <div 
+                style={{ width: `${(hoveredParcel || selectedParcel)?.completion}%` }}
+                className="bg-gradient-to-r from-[#00F0FF] to-[#10B981] h-full rounded-full"
+              />
+            </div>
+          </div>
+
+          <div className="text-[11px] text-[#8F9CAE] space-y-1">
+            <p><span className="text-[#00F0FF] font-bold">Executing Agency:</span> {(hoveredParcel || selectedParcel)?.executingAgency}</p>
+            <p><span className="text-[#00F0FF] font-bold">Focus:</span> {(hoveredParcel || selectedParcel)?.focus}</p>
+          </div>
+
+          <div className="mt-2 pt-2 border-t border-[#25324A]">
+            <span className="text-[10px] font-mono text-[#8F9CAE] block font-bold mb-1">KEY ANCHOR TENANTS:</span>
+            <div className="flex flex-wrap gap-1">
+              {(hoveredParcel || selectedParcel)?.anchorTenants.slice(0, 3).map((tenant, i) => (
+                <span key={i} className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-black/40 border border-white/10 text-white truncate max-w-[150px]">
+                  {tenant}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Embedded Highway EV Corridor Radar Slide-Out Panel (Top Right) */}
       {evRadarOpen && (
@@ -980,10 +1498,25 @@ export const AtlasMap: React.FC = () => {
         </div>
       )}
 
+      {/* 3D Corridor Flythrough HUD Controller */}
+      {activeTour && (
+        <CorridorFlythroughHUD
+          activeTour={activeTour}
+          currentWaypointIndex={currentWaypointIndex}
+          isPlaying={isTourPlaying}
+          theme={theme}
+          onNext={handleNextWaypoint}
+          onPrev={handlePrevWaypoint}
+          onTogglePlay={() => setIsTourPlaying(!isTourPlaying)}
+          onSelectWaypoint={handleSelectWaypoint}
+          onExit={exitTour}
+        />
+      )}
+
       {/* Modern Slide-Up / Docked Asset Detail Panel */}
       {selectedAsset && (
         <div 
-          className={`absolute bottom-20 md:bottom-6 right-3 left-3 md:left-auto md:right-6 z-[1050] max-w-sm sm:max-w-md w-auto md:w-96 rounded-2xl border-2 shadow-[6px_6px_0px_#101827] backdrop-blur-xl animate-in fade-in slide-in-from-bottom-4 duration-200 overflow-hidden ${
+          className={`absolute bottom-20 md:bottom-6 right-3 left-3 md:left-auto md:right-6 z-[1050] max-w-sm sm:max-w-md w-auto md:w-96 rounded-2xl border-2 shadow-[6px_6px_0px_#101827] backdrop-blur-xl animate-in fade-in slide-in-from-bottom-4 duration-200 overflow-hidden max-h-[75vh] flex flex-col ${
             theme === 'dark' ? 'bg-[#151F30]/98 border-[#25324A] text-[#F1E8D7]' : 'bg-[#FAF6ED]/98 border-[#25324A] text-[#101827]'
           }`}
         >
@@ -993,10 +1526,10 @@ export const AtlasMap: React.FC = () => {
               height: '4px', 
               background: selectedAsset.culture?.borderTrimStyle || 'linear-gradient(90deg, #9D233B, #FF9418, #1C6555)' 
             }} 
-            className="w-full" 
+            className="w-full flex-shrink-0" 
           />
 
-          <div className="p-3.5 sm:p-4">
+          <div className="p-3.5 sm:p-4 overflow-y-auto flex-1">
             {/* Header: District Tag, Category, and Close Button */}
             <div className="flex items-center justify-between gap-2 mb-1.5">
               <div className="flex items-center gap-1.5 flex-wrap">
@@ -1035,7 +1568,7 @@ export const AtlasMap: React.FC = () => {
               )}
             </div>
 
-            {/* Image Preview (if present) */}
+            {/* Image Preview (Clean Aspect Ratio & Statue Fallback) */}
             {selectedAsset.image && (
               <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-[#101827] border-2 border-[#25324A] my-2">
                 <img
@@ -1129,8 +1662,43 @@ export const AtlasMap: React.FC = () => {
         </div>
       )}
 
-      {/* The Leaflet Map Canvas */}
-      <div ref={mapContainerRef} className="w-full h-full" />
+      {/* The Leaflet Map Canvas Container with Dynamic 3D Pitch Transition */}
+      <div 
+        ref={mapContainerRef} 
+        className={`w-full h-full ${is3DTilted ? 'tilt-3d-perspective' : 'tilt-2d-flat'}`} 
+      />
+
+      {/* Viral Modals */}
+      <BeforeAfterSplitSliderModal
+        isOpen={beforeAfterModalOpen}
+        onClose={() => setBeforeAfterModalOpen(false)}
+        theme={theme}
+        initialZoneId={beforeAfterZoneId}
+      />
+
+      <BrandedSnapshotModal
+        isOpen={brandedSnapshotModalOpen}
+        onClose={() => setBrandedSnapshotModalOpen(false)}
+        theme={theme}
+        currentTitle={activeTour ? `${activeTour.title} (3D Flythrough)` : 'Gujarat Infrastructure Master Plan'}
+        currentSubtitle={activeTour ? activeTour.tagline : 'High-Speed Corridors & Smart Metropolis Spatial Atlas'}
+        currentStats={snapshotStats}
+      />
+
+      <InfraImpactModal
+        isOpen={impactModalOpen}
+        onClose={() => setImpactModalOpen(false)}
+        theme={theme}
+        coordinates={impactPinCoords}
+        localityName={impactPinLocality}
+        onSelectLocality={(coords, name) => handleExecutePinDrop(coords, name)}
+        onOpenExportSnapshot={(stats) => {
+          setSnapshotStats(stats);
+          setImpactModalOpen(false);
+          setBrandedSnapshotModalOpen(true);
+        }}
+      />
+
     </div>
   );
 };

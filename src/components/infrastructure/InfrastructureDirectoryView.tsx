@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { ToranOrnamentalBorder } from '../cultural/GujaratiPatterns';
+import { getDistrictPhoto } from '../../utils/district-photos';
 import { Search, MapPin, ExternalLink, Zap, ShieldCheck, Activity, X } from 'lucide-react';
 
 interface InfraAsset {
@@ -212,12 +213,12 @@ export const InfrastructureDirectoryView: React.FC = () => {
               theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
             }`}
           >
-            {/* Media Image Header */}
+            {/* Media Image Header with crisp photo & clear visibility */}
             <div 
               className="h-48 w-full bg-cover relative p-3 flex flex-col justify-between border-b-2 border-[#25324A]"
-              style={{ backgroundImage: `url('${item.imgUrl}')`, backgroundPosition: 'center 20%' }}
+              style={{ backgroundImage: `url('${item.imgUrl}'), url('${getDistrictPhoto(item.district)}')`, backgroundPosition: 'center 20%' }}
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/60 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
               
               <div className="relative z-10 flex items-center justify-between">
                 <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#101827]/90 text-[#FF9418] border border-[#25324A]">
