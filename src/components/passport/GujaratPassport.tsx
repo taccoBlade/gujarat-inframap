@@ -46,8 +46,8 @@ export const GujaratPassport: React.FC = () => {
   };
 
   const getMilestoneStatus = (count: number) => {
-    if (count >= 34) return { title: 'Royal Solanki Emperor', next: '100% Gujarat Conquered!', needed: 0 };
-    if (count >= 24) return { title: 'Vanguard Explorer', next: '10 stamps to Royal Solanki Emperor', needed: 34 - count };
+    if (count >= 34) return { title: 'Gujarat Maha Pravasi', next: '100% Gujarat Explored!', needed: 0 };
+    if (count >= 24) return { title: 'Vanguard Explorer', next: '10 stamps to Maha Pravasi rank', needed: 34 - count };
     if (count >= 12) return { title: 'Saurashtra Pathfinder', next: '12 stamps to Vanguard Explorer', needed: 24 - count };
     if (count >= 5) return { title: 'Heritage Pravasi', next: '7 stamps to Pathfinder status', needed: 12 - count };
     return { title: 'Novice Pilgrim', next: `${5 - count} stamps to Heritage Pravasi rank`, needed: 5 - count };

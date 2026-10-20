@@ -58,10 +58,10 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
     )
   },
   passport: {
-    code: 'SEAL-03 // SOLANKI IMPERIAL LEDGER',
+    code: 'SEAL-03 // 34 DISTRICT TERRITORIAL LEDGER',
     badge: '34 DISTRICTS CHALLENGE',
-    title: 'Royal Solanki Digital Passport',
-    gujarati: 'રાજવી સોલંકી ડિજિટલ પાસપોર્ટ',
+    title: 'Gujarat Cultural Passport',
+    gujarati: 'ગુજરાત સાંસ્કૃતિક ડિજિટલ પાસપોર્ટ',
     accent: '#F59E0B',
     glowColor: 'rgba(245, 158, 11, 0.4)',
     subtext: 'Verified Territorial Stamps • Architectural Lineage • State Rank',
