@@ -73,6 +73,13 @@ h1, h2, h3, .font-editorial {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* Ensure Leaflet controls sit cleanly above the mobile bottom navigation */
+@media (max-width: 1023px) {
+  .leaflet-bottom {
+    margin-bottom: 4.5rem !important;
+  }
+}
+
 /* Leaflet Custom Marker & DivIcon Reset */
 .leaflet-div-icon {
   background: transparent !important;

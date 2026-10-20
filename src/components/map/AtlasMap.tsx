@@ -23,8 +23,28 @@ import {
   Search,
   Filter,
   ChevronRight,
-  Maximize2
+  Maximize2,
+  Share2,
+  Navigation
 } from 'lucide-react';
+
+interface AssetDetail {
+  id: string;
+  type: 'destination' | 'story' | 'ev';
+  name: string;
+  gujaratiTitle?: string;
+  district: string;
+  image?: string;
+  categoryLabel?: string;
+  summary: string;
+  timings?: string;
+  entryFee?: string;
+  coordinates: [number, number];
+  culture?: any;
+  isDeadZone?: boolean;
+  evInfo?: string;
+  verifiedSource?: string;
+}
 
 interface StoryItem {
   id: string;
@@ -80,9 +100,10 @@ export const AtlasMap: React.FC = () => {
   const [showStories, setShowStories] = useState(true);
   const [showEV, setShowEV] = useState(true);
 
-  // Responsive Layer Panel & Filter Drawer State
-  const [layerPanelOpen, setLayerPanelOpen] = useState(true);
+  // Responsive Layer Panel & Filter Drawer State (Collapsed by default for clean map focus)
+  const [layerPanelOpen, setLayerPanelOpen] = useState(false);
   const [localSearch, setLocalSearch] = useState(searchQuery || '');
+  const [selectedAsset, setSelectedAsset] = useState<AssetDetail | null>(null);
 
   // Embedded EV Highway Radar Drawer State
   const [evRadarOpen, setEvRadarOpen] = useState(false);
@@ -156,6 +177,11 @@ export const AtlasMap: React.FC = () => {
       // Track zoom level for clustering
       map.on('zoomend', () => {
         setCurrentZoom(map.getZoom());
+      });
+
+      // Clear selected asset on background map click
+      map.on('click', () => {
+        setSelectedAsset(null);
       });
 
       // Initialize Layer Groups
@@ -394,6 +420,23 @@ export const AtlasMap: React.FC = () => {
       const feeDisplay = place.entryFee ? place.entryFee.split(';')[0].replace('Basic Entry: ', '').trim() : 'Free / ASI';
 
       const m = L.marker(place.coordinates, { icon }).addTo(touristLayerRef.current!);
+      m.on('click', () => {
+        setSelectedAsset({
+          id: place.id,
+          type: 'destination',
+          name: place.name,
+          gujaratiTitle: culture.gujaratiTitle,
+          district: place.district,
+          image: place.image,
+          categoryLabel: place.categoryLabel,
+          summary: place.summary,
+          timings: timingsDisplay,
+          entryFee: feeDisplay,
+          coordinates: place.coordinates,
+          culture,
+          isDeadZone
+        });
+      });
       m.bindPopup(`
         <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 285px; max-width: 320px; overflow: hidden; border-radius: 12px;">
           <div style="height: 4px; background: ${culture.borderTrimStyle}; width: 100%;"></div>
@@ -499,6 +542,18 @@ export const AtlasMap: React.FC = () => {
           });
 
           const m = L.marker(coords, { icon }).addTo(storyLayerRef.current!);
+          m.on('click', () => {
+            setSelectedAsset({
+              id: story.id,
+              type: 'story',
+              name: story.name,
+              gujaratiTitle: 'અજાણી વાતો',
+              district: story.district,
+              categoryLabel: 'Unfiltered Folklore & Reality',
+              summary: story.tagline || story.theGroundReality,
+              coordinates: coords,
+            });
+          });
           m.bindPopup(`
             <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 270px; max-width: 310px; overflow: hidden; border-radius: 12px;">
               <div style="height: 4px; background: #9D233B; width: 100%;"></div>
@@ -565,6 +620,18 @@ export const AtlasMap: React.FC = () => {
           });
 
           const m = L.marker(station.coordinates, { icon }).addTo(evLayerRef.current!);
+          m.on('click', () => {
+            setSelectedAsset({
+              id: station.id,
+              type: 'ev',
+              name: station.name,
+              district: station.district,
+              categoryLabel: `${station.totalPowerKw} kW Hypercharger`,
+              summary: `${station.locationDesc} (${station.network}) • ${station.hasDgBackup ? 'Blackout-Proof Generator Backup' : 'Standard Grid Power'}. Operational fast charger.`,
+              coordinates: station.coordinates,
+              evInfo: `${station.totalPowerKw} kW Peak • 98.2% Gun Reliability`
+            });
+          });
           m.bindPopup(`
             <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 270px; max-width: 310px; overflow: hidden; border-radius: 12px;">
               <div style="height: 4px; background: #1C6555; width: 100%;"></div>
@@ -614,13 +681,13 @@ export const AtlasMap: React.FC = () => {
   ]);
 
   return (
-    <div className="relative w-full h-[calc(100vh-4rem)] bg-[#101827] overflow-hidden">
+    <div className="relative w-full h-[calc(100dvh-3.5rem)] sm:h-[calc(100dvh-4rem)] bg-[#101827] overflow-hidden">
       
-      {/* Floating Map Controls & Quick Search (Top Left) */}
-      <div className="absolute top-4 left-4 z-[1040] flex flex-col gap-2 max-w-xs sm:max-w-sm w-full select-none">
+      {/* Floating Map Controls & Quick Search (Top Left HUD) */}
+      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-[1040] flex flex-col gap-2 max-w-xs sm:max-w-sm w-[calc(100%-1.5rem)] sm:w-full select-none pointer-events-none">
         
-        {/* Search & District Filter Bar */}
-        <div className={`p-2 rounded-xl border-2 shadow-[3px_3px_0px_#101827] backdrop-blur-md flex items-center gap-2 ${
+        {/* 1. Search & District Filter Bar */}
+        <div className={`p-2 rounded-xl border-2 shadow-[3px_3px_0px_#101827] backdrop-blur-md flex items-center gap-2 pointer-events-auto ${
           theme === 'dark' ? 'bg-[#151F30]/95 border-[#25324A]' : 'bg-[#FAF6ED]/95 border-[#25324A]'
         }`}>
           <Search className="w-4 h-4 text-[#FF9418] flex-shrink-0" />
@@ -658,10 +725,53 @@ export const AtlasMap: React.FC = () => {
           </select>
         </div>
 
-        {/* Dismissible / Collapsible Layer Control Panel */}
-        {layerPanelOpen ? (
-          <div className={`p-3.5 rounded-xl border-2 shadow-[4px_4px_0px_#101827] backdrop-blur-md transition-all ${
-            theme === 'dark' ? 'bg-[#151F30]/95 border-[#25324A] text-[#F1E8D7]' : 'bg-[#FAF6ED]/95 border-[#25324A] text-[#101827]'
+        {/* 2. Grouped Quick Toolbar: Decluttered Navigation Pills */}
+        <div className="flex items-center gap-1.5 flex-wrap pointer-events-auto">
+          <button
+            onClick={() => {
+              setLayerPanelOpen(!layerPanelOpen);
+              if (!layerPanelOpen) setEvRadarOpen(false);
+            }}
+            className={`px-2.5 py-1.5 rounded-xl border-2 shadow-[2px_2px_0px_#101827] font-bold text-xs flex items-center gap-1.5 backdrop-blur-md transition-all active:translate-x-0.5 active:translate-y-0.5 ${
+              layerPanelOpen
+                ? 'bg-[#FF9418] text-[#101827] border-[#101827]'
+                : theme === 'dark'
+                  ? 'bg-[#151F30]/95 border-[#25324A] text-[#F1E8D7] hover:border-[#FF9418]'
+                  : 'bg-[#FAF6ED]/95 border-[#25324A] text-[#101827] hover:border-[#FF9418]'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>Map Layers</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded font-mono bg-black/20 font-bold">
+              {(showTourist ? 1 : 0) + (showStories ? 1 : 0) + (showEV ? 1 : 0) + (showDistricts ? 1 : 0)}/4
+            </span>
+          </button>
+
+          <button
+            onClick={() => {
+              setEvRadarOpen(!evRadarOpen);
+              if (!evRadarOpen) setLayerPanelOpen(false);
+            }}
+            className={`px-2.5 py-1.5 rounded-xl border-2 shadow-[2px_2px_0px_#101827] font-bold text-xs flex items-center gap-1.5 backdrop-blur-md transition-all active:translate-x-0.5 active:translate-y-0.5 ${
+              evRadarOpen
+                ? 'bg-[#FF9418] text-[#101827] border-[#101827]'
+                : theme === 'dark'
+                  ? 'bg-[#151F30]/95 border-[#25324A] text-[#FF9418] hover:border-[#FF9418]'
+                  : 'bg-[#FAF6ED]/95 border-[#25324A] text-[#101827] hover:border-[#FF9418]'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>⚡ EV Highway Corridor Radar</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded font-mono bg-black/20 font-bold">
+              180kW
+            </span>
+          </button>
+        </div>
+
+        {/* 3. Dismissible / Collapsible Layer Control Panel */}
+        {layerPanelOpen && (
+          <div className={`p-3.5 rounded-xl border-2 shadow-[4px_4px_0px_#101827] backdrop-blur-md transition-all pointer-events-auto ${
+            theme === 'dark' ? 'bg-[#151F30]/98 border-[#25324A] text-[#F1E8D7]' : 'bg-[#FAF6ED]/98 border-[#25324A] text-[#101827]'
           }`}>
             <ToranOrnamentalBorder className="rounded-t mb-2 -mt-1.5 -mx-1.5" height={8} />
 
@@ -749,34 +859,7 @@ export const AtlasMap: React.FC = () => {
                 </span>
               </label>
             </div>
-
-            {/* Embedded EV Highway Corridor Toggle Button */}
-            <div className="mt-2.5 pt-2 border-t-2 border-[#25324A]">
-              <button
-                onClick={() => setEvRadarOpen(!evRadarOpen)}
-                className="w-full py-1.5 px-2.5 rounded-lg bg-[#FF9418] hover:bg-[#e07f10] text-[#101827] font-black text-xs flex items-center justify-between shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all"
-              >
-                <div className="flex items-center gap-1.5">
-                  <Zap className="w-3.5 h-3.5" />
-                  <span>{evRadarOpen ? 'Close EV Corridor Radar' : '⚡ EV Highway Corridor Radar'}</span>
-                </div>
-                <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#101827] text-[#FF9418] font-mono">
-                  180kW
-                </span>
-              </button>
-            </div>
-
           </div>
-        ) : (
-          <button
-            onClick={() => setLayerPanelOpen(true)}
-            className={`px-3 py-1.5 rounded-xl border-2 shadow-[2px_2px_0px_#101827] font-bold text-xs flex items-center gap-2 backdrop-blur-md w-fit ${
-              theme === 'dark' ? 'bg-[#151F30] border-[#25324A] text-[#F1E8D7]' : 'bg-[#FAF6ED] border-[#25324A] text-[#101827]'
-            }`}
-          >
-            <Layers className="w-4 h-4 text-[#FF9418]" />
-            <span>Map Layers</span>
-          </button>
         )}
 
       </div>
@@ -894,6 +977,155 @@ export const AtlasMap: React.FC = () => {
             </div>
           </div>
 
+        </div>
+      )}
+
+      {/* Modern Slide-Up / Docked Asset Detail Panel */}
+      {selectedAsset && (
+        <div 
+          className={`absolute bottom-20 md:bottom-6 right-3 left-3 md:left-auto md:right-6 z-[1050] max-w-sm sm:max-w-md w-auto md:w-96 rounded-2xl border-2 shadow-[6px_6px_0px_#101827] backdrop-blur-xl animate-in fade-in slide-in-from-bottom-4 duration-200 overflow-hidden ${
+            theme === 'dark' ? 'bg-[#151F30]/98 border-[#25324A] text-[#F1E8D7]' : 'bg-[#FAF6ED]/98 border-[#25324A] text-[#101827]'
+          }`}
+        >
+          {/* Cultural Accent Trim */}
+          <div 
+            style={{ 
+              height: '4px', 
+              background: selectedAsset.culture?.borderTrimStyle || 'linear-gradient(90deg, #9D233B, #FF9418, #1C6555)' 
+            }} 
+            className="w-full" 
+          />
+
+          <div className="p-3.5 sm:p-4">
+            {/* Header: District Tag, Category, and Close Button */}
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="px-2 py-0.5 rounded-md bg-[#101827] text-[#FF9418] border border-[#25324A] text-[10px] font-mono font-bold uppercase tracking-wider">
+                  {selectedAsset.type === 'destination' ? '🏛️' : selectedAsset.type === 'story' ? '📜' : '⚡'} {selectedAsset.district}
+                </span>
+                {selectedAsset.categoryLabel && (
+                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold ${
+                    selectedAsset.type === 'story'
+                      ? 'bg-[#9D233B]/20 text-[#9D233B] border border-[#9D233B]/40'
+                      : 'bg-[#1C6555]/20 text-[#1C6555] border border-[#1C6555]/40'
+                  }`}>
+                    {selectedAsset.categoryLabel}
+                  </span>
+                )}
+              </div>
+
+              <button
+                onClick={() => setSelectedAsset(null)}
+                className="p-1 rounded-lg text-[#8F9CAE] hover:text-[#FF9418] hover:bg-black/10 transition-colors"
+                aria-label="Close detail panel"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Asset Title & Gujarati Subtitle */}
+            <div className="mb-2">
+              <h3 className="font-editorial text-base sm:text-lg font-black leading-snug">
+                {selectedAsset.name}
+              </h3>
+              {selectedAsset.gujaratiTitle && (
+                <span className="font-['Noto_Sans_Gujarati'] text-[#FF9418] text-xs font-semibold block mt-0.5">
+                  {selectedAsset.gujaratiTitle}
+                </span>
+              )}
+            </div>
+
+            {/* Image Preview (if present) */}
+            {selectedAsset.image && (
+              <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-[#101827] border-2 border-[#25324A] my-2">
+                <img
+                  src={selectedAsset.image}
+                  alt={selectedAsset.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/images/destinations/statue-of-unity.jpg';
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Overview / Narrative Summary */}
+            <p className="text-xs text-[#8F9CAE] leading-relaxed my-1.5 line-clamp-3">
+              {selectedAsset.summary}
+            </p>
+
+            {/* Destination Logistics Facts */}
+            {selectedAsset.type === 'destination' && (
+              <div className="grid grid-cols-2 gap-2 my-2 text-[11px] font-mono">
+                <div className="p-1.5 rounded-lg border border-[#25324A] bg-black/15 flex items-center gap-1.5 truncate">
+                  <Clock className="w-3.5 h-3.5 text-[#FF9418] flex-shrink-0" />
+                  <span className="truncate text-[#8F9CAE]">{selectedAsset.timings || '08:00 – 18:00'}</span>
+                </div>
+                <div className="p-1.5 rounded-lg border border-[#25324A] bg-black/15 flex items-center gap-1.5 truncate">
+                  <Ticket className="w-3.5 h-3.5 text-[#1C6555] flex-shrink-0" />
+                  <span className="truncate text-[#8F9CAE]">{selectedAsset.entryFee || 'Free / ASI'}</span>
+                </div>
+              </div>
+            )}
+
+            {/* EV Reachability Alert Chip */}
+            {selectedAsset.isDeadZone !== undefined && (
+              <div className={`p-2 rounded-lg border text-[11px] font-mono flex items-center justify-between mb-2.5 ${
+                selectedAsset.isDeadZone
+                  ? 'bg-[#9D233B]/15 border-[#9D233B] text-[#9D233B]'
+                  : 'bg-[#1C6555]/15 border-[#1C6555] text-[#1C6555]'
+              }`}>
+                <span className="font-bold truncate">
+                  {selectedAsset.isDeadZone ? '⚠️ Remote Dead Zone: Top-up' : '⚡ EV Ready: Fast Charger < 45km'}
+                </span>
+                <span className="text-[10px] opacity-80">{selectedAsset.isDeadZone ? 'Remote' : '60-180kW'}</span>
+              </div>
+            )}
+
+            {/* Primary Action Buttons */}
+            <div className="grid grid-cols-3 gap-1.5 mt-2.5 pt-2 border-t-2 border-[#25324A]">
+              <button
+                onClick={() => {
+                  const dObj = GUJARAT_34_DISTRICTS.find(d => d.name.toLowerCase() === selectedAsset.district.toLowerCase());
+                  if (dObj) {
+                    claimDistrictStamp(dObj.id);
+                  }
+                }}
+                className="py-1.5 px-2 rounded-lg bg-[#FF9418] hover:bg-[#e07f10] text-[#101827] font-black text-xs flex items-center justify-center gap-1 shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
+                title="Stamp District into Passport"
+              >
+                <Award className="w-3.5 h-3.5 flex-shrink-0" />
+                <span className="truncate">Stamp</span>
+              </button>
+
+              <a
+                href={`https://www.google.com/maps/dir/?api=1&destination=${selectedAsset.coordinates[0]},${selectedAsset.coordinates[1]}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-1.5 px-2 rounded-lg bg-[#101827] hover:bg-[#151F30] text-[#F1E8D7] border-2 border-[#25324A] font-bold text-xs flex items-center justify-center gap-1 shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
+                title="Open Directions in Google Maps"
+              >
+                <Navigation className="w-3.5 h-3.5 text-[#FF9418] flex-shrink-0" />
+                <span className="truncate">Directions</span>
+              </a>
+
+              <button
+                onClick={() => {
+                  if (selectedAsset.type === 'story') {
+                    setMode('unfiltered');
+                  } else {
+                    setMode('places');
+                  }
+                }}
+                className="py-1.5 px-2 rounded-lg bg-[#101827] hover:bg-[#151F30] text-[#F1E8D7] border-2 border-[#25324A] font-bold text-xs flex items-center justify-center gap-1 shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"
+                title="View Full Dossier"
+              >
+                <ExternalLink className="w-3.5 h-3.5 text-[#1C6555] flex-shrink-0" />
+                <span className="truncate">Dossier</span>
+              </button>
+            </div>
+
+          </div>
         </div>
       )}
 

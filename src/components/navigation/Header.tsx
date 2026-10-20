@@ -111,8 +111,8 @@ export const Header: React.FC = () => {
           </div>
         </div>
 
-        {/* Primary Desktop Mode Navigation */}
-        <nav className={`hidden lg:flex items-center gap-1 p-1 rounded-xl border-2 transition-colors ${
+        {/* Primary Desktop/Tablet Mode Navigation */}
+        <nav className={`hidden md:flex items-center gap-1 p-1 rounded-xl border-2 transition-colors ${
           theme === 'dark' 
             ? 'bg-[#151F30] border-[#25324A]' 
             : 'bg-[#F1E8D7] border-[#25324A]'

@@ -38,10 +38,10 @@ export const MobileBottomNav: React.FC = () => {
   return (
     <nav 
       aria-label="Mobile Navigation"
-      className={`lg:hidden fixed bottom-0 left-0 right-0 z-40 border-t-2 backdrop-blur-xl transition-colors duration-200 safe-bottom ${
+      className={`md:hidden fixed bottom-0 left-0 right-0 z-[9999] border-t-2 transition-colors duration-200 safe-bottom select-none ${
         theme === 'dark' 
-          ? 'bg-[#101827]/98 border-[#25324A] text-[#F1E8D7] shadow-[0_-4px_16px_rgba(0,0,0,0.4)]' 
-          : 'bg-[#FAF6ED]/98 border-[#25324A] text-[#101827] shadow-[0_-4px_16px_rgba(0,0,0,0.06)]'
+          ? 'bg-[#101827] border-[#25324A] text-[#F1E8D7] shadow-[0_-4px_24px_rgba(0,0,0,0.7)]' 
+          : 'bg-[#FAF6ED] border-[#25324A] text-[#101827] shadow-[0_-4px_24px_rgba(0,0,0,0.15)]'
       }`}
     >
       <div className="grid grid-cols-5 h-16 items-center px-1">
@@ -54,23 +54,23 @@ export const MobileBottomNav: React.FC = () => {
                 setMode(item.mode);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className={`flex flex-col items-center justify-center h-full py-1 transition-all relative ${
+              className={`flex flex-col items-center justify-center h-full py-1 transition-all relative touch-manipulation active:scale-95 ${
                 isActive 
                   ? 'text-[#FF9418] font-black' 
                   : theme === 'dark'
-                    ? 'text-[#8F9CAE] hover:text-[#F1E8D7] font-medium'
-                    : 'text-[#606F7B] hover:text-[#101827] font-medium'
+                    ? 'text-[#8F9CAE] hover:text-[#F1E8D7] font-semibold'
+                    : 'text-[#606F7B] hover:text-[#101827] font-semibold'
               }`}
             >
               {/* Active top accent pill indicator */}
               {isActive && (
-                <div className="absolute top-0 w-8 h-1 rounded-b-md bg-[#FF9418] shadow-[0_1px_4px_rgba(255,148,24,0.6)]" />
+                <div className="absolute top-0 w-10 h-1 rounded-b-md bg-[#FF9418] shadow-[0_2px_8px_#FF9418]" />
               )}
 
               <div className="relative mb-0.5">
                 {item.icon}
                 {item.badge && (
-                  <span className={`absolute -top-1.5 -right-3.5 px-1 py-0.2 text-[9px] font-mono font-bold rounded leading-none ${
+                  <span className={`absolute -top-1.5 -right-3 px-1 py-0.2 text-[8px] font-mono font-bold rounded leading-none ${
                     isActive 
                       ? 'bg-[#FF9418] text-[#101827]' 
                       : theme === 'dark'
@@ -82,7 +82,9 @@ export const MobileBottomNav: React.FC = () => {
                 )}
               </div>
 
-              <span className="text-[10px] tracking-tight">{item.label}</span>
+              <span className={`text-[10px] tracking-tight leading-none ${isActive ? 'font-black' : 'font-medium'}`}>
+                {item.label}
+              </span>
             </button>
           );
         })}
