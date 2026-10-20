@@ -107,6 +107,12 @@ export async function loginWithGoogle(): Promise<{ success: boolean; user?: User
       if (code === 'auth/popup-blocked') {
         return { success: false, error: 'Pop-up was blocked by your browser. Please allow popups, or tap "Continue as Explorer" for instant access.' };
       }
+      if (code === 'auth/operation-not-allowed') {
+        return {
+          success: false,
+          error: 'Google Sign-In is not enabled yet in your Firebase Console. Go to Firebase Console > Authentication > Sign-in method and enable Google.'
+        };
+      }
       if (code === 'auth/unauthorized-domain') {
         return { 
           success: false, 
