@@ -112,7 +112,8 @@ export const AtlasMap: React.FC = () => {
     searchQuery,
     setSearchQuery,
     selectedDistrict,
-    setSelectedDistrict
+    setSelectedDistrict,
+    setActiveDossierAsset
   } = useAtlasStore();
 
   // Invalidate map size when switching back to explore mode
@@ -286,11 +287,45 @@ export const AtlasMap: React.FC = () => {
       (window as unknown as { claimFromMap: (id: string) => void }).claimFromMap = (id: string) => {
         claimDistrictStamp(id);
       };
-      (window as unknown as { viewStoriesFromMap: () => void }).viewStoriesFromMap = () => {
+      (window as unknown as { viewStoriesFromMap: (id?: string) => void }).viewStoriesFromMap = (id?: string) => {
+        if (id) {
+          const matchedStory = stories.find(s => s.id === id);
+          if (matchedStory) {
+            setActiveDossierAsset({ ...matchedStory, type: 'story' });
+            return;
+          }
+        }
         setMode('unfiltered');
       };
-      (window as unknown as { viewDestinationsFromMap: () => void }).viewDestinationsFromMap = () => {
+      (window as unknown as { viewDestinationsFromMap: (id?: string) => void }).viewDestinationsFromMap = (id?: string) => {
+        if (id) {
+          const matchedDest = VERIFIED_TOURIST_DESTINATIONS.find(d => d.id === id);
+          if (matchedDest) {
+            setActiveDossierAsset({ ...matchedDest, type: 'destination' });
+            return;
+          }
+        }
         setMode('places');
+      };
+      (window as unknown as { openDossierFromMap: (id: string, type?: string) => void }).openDossierFromMap = (id: string, type?: string) => {
+        if (type === 'story') {
+          const matchedStory = stories.find(s => s.id === id);
+          if (matchedStory) {
+            setActiveDossierAsset({ ...matchedStory, type: 'story' });
+            return;
+          }
+        }
+        const matchedDest = VERIFIED_TOURIST_DESTINATIONS.find(d => d.id === id);
+        if (matchedDest) {
+          setActiveDossierAsset({ ...matchedDest, type: 'destination' });
+          return;
+        }
+        const fallbackStory = stories.find(s => s.id === id);
+        if (fallbackStory) {
+          setActiveDossierAsset({ ...fallbackStory, type: 'story' });
+          return;
+        }
+        setMode(type === 'story' ? 'unfiltered' : 'places');
       };
 
       setTimeout(() => {
@@ -697,7 +732,7 @@ export const AtlasMap: React.FC = () => {
               <span style="font-size: 9px; color: #8F9CAE;">${isDeadZone ? 'Remote' : '60-180kW'}</span>
             </div>
 
-            <button onclick="window.viewDestinationsFromMap()" style="
+            <button onclick="window.viewDestinationsFromMap('${place.id}')" style="
               width: 100%; padding: 8px; background: #FF9418;
               color: #101827; font-weight: 800; font-size: 11px; border: 1.5px solid #101827;
               border-radius: 8px; cursor: pointer; box-shadow: 2px 2px 0px #101827;
@@ -777,7 +812,7 @@ export const AtlasMap: React.FC = () => {
                 <p style="margin: 0 0 6px 0; font-size: 11px; line-height: 1.35;">
                   ${escapeHtml(story.tagline || story.theGroundReality.slice(0, 100))}...
                 </p>
-                <button onclick="window.viewStoriesFromMap()" style="
+                <button onclick="window.viewStoriesFromMap('${story.id}')" style="
                   width: 100%; padding: 7px; background: #9D233B;
                   color: #FFFFFF; font-weight: 800; font-size: 11px; border: 1.5px solid #101827;
                   border-radius: 8px; cursor: pointer; box-shadow: 2px 2px 0px #101827; margin-top: 4px;
@@ -1540,9 +1575,19 @@ export const AtlasMap: React.FC = () => {
               <button
                 onClick={() => {
                   if (selectedAsset.type === 'story') {
-                    setMode('unfiltered');
+                    const matchedStory = stories.find(s => s.id === selectedAsset.id);
+                    if (matchedStory) {
+                      setActiveDossierAsset({ ...matchedStory, type: 'story' });
+                    } else {
+                      setActiveDossierAsset(selectedAsset);
+                    }
                   } else {
-                    setMode('places');
+                    const matchedDest = VERIFIED_TOURIST_DESTINATIONS.find(d => d.id === selectedAsset.id);
+                    if (matchedDest) {
+                      setActiveDossierAsset({ ...matchedDest, type: 'destination' });
+                    } else {
+                      setActiveDossierAsset(selectedAsset);
+                    }
                   }
                 }}
                 className="py-1.5 px-2 rounded-lg bg-[#101827] hover:bg-[#151F30] text-[#F1E8D7] border-2 border-[#25324A] font-bold text-xs flex items-center justify-center gap-1 shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all truncate"

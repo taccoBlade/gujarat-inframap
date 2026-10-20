@@ -57,6 +57,12 @@ interface AtlasState {
   claimDistrictStamp: (districtId: string) => { success: boolean; message: string };
   toggleBookmark: (storyId: string) => void;
   resetPassport: () => void;
+  // Dossier & Saved Locations
+  activeDossierAsset: any | null;
+  setActiveDossierAsset: (asset: any | null) => void;
+  saveLocation: (loc: { name: string; lat: number; lng: number; category?: string; notes?: string }) => void;
+  removeSavedLocation: (id: string) => void;
+  detectAndSaveCurrentLocation: () => Promise<{ success: boolean; lat?: number; lng?: number; message: string }>;
 }
 
 const DEFAULT_PROFILE: UserPassportProfile = {
@@ -270,5 +276,90 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
   resetPassport: () => {
     localStorage.removeItem('gujarat_passport_profile');
     set({ userProfile: DEFAULT_PROFILE });
+  },
+
+  activeDossierAsset: null,
+  setActiveDossierAsset: (asset) => set({ activeDossierAsset: asset }),
+
+  saveLocation: (loc) => {
+    const current = get().userProfile;
+    const existing = current.savedLocations || [];
+    const newLoc = {
+      id: 'loc_' + Date.now().toString(36),
+      name: loc.name,
+      lat: loc.lat,
+      lng: loc.lng,
+      savedAt: new Date().toISOString().split('T')[0],
+      category: loc.category || 'User Pin',
+      notes: loc.notes
+    };
+    const updated = {
+      ...current,
+      savedLocations: [newLoc, ...existing.filter(l => l.name !== loc.name)]
+    };
+    localStorage.setItem('gujarat_passport_profile', JSON.stringify(updated));
+    set({ userProfile: updated });
+    if (updated.isLoggedIn && !updated.uid.startsWith('guest_')) {
+      syncProfileToFirestore(updated);
+    }
+  },
+
+  removeSavedLocation: (id) => {
+    const current = get().userProfile;
+    const existing = current.savedLocations || [];
+    const updated = {
+      ...current,
+      savedLocations: existing.filter(l => l.id !== id)
+    };
+    localStorage.setItem('gujarat_passport_profile', JSON.stringify(updated));
+    set({ userProfile: updated });
+    if (updated.isLoggedIn && !updated.uid.startsWith('guest_')) {
+      syncProfileToFirestore(updated);
+    }
+  },
+
+  detectAndSaveCurrentLocation: async () => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      return { success: false, message: 'Geolocation is not supported by your browser.' };
+    }
+
+    return new Promise((resolve) => {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = parseFloat(pos.coords.latitude.toFixed(5));
+          const lng = parseFloat(pos.coords.longitude.toFixed(5));
+          const current = get().userProfile;
+          const existing = current.savedLocations || [];
+          const liveLoc = {
+            id: 'gps_' + Date.now().toString(36),
+            name: '📍 Live GPS Spot (' + lat + ', ' + lng + ')',
+            lat,
+            lng,
+            savedAt: new Date().toISOString().split('T')[0],
+            category: 'Live GPS Pin'
+          };
+          const updated = {
+            ...current,
+            currentGpsCoords: [lat, lng] as [number, number],
+            savedLocations: [liveLoc, ...existing.filter(l => !l.id.startsWith('gps_'))]
+          };
+          localStorage.setItem('gujarat_passport_profile', JSON.stringify(updated));
+          set({ userProfile: updated });
+          if (updated.isLoggedIn && !updated.uid.startsWith('guest_')) {
+            syncProfileToFirestore(updated);
+          }
+          resolve({
+            success: true,
+            lat,
+            lng,
+            message: 'Live GPS Location captured and saved!'
+          });
+        },
+        (err) => {
+          resolve({ success: false, message: err.message || 'Could not fetch GPS coordinates.' });
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    });
   }
 }));

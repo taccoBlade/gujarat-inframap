@@ -12,6 +12,8 @@ import { CulturalFooter } from './components/navigation/CulturalFooter';
 import { ShareableStoryCardModal } from './components/share/ShareableStoryCardModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { OnboardingModal } from './components/auth/OnboardingModal';
+import { AssetDossierModal } from './components/common/AssetDossierModal';
+import { CinematicTransitionOverlay } from './components/navigation/CinematicTransitionOverlay';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const fluidPageVariants = {
@@ -78,6 +80,8 @@ export const App: React.FC = () => {
       <MobileBottomNav />
 
       {/* Modals & Dialogs */}
+      <AssetDossierModal />
+      <CinematicTransitionOverlay />
       <AuthModal />
       <OnboardingModal />
       <ShareableStoryCardModal />

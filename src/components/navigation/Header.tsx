@@ -11,7 +11,11 @@ import {
   LogIn, 
   MapPin, 
   ChevronDown,
-  Zap
+  Zap,
+  Bookmark,
+  Crosshair,
+  Trash2,
+  ExternalLink
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -24,10 +28,15 @@ export const Header: React.FC = () => {
     setAuthModalOpen,
     setOnboardingOpen,
     setShareModalOpen,
-    logout
+    logout,
+    detectAndSaveCurrentLocation,
+    removeSavedLocation,
+    setActiveDossierAsset
   } = useAtlasStore();
 
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [showSavedLocations, setShowSavedLocations] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -171,9 +180,11 @@ export const Header: React.FC = () => {
             <button
               onClick={() => setAuthModalOpen(true)}
               className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-[#FF9418] hover:bg-[#e07f10] text-[#101827] font-black text-xs border-2 border-[#101827] dark:border-[#25324A] shadow-[2px_2px_0px_#101827] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+              title="Log in to save places, detect live location, and track passport"
             >
               <LogIn className="w-3.5 h-3.5 flex-shrink-0" />
-              <span>Claim Passport</span>
+              <span className="hidden sm:inline">Log In • Save Places</span>
+              <span className="sm:hidden">Log In</span>
             </button>
           ) : (
             <div className="relative" ref={dropdownRef}>
@@ -230,6 +241,74 @@ export const Header: React.FC = () => {
                   </div>
 
                   <div className="py-1">
+                    <button
+                      onClick={async () => {
+                        setIsLocating(true);
+                        const res = await detectAndSaveCurrentLocation();
+                        setIsLocating(false);
+                        alert(res.message);
+                      }}
+                      disabled={isLocating}
+                      className="w-full px-4 py-2 text-left text-xs hover:bg-[#10B981]/15 text-[#10B981] flex items-center gap-2.5 font-bold transition-colors"
+                      title="Detect and bookmark your live GPS location"
+                    >
+                      <Crosshair className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
+                      <span>{isLocating ? 'Acquiring GPS...' : '📍 Save Live GPS Location'}</span>
+                    </button>
+
+                    <button
+                      onClick={() => setShowSavedLocations(!showSavedLocations)}
+                      className="w-full px-4 py-2 text-left text-xs hover:bg-[#FF9418]/15 flex items-center justify-between font-bold transition-colors"
+                    >
+                      <span className="flex items-center gap-2.5">
+                        <Bookmark className="w-4 h-4 text-[#FF9418]" />
+                        <span>Saved Places</span>
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-[#FF9418]/20 text-[#FF9418] border border-[#FF9418]/30">
+                        {(userProfile.savedLocations || []).length}
+                      </span>
+                    </button>
+
+                    {showSavedLocations && (
+                      <div className="mx-2 my-1 p-2 rounded-xl bg-black/20 border border-[#25324A] max-h-40 overflow-y-auto space-y-1.5">
+                        {(userProfile.savedLocations || []).length === 0 ? (
+                          <p className="text-[10px] text-[#8F9CAE] p-1 font-mono text-center">
+                            No saved places yet. Click 'Save' on any destination or map dossier to bookmark it!
+                          </p>
+                        ) : (
+                          userProfile.savedLocations!.map((loc) => (
+                            <div key={loc.id} className="flex items-center justify-between p-1.5 rounded-lg bg-black/30 border border-[#25324A] text-[11px]">
+                              <button 
+                                onClick={() => {
+                                  setActiveDossierAsset({
+                                    id: loc.id,
+                                    name: loc.name,
+                                    coordinates: [loc.lat, loc.lng],
+                                    district: loc.notes || 'Gujarat',
+                                    summary: `Saved location at ${loc.lat.toFixed(4)}, ${loc.lng.toFixed(4)}. Category: ${loc.category || 'Personal bookmark'}.`
+                                  });
+                                  setProfileDropdownOpen(false);
+                                }}
+                                className="flex-1 text-left font-bold truncate text-[#FF9418] hover:underline"
+                              >
+                                {loc.name}
+                              </button>
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  removeSavedLocation(loc.id);
+                                }}
+                                className="p-1 text-[#8F9CAE] hover:text-[#9D233B]"
+                                title="Remove bookmark"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    )}
+
                     <button
                       onClick={() => {
                         setMode('passport');

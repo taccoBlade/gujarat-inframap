@@ -45,6 +45,16 @@ export interface UnfilteredPlaceStory {
   routeTip?: string;
 }
 
+export interface SavedLocation {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  savedAt: string;
+  category?: string;
+  notes?: string;
+}
+
 export interface UserPassportProfile {
   uid: string;
   name: string;
@@ -52,11 +62,13 @@ export interface UserPassportProfile {
   email?: string;
   phoneNumber?: string;
   photoURL?: string;
-  authProvider?: 'google' | 'phone' | 'demo' | 'anonymous';
+  authProvider?: 'email' | 'google' | 'phone' | 'demo' | 'anonymous';
   homeDistrict: string;
   collectedStampIds: string[];
   bookmarkedStoryIds: string[];
   visitedPlaceIds?: string[];
+  savedLocations?: SavedLocation[];
+  currentGpsCoords?: [number, number];
   badges?: string[];
   lastCheckedInDistrict?: string;
   joinedDate: string;
