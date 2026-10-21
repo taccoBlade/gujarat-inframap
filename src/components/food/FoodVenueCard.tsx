@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { VerifiedFoodVenue } from '../../types/food';
 import { evaluateVenueOpenStatus } from '../../utils/opening-hours';
+import { getFoodFallbackPhoto } from '../../utils/food-photos';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { 
   MapPin, 
@@ -97,11 +98,22 @@ export const FoodVenueCard: React.FC<FoodVenueCardProps> = ({ venue, onSelect, i
       }`}
     >
       {/* Top Media & Tags Header */}
-      <div className="relative h-44 sm:h-48 w-full overflow-hidden bg-black/40">
+      <div className="relative h-44 sm:h-48 w-full overflow-hidden bg-gradient-to-br from-[#151F30] to-[#101827]">
         <img
-          src={venue.photo_url || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80'}
+          src={venue.photo_url || getFoodFallbackPhoto(venue.city, venue.category)}
           alt={venue.name}
           loading="lazy"
+          referrerPolicy="no-referrer"
+          crossOrigin="anonymous"
+          onError={(e) => {
+            const target = e.currentTarget;
+            const fallback = getFoodFallbackPhoto(venue.city, venue.category);
+            if (target.src !== fallback) {
+              target.src = fallback;
+            } else {
+              target.src = '/images/destinations/manek-chowk-food-night.jpg';
+            }
+          }}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20" />

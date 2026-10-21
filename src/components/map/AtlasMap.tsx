@@ -1801,6 +1801,8 @@ export const AtlasMap: React.FC = () => {
                 <img
                   src={selectedAsset.image}
                   alt={selectedAsset.name}
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = '/images/destinations/statue-of-unity.jpg';

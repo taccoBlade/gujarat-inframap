@@ -533,7 +533,7 @@ export const VERIFIED_FOOD_VENUES: VerifiedFoodVenue[] = [
     ],
     last_verified: "2026-10-21",
     verification_notes: "Food street along Law Garden boundary; individual vendor operating status fluctuates based on municipal traffic/vending drives.",
-    photo_url: "https://images.unsplash.com/photo-1505253758473-96b46deae2cd?auto=format&fit=crop&w=800&q=80",
+    photo_url: "/images/destinations/manek-chowk-food-night.jpg",
     google_maps_url: "https://www.google.com/maps/dir/?api=1&destination=23.0264,72.5608"
   },
   {
@@ -659,7 +659,7 @@ export const VERIFIED_FOOD_VENUES: VerifiedFoodVenue[] = [
     ],
     last_verified: "2026-10-21",
     verification_notes: "300m iconic LED-lit pedestrian truss bridge across the Sabarmati River; ticket counter closes before 9:00 PM.",
-    photo_url: "https://images.unsplash.com/photo-1545648580-0a2a4b8935c1?auto=format&fit=crop&w=800&q=80",
+    photo_url: "/images/destinations/sabarmati-ashram.jpg",
     google_maps_url: "https://www.google.com/maps/dir/?api=1&destination=23.0169,72.5728"
   },
 

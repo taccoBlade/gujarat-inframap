@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { VerifiedFoodVenue } from '../../types/food';
 import { evaluateVenueOpenStatus } from '../../utils/opening-hours';
+import { getFoodFallbackPhoto } from '../../utils/food-photos';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -155,10 +156,21 @@ export const FoodVenueDrawer: React.FC<FoodVenueDrawerProps> = ({ venue, onClose
             </div>
 
             {/* Photo Banner with Neo-Brutalist Frame */}
-            <div className="relative rounded-2xl border-2 border-[#25324A] overflow-hidden h-52 sm:h-64 shadow-[4px_4px_0px_#101827]">
+            <div className="relative rounded-2xl border-2 border-[#25324A] overflow-hidden h-52 sm:h-64 shadow-[4px_4px_0px_#101827] bg-gradient-to-br from-[#151F30] to-[#101827]">
               <img
-                src={venue.photo_url || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80'}
+                src={venue.photo_url || getFoodFallbackPhoto(venue.city, venue.category)}
                 alt={venue.name}
+                referrerPolicy="no-referrer"
+                crossOrigin="anonymous"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  const fallback = getFoodFallbackPhoto(venue.city, venue.category);
+                  if (target.src !== fallback) {
+                    target.src = fallback;
+                  } else {
+                    target.src = '/images/destinations/manek-chowk-food-night.jpg';
+                  }
+                }}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
