@@ -34,9 +34,9 @@ export const FoodSplitMap: React.FC<FoodSplitMapProps> = ({ venues, selectedVenu
   const markerGroupRef = useRef<L.LayerGroup | null>(null);
   const districtBoundaryRef = useRef<L.GeoJSON | null>(null);
 
-  const { theme, foodCityFilter } = useAtlasStore();
+  const { foodCityFilter } = useAtlasStore();
 
-  // Initialize Map using the exact same basemap & bounds as the home page AtlasMap
+  // Initialize Map using Humanitarian OSM tiles & official Gujarat boundaries
   useEffect(() => {
     if (!mapContainerRef.current) return;
     if (mapInstanceRef.current) return;
@@ -59,7 +59,7 @@ export const FoodSplitMap: React.FC<FoodSplitMapProps> = ({ venues, selectedVenu
       attributionControl: false
     });
 
-    // Same Humanitarian Basemap with Survey of India Alignment used in AtlasMap
+    // Clean Humanitarian Basemap with Survey of India Alignment used in AtlasMap
     L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap | Survey of India Alignment | Gujarat Atlas',
       subdomains: ['a', 'b', 'c'],
@@ -68,7 +68,7 @@ export const FoodSplitMap: React.FC<FoodSplitMapProps> = ({ venues, selectedVenu
 
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-    // Load official Gujarat administrative district boundaries (same as Home Page AtlasMap)
+    // Load official Gujarat administrative district boundaries
     fetch('/data/gujarat_districts.geojson')
       .then(res => res.json())
       .then(geojsonData => {
@@ -99,6 +99,13 @@ export const FoodSplitMap: React.FC<FoodSplitMapProps> = ({ venues, selectedVenu
     markerGroupRef.current = markerGroup;
     mapInstanceRef.current = map;
 
+    // Invalidate size once initial frame settles
+    requestAnimationFrame(() => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.invalidateSize();
+      }
+    });
+
     return () => {
       map.remove();
       mapInstanceRef.current = null;
@@ -107,17 +114,47 @@ export const FoodSplitMap: React.FC<FoodSplitMapProps> = ({ venues, selectedVenu
     };
   }, []);
 
-  // Pan to City center when city filter changes
+  // Responsive ResizeObserver to invalidate size whenever container resizes or unhides
   useEffect(() => {
-    if (!mapInstanceRef.current) return;
+    if (!mapContainerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.invalidateSize();
+          }
+        }
+      }
+    });
+    observer.observe(mapContainerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Pan to City center when city filter changes (safeguarded against 0x0 container dimensions)
+  useEffect(() => {
+    if (!mapInstanceRef.current || !mapContainerRef.current) return;
+    const size = mapInstanceRef.current.getSize();
+    if (!size || size.x === 0 || size.y === 0) return; // Prevent Invalid LatLng (NaN, NaN)
+
     const target = CITY_CENTERS[foodCityFilter] || CITY_CENTERS.all;
-    mapInstanceRef.current.flyTo(target.center, target.zoom, { duration: 1.2 });
+    try {
+      mapInstanceRef.current.flyTo(target.center, target.zoom, { duration: 1.2 });
+    } catch (e) {
+      console.warn('Map flyTo skipped:', e);
+    }
   }, [foodCityFilter]);
 
-  // Pan to selected venue if changed
+  // Pan to selected venue if changed (safeguarded against 0x0 container dimensions)
   useEffect(() => {
-    if (!mapInstanceRef.current || !selectedVenue) return;
-    mapInstanceRef.current.flyTo([selectedVenue.latitude, selectedVenue.longitude], 15.5, { duration: 1 });
+    if (!mapInstanceRef.current || !selectedVenue || !mapContainerRef.current) return;
+    const size = mapInstanceRef.current.getSize();
+    if (!size || size.x === 0 || size.y === 0) return; // Prevent Invalid LatLng (NaN, NaN)
+
+    try {
+      mapInstanceRef.current.flyTo([selectedVenue.latitude, selectedVenue.longitude], 15.5, { duration: 1 });
+    } catch (e) {
+      console.warn('Venue flyTo skipped:', e);
+    }
   }, [selectedVenue]);
 
   // Update Markers
@@ -248,8 +285,8 @@ export const FoodSplitMap: React.FC<FoodSplitMapProps> = ({ venues, selectedVenu
   }, [venues, selectedVenue]);
 
   return (
-    <div className="relative w-full h-full min-h-[380px] rounded-3xl overflow-hidden border-2 border-[#25324A] shadow-[4px_4px_0px_#101827]">
-      <div ref={mapContainerRef} className="w-full h-full z-0" />
+    <div className="relative w-full h-full min-h-[350px] rounded-3xl overflow-hidden border-2 border-[#25324A] shadow-[4px_4px_0px_#101827]">
+      <div ref={mapContainerRef} className="w-full h-full min-h-[350px] z-0" />
       
       {/* City Legend Indicator Overlay */}
       <div className="absolute top-3 left-3 z-[400] flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#101827]/90 backdrop-blur-md border border-[#25324A] text-white shadow-md">

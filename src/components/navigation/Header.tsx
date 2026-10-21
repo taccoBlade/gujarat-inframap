@@ -73,7 +73,7 @@ export const Header: React.FC = () => {
     { mode: 'explore', label: 'Atlas Map', icon: <Map className="w-4 h-4 text-[#FF9418]" /> },
     { mode: 'food', label: 'Food & After Dark', icon: <Utensils className="w-4 h-4 text-[#FF9418]" />, badge: String(VERIFIED_FOOD_VENUES.length) },
     { mode: 'places', label: 'Destinations', icon: <Compass className="w-4 h-4 text-[#FF9418]" /> },
-    { mode: 'passport', label: 'Gujarat Passport', icon: <Award className="w-4 h-4 text-[#FF9418]" />, badge: `${userProfile.collectedStampIds.length}/34` },
+    { mode: 'passport', label: 'Gujarat Passport', icon: <Award className="w-4 h-4 text-[#FF9418]" />, badge: `${userProfile?.collectedStampIds?.length ?? 1}/34` },
     { mode: 'unfiltered', label: 'Unfiltered Stories', icon: <Sparkles className="w-4 h-4 text-[#9D233B]" /> },
     { mode: 'infrastructure', label: 'Infrastructure', icon: <Zap className="w-4 h-4 text-[#1C6555]" /> },
   ];

@@ -26,7 +26,7 @@ export const MobileBottomNav: React.FC = () => {
       mode: 'passport', 
       label: 'Passport', 
       icon: <Award className="w-4 h-4" />, 
-      badge: `${userProfile.collectedStampIds.length}/34` 
+      badge: `${userProfile?.collectedStampIds?.length ?? 1}/34` 
     },
     { 
       mode: 'unfiltered', 

@@ -6,6 +6,7 @@ import { FoodVenueDrawer } from './FoodVenueDrawer';
 import { FoodSplitMap } from './FoodSplitMap';
 import { FoodCrawlPlannerModal } from './FoodCrawlPlannerModal';
 import { ReportClosureModal } from './ReportClosureModal';
+import { ComponentErrorBoundary } from '../common/ComponentErrorBoundary';
 import { evaluateVenueOpenStatus } from '../../utils/opening-hours';
 import { 
   Search, 
@@ -247,14 +248,14 @@ export const FoodAfterDarkView: React.FC = () => {
               )}
             </button>
 
-            {/* Desktop View Mode Switcher (Split / List / Map) */}
-            <div className={`hidden lg:flex items-center gap-1 p-1 rounded-xl border-2 ${
+            {/* Responsive View Mode Switcher (Split on Desktop, List/Map on Mobile) */}
+            <div className={`flex items-center gap-1 p-1 rounded-xl border-2 ${
               theme === 'dark' ? 'bg-[#151F30] border-[#25324A]' : 'bg-[#FAF6ED] border-[#25324A]'
             }`}>
               <button
                 type="button"
                 onClick={() => setFoodViewMode('split')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                className={`hidden lg:block px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
                   foodViewMode === 'split' ? 'bg-[#FF9418] text-[#101827]' : 'text-neutral-400 hover:text-white'
                 }`}
                 title="Split View (List + Interactive Map)"
@@ -265,9 +266,13 @@ export const FoodAfterDarkView: React.FC = () => {
                 type="button"
                 onClick={() => setFoodViewMode('list')}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
-                  foodViewMode === 'list' ? 'bg-[#FF9418] text-[#101827]' : 'text-neutral-400 hover:text-white'
+                  foodViewMode === 'list'
+                    ? 'bg-[#FF9418] text-[#101827]'
+                    : foodViewMode === 'split'
+                      ? 'lg:bg-transparent lg:text-neutral-400 bg-[#FF9418] text-[#101827]'
+                      : 'text-neutral-400 hover:text-white'
                 }`}
-                title="List Only View"
+                title="List View"
               >
                 List
               </button>
@@ -277,7 +282,7 @@ export const FoodAfterDarkView: React.FC = () => {
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
                   foodViewMode === 'map' ? 'bg-[#FF9418] text-[#101827]' : 'text-neutral-400 hover:text-white'
                 }`}
-                title="Map Only View"
+                title="Map View"
               >
                 Map
               </button>
@@ -461,11 +466,13 @@ export const FoodAfterDarkView: React.FC = () => {
 
                 {/* Right: Sticky Interactive Leaflet Map on Desktop */}
                 <div className="hidden lg:block lg:col-span-5 xl:col-span-5 sticky top-20 h-[calc(100vh-6rem)]">
-                  <FoodSplitMap
-                    venues={filteredVenues}
-                    selectedVenue={selectedVenue}
-                    onSelectVenue={(v) => setSelectedFoodVenueId(v.id)}
-                  />
+                  <ComponentErrorBoundary componentName="FoodSplitMap">
+                    <FoodSplitMap
+                      venues={filteredVenues}
+                      selectedVenue={selectedVenue}
+                      onSelectVenue={(v) => setSelectedFoodVenueId(v.id)}
+                    />
+                  </ComponentErrorBoundary>
                 </div>
               </div>
             )}
@@ -491,17 +498,40 @@ export const FoodAfterDarkView: React.FC = () => {
 
             {/* Map Only View */}
             {foodViewMode === 'map' && (
-              <div className="h-[75vh] w-full">
-                <FoodSplitMap
-                  venues={filteredVenues}
-                  selectedVenue={selectedVenue}
-                  onSelectVenue={(v) => setSelectedFoodVenueId(v.id)}
-                />
+              <div className="h-[72vh] sm:h-[75vh] w-full">
+                <ComponentErrorBoundary componentName="FoodSplitMap">
+                  <FoodSplitMap
+                    venues={filteredVenues}
+                    selectedVenue={selectedVenue}
+                    onSelectVenue={(v) => setSelectedFoodVenueId(v.id)}
+                  />
+                </ComponentErrorBoundary>
               </div>
             )}
           </div>
         )}
       </section>
+
+      {/* Mobile Floating View Mode Pill (List <-> Map toggle) */}
+      <div className="lg:hidden fixed bottom-20 left-1/2 -translate-x-1/2 z-[1100]">
+        <button
+          type="button"
+          onClick={() => setFoodViewMode(foodViewMode === 'map' ? 'list' : 'map')}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#101827] text-white border-2 border-[#FF9418] shadow-[0_4px_16px_rgba(0,0,0,0.5)] font-bold text-xs active:scale-95 transition-all"
+        >
+          {foodViewMode === 'map' ? (
+            <>
+              <ListFilter className="w-4 h-4 text-[#FF9418]" />
+              <span>View List ({filteredVenues.length})</span>
+            </>
+          ) : (
+            <>
+              <MapIcon className="w-4 h-4 text-[#FF9418]" />
+              <span>View Map ({filteredVenues.length})</span>
+            </>
+          )}
+        </button>
+      </div>
 
       {/* Slide-over / Bottom Sheet Venue Details Drawer */}
       <FoodVenueDrawer
