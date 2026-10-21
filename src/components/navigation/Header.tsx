@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { AtlasMode } from '../../types/atlas';
+import { VERIFIED_FOOD_VENUES } from '../../data/food-venues-data';
 import { 
   Compass, 
   Map, 
@@ -15,7 +16,8 @@ import {
   Bookmark,
   Crosshair,
   Trash2,
-  ExternalLink
+  ExternalLink,
+  Utensils
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -69,6 +71,7 @@ export const Header: React.FC = () => {
   // Primary navigation tabs — Progress badge strictly on Passport to prevent noise
   const navItems: { mode: AtlasMode; label: string; icon: React.ReactNode; badge?: string }[] = [
     { mode: 'explore', label: 'Atlas Map', icon: <Map className="w-4 h-4 text-[#FF9418]" /> },
+    { mode: 'food', label: 'Food & After Dark', icon: <Utensils className="w-4 h-4 text-[#FF9418]" />, badge: String(VERIFIED_FOOD_VENUES.length) },
     { mode: 'places', label: 'Destinations', icon: <Compass className="w-4 h-4 text-[#FF9418]" /> },
     { mode: 'passport', label: 'Gujarat Passport', icon: <Award className="w-4 h-4 text-[#FF9418]" />, badge: `${userProfile.collectedStampIds.length}/34` },
     { mode: 'unfiltered', label: 'Unfiltered Stories', icon: <Sparkles className="w-4 h-4 text-[#9D233B]" /> },

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { AtlasMode, UserPassportProfile } from '../types/atlas';
+import { CityName, VerifiedFoodVenue } from '../types/food';
 import { GUJARAT_34_DISTRICTS } from '../data/passport-districts';
 import { syncProfileToFirestore, logoutUser } from '../lib/firebase';
 import confetti from 'canvas-confetti';
@@ -27,6 +28,41 @@ interface AtlasState {
   evFilterCorridor: string;
   evFilterFastOnly: boolean;
   evFilterDgBackupOnly: boolean;
+
+  // Food & After Dark Discovery state
+  foodCityFilter: 'all' | CityName;
+  foodCategoryFilter: string;
+  foodSearchQuery: string;
+  foodFilterOpenNow: boolean;
+  foodFilterOpenLate: boolean;
+  foodFilterUnder200: boolean;
+  foodFilterPureVegOnly: boolean;
+  foodViewMode: 'split' | 'list' | 'map';
+  selectedFoodVenueId: string | null;
+  foodCrawlVenueIds: string[];
+  favouriteFoodVenueIds: string[];
+  isFoodCrawlModalOpen: boolean;
+  isReportClosureModalOpen: boolean;
+  reportingVenue: VerifiedFoodVenue | null;
+
+  // Food Actions
+  setFoodCityFilter: (city: 'all' | CityName) => void;
+  setFoodCategoryFilter: (category: string) => void;
+  setFoodSearchQuery: (query: string) => void;
+  setFoodFilterOpenNow: (open: boolean) => void;
+  setFoodFilterOpenLate: (late: boolean) => void;
+  setFoodFilterUnder200: (under: boolean) => void;
+  setFoodFilterPureVegOnly: (veg: boolean) => void;
+  setFoodViewMode: (mode: 'split' | 'list' | 'map') => void;
+  setSelectedFoodVenueId: (id: string | null) => void;
+  toggleFavouriteFoodVenue: (id: string) => void;
+  addToFoodCrawl: (id: string) => void;
+  removeFromFoodCrawl: (id: string) => void;
+  reorderFoodCrawl: (startIndex: number, endIndex: number) => void;
+  clearFoodCrawl: () => void;
+  setFoodCrawlModalOpen: (open: boolean) => void;
+  openReportClosureModal: (venue: VerifiedFoodVenue) => void;
+  closeReportClosureModal: () => void;
 
   // Actions
   setMode: (mode: AtlasMode) => void;
@@ -92,6 +128,26 @@ function getSavedProfile(): UserPassportProfile {
   return DEFAULT_PROFILE;
 }
 
+function getSavedFoodFavourites(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem('gujarat_food_favourites');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function getSavedFoodCrawl(): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem('gujarat_food_crawl');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
 export const useAtlasStore = create<AtlasState>((set, get) => ({
   currentMode: 'explore',
   theme: 'light',
@@ -115,6 +171,65 @@ export const useAtlasStore = create<AtlasState>((set, get) => ({
   evFilterCorridor: 'all',
   evFilterFastOnly: false,
   evFilterDgBackupOnly: false,
+
+  // Food & After Dark initial state
+  foodCityFilter: 'all',
+  foodCategoryFilter: 'all',
+  foodSearchQuery: '',
+  foodFilterOpenNow: false,
+  foodFilterOpenLate: false,
+  foodFilterUnder200: false,
+  foodFilterPureVegOnly: false,
+  foodViewMode: 'split',
+  selectedFoodVenueId: null,
+  foodCrawlVenueIds: getSavedFoodCrawl(),
+  favouriteFoodVenueIds: getSavedFoodFavourites(),
+  isFoodCrawlModalOpen: false,
+  isReportClosureModalOpen: false,
+  reportingVenue: null,
+
+  setFoodCityFilter: (city) => set({ foodCityFilter: city }),
+  setFoodCategoryFilter: (category) => set({ foodCategoryFilter: category }),
+  setFoodSearchQuery: (query) => set({ foodSearchQuery: query }),
+  setFoodFilterOpenNow: (open) => set({ foodFilterOpenNow: open }),
+  setFoodFilterOpenLate: (late) => set({ foodFilterOpenLate: late }),
+  setFoodFilterUnder200: (under) => set({ foodFilterUnder200: under }),
+  setFoodFilterPureVegOnly: (veg) => set({ foodFilterPureVegOnly: veg }),
+  setFoodViewMode: (mode) => set({ foodViewMode: mode }),
+  setSelectedFoodVenueId: (id) => set({ selectedFoodVenueId: id }),
+  toggleFavouriteFoodVenue: (id) => {
+    const current = get().favouriteFoodVenueIds;
+    const updated = current.includes(id) ? current.filter(x => x !== id) : [...current, id];
+    try { localStorage.setItem('gujarat_food_favourites', JSON.stringify(updated)); } catch (e) {}
+    set({ favouriteFoodVenueIds: updated });
+  },
+  addToFoodCrawl: (id) => {
+    const current = get().foodCrawlVenueIds;
+    if (current.includes(id)) return;
+    const updated = [...current, id];
+    try { localStorage.setItem('gujarat_food_crawl', JSON.stringify(updated)); } catch (e) {}
+    set({ foodCrawlVenueIds: updated });
+  },
+  removeFromFoodCrawl: (id) => {
+    const current = get().foodCrawlVenueIds;
+    const updated = current.filter(x => x !== id);
+    try { localStorage.setItem('gujarat_food_crawl', JSON.stringify(updated)); } catch (e) {}
+    set({ foodCrawlVenueIds: updated });
+  },
+  reorderFoodCrawl: (startIndex, endIndex) => {
+    const current = [...get().foodCrawlVenueIds];
+    const [removed] = current.splice(startIndex, 1);
+    current.splice(endIndex, 0, removed);
+    try { localStorage.setItem('gujarat_food_crawl', JSON.stringify(current)); } catch (e) {}
+    set({ foodCrawlVenueIds: current });
+  },
+  clearFoodCrawl: () => {
+    try { localStorage.removeItem('gujarat_food_crawl'); } catch (e) {}
+    set({ foodCrawlVenueIds: [] });
+  },
+  setFoodCrawlModalOpen: (open) => set({ isFoodCrawlModalOpen: open }),
+  openReportClosureModal: (venue) => set({ isReportClosureModalOpen: true, reportingVenue: venue }),
+  closeReportClosureModal: () => set({ isReportClosureModalOpen: false, reportingVenue: null }),
 
   setMode: (mode) => set({ currentMode: mode }),
 

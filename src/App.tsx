@@ -6,6 +6,7 @@ import { AtlasMap } from './components/map/AtlasMap';
 import { UnfilteredStoriesView } from './components/unfiltered/UnfilteredStoriesView';
 import { InfrastructureDirectoryView } from './components/infrastructure/InfrastructureDirectoryView';
 import { PlacesDestinationView } from './components/places/PlacesDestinationView';
+import { FoodAfterDarkView } from './components/food/FoodAfterDarkView';
 import { OfflineBanner } from './components/pwa/OfflineBanner';
 import { MobileBottomNav } from './components/navigation/MobileBottomNav';
 import { CulturalFooter } from './components/navigation/CulturalFooter';
@@ -65,6 +66,7 @@ export const App: React.FC = () => {
               transition={fluidTransition}
             >
               {currentMode === 'places' && <PlacesDestinationView />}
+              {currentMode === 'food' && <FoodAfterDarkView />}
               {currentMode === 'passport' && <GujaratPassport />}
               {currentMode === 'unfiltered' && <UnfilteredStoriesView />}
               {currentMode === 'infrastructure' && <InfrastructureDirectoryView />}

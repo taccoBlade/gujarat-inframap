@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAtlasStore } from '../../stores/useAtlasStore';
 import { AtlasMode } from '../../types/atlas';
-import { Compass, Map, Award, Sparkles, Zap } from 'lucide-react';
+import { Compass, Map, Award, Sparkles, Zap, Utensils } from 'lucide-react';
 
 export const MobileBottomNav: React.FC = () => {
   const { currentMode, setMode, userProfile, theme } = useAtlasStore();
@@ -9,29 +9,34 @@ export const MobileBottomNav: React.FC = () => {
   const navItems: { mode: AtlasMode; label: string; icon: React.ReactNode; badge?: string }[] = [
     { 
       mode: 'explore', 
-      label: 'Atlas Map', 
-      icon: <Map className="w-5 h-5" /> 
+      label: 'Atlas', 
+      icon: <Map className="w-4 h-4" /> 
+    },
+    { 
+      mode: 'food', 
+      label: 'Food', 
+      icon: <Utensils className="w-4 h-4 text-[#FF9418]" /> 
     },
     { 
       mode: 'places', 
-      label: 'Destinations', 
-      icon: <Compass className="w-5 h-5" /> 
+      label: 'Places', 
+      icon: <Compass className="w-4 h-4" /> 
     },
     { 
       mode: 'passport', 
       label: 'Passport', 
-      icon: <Award className="w-5 h-5" />, 
+      icon: <Award className="w-4 h-4" />, 
       badge: `${userProfile.collectedStampIds.length}/34` 
     },
     { 
       mode: 'unfiltered', 
       label: 'Stories', 
-      icon: <Sparkles className="w-5 h-5" /> 
+      icon: <Sparkles className="w-4 h-4" /> 
     },
     { 
       mode: 'infrastructure', 
       label: 'Infra', 
-      icon: <Zap className="w-5 h-5" /> 
+      icon: <Zap className="w-4 h-4" /> 
     },
   ];
 
@@ -44,7 +49,7 @@ export const MobileBottomNav: React.FC = () => {
           : 'bg-[#FAF6ED] border-[#25324A] text-[#101827] shadow-[0_-4px_24px_rgba(0,0,0,0.15)]'
       }`}
     >
-      <div className="grid grid-cols-5 h-16 items-center px-1">
+      <div className="grid grid-cols-6 h-16 items-center px-0.5">
         {navItems.map((item) => {
           const isActive = currentMode === item.mode;
           return (

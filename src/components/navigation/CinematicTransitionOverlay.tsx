@@ -128,6 +128,24 @@ const PRESETS: Record<AtlasMode, TransitionPreset> = {
         <path d="M 52 14 L 32 52 L 48 52 L 44 86 L 68 45 L 52 45 Z" fill="#10B981" fillOpacity="0.2" strokeWidth="2.5" />
       </svg>
     )
+  },
+  food: {
+    code: 'FOOD-07 // CITY FOOD & AFTER DARK',
+    badge: '66 VERIFIED VENUES',
+    title: 'Food & After Dark Discovery',
+    gujarati: 'રાત્રિ પ્રવાસ & સ્વાદિષ્ટ વાનગીઓ',
+    accent: '#FF9418',
+    glowColor: 'rgba(255, 148, 24, 0.4)',
+    subtext: 'Ahmedabad • Vadodara • Surat | Late-Night Stalls, Cafés & Night-Out Venues',
+    iconSvg: (
+      <svg className="w-10 h-10 sm:w-14 sm:h-14 stroke-[#FF9418] fill-none stroke-[2]" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="38" strokeDasharray="3 3" strokeOpacity="0.6" />
+        <path d="M 30 65 Q 50 35 70 65 Z" fill="#FF9418" fillOpacity="0.2" strokeWidth="2.5" />
+        <circle cx="42" cy="52" r="3" fill="#1C6555" />
+        <circle cx="58" cy="52" r="3" fill="#9D233B" />
+        <path d="M 40 26 Q 44 18 48 26 T 56 26" stroke="#FF9418" strokeWidth="2" strokeLinecap="round" />
+      </svg>
+    )
   }
 };
 

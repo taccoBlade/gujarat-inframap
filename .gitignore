@@ -45,3 +45,5 @@ scratch/
 
 .agents/
 skills-lock.json
+brag-output/
+brag-plan.md

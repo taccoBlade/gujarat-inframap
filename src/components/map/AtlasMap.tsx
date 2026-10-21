@@ -5,6 +5,7 @@ import { GUJARAT_34_DISTRICTS } from '../../data/passport-districts';
 import { DistrictPassportStamp } from '../../types/atlas';
 import { VERIFIED_TOURIST_DESTINATIONS, TouristDestination } from '../../data/tourist-destinations';
 import { GUJARAT_HIGHWAY_EV_STATIONS } from '../../data/ev-stations';
+import { VERIFIED_FOOD_VENUES } from '../../data/food-venues-data';
 import { getRegionalCulture } from '../../utils/cultural-regions';
 import unfilteredStoriesRaw from '../../../data/gujarat_unfiltered.json';
 import { AjrakhStarPattern, StepwellGeometryPattern, ToranOrnamentalBorder } from '../cultural/GujaratiPatterns';
@@ -51,7 +52,7 @@ import {
 
 interface AssetDetail {
   id: string;
-  type: 'destination' | 'story' | 'ev';
+  type: 'destination' | 'story' | 'ev' | 'food';
   name: string;
   gujaratiTitle?: string;
   district: string;
@@ -99,6 +100,7 @@ export const AtlasMap: React.FC = () => {
   const touristLayerRef = useRef<L.LayerGroup | null>(null);
   const storyLayerRef = useRef<L.LayerGroup | null>(null);
   const evLayerRef = useRef<L.LayerGroup | null>(null);
+  const foodLayerRef = useRef<L.LayerGroup | null>(null);
   const geojsonBoundaryRef = useRef<L.GeoJSON | null>(null);
   const blueprintParcelLayerRef = useRef<L.LayerGroup | null>(null);
   const corridorPolylineRef = useRef<L.Polyline | null>(null);
@@ -118,6 +120,7 @@ export const AtlasMap: React.FC = () => {
     setActiveDossierAsset,
     saveLocation,
     removeSavedLocation,
+    setSelectedFoodVenueId,
     isAuthModalOpen
   } = useAtlasStore();
 
@@ -143,6 +146,7 @@ export const AtlasMap: React.FC = () => {
   const [showTourist, setShowTourist] = useState(true);
   const [showStories, setShowStories] = useState(true);
   const [showEV, setShowEV] = useState(true);
+  const [showFood, setShowFood] = useState(true);
   const [showParcels, setShowParcels] = useState(true);
 
   // Responsive Panels & Drawer State
@@ -257,6 +261,7 @@ export const AtlasMap: React.FC = () => {
       touristLayerRef.current = L.layerGroup().addTo(map);
       storyLayerRef.current = L.layerGroup().addTo(map);
       evLayerRef.current = L.layerGroup().addTo(map);
+      foodLayerRef.current = L.layerGroup().addTo(map);
       blueprintParcelLayerRef.current = L.layerGroup().addTo(map);
 
       mapInstanceRef.current = map;
@@ -920,6 +925,99 @@ export const AtlasMap: React.FC = () => {
       }
     }
 
+    // --- 5. Food & Nightlife Layer ---
+    if (foodLayerRef.current) {
+      foodLayerRef.current.clearLayers();
+      if (showFood) {
+        const filteredFood = VERIFIED_FOOD_VENUES.filter(f => {
+          if (query && !f.name.toLowerCase().includes(query) && !f.city.toLowerCase().includes(query) && !f.area.toLowerCase().includes(query) && !f.address.toLowerCase().includes(query)) return false;
+          return true;
+        });
+
+        filteredFood.forEach((venue) => {
+          const icon = L.divIcon({
+            className: 'food-pin map-marker-pin',
+            html: `
+              <div style="
+                width: 28px;
+                height: 28px;
+                background: #151F30;
+                color: #FF9418;
+                border: 2px solid #FF9418;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 2px 2px 0px #101827;
+                font-size: 13px;
+                cursor: pointer;
+                transform: translate(-50%, -50%);
+              ">
+                🌮
+              </div>
+            `,
+            iconSize: [28, 28],
+            iconAnchor: [14, 14],
+          });
+
+          const m = L.marker([venue.latitude, venue.longitude], { icon }).addTo(foodLayerRef.current!);
+
+          m.on('click', () => {
+            map.flyTo([venue.latitude, venue.longitude], Math.max(map.getZoom(), 12), { duration: 0.8 });
+            setSelectedAsset({
+              id: venue.id,
+              type: 'food',
+              name: venue.name,
+              gujaratiTitle: venue.branch,
+              district: venue.city,
+              image: venue.photo_url,
+              categoryLabel: venue.category,
+              summary: `${venue.address} • ${venue.verification_notes}`,
+              timings: venue.opening_hours,
+              entryFee: venue.price_range,
+              coordinates: [venue.latitude, venue.longitude],
+              verifiedSource: venue.source_urls[0]
+            });
+          });
+
+          m.bindPopup(`
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; min-width: 270px; max-width: 310px; overflow: hidden; border-radius: 12px;">
+              <div style="height: 4px; background: #FF9418; width: 100%;"></div>
+              <div style="padding: 12px 14px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                  <span style="font-size: 10px; font-weight: 800; color: #FF9418; font-family: monospace;">
+                    🌮 ${escapeHtml(venue.city)} • ${escapeHtml(venue.area)}
+                  </span>
+                  <span style="font-size: 9px; padding: 2px 6px; border-radius: 4px; background: rgba(255,148,24,0.15); color: #FF9418; font-weight: bold;">
+                    Verified
+                  </span>
+                </div>
+                <h3 style="margin: 3px 0 2px 0; font-size: 14px; font-weight: 800; font-family: 'Outfit', serif;">
+                  ${escapeHtml(venue.name)}
+                </h3>
+                <p style="margin: 0 0 6px 0; font-size: 11px; color: #8F9CAE;">
+                  ${escapeHtml(venue.branch)}
+                </p>
+                <div style="font-size: 11px; margin-bottom: 6px; padding: 4px 6px; border-radius: 6px; background: rgba(0,0,0,0.2); border: 1px solid #25324A;">
+                  🕒 ${escapeHtml(venue.opening_hours)}
+                </div>
+                <div style="font-size: 10px; color: #10B981; font-weight: 700; margin-bottom: 8px;">
+                  🌱 ${escapeHtml(venue.vegetarian)}
+                </div>
+                <a href="${venue.google_maps_url || `https://www.google.com/maps/dir/?api=1&destination=${venue.latitude},${venue.longitude}`}" target="_blank" rel="noopener noreferrer" style="
+                  display: block; text-align: center; width: 100%; padding: 7px; background: #FF9418;
+                  color: #101827; font-weight: 800; font-size: 11px; border: 1.5px solid #101827;
+                  border-radius: 8px; text-decoration: none; box-shadow: 2px 2px 0px #101827;
+                ">
+                  Navigate in Google Maps ↗
+                </a>
+              </div>
+            </div>
+          `, { className: 'ethnic-leaflet-popup', maxWidth: 310, minWidth: 270, autoPan: false });
+        });
+      }
+    }
+
   }, [
     mapReady, 
     currentZoom, 
@@ -927,6 +1025,7 @@ export const AtlasMap: React.FC = () => {
     showTourist, 
     showStories, 
     showEV, 
+    showFood,
     evFilterDgOnly, 
     evFilterFastOnly, 
     evSelectedCorridor, 
@@ -1478,6 +1577,21 @@ export const AtlasMap: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <input 
                     type="checkbox" 
+                    checked={showFood} 
+                    onChange={(e) => setShowFood(e.target.checked)} 
+                    className="accent-[#FF9418] rounded"
+                  />
+                  <span className="font-bold">🌮 Food &amp; Nightlife</span>
+                </div>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border border-[#25324A] text-[#FF9418]">
+                  66
+                </span>
+              </label>
+
+              <label className="flex items-center justify-between p-1 rounded hover:bg-black/10 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
                     checked={showDistricts} 
                     onChange={(e) => setShowDistricts(e.target.checked)} 
                     className="accent-[#FF9418] rounded"
@@ -1647,7 +1761,7 @@ export const AtlasMap: React.FC = () => {
             <div className="flex items-center justify-between gap-2 mb-1.5">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="px-2 py-0.5 rounded-md bg-[#101827] text-[#FF9418] border border-[#25324A] text-[10px] font-mono font-bold uppercase tracking-wider">
-                  {selectedAsset.type === 'destination' ? '🏛️' : selectedAsset.type === 'story' ? '📜' : '⚡'} {selectedAsset.district}
+                  {selectedAsset.type === 'destination' ? '🏛️' : selectedAsset.type === 'story' ? '📜' : selectedAsset.type === 'food' ? '🌮' : '⚡'} {selectedAsset.district}
                 </span>
                 {selectedAsset.categoryLabel && (
                   <span className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold ${
@@ -1798,7 +1912,10 @@ export const AtlasMap: React.FC = () => {
 
               <button
                 onClick={() => {
-                  if (selectedAsset.type === 'story') {
+                  if (selectedAsset.type === 'food') {
+                    setSelectedFoodVenueId(selectedAsset.id);
+                    setMode('food');
+                  } else if (selectedAsset.type === 'story') {
                     const matchedStory = stories.find(s => s.id === selectedAsset.id);
                     if (matchedStory) {
                       setActiveDossierAsset({ ...matchedStory, type: 'story' });
